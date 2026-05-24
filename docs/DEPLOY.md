@@ -123,8 +123,9 @@ git push -u origin main
 
 1. [vercel.com](https://vercel.com) → **Add New → Project** → import the GitHub repo.
 2. Framework: **Next.js** (auto-detected).
-3. Build command: `npm run build` (default).
-4. Add **Environment variables** for **Production** and **Preview**:
+3. Build command: `npm run build` (default). Use **Node.js 20.x** in Vercel project settings (recommended).
+4. Keep **Next.js** on a patched release (currently `15.2.9+` — see [Next.js security advisories](https://nextjs.org/blog/security-update-2025-12-11)).
+5. Add **Environment variables** for **Production** and **Preview**:
 
 | Variable | Required | Notes |
 |----------|----------|--------|
@@ -143,7 +144,7 @@ Optional (documented, not required for MVP):
 - `SENTRY_DSN` — error monitoring ([PRODUCTION_RECOMMENDATIONS.md](./PRODUCTION_RECOMMENDATIONS.md))
 - Upstash / rate limiting — see [TECH_STACK.md](./TECH_STACK.md)
 
-5. **Deploy** and wait for the build to finish.
+6. **Deploy** and wait for the build to finish.
 
 ### CLI alternative
 
