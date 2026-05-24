@@ -1,0 +1,34 @@
+import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
+import { CheckoutForm } from "@/features/checkout/components/checkout-form";
+import { getProductForCheckout } from "@/server/services/product.service";
+import { getPaymentInstructions } from "@/server/services/site-settings.service";
+import { getSession } from "@/server/services/auth.service";
+
+export default async function CheckoutPage({
+  params,
+}: {
+  params: Promise<{ slug: string; locale: string }>;
+}) {
+  const { slug, locale } = await params;
+  const product = await getProductForCheckout(locale, slug);
+  const t = await getTranslations("checkout");
+  const user = await getSession();
+
+  if (!product) notFound();
+
+  const paymentInstructions = await getPaymentInstructions(locale);
+
+  return (
+    <div className="mx-auto max-w-content">
+      <h1 className="mb-6 text-2xl font-bold">{t("title")}</h1>
+      <CheckoutForm
+        product={product}
+        locale={locale}
+        paymentInstructions={paymentInstructions}
+        isLoggedIn={Boolean(user)}
+        userEmail={user?.email}
+      />
+    </div>
+  );
+}

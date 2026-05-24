@@ -1,0 +1,220 @@
+{
+  "common": {
+    "brand": "riont",
+    "searchPlaceholder": "Search products...",
+    "searchComingSoon": "Search coming soon",
+    "shopNow": "Shop Now",
+    "explore": "Explore",
+    "viewAll": "View all",
+    "login": "Login",
+    "cart": "Cart",
+    "language": "Language",
+    "account": "Account",
+    "signOut": "Sign out",
+    "comingSoon": "Coming soon",
+    "retry": "Try again",
+    "notifications": "Notifications"
+  },
+  "nav": {
+    "home": "Home",
+    "products": "All Products",
+    "categories": "Categories",
+    "support": "Support",
+    "orders": "My Orders"
+  },
+  "promo": {
+    "title": "20% Discount",
+    "subtitle": "Limited time offer",
+    "cta": "View Now"
+  },
+  "home": {
+    "heroTitle": "Premium Digital Products",
+    "heroHighlight": "Instant Delivery",
+    "heroSubtitle": "Safe, Fast, Reliable.",
+    "trustInstant": "Instant Delivery",
+    "trustSupport": "24/7 Support",
+    "trustSecure": "Secure Payments",
+    "trustQuality": "Best Quality",
+    "popularCategories": "Popular Categories",
+    "featuredProducts": "Featured Products"
+  },
+  "currency": {
+    "label": "Currency"
+  },
+  "notifications": {
+    "title": "Notifications",
+    "empty": "No notifications yet.",
+    "markRead": "Mark read",
+    "markAllRead": "Mark all read"
+  },
+  "product": {
+    "buyNow": "Submit Order",
+    "addToCart": "Add to Cart",
+    "addedToCart": "Added to cart",
+    "instantDelivery": "Instant Delivery",
+    "bestSeller": "Best Seller",
+    "checkoutComingSoon": "Checkout will be available in the next release."
+  },
+  "auth": {
+    "welcomeBack": "Welcome Back",
+    "createAccountTitle": "Create Account",
+    "subtitle": "Sign in to manage orders and digital deliveries",
+    "continueGoogle": "Continue with Google",
+    "continueApple": "Continue with Apple",
+    "orEmail": "or continue with email",
+    "email": "Email",
+    "password": "Password",
+    "displayName": "Display name",
+    "signIn": "Sign In",
+    "signUp": "Create Account",
+    "signingIn": "Signing in…",
+    "signingUp": "Creating account…",
+    "noAccount": "Don't have an account? Sign up",
+    "hasAccount": "Already have an account? Sign in",
+    "errors": {
+      "VALIDATION": "Please check your email and password.",
+      "INVALID_CREDENTIALS": "Incorrect email or password.",
+      "EMAIL_NOT_CONFIRMED": "Please confirm your email before signing in.",
+      "USER_ALREADY_REGISTERED": "An account with this email already exists.",
+      "WEAK_PASSWORD": "Password does not meet security requirements.",
+      "RATE_LIMIT": "Too many attempts. Please wait and try again.",
+      "OAUTH_FAILED": "Could not start social sign-in. Please try again.",
+      "UNKNOWN": "Something went wrong. Please try again."
+    },
+    "toast": {
+      "registered": "Account created. Check your email if confirmation is required.",
+      "authFailed": "Sign-in failed. Please try again.",
+      "signedOut": "You have been signed out.",
+      "signedIn": "Welcome back!"
+    }
+  },
+  "cart": {
+    "title": "Your Cart",
+    "empty": "Your cart is empty. Browse products to get started.",
+    "browse": "Browse Products",
+    "remove": "Remove",
+    "increase": "Increase quantity",
+    "decrease": "Decrease quantity",
+    "checkoutItem": "Checkout",
+    "checkoutNote": "Each item checks out separately for now. Payment is completed externally after order approval."
+  },
+  "categories": {
+    "title": "Categories",
+    "instagram": "Instagram Services",
+    "gaming": "Gaming",
+    "software": "Software",
+    "subscriptions": "Subscriptions",
+    "productCount": "{count} products"
+  },
+  "catalog": {
+    "viewAllProducts": "View all products",
+    "searchResults": "Results for \"{query}\"",
+    "emptyTitle": "No products available",
+    "emptyDescription": "Check back soon — new products are added regularly.",
+    "loadErrorTitle": "Could not load products",
+    "loadErrorDescription": "We could not reach the catalog. Please try again."
+  },
+  "support": {
+    "title": "Support",
+    "description": "Open a ticket to get help with orders, delivery, or general questions.",
+    "contactHint": "Signed-in customers can message our team directly.",
+    "signInRequired": "Sign in to open and manage support tickets.",
+    "signIn": "Sign in",
+    "newTicket": "New ticket",
+    "yourTickets": "Your tickets",
+    "noTickets": "No tickets yet.",
+    "subject": "Subject",
+    "message": "Message",
+    "submitTicket": "Create ticket",
+    "subjectPlaceholder": "Brief summary of your issue",
+    "messagePlaceholder": "Describe your question or issue…",
+    "backToSupport": "← Support",
+    "linkedOrder": "Order",
+    "reply": "Reply",
+    "replyPlaceholder": "Write your message…",
+    "sendReply": "Send message",
+    "attachment": "Attachment (optional)",
+    "attachmentHint": "JPG, PNG, WebP, or PDF — max 5MB",
+    "reportIssue": "Report an issue",
+    "status": {
+      "open": "Open",
+      "waiting_customer": "Awaiting your reply",
+      "waiting_admin": "Awaiting support",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    }
+  },
+  "checkout": {
+    "title": "Checkout",
+    "yourDetails": "Your details",
+    "guestEmail": "Email for order updates",
+    "orderNote": "Order note (optional)",
+    "coupon": "Discount code",
+    "couponPlaceholder": "Enter code",
+    "couponHint": "Applied when valid at checkout.",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "termsLabel": "I agree to the terms and understand payment is completed externally after order approval.",
+    "submitOrder": "Submit order request",
+    "submitting": "Submitting…",
+    "backToProduct": "Back to product"
+  },
+  "orders": {
+    "myOrders": "My Orders",
+    "empty": "You have no orders yet.",
+    "browseProducts": "Browse products",
+    "orderNumber": "Order number",
+    "items": "Items",
+    "yourFields": "Information you provided",
+    "timeline": "Order timeline",
+    "summary": "Summary",
+    "subtotal": "Subtotal",
+    "discount": "Discount",
+    "total": "Total",
+    "paymentInstructions": "Payment instructions",
+    "continueShopping": "Continue shopping",
+    "qty": "Qty {count}",
+    "guestTokenHint": "Save this page link — it contains your private access token for guest order tracking.",
+    "delivery": "Your delivery",
+    "deliveryHint": "Save these details in a secure place. We recommend copying them now.",
+    "status": {
+      "pending_review": "Pending review",
+      "awaiting_payment": "Awaiting payment",
+      "payment_received": "Payment received",
+      "processing": "Processing",
+      "delivered": "Delivered",
+      "completed": "Completed",
+      "cancelled": "Cancelled",
+      "needs_customer_response": "Needs your response",
+      "on_hold": "On hold"
+    },
+    "confirmation": {
+      "title": "Order submitted",
+      "subtitle": "We will review your order and send payment instructions shortly.",
+      "orderLabel": "Your order number",
+      "saveLink": "Bookmark this page to track your order as a guest.",
+      "viewOrder": "View order status",
+      "continueShopping": "Continue shopping",
+      "browse": "Browse products",
+      "missing": "Order reference not found."
+    },
+    "errors": {
+      "VALIDATION": "Please check the form and try again.",
+      "NOT_FOUND": "Product not found.",
+      "OUT_OF_STOCK": "This product is currently out of stock.",
+      "COUPON_INVALID": "Invalid discount code.",
+      "COUPON_EXPIRED": "This discount code has expired.",
+      "COUPON_INACTIVE": "This discount code is not active.",
+      "COUPON_MIN_ORDER": "Order total is too low for this code.",
+      "COUPON_USAGE_LIMIT": "This discount code has reached its usage limit.",
+      "INTERNAL": "Could not submit your order. Please try again."
+    }
+  },
+  "errors": {
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The page you are looking for does not exist or was moved.",
+    "backHome": "Back to home",
+    "genericTitle": "Something went wrong",
+    "genericDescription": "An unexpected error occurred. Please try again."
+  }
+}

@@ -1,0 +1,53 @@
+import type { OrderStatus } from "@/lib/domain/enums";
+
+export type AdminOrderListItem = {
+  id: string;
+  orderNumber: string;
+  status: OrderStatus;
+  totalCents: number;
+  currency: string;
+  submittedAt: string;
+  customerLabel: string;
+  productSummary: string;
+};
+
+export type AdminOrderFieldValue = {
+  fieldKey: string;
+  label: string;
+  value: string;
+  isSensitive: boolean;
+};
+
+export type AdminOrderItem = {
+  id: string;
+  productId: string;
+  productName: string;
+  unitPriceCents: number;
+  quantity: number;
+  deliveryMode: "auto" | "manual";
+  fulfillmentStatus: string;
+  deliveryContent: string | null;
+};
+
+export type AdminOrderDetail = {
+  id: string;
+  orderNumber: string;
+  status: OrderStatus;
+  subtotalCents: number;
+  discountCents: number;
+  totalCents: number;
+  currency: string;
+  locale: string;
+  customerNote: string | null;
+  adminNote: string | null;
+  guestEmail: string | null;
+  userId: string | null;
+  submittedAt: string;
+  items: AdminOrderItem[];
+  fields: AdminOrderFieldValue[];
+  timeline: Array<{
+    toStatus: OrderStatus;
+    note: string | null;
+    createdAt: string;
+  }>;
+};

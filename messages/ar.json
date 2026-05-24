@@ -1,0 +1,220 @@
+{
+  "common": {
+    "brand": "riont",
+    "searchPlaceholder": "ابحث عن المنتجات...",
+    "searchComingSoon": "البحث قريباً",
+    "shopNow": "تسوق الآن",
+    "explore": "استكشف",
+    "viewAll": "عرض الكل",
+    "login": "تسجيل الدخول",
+    "cart": "السلة",
+    "language": "اللغة",
+    "account": "الحساب",
+    "signOut": "تسجيل الخروج",
+    "comingSoon": "قريباً",
+    "retry": "إعادة المحاولة",
+    "notifications": "الإشعارات"
+  },
+  "nav": {
+    "home": "الرئيسية",
+    "products": "كل المنتجات",
+    "categories": "التصنيفات",
+    "support": "الدعم",
+    "orders": "طلباتي"
+  },
+  "promo": {
+    "title": "خصم 20%",
+    "subtitle": "عرض لفترة محدودة",
+    "cta": "عرض الآن"
+  },
+  "home": {
+    "heroTitle": "منتجات رقمية مميزة",
+    "heroHighlight": "تسليم فوري",
+    "heroSubtitle": "آمن، سريع، موثوق.",
+    "trustInstant": "تسليم فوري",
+    "trustSupport": "دعم 24/7",
+    "trustSecure": "دفع آمن",
+    "trustQuality": "أفضل جودة",
+    "popularCategories": "التصنيفات الشائعة",
+    "featuredProducts": "منتجات مميزة"
+  },
+  "currency": {
+    "label": "العملة"
+  },
+  "notifications": {
+    "title": "الإشعارات",
+    "empty": "لا توجد إشعارات بعد.",
+    "markRead": "تعليم كمقروء",
+    "markAllRead": "تعليم الكل كمقروء"
+  },
+  "product": {
+    "buyNow": "إرسال الطلب",
+    "addToCart": "أضف للسلة",
+    "addedToCart": "تمت الإضافة إلى السلة",
+    "instantDelivery": "تسليم فوري",
+    "bestSeller": "الأكثر مبيعاً",
+    "checkoutComingSoon": "الدفع سيتوفر في الإصدار القادم."
+  },
+  "auth": {
+    "welcomeBack": "مرحباً بعودتك",
+    "createAccountTitle": "إنشاء حساب",
+    "subtitle": "سجّل الدخول لإدارة الطلبات والتسليم الرقمي",
+    "continueGoogle": "المتابعة مع Google",
+    "continueApple": "المتابعة مع Apple",
+    "orEmail": "أو المتابعة بالبريد",
+    "email": "البريد الإلكتروني",
+    "password": "كلمة المرور",
+    "displayName": "الاسم المعروض",
+    "signIn": "تسجيل الدخول",
+    "signUp": "إنشاء حساب",
+    "signingIn": "جارٍ تسجيل الدخول…",
+    "signingUp": "جارٍ إنشاء الحساب…",
+    "noAccount": "ليس لديك حساب؟ سجّل الآن",
+    "hasAccount": "لديك حساب؟ سجّل الدخول",
+    "errors": {
+      "VALIDATION": "يرجى التحقق من البريد وكلمة المرور.",
+      "INVALID_CREDENTIALS": "البريد أو كلمة المرور غير صحيحة.",
+      "EMAIL_NOT_CONFIRMED": "يرجى تأكيد بريدك قبل تسجيل الدخول.",
+      "USER_ALREADY_REGISTERED": "يوجد حساب مسجّل بهذا البريد.",
+      "WEAK_PASSWORD": "كلمة المرور لا تستوفي متطلبات الأمان.",
+      "RATE_LIMIT": "محاولات كثيرة. انتظر قليلاً ثم أعد المحاولة.",
+      "OAUTH_FAILED": "تعذّر بدء تسجيل الدخول الاجتماعي. حاول مرة أخرى.",
+      "UNKNOWN": "حدث خطأ. يرجى المحاولة مرة أخرى."
+    },
+    "toast": {
+      "registered": "تم إنشاء الحساب. تحقق من بريدك إذا كان التأكيد مطلوباً.",
+      "authFailed": "فشل تسجيل الدخول. حاول مرة أخرى.",
+      "signedOut": "تم تسجيل الخروج.",
+      "signedIn": "مرحباً بعودتك!"
+    }
+  },
+  "cart": {
+    "title": "سلة التسوق",
+    "empty": "سلتك فارغة. تصفّح المنتجات للبدء.",
+    "browse": "تصفّح المنتجات",
+    "remove": "إزالة",
+    "increase": "زيادة الكمية",
+    "decrease": "تقليل الكمية",
+    "checkoutItem": "إتمام الطلب",
+    "checkoutNote": "كل منتج يُطلب على حدة حالياً. يتم الدفع خارج المنصة بعد موافقة الإدارة."
+  },
+  "categories": {
+    "title": "التصنيفات",
+    "instagram": "خدمات إنستغرام",
+    "gaming": "ألعاب",
+    "software": "برامج",
+    "subscriptions": "اشتراكات",
+    "productCount": "{count} منتج"
+  },
+  "catalog": {
+    "viewAllProducts": "عرض كل المنتجات",
+    "searchResults": "نتائج \"{query}\"",
+    "emptyTitle": "لا توجد منتجات",
+    "emptyDescription": "عد لاحقاً — نضيف منتجات جديدة باستمرار.",
+    "loadErrorTitle": "تعذّر تحميل المنتجات",
+    "loadErrorDescription": "لم نتمكن من الوصول إلى الكتالوج. حاول مرة أخرى."
+  },
+  "support": {
+    "title": "الدعم",
+    "description": "افتح تذكرة للمساعدة في الطلبات أو التسليم أو أي استفسار.",
+    "contactHint": "يمكن للعملاء المسجّلين مراسلة فريقنا مباشرة.",
+    "signInRequired": "سجّل الدخول لفتح تذاكر الدعم وإدارتها.",
+    "signIn": "تسجيل الدخول",
+    "newTicket": "تذكرة جديدة",
+    "yourTickets": "تذاكرك",
+    "noTickets": "لا توجد تذاكر بعد.",
+    "subject": "الموضوع",
+    "message": "الرسالة",
+    "submitTicket": "إنشاء تذكرة",
+    "subjectPlaceholder": "ملخص مختصر للمشكلة",
+    "messagePlaceholder": "صف سؤالك أو مشكلتك…",
+    "backToSupport": "← الدعم",
+    "linkedOrder": "الطلب",
+    "reply": "رد",
+    "replyPlaceholder": "اكتب رسالتك…",
+    "sendReply": "إرسال",
+    "attachment": "مرفق (اختياري)",
+    "attachmentHint": "JPG أو PNG أو WebP أو PDF — بحد أقصى 5 ميجابايت",
+    "reportIssue": "الإبلاغ عن مشكلة",
+    "status": {
+      "open": "مفتوحة",
+      "waiting_customer": "بانتظار ردك",
+      "waiting_admin": "بانتظار الدعم",
+      "resolved": "تم الحل",
+      "closed": "مغلقة"
+    }
+  },
+  "checkout": {
+    "title": "إتمام الطلب",
+    "yourDetails": "بياناتك",
+    "guestEmail": "البريد لتحديثات الطلب",
+    "orderNote": "ملاحظة على الطلب (اختياري)",
+    "coupon": "كود الخصم",
+    "couponPlaceholder": "أدخل الكود",
+    "couponHint": "يُطبّق إذا كان الكود صالحاً.",
+    "subtotal": "المجموع الفرعي",
+    "total": "الإجمالي",
+    "termsLabel": "أوافق على الشروط وأفهم أن الدفع يتم خارجياً بعد الموافقة على الطلب.",
+    "submitOrder": "إرسال طلب الشراء",
+    "submitting": "جارٍ الإرسال…",
+    "backToProduct": "العودة للمنتج"
+  },
+  "orders": {
+    "myOrders": "طلباتي",
+    "empty": "لا توجد طلبات بعد.",
+    "browseProducts": "تصفّح المنتجات",
+    "orderNumber": "رقم الطلب",
+    "items": "العناصر",
+    "yourFields": "المعلومات التي قدمتها",
+    "timeline": "مسار الطلب",
+    "summary": "الملخص",
+    "subtotal": "المجموع الفرعي",
+    "discount": "الخصم",
+    "total": "الإجمالي",
+    "paymentInstructions": "تعليمات الدفع",
+    "continueShopping": "متابعة التسوق",
+    "qty": "الكمية {count}",
+    "guestTokenHint": "احفظ رابط هذه الصفحة — يحتوي على رمز وصول خاص لتتبع الطلب كضيف.",
+    "delivery": "تسليمك",
+    "deliveryHint": "احفظ هذه التفاصيل في مكان آمن. ننصح بنسخها الآن.",
+    "status": {
+      "pending_review": "قيد المراجعة",
+      "awaiting_payment": "بانتظار الدفع",
+      "payment_received": "تم استلام الدفع",
+      "processing": "قيد المعالجة",
+      "delivered": "تم التسليم",
+      "completed": "مكتمل",
+      "cancelled": "ملغى",
+      "needs_customer_response": "بحاجة لردك",
+      "on_hold": "معلّق"
+    },
+    "confirmation": {
+      "title": "تم إرسال الطلب",
+      "subtitle": "سنراجع طلبك ونرسل تعليمات الدفع قريباً.",
+      "orderLabel": "رقم طلبك",
+      "saveLink": "احفظ هذه الصفحة لتتبع طلبك كضيف.",
+      "viewOrder": "عرض حالة الطلب",
+      "continueShopping": "متابعة التسوق",
+      "browse": "تصفّح المنتجات",
+      "missing": "مرجع الطلب غير موجود."
+    },
+    "errors": {
+      "VALIDATION": "يرجى التحقق من النموذج والمحاولة مرة أخرى.",
+      "NOT_FOUND": "المنتج غير موجود.",
+      "OUT_OF_STOCK": "المنتج غير متوفر حالياً.",
+      "COUPON_INVALID": "كود خصم غير صالح.",
+      "COUPON_EXPIRED": "انتهت صلاحية كود الخصم.",
+      "COUPON_INACTIVE": "كود الخصم غير مفعّل.",
+      "COUPON_MIN_ORDER": "إجمالي الطلب أقل من الحد المطلوب للكود.",
+      "COUPON_USAGE_LIMIT": "وصل كود الخصم إلى حد الاستخدام.",
+      "INTERNAL": "تعذّر إرسال الطلب. حاول مرة أخرى."
+    }
+  },
+  "errors": {
+    "notFoundTitle": "الصفحة غير موجودة",
+    "notFoundDescription": "الصفحة التي تبحث عنها غير موجودة أو نُقلت.",
+    "backHome": "العودة للرئيسية",
+    "genericTitle": "حدث خطأ",
+    "genericDescription": "حدث خطأ غير متوقع. يرجى المحاولة مرة أخرى."
+  }
+}
