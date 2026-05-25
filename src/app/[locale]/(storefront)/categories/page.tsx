@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
+import { CategoriesBrowseShell } from "@/features/catalog/components/categories-browse-shell";
 import { listCategories } from "@/server/services/category.service";
-import { CategoryCard } from "@/features/catalog/components/category-card";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata({
@@ -15,7 +15,7 @@ export async function generateMetadata({
   return buildPageMetadata({
     locale,
     path: "/categories",
-    title: `${t("title")} | riont`,
+    title: `${t("browseTitle")} | riont`,
     description:
       locale === "ar"
         ? "تصفّح تصنيفات المنتجات الرقمية — ألعاب، برامج، اشتراكات والمزيد."
@@ -24,22 +24,8 @@ export async function generateMetadata({
 }
 
 export default async function CategoriesPage() {
-  const t = await getTranslations("categories");
   const locale = await getLocale();
   const categories = await listCategories(locale);
 
-  return (
-    <div className="mx-auto max-w-content">
-      <h1 className="mb-6 text-2xl font-bold">{t("title")}</h1>
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {categories.map((category) => (
-          <CategoryCard
-            key={category.id}
-            category={category}
-            productCountLabel={t("productCount", { count: category.productCount })}
-          />
-        ))}
-      </div>
-    </div>
-  );
+  return <CategoriesBrowseShell categories={categories} />;
 }

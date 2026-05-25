@@ -186,6 +186,7 @@ function getDemoProducts(options?: {
   featured?: boolean;
   limit?: number;
   categorySlug?: string;
+  sortBy?: "sort_order" | "sales_count";
 }) {
   let items = options?.featured
     ? demoProducts.filter((_, i) => i < 4)
@@ -195,14 +196,25 @@ function getDemoProducts(options?: {
     items = items.filter((p) => p.categorySlug === options.categorySlug);
   }
 
+  if (options?.sortBy === "sales_count") {
+    items = [...items].reverse();
+  }
+
   return options?.limit ? items.slice(0, options.limit) : items;
 }
 
 async function listFromDatabase(
   locale: string,
-  options?: { featured?: boolean; limit?: number; categorySlug?: string },
+  options?: {
+    featured?: boolean;
+    limit?: number;
+    categorySlug?: string;
+    sortBy?: "sort_order" | "sales_count";
+  },
 ): Promise<CatalogProduct[]> {
   const supabase = await createClient();
+
+  const sortBySales = options?.sortBy === "sales_count";
 
   let query = supabase
     .from("products")
@@ -210,7 +222,9 @@ async function listFromDatabase(
     .eq("status", "active")
     .eq("product_translations.locale", locale)
     .eq("categories.category_translations.locale", locale)
-    .order("sort_order", { ascending: true });
+    .order(sortBySales ? "sales_count" : "sort_order", {
+      ascending: !sortBySales,
+    });
 
   if (options?.featured) {
     query = query.eq("is_featured", true);
@@ -235,7 +249,12 @@ async function listFromDatabase(
 
 export async function listProducts(
   locale: string,
-  options?: { featured?: boolean; limit?: number; categorySlug?: string },
+  options?: {
+    featured?: boolean;
+    limit?: number;
+    categorySlug?: string;
+    sortBy?: "sort_order" | "sales_count";
+  },
 ): Promise<CatalogProduct[]> {
   if (!isSupabaseConfigured()) {
     if (!allowDemoFallback) {
@@ -254,6 +273,13 @@ export async function listProducts(
 
 export async function listFeaturedProducts(locale: string): Promise<CatalogProduct[]> {
   return listProducts(locale, { featured: true, limit: 8 });
+}
+
+export async function listBestSellingProducts(
+  locale: string,
+  limit = 5,
+): Promise<CatalogProduct[]> {
+  return listProducts(locale, { limit, sortBy: "sales_count" });
 }
 
 export async function searchProducts(
@@ -475,6 +501,7 @@ export async function getProductForCheckout(
       id: `demo-${slug}`,
       slug: demo.slug,
       name: demo.name,
+      categoryName: demo.category ?? null,
       shortDescription: demo.shortDescription ?? null,
       priceCents: demo.priceCents,
       compareAtCents: demo.compareAtCents ?? null,
@@ -503,6 +530,7 @@ export async function getProductForCheckout(
     id: detail.id,
     slug: detail.slug,
     name: detail.name,
+    categoryName: detail.category ?? null,
     shortDescription: detail.shortDescription ?? null,
     priceCents: detail.priceCents,
     compareAtCents: detail.compareAtCents ?? null,

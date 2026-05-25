@@ -1,0 +1,470 @@
+/**
+ * NEXORA reference match — clarity, contrast, controlled glow
+ * Loads last; overrides over-processed AAA/authenticity layers
+ */
+
+:root {
+  --bg-void: #020202;
+  --glow-edge: 0 0 0 1px rgba(139, 92, 246, 0.06);
+  --glow-focus: 0 0 16px rgba(139, 92, 246, 0.1);
+  --glow-bloom: 0 0 40px rgba(139, 92, 246, 0.04);
+  --shadow-card:
+    var(--glow-edge),
+    var(--glow-focus),
+    var(--glow-bloom),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --shadow-card-hover:
+    0 0 0 1px rgba(167, 139, 250, 0.14),
+    0 0 24px rgba(139, 92, 246, 0.16),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --shadow-nav-active:
+    0 0 12px rgba(139, 92, 246, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  --shadow-btn-primary:
+    0 0 20px rgba(124, 58, 237, 0.32),
+    0 4px 12px rgba(0, 0, 0, 0.35);
+  --text-muted: rgba(148, 163, 184, 0.65);
+}
+
+/* ─── Global: cleaner blacks, less purple wash ─── */
+.nex-storefront {
+  background-color: #020202;
+  background-image:
+    radial-gradient(ellipse 100% 70% at 18% -8%, rgba(139, 92, 246, 0.12), transparent 50%),
+    radial-gradient(ellipse 50% 40% at 92% 5%, rgba(124, 58, 237, 0.06), transparent 48%),
+    linear-gradient(180deg, #020202 0%, #040404 45%, #060608 100%);
+}
+
+.nex-storefront::before {
+  opacity: 0.35;
+}
+
+.nex-storefront::after {
+  opacity: 0.2;
+}
+
+.nex-noise-overlay--page {
+  display: none;
+}
+
+.nex-home-main::before {
+  opacity: 0.25;
+}
+
+/* ─── Hero: NEXORA reference match ─── */
+.nex-hero {
+  position: relative;
+  min-height: 380px;
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(139, 92, 246, 0.14);
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.05),
+    0 0 32px rgba(139, 92, 246, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  overflow: hidden;
+  isolation: isolate;
+}
+
+/* Cinematic slider backgrounds */
+.nex-hero-slider .nex-hero-media {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.nex-hero-bg-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+}
+
+.nex-hero-bg,
+.nex-hero-city {
+  object-fit: cover;
+  object-position: 65% 38%;
+  filter: saturate(1.12) contrast(1.08) brightness(0.96);
+  transform: translateZ(0);
+  will-change: transform;
+}
+
+.nex-hero-copy-inner {
+  transform: translateZ(0);
+}
+
+.nex-hero-title-accent {
+  text-shadow: 0 0 24px rgba(139, 92, 246, 0.35);
+}
+
+.nex-hero-dot {
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.35);
+}
+
+@media (max-width: 640px) {
+  .nex-hero {
+    min-height: 360px;
+  }
+
+  .nex-hero-scrim-left {
+    width: 55%;
+    max-width: none;
+  }
+
+  .nex-hero-title {
+    font-size: clamp(1.45rem, 6vw, 1.85rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nex-hero-bg-layer,
+  .nex-hero-bg {
+    transition: none !important;
+    animation: none !important;
+  }
+}
+
+/* Subtle ember particles (reference density) */
+.nex-hero-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(1px 1px at 72% 28%, rgba(167, 139, 250, 0.5), transparent),
+    radial-gradient(1px 1px at 85% 45%, rgba(139, 92, 246, 0.4), transparent),
+    radial-gradient(1.5px 1.5px at 68% 55%, rgba(196, 181, 253, 0.35), transparent),
+    radial-gradient(1px 1px at 78% 62%, rgba(139, 92, 246, 0.3), transparent),
+    radial-gradient(1px 1px at 90% 35%, rgba(167, 139, 250, 0.25), transparent),
+    radial-gradient(1px 1px at 62% 40%, rgba(139, 92, 246, 0.2), transparent);
+  opacity: 0.7;
+}
+
+/* Hide over-processed hero layers */
+.nex-hero-depth-haze,
+.nex-hero-depth,
+.nex-hero-fog-back,
+.nex-hero-floor-mist,
+.nex-hero-atmosphere,
+.nex-hero-bloom-diffusion,
+.nex-hero-edge-glow,
+.nex-hero-edge-reflection,
+.nex-hero-lens,
+.nex-hero-color-grade,
+.nex-hero-grain,
+.nex-hero-character-glow,
+.nex-hero-fog-character,
+.nex-hero-light-streaks,
+.nex-hero-neon-edge,
+.nex-hero-rim-diffusion {
+  display: none !important;
+}
+
+/* Left text legibility — soldier/city stay visible on right */
+.nex-hero-scrim-left {
+  width: 42%;
+  max-width: 440px;
+  background: linear-gradient(
+    90deg,
+    rgba(2, 2, 5, 0.82) 0%,
+    rgba(4, 3, 8, 0.5) 55%,
+    transparent 100%
+  );
+}
+
+.nex-hero-scrim-bottom {
+  height: 38%;
+  background: linear-gradient(
+    0deg,
+    rgba(2, 2, 5, 0.7) 0%,
+    rgba(2, 2, 5, 0.2) 50%,
+    transparent 100%
+  );
+}
+
+.nex-hero-vignette {
+  box-shadow:
+    inset 0 0 50px rgba(0, 0, 0, 0.2),
+    inset -24px 0 60px rgba(0, 0, 0, 0.12);
+}
+
+/* Badge */
+.nex-hero-badge {
+  color: rgba(233, 225, 255, 0.95);
+  border: 1px solid rgba(139, 92, 246, 0.35);
+  background: rgba(12, 8, 22, 0.75);
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.15);
+}
+
+/* Title — reference: white line + neon purple line */
+.nex-hero-title {
+  font-size: clamp(1.65rem, 3.1vw, 2.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: 0.02em;
+}
+
+.nex-hero-title-line {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.nex-hero-title-accent {
+  display: inline-block;
+  background: linear-gradient(90deg, #c4b5fd 0%, #a78bfa 40%, #8b5cf6 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 18px rgba(139, 92, 246, 0.45));
+}
+
+.nex-hero-subtitle {
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(203, 213, 225, 0.88);
+  max-width: 360px;
+}
+
+.nex-hero-features {
+  font-size: 11px;
+  line-height: 1.5;
+  color: rgba(148, 163, 184, 0.75);
+  max-width: 360px;
+}
+
+/* CTAs */
+.nex-hero-cta-primary.nex-btn-primary {
+  height: 40px;
+  padding-inline: 18px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #9333ea 0%, #7c3aed 55%, #6d28d9 100%);
+  box-shadow:
+    0 0 20px rgba(124, 58, 237, 0.35),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.nex-hero-cta-explore.nex-btn-outline {
+  height: 40px;
+  padding-inline: 18px;
+  font-size: 13px;
+  border-radius: 10px;
+  border: 1px solid rgba(139, 92, 246, 0.45);
+  background: rgba(8, 6, 14, 0.65);
+  color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(8px);
+}
+
+.nex-hero-cta-explore.nex-btn-outline:hover {
+  border-color: rgba(167, 139, 250, 0.55);
+  background: rgba(14, 10, 24, 0.8);
+}
+
+/* Stats bar — two-line cells */
+.nex-hero-stats {
+  background: rgba(6, 6, 10, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  backdrop-filter: blur(14px);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.nex-stat-icon {
+  width: 36px;
+  height: 36px;
+  background: rgba(76, 29, 149, 0.35);
+  border: 1px solid rgba(167, 139, 250, 0.25);
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.28);
+}
+
+.nex-stat-divider {
+  width: 1px;
+  align-self: stretch;
+  margin-block: 12px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.nex-stat-value {
+  letter-spacing: -0.01em;
+}
+
+.nex-stat-label {
+  font-weight: 500;
+}
+
+/* ─── Navbar: sharper glass ─── */
+.nex-topbar {
+  background: rgba(3, 3, 5, 0.9);
+  border-bottom-color: rgba(255, 255, 255, 0.05);
+}
+
+.nex-search {
+  height: 42px;
+  background: rgba(10, 10, 14, 0.95);
+  border-color: rgba(139, 92, 246, 0.14);
+  box-shadow:
+    inset 0 1px 2px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 16px rgba(139, 92, 246, 0.06);
+}
+
+.nex-pill-select,
+.nex-lang-btn {
+  background: rgba(10, 10, 14, 0.92);
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+/* ─── Category cards: crisp neon, defined edges ─── */
+.nex-category-card {
+  border-color: rgba(255, 255, 255, 0.06);
+  min-height: 94px;
+}
+
+.nex-category-glow::before {
+  filter: blur(14px);
+  opacity: 0.65;
+  inset: -10px;
+}
+
+.nex-glow-violet::before {
+  background: rgba(139, 92, 246, 0.5);
+}
+.nex-glow-blue::before {
+  background: rgba(59, 130, 246, 0.45);
+}
+.nex-glow-amber::before {
+  background: rgba(245, 158, 11, 0.45);
+}
+.nex-glow-emerald::before {
+  background: rgba(16, 185, 129, 0.4);
+}
+.nex-glow-rose::before {
+  background: rgba(244, 63, 94, 0.4);
+}
+
+.nex-category-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+/* ─── Product cards: clearer art, premium contrast ─── */
+.nex-product-card {
+  min-height: 176px;
+  background: linear-gradient(
+    180deg,
+    rgba(139, 92, 246, 0.06) 0%,
+    rgba(12, 11, 18, 0.98) 26%,
+    rgba(8, 8, 12, 1) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.055);
+}
+
+.nex-product-card::before {
+  background: radial-gradient(
+    ellipse 90% 45% at 50% 0%,
+    rgba(139, 92, 246, 0.12),
+    transparent 55%
+  );
+}
+
+.nex-product-image-wrap {
+  height: 80px;
+  background: linear-gradient(
+    180deg,
+    rgba(22, 16, 36, 0.6) 0%,
+    rgba(8, 8, 12, 0.95) 100%
+  );
+  border-color: rgba(255, 255, 255, 0.05);
+}
+
+.nex-product-image-wrap::after {
+  background: linear-gradient(
+    0deg,
+    rgba(6, 6, 10, 0.5) 0%,
+    transparent 40%
+  );
+}
+
+.nex-product-art-bleed {
+  opacity: 0.35;
+  filter: blur(6px);
+}
+
+.nex-product-image-wrap img {
+  mix-blend-mode: normal;
+  opacity: 1;
+  filter: none;
+}
+
+.nex-product-card:hover .nex-product-image-wrap img {
+  filter: brightness(1.04);
+  transform: scale(1.01);
+}
+
+.nex-product-image-integration {
+  opacity: 0.7;
+}
+
+/* ─── Right sidebar: defined panels ─── */
+.nex-panel-card {
+  backdrop-filter: blur(4px);
+  border-color: rgba(255, 255, 255, 0.05);
+  box-shadow: var(--shadow-card);
+}
+
+.nex-panel-card::after {
+  opacity: 0.35;
+}
+
+.home-right-sidebar::before {
+  display: none;
+}
+
+.nex-deals-card {
+  background: linear-gradient(
+    158deg,
+    rgba(109, 40, 217, 0.5) 0%,
+    rgba(55, 22, 95, 0.85) 38%,
+    rgba(8, 6, 12, 1) 100%
+  );
+  border-color: rgba(167, 139, 250, 0.2);
+  box-shadow:
+    0 0 24px rgba(139, 92, 246, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.nex-deals-card .nex-deals-glow {
+  filter: drop-shadow(0 0 14px rgba(167, 139, 250, 0.4));
+}
+
+.nex-why-icon {
+  box-shadow:
+    0 0 14px rgba(139, 92, 246, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.nex-bestseller-thumb {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.nex-bestseller-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+/* ─── Section density ─── */
+.nex-home-layout {
+  gap: 16px;
+}
+
+.nex-home-main {
+  gap: 18px;
+}
+
+.nex-section-label {
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  color: rgba(148, 163, 184, 0.6);
+}
+
+/* Card glass: subtle, not muddy */
+.nex-card::before {
+  opacity: 0.55;
+}
+
+.nex-card::after {
+  opacity: 0.5;
+}

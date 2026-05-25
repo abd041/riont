@@ -1,0 +1,159 @@
+/**
+ * Left sidebar — fixed layout & scroll behavior (no visual redesign)
+ */
+
+/* Prevent horizontal page shift */
+html,
+body {
+  overflow-x: hidden;
+}
+
+/* ─── Desktop: app shell does not scroll; main column does ─── */
+@media (min-width: 1024px) {
+  .nex-storefront {
+    min-height: 100vh;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+
+  .nex-storefront--no-nav .nex-storefront-main {
+    margin-inline-start: 0;
+  }
+
+  .nex-storefront-main {
+    margin-inline-start: var(--sidebar-width);
+    min-height: 0;
+    height: 100vh;
+    max-height: 100vh;
+    overflow: hidden;
+  }
+
+  .nex-storefront-main .nex-main {
+    min-height: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+}
+
+/* ─── Sidebar rail (fixed on lg+) ─── */
+.nex-sidebar-rail {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  z-index: 50;
+  width: var(--sidebar-width);
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+@media (min-width: 1024px) {
+  .nex-sidebar-rail {
+    z-index: 40;
+  }
+
+  .nex-sidebar-rail.is-closed,
+  .nex-sidebar-rail.is-open {
+    transform: none;
+  }
+}
+
+/* Mobile drawer: off-canvas until open */
+@media (max-width: 1023.98px) {
+  .nex-sidebar-rail {
+    transition: transform 0.2s ease;
+  }
+
+  .nex-sidebar-rail.is-closed {
+    transform: translateX(-100%);
+  }
+
+  [dir="rtl"] .nex-sidebar-rail.is-closed {
+    transform: translateX(100%);
+  }
+
+  .nex-sidebar-rail.is-open {
+    transform: translateX(0);
+  }
+}
+
+/* ─── Sidebar scrollport ─── */
+.nex-sidebar-rail .nex-sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100vh;
+  max-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scroll-behavior: smooth;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 28px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.08) transparent;
+}
+
+.nex-sidebar-rail .nex-sidebar-nav {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.nex-sidebar-rail .nex-sidebar-footer {
+  flex-shrink: 0;
+  padding-bottom: 4px;
+}
+
+/* Premium scrollbar (WebKit) */
+.nex-sidebar-rail .nex-sidebar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.nex-sidebar-rail .nex-sidebar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.nex-sidebar-rail .nex-sidebar::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+}
+
+.nex-sidebar-rail .nex-sidebar::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+/* ─── Cinematic scroll fades (fixed to rail viewport) ─── */
+.nex-sidebar__fade {
+  position: absolute;
+  inset-inline: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.nex-sidebar__fade--top {
+  top: 0;
+  height: 36px;
+  background: linear-gradient(
+    180deg,
+    rgba(10, 10, 16, 0.92) 0%,
+    rgba(10, 10, 16, 0.45) 55%,
+    transparent 100%
+  );
+}
+
+.nex-sidebar__fade--bottom {
+  bottom: 0;
+  height: 48px;
+  background: linear-gradient(
+    0deg,
+    rgba(5, 5, 10, 0.95) 0%,
+    rgba(5, 5, 10, 0.5) 50%,
+    transparent 100%
+  );
+}

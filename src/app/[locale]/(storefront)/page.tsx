@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { getTranslations, getLocale } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { HeroSection } from "@/features/home/components/hero-section";
-import { TrustBar } from "@/features/home/components/trust-bar";
-import { PopularCategories } from "@/features/home/components/popular-categories";
-import { ProductCard } from "@/features/catalog/components/product-card";
+import { HomeCategoryRow } from "@/features/home/components/home-category-row";
+import { HomeProductCard } from "@/features/home/components/home-product-card";
+import { HomeRightSidebar } from "@/features/home/components/home-right-sidebar";
+import { HomeMotionSection } from "@/features/home/motion/home-motion-section";
+import { HomeMotionStagger } from "@/features/home/motion/home-motion-stagger";
 import { listFeaturedProducts } from "@/server/services/product.service";
 import { getHomePageContent } from "@/server/services/content-block.service";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -38,27 +40,27 @@ export default async function HomePage() {
   ]);
 
   return (
-    <div className="mx-auto flex max-w-content flex-col gap-8">
-      <HeroSection content={homeContent.hero} />
-      <TrustBar content={homeContent.trust} />
-      <PopularCategories />
+    <div className="nex-home-layout mx-auto flex w-full max-w-[1440px]">
+      <div className="nex-home-main min-w-0 flex-1">
+        <HeroSection content={homeContent.hero} />
+        <HomeCategoryRow />
 
-      <section>
-        <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-xl font-semibold">{t("featuredProducts")}</h2>
-          <Link
-            href="/products"
-            className="text-sm text-accent-400 hover:text-accent-500"
-          >
-            {tCommon("viewAll")} →
-          </Link>
-        </div>
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-          {products.map((product) => (
-            <ProductCard key={product.slug} {...product} />
-          ))}
-        </div>
-      </section>
+        <HomeMotionSection className="nex-featured-section" delay={0.06}>
+          <div className="nex-featured-header">
+            <h2 className="nex-featured-title">{t("featuredProducts")}</h2>
+            <Link href="/products" className="nex-featured-view-all">
+              {tCommon("viewAll")}
+            </Link>
+          </div>
+          <HomeMotionStagger className="nex-featured-grid">
+            {products.slice(0, 5).map((product) => (
+              <HomeProductCard key={product.slug} {...product} />
+            ))}
+          </HomeMotionStagger>
+        </HomeMotionSection>
+      </div>
+
+      <HomeRightSidebar />
     </div>
   );
 }

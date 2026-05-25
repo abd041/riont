@@ -1,11 +1,26 @@
+@import "./nexora-premium.css";
+@import "./nexora-aaa-polish.css";
+@import "./nexora-authenticity.css";
+@import "./nexora-reference-match.css";
+@import "./nexora-sidebar-premium.css";
+@import "./nexora-sidebar-scroll.css";
+@import "./nexora-right-sidebar-premium.css";
+@import "./nexora-categories-reference.css";
+@import "./nexora-featured-products-reference.css";
+@import "./nexora-topbar-reference.css";
+@import "./nexora-home-motion.css";
+@import "./nexora-browse-products.css";
+@import "./nexora-categories-page.css";
+@import "./nexora-checkout.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
   --bg-void: #000000;
-  --bg-base: #050508;
-  --bg-elevated: #0a0a0f;
+  --bg-base: #040404;
+  --bg-elevated: #07070a;
   --bg-surface: #0f0f16;
   --bg-surface-2: #14141e;
   --bg-overlay: rgba(10, 10, 15, 0.85);
@@ -51,8 +66,9 @@
   --text-muted: rgba(255, 255, 255, 0.45);
   --text-accent: #c4b5fd;
 
-  --sidebar-width: 240px;
-  --topbar-height: 64px;
+  --sidebar-width: 232px;
+  --right-sidebar-width: 300px;
+  --topbar-height: 68px;
   --radius-md: 10px;
   --radius-lg: 14px;
 }
@@ -63,7 +79,7 @@
   }
 
   body {
-    @apply bg-[var(--bg-base)] text-[var(--text-secondary)] antialiased;
+    @apply bg-[#040404] text-[var(--text-secondary)] antialiased;
   }
 
   h1,
@@ -95,5 +111,14 @@
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
+  }
+
+  .home-hero {
+    min-height: 320px;
+  }
+
+  .scrollbar-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border-default) transparent;
   }
 }

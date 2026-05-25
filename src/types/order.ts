@@ -15,6 +15,7 @@ export type CheckoutProduct = {
   id: string;
   slug: string;
   name: string;
+  categoryName?: string | null;
   shortDescription: string | null;
   priceCents: number;
   compareAtCents: number | null;

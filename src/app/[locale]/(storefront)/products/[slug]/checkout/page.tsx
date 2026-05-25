@@ -12,7 +12,6 @@ export default async function CheckoutPage({
 }) {
   const { slug, locale } = await params;
   const product = await getProductForCheckout(locale, slug);
-  const t = await getTranslations("checkout");
   const user = await getSession();
 
   if (!product) notFound();
@@ -20,15 +19,12 @@ export default async function CheckoutPage({
   const paymentInstructions = await getPaymentInstructions(locale);
 
   return (
-    <div className="mx-auto max-w-content">
-      <h1 className="mb-6 text-2xl font-bold">{t("title")}</h1>
-      <CheckoutForm
-        product={product}
-        locale={locale}
-        paymentInstructions={paymentInstructions}
-        isLoggedIn={Boolean(user)}
-        userEmail={user?.email}
-      />
-    </div>
+    <CheckoutForm
+      product={product}
+      locale={locale}
+      paymentInstructions={paymentInstructions}
+      isLoggedIn={Boolean(user)}
+      userEmail={user?.email}
+    />
   );
 }

@@ -1,0 +1,351 @@
+/**
+ * Right sidebar — reference match (NEXORA panel)
+ */
+
+:root {
+  --right-sidebar-width: 300px;
+}
+
+/* ─── Container ─── */
+.home-right-sidebar {
+  position: relative;
+  isolation: isolate;
+  gap: 16px;
+  padding: 0 4px 12px;
+  background: transparent;
+}
+
+.home-right-sidebar::before,
+.home-right-sidebar::after {
+  display: none;
+}
+
+/* ─── Panel cards ─── */
+.home-right-sidebar .nex-rs-card {
+  position: relative;
+  overflow: hidden;
+  padding: 20px 18px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(180deg, rgba(16, 16, 24, 0.94), rgba(10, 10, 18, 0.98));
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.42);
+}
+
+.home-right-sidebar .nex-rs-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.06);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.home-right-sidebar .nex-rs-card:hover {
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+/* ─── Section labels (reference: purple caps) ─── */
+.nex-rs-section-label {
+  margin: 0 0 16px;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #a78bfa;
+}
+
+/* ─── Why choose us ─── */
+.nex-rs-feature-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nex-rs-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.nex-rs-icon {
+  display: flex;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(139, 92, 246, 0.22);
+  background: linear-gradient(
+    180deg,
+    rgba(76, 29, 149, 0.45),
+    rgba(46, 16, 78, 0.65)
+  );
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.06),
+    0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.nex-rs-icon svg {
+  width: 18px;
+  height: 18px;
+  color: #c4b5fd;
+}
+
+.nex-rs-feature-title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: #fff;
+}
+
+.nex-rs-feature-desc {
+  margin: 3px 0 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: #9ca3af;
+}
+
+/* ─── Best sellers ─── */
+.nex-rs-product-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.nex-rs-product-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-radius: 12px;
+  padding: 8px 4px;
+  transition:
+    background 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nex-rs-product-row:hover {
+  background: rgba(255, 255, 255, 0.03);
+  transform: translateY(-1px);
+}
+
+.nex-rs-product-thumb {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: #0c0c12;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.nex-rs-product-body {
+  min-width: 0;
+  flex: 1;
+}
+
+.nex-rs-product-name {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.nex-rs-product-meta {
+  margin: 2px 0 0;
+  font-size: 10px;
+  line-height: 1.3;
+  color: #9ca3af;
+}
+
+.nex-rs-product-aside {
+  flex-shrink: 0;
+  text-align: end;
+}
+
+.nex-rs-product-price {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #a78bfa;
+}
+
+.nex-rs-product-rating {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 3px;
+  margin-top: 3px;
+  font-size: 10px;
+  font-weight: 500;
+  color: #9ca3af;
+}
+
+.nex-rs-product-rating svg {
+  width: 10px;
+  height: 10px;
+  color: #fbbf24;
+  fill: #fbbf24;
+}
+
+/* ─── View all ─── */
+.nex-rs-view-all {
+  display: flex;
+  margin-top: 14px;
+  height: 40px;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.88);
+  transition:
+    background 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nex-rs-view-all:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.03));
+  color: #fff;
+}
+
+/* ─── Exclusive deals (reference banner) ─── */
+.home-right-sidebar .nex-rs-deals {
+  position: relative;
+  overflow: hidden;
+  min-height: 152px;
+  padding: 22px 18px 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(139, 92, 246, 0.14);
+  background: linear-gradient(
+    105deg,
+    #0c0618 0%,
+    #120820 38%,
+    #0a0512 100%
+  );
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+}
+
+.nex-rs-deals-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.nex-rs-deals-bg-img {
+  object-fit: cover;
+  object-position: 72% 58%;
+}
+
+.nex-rs-deals-scrim {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(
+    90deg,
+    rgba(8, 4, 16, 0.92) 0%,
+    rgba(8, 4, 16, 0.72) 42%,
+    rgba(8, 4, 16, 0.15) 68%,
+    transparent 100%
+  );
+}
+
+.nex-rs-deals-body {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  max-width: 52%;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.nex-rs-deals-eyebrow {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: #d1b3ff;
+}
+
+.nex-rs-deals-headline {
+  margin: 5px 0 0;
+  font-size: 21px;
+  font-weight: 800;
+  line-height: 1.08;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  color: #f5f3ff;
+}
+
+.nex-rs-deals-cta {
+  display: inline-flex;
+  margin-top: 16px;
+  height: 38px;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 24px;
+  border-radius: 999px;
+  border: none;
+  background: #5e2ced;
+  font-size: 12px;
+  font-weight: 600;
+  color: #fff;
+  box-shadow: 0 8px 24px rgba(94, 44, 237, 0.35);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nex-rs-deals-cta:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+  box-shadow: 0 10px 28px rgba(94, 44, 237, 0.45);
+}
+
+/* RTL */
+[dir="rtl"] .nex-rs-deals-bg-img {
+  object-position: 28% 58%;
+}
+
+[dir="rtl"] .nex-rs-deals-scrim {
+  background: linear-gradient(
+    270deg,
+    rgba(8, 4, 16, 0.92) 0%,
+    rgba(8, 4, 16, 0.72) 42%,
+    rgba(8, 4, 16, 0.15) 68%,
+    transparent 100%
+  );
+}
+
+[dir="rtl"] .nex-rs-deals-body {
+  align-items: flex-start;
+  max-width: 52%;
+}

@@ -1,0 +1,239 @@
+/**
+ * Browse Categories — reference match (horizontal neon cards)
+ */
+
+.nex-categories-section {
+  position: relative;
+}
+
+.nex-categories-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.nex-categories-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.nex-categories-view-all {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a78bfa;
+  transition: color 0.35s ease;
+}
+
+.nex-categories-view-all:hover {
+  color: #c4b5fd;
+}
+
+.nex-categories-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .nex-categories-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nex-categories-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+/* ─── Card shell (horizontal: icon left, text right) ─── */
+.nex-cat-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px 14px 14px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(
+    145deg,
+    rgba(14, 14, 20, 0.98),
+    rgba(8, 8, 12, 0.99)
+  );
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.35),
+    inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nex-cat-card:hover {
+  transform: translateY(-2px);
+}
+
+.nex-cat-text {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 3px;
+  text-align: start;
+}
+
+.nex-cat-name {
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #f8fafc;
+}
+
+.nex-cat-count {
+  font-size: 11px;
+  line-height: 1.3;
+  color: #9ca3af;
+}
+
+/* ─── Icon + neon glow ─── */
+.nex-cat-icon-wrap {
+  position: relative;
+  display: flex;
+  height: 48px;
+  width: 48px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+}
+
+.nex-cat-icon-wrap::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border-radius: 50%;
+  filter: blur(14px);
+  opacity: 0.85;
+  z-index: 0;
+}
+
+.nex-cat-icon {
+  position: relative;
+  z-index: 1;
+  width: 26px;
+  height: 26px;
+}
+
+/* Violet — Games */
+.nex-cat-card--violet {
+  border-color: rgba(139, 92, 246, 0.1);
+}
+
+.nex-cat-card--violet .nex-cat-icon-wrap::before {
+  background: rgba(139, 92, 246, 0.55);
+}
+
+.nex-cat-card--violet .nex-cat-icon {
+  color: #c4b5fd;
+  filter: drop-shadow(0 0 10px rgba(139, 92, 246, 0.65));
+}
+
+.nex-cat-card--violet:hover {
+  border-color: rgba(139, 92, 246, 0.22);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(139, 92, 246, 0.12);
+}
+
+/* Blue — Software */
+.nex-cat-card--blue {
+  border-color: rgba(59, 130, 246, 0.1);
+}
+
+.nex-cat-card--blue .nex-cat-icon-wrap::before {
+  background: rgba(59, 130, 246, 0.5);
+}
+
+.nex-cat-card--blue .nex-cat-icon {
+  color: #93c5fd;
+  filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.6));
+}
+
+.nex-cat-card--blue:hover {
+  border-color: rgba(59, 130, 246, 0.22);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(59, 130, 246, 0.12);
+}
+
+/* Amber — Subscriptions */
+.nex-cat-card--amber {
+  border-color: rgba(245, 158, 11, 0.1);
+}
+
+.nex-cat-card--amber .nex-cat-icon-wrap::before {
+  background: rgba(245, 158, 11, 0.5);
+}
+
+.nex-cat-card--amber .nex-cat-icon {
+  color: #fcd34d;
+  filter: drop-shadow(0 0 10px rgba(245, 158, 11, 0.55));
+}
+
+.nex-cat-card--amber:hover {
+  border-color: rgba(245, 158, 11, 0.22);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(245, 158, 11, 0.12);
+}
+
+/* Emerald — Gift Cards */
+.nex-cat-card--emerald {
+  border-color: rgba(16, 185, 129, 0.1);
+}
+
+.nex-cat-card--emerald .nex-cat-icon-wrap::before {
+  background: rgba(16, 185, 129, 0.48);
+}
+
+.nex-cat-card--emerald .nex-cat-icon {
+  color: #6ee7b7;
+  filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.55));
+}
+
+.nex-cat-card--emerald:hover {
+  border-color: rgba(16, 185, 129, 0.22);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(16, 185, 129, 0.12);
+}
+
+/* Rose — Accounts */
+.nex-cat-card--rose {
+  border-color: rgba(244, 63, 94, 0.1);
+}
+
+.nex-cat-card--rose .nex-cat-icon-wrap::before {
+  background: rgba(244, 63, 94, 0.48);
+}
+
+.nex-cat-card--rose .nex-cat-icon {
+  color: #fda4af;
+  filter: drop-shadow(0 0 10px rgba(244, 63, 94, 0.55));
+}
+
+.nex-cat-card--rose:hover {
+  border-color: rgba(244, 63, 94, 0.22);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(244, 63, 94, 0.12);
+}

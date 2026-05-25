@@ -1,0 +1,307 @@
+/**
+ * Featured Products — reference match
+ */
+
+.nex-featured-section {
+  position: relative;
+}
+
+.nex-featured-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.nex-featured-title {
+  margin: 0;
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.nex-featured-view-all {
+  font-size: 12px;
+  font-weight: 500;
+  color: #a78bfa;
+  transition: color 0.35s ease;
+}
+
+.nex-featured-view-all:hover {
+  color: #c4b5fd;
+}
+
+.nex-featured-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+
+@media (min-width: 640px) {
+  .nex-featured-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nex-featured-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1280px) {
+  .nex-featured-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 16px;
+  }
+}
+
+/* ─── Card ─── */
+.nex-fp-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: linear-gradient(
+    180deg,
+    rgba(14, 14, 20, 0.98),
+    rgba(8, 8, 12, 1)
+  );
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.4);
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nex-fp-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 14px 40px rgba(0, 0, 0, 0.48);
+}
+
+/* Media (top ~50%) */
+.nex-fp-media {
+  position: relative;
+  display: block;
+  aspect-ratio: 1.15 / 1;
+  overflow: hidden;
+  isolation: isolate;
+  background: linear-gradient(
+    145deg,
+    rgba(30, 20, 50, 0.5) 0%,
+    rgba(10, 10, 16, 0.95) 55%,
+    rgba(6, 6, 10, 1) 100%
+  );
+}
+
+.nex-fp-media::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 80% 70% at 50% 50%,
+    rgba(139, 92, 246, 0.12),
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
+.nex-fp-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 5;
+  padding: 4px 8px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #9333ea, #7c3aed);
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1;
+  color: #fff;
+  box-shadow: 0 0 16px rgba(139, 92, 246, 0.45);
+}
+
+[dir="rtl"] .nex-fp-badge {
+  left: auto;
+  right: 10px;
+}
+
+.nex-fp-badge-bestseller {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  z-index: 5;
+  height: 20px;
+  padding: 0 7px;
+  display: inline-flex;
+  align-items: center;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  line-height: 1;
+  color: #1a1208;
+  white-space: nowrap;
+}
+
+[dir="rtl"] .nex-fp-badge-bestseller {
+  right: auto;
+  left: 10px;
+}
+
+/* Must stay absolute (do not add Tailwind `relative` on this node) */
+.nex-fp-media > .nex-fp-image-wrap {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+}
+
+.nex-fp-image,
+.nex-fp-image-wrap img {
+  object-fit: cover;
+  object-position: center;
+}
+
+.nex-fp-image-placeholder {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(167, 139, 250, 0.35);
+}
+
+/* Body */
+.nex-fp-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  padding: 12px 14px 14px;
+}
+
+.nex-fp-info {
+  display: block;
+  flex: 1;
+  min-width: 0;
+  text-decoration: none;
+  color: inherit;
+}
+
+.nex-fp-name {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.25;
+  color: #fff;
+  transition: color 0.25s ease;
+}
+
+.nex-fp-card:hover .nex-fp-name {
+  color: #ede9fe;
+}
+
+.nex-fp-subtitle {
+  margin: 4px 0 0;
+  font-size: 11px;
+  line-height: 1.3;
+  color: #9ca3af;
+}
+
+.nex-fp-rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 8px;
+  font-size: 11px;
+  line-height: 1;
+}
+
+.nex-fp-rating-star {
+  width: 12px;
+  height: 12px;
+  flex-shrink: 0;
+  color: #fbbf24;
+  fill: #fbbf24;
+}
+
+.nex-fp-rating-value {
+  font-weight: 600;
+  color: #fbbf24;
+}
+
+.nex-fp-rating-count {
+  color: #9ca3af;
+}
+
+/* Footer: price + cart */
+.nex-fp-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.nex-fp-prices {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.nex-fp-price {
+  font-size: 15px;
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  color: #fff;
+}
+
+.nex-fp-price-compare {
+  font-size: 11px;
+  font-weight: 500;
+  color: #6b7280;
+  text-decoration: line-through;
+}
+
+.nex-fp-cart {
+  display: flex;
+  height: 36px;
+  width: 36px;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: 10px;
+  background: linear-gradient(145deg, #a855f7, #7c3aed);
+  color: #fff;
+  box-shadow: 0 0 18px rgba(139, 92, 246, 0.35);
+  cursor: pointer;
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nex-fp-cart:hover {
+  transform: scale(1.05);
+  filter: brightness(1.08);
+  box-shadow: 0 0 22px rgba(139, 92, 246, 0.5);
+}
+
+.nex-fp-cart svg {
+  width: 16px;
+  height: 16px;
+}

@@ -1,0 +1,534 @@
+/**
+ * NEXORA — Final AAA realism pass
+ * Film grain, volumetric blending, material depth, premium motion
+ */
+
+:root {
+  --ease-premium: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
+  --ease-glow: cubic-bezier(0.25, 0.85, 0.45, 1);
+  --duration-surface: 0.52s;
+  --duration-glow: 0.65s;
+  --nex-noise-svg: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.72' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ─── Reusable film grain + noise ─── */
+.nex-noise-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.042;
+  mix-blend-mode: overlay;
+  background-image: var(--nex-noise-svg);
+  background-size: 180px 180px;
+}
+
+.nex-noise-overlay--subtle {
+  opacity: 0.028;
+}
+
+.nex-noise-overlay--page {
+  position: fixed;
+  inset: 0;
+  z-index: 9998;
+  opacity: 0.022;
+  mix-blend-mode: soft-light;
+  pointer-events: none;
+}
+
+/* ─── Page: environmental texture (not flat black) ─── */
+.nex-storefront::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    var(--nex-noise-svg),
+    radial-gradient(ellipse 35% 25% at 15% 80%, rgba(76, 29, 149, 0.04), transparent 70%),
+    radial-gradient(ellipse 30% 22% at 88% 25%, rgba(124, 58, 237, 0.035), transparent 68%),
+    radial-gradient(ellipse 50% 35% at 42% 55%, rgba(20, 15, 35, 0.06), transparent 75%),
+    linear-gradient(
+      125deg,
+      rgba(12, 8, 22, 0.15) 0%,
+      transparent 40%,
+      rgba(8, 6, 18, 0.12) 100%
+    );
+  background-size:
+    200px 200px,
+    100% 100%,
+    100% 100%,
+    100% 100%,
+    100% 100%;
+  opacity: 0.55;
+  mix-blend-mode: soft-light;
+}
+
+.nex-main::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 70% 50% at 60% 30%,
+    rgba(139, 92, 246, 0.03),
+    transparent 72%
+  );
+  opacity: 0.85;
+}
+
+/* ─── Premium motion (soft, non-CSS-snappy) ─── */
+.nex-card-hover,
+.nex-category-card,
+.nex-product-card,
+.nex-bestseller-row,
+.nex-nav-link,
+.nex-btn-primary,
+.nex-btn-outline,
+.nex-cart-btn,
+.nex-sidebar-promo-btn,
+.nex-search,
+.nex-lang-btn {
+  transition-timing-function: var(--ease-soft);
+}
+
+.nex-card-hover {
+  transition-duration: var(--duration-surface);
+  transition-property: border-color, box-shadow, transform, filter;
+}
+
+.nex-card-hover:hover {
+  transition-duration: var(--duration-glow);
+  transition-timing-function: var(--ease-glow);
+}
+
+.nex-product-card {
+  transition-duration: var(--duration-surface);
+  transition-timing-function: var(--ease-premium);
+  transition-property: transform, box-shadow, border-color, background, filter;
+}
+
+.nex-product-card:hover {
+  transition-duration: var(--duration-glow);
+}
+
+.nex-product-image-glow,
+.nex-product-image-wrap::before,
+.nex-product-image-wrap::after {
+  transition: opacity var(--duration-glow) var(--ease-glow),
+    box-shadow var(--duration-glow) var(--ease-glow);
+}
+
+/* ─── Card material: glass + corner specular ─── */
+.nex-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 1;
+  background:
+    radial-gradient(ellipse 40% 30% at 0% 0%, rgba(255, 255, 255, 0.06), transparent 55%),
+    radial-gradient(ellipse 35% 28% at 100% 0%, rgba(167, 139, 250, 0.05), transparent 50%),
+    linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.02) 0%,
+      transparent 40%
+    );
+  opacity: 0.9;
+}
+
+.nex-card::after {
+  z-index: 1;
+  opacity: 0.65;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.045) 0%,
+    transparent 20%,
+    transparent 85%,
+    rgba(139, 92, 246, 0.03) 100%
+  );
+}
+
+.nex-card-hover:hover::before {
+  opacity: 1;
+}
+
+/* ─── Hero: cinematic realism ─── */
+.nex-hero {
+  isolation: isolate;
+}
+
+.nex-hero-bg,
+.nex-hero-city {
+  object-fit: cover;
+  object-position: center 35%;
+}
+
+/* Depth haze — city ↔ foreground volumetric separation */
+.nex-hero-depth-haze {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 70% 55% at 58% 55%, rgba(30, 15, 55, 0.55), transparent 62%),
+    linear-gradient(
+      90deg,
+      rgba(8, 6, 18, 0.5) 0%,
+      transparent 35%,
+      rgba(55, 25, 95, 0.25) 70%,
+      rgba(139, 92, 246, 0.08) 100%
+    );
+  filter: blur(1px);
+  opacity: 0.88;
+}
+
+/* Cinematic S-curve contrast */
+.nex-hero-color-grade {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.15) 0%,
+    transparent 25%,
+    transparent 70%,
+    rgba(4, 2, 12, 0.35) 100%
+  );
+  mix-blend-mode: overlay;
+  opacity: 0.5;
+}
+
+.nex-hero-color-grade::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse 90% 70% at 72% 45%,
+    transparent 40%,
+    rgba(0, 0, 0, 0.2) 100%
+  );
+  mix-blend-mode: multiply;
+  opacity: 0.6;
+}
+
+/* Ultra-soft bloom diffusion (realistic falloff) */
+.nex-hero-bloom-diffusion {
+  position: absolute;
+  inset: -8%;
+  z-index: 7;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 65% at 78% 38%, rgba(196, 181, 253, 0.22), transparent 68%),
+    radial-gradient(ellipse 35% 45% at 65% 60%, rgba(139, 92, 246, 0.12), transparent 70%);
+  filter: blur(32px);
+  mix-blend-mode: screen;
+  opacity: 0.75;
+}
+
+/* Ground mist — embed character in scene */
+.nex-hero-floor-mist {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 45%;
+  z-index: 6;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      0deg,
+      rgba(76, 29, 149, 0.35) 0%,
+      rgba(109, 40, 217, 0.15) 25%,
+      transparent 70%
+    ),
+    radial-gradient(ellipse 80% 40% at 75% 100%, rgba(167, 139, 250, 0.2), transparent 65%);
+  filter: blur(6px);
+  mix-blend-mode: screen;
+  opacity: 0.7;
+}
+
+/* Lower-edge purple reflection (environmental bounce) */
+.nex-hero-edge-reflection {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 0;
+  height: 28%;
+  z-index: 11;
+  pointer-events: none;
+  background: linear-gradient(
+    0deg,
+    rgba(124, 58, 237, 0.18) 0%,
+    rgba(139, 92, 246, 0.06) 40%,
+    transparent 100%
+  );
+  mix-blend-mode: plus-lighter;
+  opacity: 0.55;
+}
+
+/* Lens: subtle vignette + chromatic warmth */
+.nex-hero-lens {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 120px rgba(0, 0, 0, 0.35),
+    inset 0 0 60px rgba(20, 8, 40, 0.2);
+  background: radial-gradient(
+    ellipse 95% 85% at 50% 50%,
+    transparent 55%,
+    rgba(0, 0, 0, 0.12) 100%
+  );
+  opacity: 0.85;
+}
+
+.nex-hero-lens::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    circle at 82% 42%,
+    rgba(196, 181, 253, 0.04) 0%,
+    transparent 45%
+  );
+  mix-blend-mode: color-dodge;
+}
+
+/* Rim-light diffusion (armor) */
+.nex-hero-rim-diffusion {
+  position: absolute;
+  top: 5%;
+  bottom: 10%;
+  inset-inline-end: 5%;
+  width: 48%;
+  z-index: 8;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 45% 85% at 88% 42%,
+    rgba(224, 214, 255, 0.12),
+    rgba(167, 139, 250, 0.06) 35%,
+    transparent 65%
+  );
+  filter: blur(18px);
+  mix-blend-mode: screen;
+  opacity: 0.8;
+}
+
+.nex-hero-character-wrap {
+  isolation: isolate;
+  filter: contrast(1.05);
+}
+
+.nex-hero-character-wrap::after {
+  content: "";
+  position: absolute;
+  inset-inline: 10% 0;
+  bottom: 0;
+  height: 42%;
+  z-index: 2;
+  background: linear-gradient(
+    0deg,
+    rgba(109, 40, 217, 0.4) 0%,
+    rgba(139, 92, 246, 0.15) 35%,
+    transparent 100%
+  );
+  filter: blur(12px);
+  mix-blend-mode: screen;
+  opacity: 0.75;
+}
+
+.nex-hero-soldier {
+  filter: saturate(1.28) contrast(1.15) brightness(1.02)
+    drop-shadow(0 4px 24px rgba(76, 29, 149, 0.5))
+    drop-shadow(0 0 48px rgba(139, 92, 246, 0.35))
+    drop-shadow(0 0 90px rgba(124, 58, 237, 0.15));
+  mix-blend-mode: normal;
+}
+
+.nex-hero-fog-character {
+  filter: blur(12px);
+  opacity: 0.7;
+}
+
+.nex-hero-atmosphere {
+  filter: blur(3px);
+  opacity: 0.65;
+}
+
+.nex-hero-neon-edge {
+  filter: blur(14px);
+  opacity: 0.28;
+}
+
+.nex-hero-grain {
+  z-index: 14;
+  opacity: 0.038;
+  mix-blend-mode: overlay;
+}
+
+/* ─── Product card: art embedded in environment ─── */
+.nex-product-card .nex-product-image-wrap {
+  isolation: isolate;
+}
+
+.nex-product-art-bleed {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: radial-gradient(
+    ellipse 75% 65% at 50% 35%,
+    rgba(139, 92, 246, 0.22),
+    transparent 68%
+  );
+  filter: blur(8px);
+  opacity: 0.65;
+  transition: opacity var(--duration-glow) var(--ease-glow);
+}
+
+.nex-product-card:hover .nex-product-art-bleed {
+  opacity: 0.95;
+}
+
+.nex-product-image-wrap::before {
+  background:
+    radial-gradient(ellipse 85% 75% at 50% 28%, rgba(196, 181, 253, 0.14), transparent 62%),
+    radial-gradient(ellipse 60% 50% at 50% 80%, rgba(76, 29, 149, 0.08), transparent 55%);
+}
+
+.nex-product-image-wrap img {
+  mix-blend-mode: screen;
+  opacity: 0.94;
+  filter: drop-shadow(0 6px 20px rgba(139, 92, 246, 0.2));
+  transition:
+    filter var(--duration-glow) var(--ease-glow),
+    transform var(--duration-surface) var(--ease-premium),
+    opacity var(--duration-glow) var(--ease-glow);
+}
+
+.nex-product-card:hover .nex-product-image-wrap img {
+  filter: drop-shadow(0 8px 28px rgba(167, 139, 250, 0.35))
+    brightness(1.08);
+  transform: scale(1.02);
+}
+
+.nex-product-card::before {
+  background:
+    radial-gradient(ellipse 100% 55% at 50% 0%, rgba(139, 92, 246, 0.16), transparent 58%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.04) 0%, transparent 16%);
+}
+
+/* ─── Right sidebar: studio finish ─── */
+.nex-panel-card {
+  backdrop-filter: blur(8px) saturate(1.15);
+}
+
+.nex-panel-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse 50% 40% at 100% 0%, rgba(167, 139, 250, 0.04), transparent 55%),
+    linear-gradient(180deg, transparent 88%, rgba(139, 92, 246, 0.04) 100%);
+  opacity: 0.8;
+}
+
+.home-right-sidebar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: -20px;
+  width: 40px;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 100% 80% at 100% 50%,
+    rgba(139, 92, 246, 0.06),
+    transparent 70%
+  );
+  filter: blur(8px);
+}
+
+.home-right-sidebar {
+  position: relative;
+}
+
+.nex-deals-card {
+  backdrop-filter: blur(6px);
+}
+
+.nex-deals-card .nex-deals-glow {
+  animation: nex-crystal-pulse 6s var(--ease-soft) infinite;
+}
+
+@keyframes nex-crystal-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 24px rgba(196, 181, 253, 0.55))
+      drop-shadow(0 0 40px rgba(139, 92, 246, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 32px rgba(196, 181, 253, 0.7))
+      drop-shadow(0 0 56px rgba(139, 92, 246, 0.45));
+  }
+}
+
+.nex-bestseller-thumb img {
+  filter: contrast(1.08) saturate(1.1);
+  transition: filter var(--duration-glow) var(--ease-glow),
+    transform var(--duration-surface) var(--ease-premium);
+}
+
+.nex-bestseller-row:hover .nex-bestseller-thumb img {
+  filter: contrast(1.12) saturate(1.15) brightness(1.05);
+  transform: scale(1.04);
+}
+
+.nex-why-icon {
+  transition: box-shadow var(--duration-glow) var(--ease-glow),
+    transform var(--duration-surface) var(--ease-premium);
+}
+
+.nex-panel-card .nex-why-icon {
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.08),
+    0 0 20px rgba(139, 92, 246, 0.28),
+    0 0 44px rgba(139, 92, 246, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.14),
+    inset 0 -6px 14px rgba(109, 40, 217, 0.18);
+}
+
+/* ─── Category: ambient bleed on hover ─── */
+.nex-category-card {
+  transition: transform var(--duration-surface) var(--ease-premium),
+    box-shadow var(--duration-glow) var(--ease-glow),
+    border-color var(--duration-glow) var(--ease-glow),
+    filter var(--duration-glow) var(--ease-glow);
+}
+
+.nex-category-card:hover {
+  filter: brightness(1.03);
+}
+
+/* ─── Topbar glass sheen ─── */
+.nex-topbar::after {
+  content: "";
+  position: absolute;
+  inset-inline: 0;
+  top: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(167, 139, 250, 0.2),
+    transparent
+  );
+  opacity: 0.7;
+}
+
+.nex-topbar {
+  position: relative;
+}

@@ -1,0 +1,278 @@
+/**
+ * Homepage — hover polish + motion accessibility
+ * Load after section reference CSS (globals.css import order).
+ */
+
+/* ─── Stagger grid items fill cell ─── */
+.nex-home-stagger-item {
+  min-width: 0;
+  height: 100%;
+}
+
+.nex-home-stagger-item > .nex-cat-card,
+.nex-home-stagger-item > .nex-fp-card {
+  height: 100%;
+}
+
+/* ─── Section “View all” links ─── */
+.nex-categories-view-all,
+.nex-featured-view-all {
+  position: relative;
+  transition:
+    color 0.35s var(--ease-soft, cubic-bezier(0.33, 1, 0.68, 1)),
+    opacity 0.35s var(--ease-soft, cubic-bezier(0.33, 1, 0.68, 1));
+}
+
+.nex-categories-view-all:hover,
+.nex-featured-view-all:hover {
+  color: #c4b5fd;
+}
+
+.nex-categories-view-all::after,
+.nex-featured-view-all::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  opacity: 0.7;
+  transition: width 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nex-categories-view-all:hover::after,
+.nex-featured-view-all:hover::after {
+  width: 100%;
+}
+
+/* ─── Browse categories ─── */
+.nex-cat-card {
+  position: relative;
+  overflow: hidden;
+}
+
+.nex-cat-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent 40%,
+    rgba(255, 255, 255, 0.04) 50%,
+    transparent 60%
+  );
+  transform: translateX(-120%);
+  transition: transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.nex-cat-card:hover::after {
+  transform: translateX(120%);
+}
+
+.nex-cat-card .nex-cat-icon {
+  transition:
+    transform var(--duration-surface, 0.52s) var(--ease-soft, cubic-bezier(0.33, 1, 0.68, 1)),
+    filter var(--duration-glow, 0.65s) var(--ease-glow, cubic-bezier(0.25, 0.85, 0.45, 1));
+}
+
+.nex-cat-card:hover .nex-cat-icon {
+  transform: scale(1.06);
+}
+
+.nex-cat-card:hover .nex-cat-name {
+  color: #fff;
+  transition: color 0.35s ease;
+}
+
+/* ─── Featured products (glow behind image, never on top) ─── */
+.nex-fp-media::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 100%,
+    rgba(139, 92, 246, 0.1),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--duration-glow, 0.65s) var(--ease-glow, cubic-bezier(0.25, 0.85, 0.45, 1));
+  pointer-events: none;
+}
+
+.nex-fp-card:hover .nex-fp-media::after {
+  opacity: 1;
+}
+
+.nex-fp-image-wrap .nex-fp-image,
+.nex-fp-image-wrap img {
+  transition: transform var(--duration-glow, 0.65s) var(--ease-glow, cubic-bezier(0.25, 0.85, 0.45, 1));
+}
+
+.nex-fp-card:hover .nex-fp-image-wrap .nex-fp-image,
+.nex-fp-card:hover .nex-fp-image-wrap img {
+  transform: scale(1.04);
+}
+
+.nex-fp-card:focus-within {
+  border-color: rgba(139, 92, 246, 0.25);
+  box-shadow:
+    0 14px 40px rgba(0, 0, 0, 0.48),
+    0 0 0 1px rgba(139, 92, 246, 0.15);
+}
+
+.nex-fp-cart:active {
+  transform: scale(0.96);
+}
+
+/* ─── Hero CTAs ─── */
+.nex-hero .nex-btn-primary,
+.nex-hero .nex-hero-cta-primary {
+  transition:
+    transform var(--duration-surface, 0.52s) var(--ease-soft, cubic-bezier(0.33, 1, 0.68, 1)),
+    box-shadow var(--duration-glow, 0.65s) var(--ease-glow, cubic-bezier(0.25, 0.85, 0.45, 1)),
+    filter var(--duration-glow, 0.65s) var(--ease-glow, cubic-bezier(0.25, 0.85, 0.45, 1));
+}
+
+.nex-hero .nex-btn-primary:hover,
+.nex-hero .nex-hero-cta-primary:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.06);
+}
+
+.nex-hero .nex-btn-primary:active,
+.nex-hero .nex-hero-cta-primary:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.nex-hero .nex-btn-outline,
+.nex-hero .nex-hero-cta-explore {
+  transition:
+    transform var(--duration-surface, 0.52s) var(--ease-soft, cubic-bezier(0.33, 1, 0.68, 1)),
+    border-color var(--duration-glow, 0.65s) ease,
+    background var(--duration-glow, 0.65s) ease,
+    color 0.35s ease;
+}
+
+.nex-hero .nex-btn-outline:hover,
+.nex-hero .nex-hero-cta-explore:hover {
+  transform: translateY(-1px);
+}
+
+.nex-hero-dot {
+  transition:
+    width 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    background 0.35s ease,
+    box-shadow 0.35s ease;
+}
+
+.nex-hero-dot:hover {
+  filter: brightness(1.15);
+}
+
+/* ─── Right sidebar stagger lists ─── */
+.nex-rs-feature-list > li,
+.nex-rs-product-list > li {
+  list-style: none;
+}
+
+.nex-rs-feature-list > li > .nex-rs-feature {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.nex-rs-product-list > li > .nex-rs-product-row {
+  display: flex;
+  width: 100%;
+}
+
+/* ─── Right sidebar ─── */
+.home-right-sidebar .nex-rs-feature {
+  border-radius: 10px;
+  padding: 4px 2px;
+  margin: -4px -2px;
+  transition:
+    background 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-right-sidebar .nex-rs-feature:hover {
+  background: rgba(255, 255, 255, 0.02);
+  transform: translateX(2px);
+}
+
+[dir="rtl"] .home-right-sidebar .nex-rs-feature:hover {
+  transform: translateX(-2px);
+}
+
+.home-right-sidebar .nex-rs-feature:hover .nex-rs-icon {
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    0 0 18px rgba(139, 92, 246, 0.25);
+}
+
+.home-right-sidebar .nex-rs-icon {
+  transition: box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.home-right-sidebar .nex-rs-product-thumb img {
+  transition: transform var(--duration-glow, 0.65s) var(--ease-glow, cubic-bezier(0.25, 0.85, 0.45, 1));
+}
+
+.home-right-sidebar .nex-rs-product-row:hover .nex-rs-product-thumb img {
+  transform: scale(1.06);
+}
+
+.nex-rs-deals {
+  transition:
+    transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nex-rs-deals:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 44px rgba(0, 0, 0, 0.5);
+}
+
+.nex-rs-deals-bg-img {
+  transition: transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.nex-rs-deals:hover .nex-rs-deals-bg-img {
+  transform: scale(1.03);
+}
+
+/* ─── Reduced motion (homepage hovers) ─── */
+@media (prefers-reduced-motion: reduce) {
+  .nex-cat-card::after,
+  .nex-cat-card:hover::after {
+    display: none;
+  }
+
+  .nex-cat-card:hover,
+  .nex-fp-card:hover,
+  .nex-rs-deals:hover,
+  .home-right-sidebar .nex-rs-feature:hover,
+  .home-right-sidebar .nex-rs-product-row:hover,
+  .nex-hero .nex-btn-primary:hover,
+  .nex-hero .nex-hero-cta-primary:hover,
+  .nex-hero .nex-btn-outline:hover,
+  .nex-hero .nex-hero-cta-explore:hover {
+    transform: none !important;
+  }
+
+  .nex-fp-card:hover .nex-fp-image-wrap img,
+  .home-right-sidebar .nex-rs-product-row:hover .nex-rs-product-thumb img,
+  .nex-rs-deals:hover .nex-rs-deals-bg-img,
+  .nex-cat-card:hover .nex-cat-icon {
+    transform: none !important;
+  }
+
+  .nex-categories-view-all::after,
+  .nex-featured-view-all::after {
+    transition: none;
+  }
+}
