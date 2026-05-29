@@ -1,5 +1,4 @@
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 import { CheckoutForm } from "@/features/checkout/components/checkout-form";
 import { getProductForCheckout } from "@/server/services/product.service";
 import { getPaymentInstructions } from "@/server/services/site-settings.service";
