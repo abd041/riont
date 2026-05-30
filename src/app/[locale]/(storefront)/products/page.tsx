@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
-import { ProductsBrowseShell } from "@/features/catalog/components/products-browse-shell";
+import { ProductsBrowseShell } from "@/features/products/components/products-browse-shell";
 import { listProducts, searchProducts } from "@/server/services/product.service";
 import { getCategoryBySlug, listCategories } from "@/server/services/category.service";
-import type { CatalogProduct } from "@/features/catalog/types";
+import type { CatalogProduct } from "@/types/catalog";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata({

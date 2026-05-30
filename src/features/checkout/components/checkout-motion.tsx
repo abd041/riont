@@ -7,7 +7,7 @@ import {
   checkoutStagger,
   checkoutViewport,
 } from "../motion/checkout-motion";
-import { fadeReducedSection } from "@/features/home/motion/home-motion";
+import { fadeReducedSection } from "@/features/homepage/motion/home-motion";
 
 export function CheckoutMotionSection({
   children,

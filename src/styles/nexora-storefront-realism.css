@@ -1,0 +1,240 @@
+/**
+ * Storefront realism pass — believable marketplace atmosphere
+ */
+
+/* ═══ Promotional hero (storefront banner, not wallpaper) ═══ */
+.nex-hero--promo .nex-hero-vignette,
+.nex-hero--promo .nex-hero-particles {
+  display: none;
+}
+
+.nex-hero--promo .nex-hero-scrim-left {
+  width: 72%;
+  background: linear-gradient(
+    105deg,
+    rgba(0, 0, 0, 0.88) 0%,
+    rgba(0, 0, 0, 0.55) 55%,
+    transparent 100%
+  );
+}
+
+.nex-hero--promo .nex-hero-scrim-bottom {
+  height: 45%;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.5), transparent);
+}
+
+.nex-hero-promo {
+  background: #050505;
+}
+
+.nex-hero-promo--deals {
+  background: linear-gradient(135deg, #120a1e 0%, #060608 55%, #0a0812 100%);
+}
+
+.nex-hero-promo--gaming {
+  background: linear-gradient(135deg, #0a1020 0%, #050508 50%, #100818 100%);
+}
+
+.nex-hero-promo--instant {
+  background: linear-gradient(135deg, #081410 0%, #050508 50%, #0a0e18 100%);
+}
+
+.nex-hero-promo__grid {
+  position: absolute;
+  inset: 0;
+  opacity: 0.35;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(180deg, rgba(0, 0, 0, 0.8), transparent 85%);
+}
+
+.nex-hero-promo__glow {
+  position: absolute;
+  top: -20%;
+  inset-inline-end: -10%;
+  width: 55%;
+  height: 90%;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(139, 92, 246, 0.14),
+    transparent 68%
+  );
+}
+
+.nex-hero-promo--gaming .nex-hero-promo__glow {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(99, 102, 241, 0.12),
+    transparent 68%
+  );
+}
+
+.nex-hero-promo--instant .nex-hero-promo__glow {
+  background: radial-gradient(
+    ellipse at center,
+    rgba(16, 185, 129, 0.08),
+    transparent 68%
+  );
+}
+
+.nex-hero-promo__chip {
+  position: absolute;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(8px);
+}
+
+.nex-hero-promo__chip--a {
+  top: 18%;
+  inset-inline-end: 8%;
+  width: 72px;
+  height: 48px;
+  opacity: 0.55;
+}
+
+.nex-hero-promo__chip--b {
+  top: 42%;
+  inset-inline-end: 18%;
+  width: 56px;
+  height: 56px;
+  opacity: 0.35;
+}
+
+.nex-hero--compact .nex-hero-promo__chip {
+  display: none;
+}
+
+.nex-hero-badge--promo {
+  border-color: rgba(139, 92, 246, 0.22) !important;
+  background: rgba(0, 0, 0, 0.35) !important;
+}
+
+/* ═══ Topbar — storefront utility bar ═══ */
+.nex-topbar {
+  border-bottom-color: rgba(255, 255, 255, 0.03);
+}
+
+.nex-topbar-center {
+  max-width: none;
+}
+
+.nex-topbar .nex-search {
+  border-radius: 10px;
+  background: rgba(6, 6, 8, 0.85);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+.nex-topbar .nex-search:focus-within {
+  border-color: rgba(139, 92, 246, 0.18);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.04),
+    0 0 0 3px rgba(139, 92, 246, 0.06);
+}
+
+.nex-topbar-action {
+  color: rgba(226, 232, 240, 0.72);
+}
+
+.nex-topbar-pill {
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(226, 232, 240, 0.75);
+}
+
+/* ═══ Typography — marketplace character ═══ */
+.mp-section__title {
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.mp-section__title::before {
+  height: 14px;
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.35);
+}
+
+.mp-section__link {
+  font-size: 9px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mp-section__meta {
+  font-size: 8px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(167, 139, 250, 0.55);
+}
+
+.mp-card__name {
+  letter-spacing: 0.01em;
+}
+
+.mp-card__price {
+  letter-spacing: 0.02em;
+}
+
+/* ═══ Marketplace rows ═══ */
+.mp-sections {
+  gap: 9px;
+}
+
+.mp-row--deals .mp-section__title::before {
+  background: linear-gradient(180deg, #fbbf24, #d97706);
+  box-shadow: 0 0 8px rgba(251, 191, 36, 0.35);
+}
+
+.mp-row--deals .mp-section__meta {
+  color: rgba(251, 191, 36, 0.65);
+}
+
+/* Thumbnail presentation — consistent marketplace tiles */
+.mp-card__media {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mp-card__img {
+  object-fit: cover;
+  padding: 0;
+}
+
+.mp-card--mini .mp-card__img {
+  object-fit: contain;
+  padding: 6px;
+  background: radial-gradient(
+    ellipse at 50% 40%,
+    rgba(139, 92, 246, 0.06),
+    transparent 70%
+  );
+}
+
+/* Subtle shelf strip between row sections */
+.mp-row + .mp-row::before {
+  content: "";
+  display: block;
+  height: 1px;
+  margin: 0 6% 4px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.04),
+    transparent
+  );
+}
+
+/* Mobile immersion */
+@media (max-width: 640px) {
+  .mp-sections {
+    gap: 8px;
+  }
+
+  .mp-scroll--fade::before,
+  .mp-scroll--fade::after {
+    width: 14px;
+  }
+
+  .nex-hero--compact .nex-hero-title {
+    font-size: clamp(0.95rem, 4vw, 1.35rem);
+  }
+}

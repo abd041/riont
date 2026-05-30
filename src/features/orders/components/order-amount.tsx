@@ -1,7 +1,7 @@
 "use client";
 
 import { useLocale } from "next-intl";
-import { useCurrency } from "@/features/currency/components/currency-provider";
+import { useCurrency } from "@/features/shared/currency/currency-provider";
 
 export function OrderAmount({
   cents,

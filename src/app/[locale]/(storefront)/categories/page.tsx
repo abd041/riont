@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
-import { CategoriesBrowseShell } from "@/features/catalog/components/categories-browse-shell";
+import { CategoriesBrowseShell } from "@/features/categories/components/categories-browse-shell";
 import { listCategories } from "@/server/services/category.service";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 

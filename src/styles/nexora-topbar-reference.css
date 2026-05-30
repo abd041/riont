@@ -25,10 +25,6 @@
 
 @media (min-width: 1024px) {
   .nex-topbar-start {
-    display: none;
-  }
-
-  .nex-topbar-start--with-brand {
     display: flex;
   }
 }

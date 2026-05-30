@@ -1,14 +1,15 @@
 "use client";
 
-import { useState } from "react";
 import { X } from "lucide-react";
 import { usePathname } from "@/i18n/navigation";
+import { useMobileNav } from "@/hooks/use-ui-store";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
+import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils/cn";
+import { cn } from "@/utils/cn";
 
-/** Full-width browse pages hide the nav rail (logo in topbar). */
+/** Full-width browse pages hide the nav drawer trigger (logo in topbar). */
 function isFullWidthBrowsePath(pathname: string) {
   return pathname === "/products" || pathname === "/categories";
 }
@@ -22,58 +23,63 @@ export function StorefrontShell({
 }: {
   children: React.ReactNode;
 }) {
-  const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const { isOpen: navOpen, toggle: toggleNav, setOpen: setNavOpen } = useMobileNav();
   const pathname = usePathname();
   const hideNavSidebar = isFullWidthBrowsePath(pathname);
   const isCheckout = isCheckoutPath(pathname);
 
+  const closeNav = () => setNavOpen(false);
+
   return (
     <div
       className={cn(
-        "nex-storefront flex min-h-screen",
+        "nex-storefront flex min-h-screen flex-col",
         hideNavSidebar && "nex-storefront--no-nav",
         isCheckout && "nex-storefront--checkout",
+        !hideNavSidebar && "nex-storefront--drawer-nav",
+        navOpen && "nex-storefront--nav-open",
       )}
     >
+      <Topbar
+        showMenuButton={!hideNavSidebar}
+        menuOpen={navOpen}
+        onMenuClick={toggleNav}
+      />
+
       {!hideNavSidebar && (
         <>
           <div
             className={cn(
-              "fixed inset-0 z-50 bg-black/70 backdrop-blur-sm lg:hidden",
-              mobileNavOpen ? "block" : "hidden",
+              "nex-nav-backdrop",
+              navOpen ? "nex-nav-backdrop--visible" : "nex-nav-backdrop--hidden",
             )}
-            onClick={() => setMobileNavOpen(false)}
+            onClick={closeNav}
             aria-hidden
           />
 
           <div
             className={cn(
-              "nex-sidebar-rail",
-              mobileNavOpen ? "is-open" : "is-closed",
+              "nex-nav-drawer",
+              navOpen ? "nex-nav-drawer--open" : "nex-nav-drawer--closed",
             )}
           >
             <div className="nex-sidebar__fade nex-sidebar__fade--top" aria-hidden />
             <div className="nex-sidebar__fade nex-sidebar__fade--bottom" aria-hidden />
-            <Sidebar onNavigate={() => setMobileNavOpen(false)} />
+            <Sidebar onNavigate={closeNav} />
           </div>
         </>
       )}
 
-      <div className="nex-storefront-main flex min-w-0 flex-1 flex-col">
-        <Topbar
-          showMenuButton={!hideNavSidebar}
-          showBrand={hideNavSidebar}
-          onMenuClick={() => setMobileNavOpen(true)}
-        />
-        <main className="nex-main flex-1">{children}</main>
-      </div>
+      <main className="nex-main nex-storefront-main flex-1">
+        <Container className="nex-storefront-container">{children}</Container>
+      </main>
 
-      {!hideNavSidebar && mobileNavOpen && (
+      {!hideNavSidebar && navOpen && (
         <Button
           variant="ghost"
           size="icon"
-          className="fixed end-4 top-4 z-[60] lg:hidden"
-          onClick={() => setMobileNavOpen(false)}
+          className="nex-nav-close fixed end-4 top-4 z-[60] lg:hidden"
+          onClick={closeNav}
           aria-label="Close menu"
         >
           <X className="h-5 w-5" />

@@ -20,7 +20,8 @@ import {
   Moon,
   Sun,
 } from "lucide-react";
-import { cn } from "@/lib/utils/cn";
+import { cn } from "@/utils/cn";
+import { isNavActive, type NavItemConfig } from "./sidebar-nav";
 
 const primaryNav = [
   { href: "/", icon: Home, key: "home" as const, exact: true },
@@ -66,45 +67,35 @@ const secondaryNav = [
 
 const iconStroke = 1.5;
 
-type NavItem =
-  | (typeof primaryNav)[number]
-  | (typeof secondaryNav)[number];
+type NavItem = NavItemConfig & { icon: typeof Home };
 
-function isNavActive(
-  pathname: string,
-  searchParams: URLSearchParams,
-  item: NavItem,
-): boolean {
-  if ("exact" in item && item.exact) {
-    return pathname === "/" || pathname === "";
-  }
+function NavLink({
+  item,
+  active,
+  onNavigate,
+  label,
+}: {
+  item: NavItem;
+  active: boolean;
+  onNavigate?: () => void;
+  label: string;
+}) {
+  const Icon = item.icon;
 
-  const match = "match" in item ? item.match : "path";
-
-  if (match === "never") {
-    return false;
-  }
-
-  if (match === "products-root") {
-    return pathname === "/products" && !searchParams.get("category");
-  }
-
-  if (match === "products-category" && "categorySlug" in item) {
-    return (
-      pathname === "/products" &&
-      searchParams.get("category") === item.categorySlug
-    );
-  }
-
-  if (match === "path-prefix") {
-    return pathname === item.href || pathname.startsWith(`${item.href}/`);
-  }
-
-  if (match === "path") {
-    return pathname === item.href;
-  }
-
-  return pathname === item.href || pathname.startsWith(`${item.href}/`);
+  return (
+    <Link
+      href={item.href}
+      onClick={onNavigate}
+      className={cn("nex-nav-link", active && "nex-nav-link--active")}
+      aria-current={active ? "page" : undefined}
+    >
+      <span className="nex-nav-link__icon" aria-hidden>
+        <Icon strokeWidth={iconStroke} />
+      </span>
+      <span className="nex-nav-link__text">{label}</span>
+      {active && <span className="nex-nav-link__pulse" aria-hidden />}
+    </Link>
+  );
 }
 
 export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
@@ -115,65 +106,38 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const searchParams = useSearchParams();
 
   return (
-    <aside className="nex-sidebar flex shrink-0 flex-col">
+    <aside className="nex-sidebar nex-sidebar--storefront flex shrink-0 flex-col">
       <div className="nex-sidebar__ambient" aria-hidden />
+      <div className="nex-sidebar__edge-glow" aria-hidden />
       <div className="nex-sidebar__noise" aria-hidden />
 
-      <header className="nex-sidebar-header">
-        <Link
-          href="/"
-          onClick={onNavigate}
-          className="nex-sidebar-brand"
-          aria-label={tCommon("brand")}
-        >
-          <div className="nex-sidebar-logo-icon">
-            <span className="nex-sidebar-logo-letter">R</span>
-          </div>
-          <span className="nex-sidebar-brand-text">
-            {tCommon("brand").toUpperCase()}
-          </span>
-        </Link>
-      </header>
-
-      <nav className="nex-sidebar-nav" aria-label={t("home")}>
+      <nav className="nex-sidebar-nav nex-sidebar-nav--no-brand" aria-label={t("home")}>
+        <p className="nex-sidebar-nav-label">{t("browse")}</p>
         <div className="nex-sidebar-nav-group">
-          {primaryNav.map((item) => {
-            const { href, icon: Icon, key } = item;
-            const active = isNavActive(pathname, searchParams, item);
-
-            return (
-              <Link
-                key={key}
-                href={href}
-                onClick={onNavigate}
-                className={cn("nex-nav-link", active && "nex-nav-link--active")}
-              >
-                <Icon className="shrink-0" strokeWidth={iconStroke} />
-                <span>{t(key)}</span>
-              </Link>
-            );
-          })}
+          {primaryNav.map((item) => (
+            <NavLink
+              key={item.key}
+              item={item}
+              active={isNavActive(pathname, searchParams, item)}
+              onNavigate={onNavigate}
+              label={t(item.key)}
+            />
+          ))}
         </div>
 
         <div className="nex-sidebar-divider" role="separator" />
 
+        <p className="nex-sidebar-nav-label">{tCommon("account")}</p>
         <div className="nex-sidebar-nav-group nex-sidebar-nav-group--secondary">
-          {secondaryNav.map((item) => {
-            const { href, icon: Icon, key } = item;
-            const active = isNavActive(pathname, searchParams, item);
-
-            return (
-              <Link
-                key={key}
-                href={href}
-                onClick={onNavigate}
-                className={cn("nex-nav-link", active && "nex-nav-link--active")}
-              >
-                <Icon className="shrink-0" strokeWidth={iconStroke} />
-                <span>{t(key)}</span>
-              </Link>
-            );
-          })}
+          {secondaryNav.map((item) => (
+            <NavLink
+              key={item.key}
+              item={item}
+              active={isNavActive(pathname, searchParams, item)}
+              onNavigate={onNavigate}
+              label={t(item.key)}
+            />
+          ))}
         </div>
       </nav>
 

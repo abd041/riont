@@ -1,4 +1,4 @@
-import { easePremium } from "@/features/home/motion/home-motion";
+import { easePremium } from "@/features/homepage/motion/home-motion";
 
 export const checkoutFadeUp = {
   hidden: { opacity: 0, y: 18 },

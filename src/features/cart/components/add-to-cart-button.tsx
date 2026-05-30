@@ -4,7 +4,7 @@ import { useTranslations } from "next-intl";
 import { ShoppingCart } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/features/cart/cart-context";
+import { useCart } from "@/hooks/use-cart";
 
 export function AddToCartButton({
   productId,

@@ -1,7 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { resolveMediaUrl } from "@/lib/storage/media-url";
 import { isSupabaseConfigured } from "@/lib/env/public";
-import type { CatalogCategory } from "@/features/catalog/types";
+import type { CatalogCategory } from "@/types/catalog";
 
 type CategoryRow = {
   id: string;

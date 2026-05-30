@@ -5,8 +5,8 @@ import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Minus, Plus, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useCart } from "@/features/cart/cart-context";
-import { useCurrency } from "@/features/currency/components/currency-provider";
+import { useCart } from "@/hooks/use-cart";
+import { useCurrency } from "@/features/shared/currency/currency-provider";
 
 export function CartPage() {
   const t = useTranslations("cart");

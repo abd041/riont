@@ -1,11 +1,12 @@
 import { createClient } from "@/lib/supabase/server";
-import { demoProducts } from "@/features/catalog/data/demo-products";
+import { demoProducts } from "@/features/products/data/demo-products";
+import { productThumbnailUrl } from "@/features/products/lib/product-thumbnails";
 import type {
   CatalogProduct,
   CatalogProductDetail,
   ProductBadge,
   ProductMediaItem,
-} from "@/features/catalog/types";
+} from "@/types/catalog";
 import type { CheckoutField, CheckoutProduct } from "@/types/order";
 import { resolveLocalizedLabel, type LocalizedLabel } from "@/lib/i18n/json-label";
 import { isSupabaseConfigured } from "@/lib/env/public";
@@ -163,7 +164,9 @@ function mapRow(row: ProductQueryRow): CatalogProduct | null {
     compareAtCents: row.compare_at_cents,
     shortDescription: translation.short_description,
     badge: resolveBadge(row),
-    imageUrl: primaryImageUrl(row, translation),
+    imageUrl:
+      primaryImageUrl(row, translation) ??
+      productThumbnailUrl(translation.slug, categoryTranslation?.slug),
   };
 }
 
@@ -189,7 +192,7 @@ function getDemoProducts(options?: {
   sortBy?: "sort_order" | "sales_count";
 }) {
   let items = options?.featured
-    ? demoProducts.filter((_, i) => i < 4)
+    ? demoProducts.filter((p) => p.badge).slice(0, 8)
     : [...demoProducts];
 
   if (options?.categorySlug) {

@@ -12,6 +12,12 @@
 @import "./nexora-browse-products.css";
 @import "./nexora-categories-page.css";
 @import "./nexora-checkout.css";
+@import "./nexora-home-marketplace.css";
+@import "./nexora-storefront-polish.css";
+@import "./nexora-storefront-realism.css";
+@import "./nexora-storefront-navigation.css";
+@import "./nexora-storefront-trust.css";
+@import "./nexora-storefront-layout-v2.css";
 
 @tailwind base;
 @tailwind components;

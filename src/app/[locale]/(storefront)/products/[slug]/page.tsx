@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getProductBySlug } from "@/server/services/product.service";
-import { ProductDetailView } from "@/features/catalog/components/product-detail-view";
+import { ProductDetailView } from "@/features/products/components/product-detail-view";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 import { absoluteUrl } from "@/lib/storage/media-url";
 

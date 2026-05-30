@@ -2,7 +2,7 @@
 
 import { ChevronDown, CircleDollarSign } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useCurrency, SUPPORTED_CURRENCIES } from "@/features/currency/components/currency-provider";
+import { useCurrency, SUPPORTED_CURRENCIES } from "@/features/shared/currency/currency-provider";
 import type { DisplayCurrency } from "@/lib/currency/constants";
 
 export function TopbarCurrency() {

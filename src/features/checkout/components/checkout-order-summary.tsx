@@ -13,7 +13,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { CheckoutProduct } from "@/types/order";
-import { useCurrency } from "@/features/currency/components/currency-provider";
+import { useCurrency } from "@/features/shared/currency/currency-provider";
 import { CheckoutMotionItem } from "./checkout-motion";
 import { CheckoutPremiumCheckbox } from "./checkout-premium-checkbox";
 import { CheckoutTrustBadges } from "./checkout-trust-badges";

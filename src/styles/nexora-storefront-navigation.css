@@ -1,0 +1,410 @@
+/**
+ * Storefront navigation — icon rail + overlay drawer (category-first UX alignment)
+ */
+
+:root {
+  --sidebar-rail-width: 56px;
+  --sidebar-drawer-width: 248px;
+}
+
+/* ─── Icon rail (desktop) ─── */
+.nex-icon-rail-slot {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  inset-inline-start: 0;
+  z-index: 42;
+  width: var(--sidebar-rail-width);
+}
+
+.nex-icon-rail {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100vh;
+  padding: 12px 0 14px;
+  background: rgba(4, 4, 6, 0.96);
+  border-inline-end: 1px solid rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(18px) saturate(1.1);
+  box-shadow: 4px 0 24px rgba(0, 0, 0, 0.35);
+}
+
+.nex-icon-rail__ambient {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 80% 40% at 50% 0%,
+    rgba(139, 92, 246, 0.08),
+    transparent 70%
+  );
+}
+
+.nex-icon-rail__brand {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  margin-bottom: 10px;
+  border-radius: 11px;
+  background: linear-gradient(145deg, #a855f7 0%, #7c3aed 55%, #6d28d9 100%);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.nex-icon-rail__brand:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
+}
+
+.nex-icon-rail__logo {
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  color: #fff;
+}
+
+.nex-icon-rail__nav {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  width: 100%;
+  padding-top: 4px;
+}
+
+.nex-icon-rail__link,
+.nex-icon-rail__menu {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 11px;
+  border: 1px solid transparent;
+  color: rgba(203, 213, 225, 0.72);
+  background: transparent;
+  transition:
+    color 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.nex-icon-rail__link:hover,
+.nex-icon-rail__menu:hover {
+  color: #e2e8f0;
+  background: rgba(255, 255, 255, 0.04);
+  border-color: rgba(255, 255, 255, 0.06);
+}
+
+.nex-icon-rail__link--active {
+  color: #ddd6fe;
+  background: rgba(139, 92, 246, 0.14);
+  border-color: rgba(139, 92, 246, 0.28);
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.12);
+}
+
+.nex-icon-rail__menu {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  cursor: pointer;
+}
+
+.nex-icon-rail__menu--open {
+  color: #ddd6fe;
+  background: rgba(139, 92, 246, 0.16);
+  border-color: rgba(139, 92, 246, 0.32);
+}
+
+/* ─── Overlay drawer ─── */
+.nex-nav-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 48;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  transition: opacity 0.22s ease, visibility 0.22s ease;
+}
+
+.nex-nav-backdrop--hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.nex-nav-backdrop--visible {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.nex-nav-drawer {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  z-index: 50;
+  width: min(var(--sidebar-drawer-width), 88vw);
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  transition:
+    transform 0.24s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 0.22s ease,
+    visibility 0.22s ease;
+}
+
+.nex-nav-drawer .nex-sidebar {
+  width: 100%;
+  height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  padding-bottom: 28px;
+}
+
+.nex-nav-drawer .nex-sidebar-nav {
+  flex: 0 0 auto;
+}
+
+.nex-nav-drawer .nex-sidebar-footer {
+  flex-shrink: 0;
+}
+
+/* Mobile: drawer from screen edge */
+@media (max-width: 1023.98px) {
+  .nex-nav-drawer {
+    inset-inline-start: 0;
+    box-shadow: 12px 0 40px rgba(0, 0, 0, 0.55);
+  }
+
+  .nex-nav-drawer--closed {
+    transform: translateX(calc(-100% - 8px));
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  [dir="rtl"] .nex-nav-drawer--closed {
+    transform: translateX(calc(100% + 8px));
+  }
+
+  .nex-nav-drawer--open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .nex-nav-close {
+    display: flex;
+  }
+}
+
+/* Desktop: drawer floats beside icon rail */
+@media (min-width: 1024px) {
+  .nex-nav-drawer {
+    inset-inline-start: 0;
+    border-inline-end: 1px solid rgba(255, 255, 255, 0.05);
+    box-shadow:
+      8px 0 32px rgba(0, 0, 0, 0.45),
+      inset -1px 0 0 rgba(255, 255, 255, 0.03);
+  }
+
+  .nex-nav-drawer--closed {
+    transform: translateX(calc(-100% - 12px));
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+
+  [dir="rtl"] .nex-nav-drawer--closed {
+    transform: translateX(calc(100% + 12px));
+  }
+
+  .nex-nav-drawer--open {
+    transform: translateX(0);
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+  }
+
+  .nex-nav-close {
+    display: none;
+  }
+}
+
+/* ─── Main column: rail offset instead of full sidebar ─── */
+@media (min-width: 1024px) {
+  .nex-storefront--icon-rail:not(.nex-storefront--no-nav) .nex-storefront-main {
+    margin-inline-start: var(--sidebar-rail-width);
+  }
+
+  .nex-storefront--icon-rail .nex-topbar {
+    padding-inline-start: 10px;
+  }
+}
+
+/* ─── Client homepage order: Most Requested → Categories → Grid ─── */
+.mp-sections--storefront-home {
+  gap: 6px;
+}
+
+@media (min-width: 768px) {
+  .mp-sections--storefront-home {
+    gap: 8px;
+  }
+}
+
+.mp-row--featured {
+  margin-top: 0;
+}
+
+.mp-row--featured .mp-section__head {
+  margin-bottom: 6px;
+}
+
+/* Most Requested — cards span full row width */
+.mp-row__scroll-full {
+  width: 100%;
+}
+
+.mp-row--featured .mp-scroll {
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: none;
+}
+
+.mp-row--featured .mp-scroll__track--full {
+  display: flex;
+  width: 100%;
+  min-width: 100%;
+  gap: 8px;
+}
+
+.mp-row--featured .mp-scroll__cell--full {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.mp-row--featured .mp-scroll__cell--full .mp-card--mini {
+  width: 100%;
+  max-width: none;
+}
+
+@media (max-width: 639.98px) {
+  .mp-row--featured .mp-scroll__track--full {
+    min-width: max(100%, 640px);
+  }
+
+  .mp-row--featured .mp-scroll__cell--full {
+    flex: 0 0 132px;
+    min-width: 132px;
+  }
+
+  .mp-row--featured .mp-scroll__cell--full .mp-card--mini {
+    width: 132px;
+  }
+}
+
+@media (min-width: 640px) {
+  .mp-row--featured .mp-scroll__track--full {
+    gap: 10px;
+  }
+}
+
+.mp-cat-section--primary {
+  position: relative;
+  z-index: 2;
+  margin-bottom: 2px;
+  padding: 2px 0 4px;
+}
+
+.mp-cat-section--primary .mp-section__head {
+  margin-bottom: 6px;
+}
+
+.mp-cat-section--primary .mp-cat {
+  width: 72px;
+  padding: 9px 6px 8px;
+  border-radius: 12px;
+}
+
+@media (min-width: 640px) {
+  .mp-cat-section--primary .mp-cat {
+    width: 76px;
+  }
+}
+
+.mp-cat-section--primary .mp-cat__icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 10px;
+}
+
+.mp-cat-section--primary .mp-cat__label {
+  font-size: 8.5px;
+}
+
+.mp-cat-section--primary .mp-cat--active {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.18),
+    0 0 20px rgba(139, 92, 246, 0.2);
+}
+
+.mp-browse-section--primary {
+  flex: 1;
+  min-height: 0;
+}
+
+.mp-browse-section--primary .mp-section__head {
+  margin-bottom: 8px;
+}
+
+.mp-browse-section--primary .mp-grid__inner {
+  gap: 8px;
+}
+
+@media (min-width: 640px) {
+  .mp-browse-section--primary .mp-grid__inner {
+    gap: 10px;
+  }
+}
+
+/* Wider, more immersive page shell on storefront home */
+.nex-storefront--icon-rail .mp-page,
+.nex-storefront--icon-rail .nex-home-marketplace {
+  max-width: none;
+}
+
+@media (min-width: 1280px) {
+  .nex-storefront--icon-rail .mp-page,
+  .nex-storefront--icon-rail .nex-home-marketplace {
+    max-width: 1680px;
+  }
+}
+
+.nex-main:has(.mp-legal-page) {
+  padding-inline: 0;
+}
+
+.mp-page__inner {
+  gap: 6px;
+}
+
+@media (min-width: 768px) {
+  .mp-page__inner {
+    gap: 8px;
+  }
+}
