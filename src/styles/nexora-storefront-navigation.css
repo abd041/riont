@@ -48,25 +48,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 38px;
-  height: 38px;
+  width: 40px;
+  height: 40px;
   margin-bottom: 10px;
   border-radius: 11px;
-  background: linear-gradient(145deg, #a855f7 0%, #7c3aed 55%, #6d28d9 100%);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  overflow: hidden;
+  transition: transform 0.25s ease;
 }
 
 .nex-icon-rail__brand:hover {
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
-}
-
-.nex-icon-rail__logo {
-  font-size: 13px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
-  color: #fff;
 }
 
 .nex-icon-rail__nav {

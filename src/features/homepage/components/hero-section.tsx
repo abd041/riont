@@ -12,7 +12,6 @@ import {
 import { ArrowRight, Shield, Clock, Star, Users, Zap } from "lucide-react";
 import type { HeroBlockContent } from "@/server/services/content-block.service";
 import {
-  easePremium,
   HERO_ANIMATION_DEFAULT,
   lineItem,
   textItem,

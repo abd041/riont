@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
 import { Compass, Grid3X3, Home, Menu } from "lucide-react";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { cn } from "@/utils/cn";
 import { isNavActive, type NavItemConfig } from "./sidebar-nav";
 
@@ -30,7 +31,7 @@ export function SidebarIconRail({ onOpenMenu, menuOpen }: SidebarIconRailProps) 
     <aside className="nex-icon-rail" aria-label={t("browse")}>
       <div className="nex-icon-rail__ambient" aria-hidden />
       <Link href="/" className="nex-icon-rail__brand" aria-label={tCommon("brand")}>
-        <span className="nex-icon-rail__logo">R</span>
+        <BrandLogo className="nex-brand-logo nex-brand-logo--rail" height={30} />
       </Link>
 
       <nav className="nex-icon-rail__nav" aria-label={t("browse")}>

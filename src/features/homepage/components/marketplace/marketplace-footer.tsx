@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Shield, Zap, Headphones, Globe, Mail, Share2 } from "lucide-react";
 import { toast } from "sonner";
+import { BrandLogo } from "@/components/shared/brand-logo";
 import { MarketplaceSection } from "./marketplace-section";
 
 const PAYMENT_METHODS = ["Visa", "Mastercard", "Apple Pay", "Mada"] as const;
@@ -32,7 +33,9 @@ export function MarketplaceFooter() {
     >
       <div className="mp-footer__grid">
         <div className="mp-footer__brand-block">
-          <p className="mp-footer__brand">{tCommon("brand")}</p>
+          <Link href="/" className="mp-footer__brand-link" aria-label={tCommon("brand")}>
+            <BrandLogo className="nex-brand-logo nex-brand-logo--footer" height={34} />
+          </Link>
           <p className="mp-footer__tagline">{t("footerTagline")}</p>
           <p className="mp-footer__about">{t("footerAbout")}</p>
 

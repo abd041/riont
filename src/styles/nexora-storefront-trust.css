@@ -260,6 +260,17 @@
   gap: 4px;
 }
 
+.mp-footer__brand-link {
+  display: inline-flex;
+  align-self: flex-start;
+  text-decoration: none;
+  margin-bottom: 2px;
+}
+
+.mp-footer__brand-link:hover .nex-brand-logo {
+  filter: brightness(1.1);
+}
+
 .mp-footer__brand {
   margin: 0;
   font-size: 11px;

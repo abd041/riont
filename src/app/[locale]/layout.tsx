@@ -5,6 +5,7 @@ import { notFound } from "next/navigation";
 import { Inter, Inter_Tight, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { AppProviders } from "@/components/providers/app-providers";
+import { BRAND_LOGO } from "@/components/shared/brand-logo";
 import "@/styles/globals.css";
 
 const inter = Inter({
@@ -30,6 +31,10 @@ export async function generateMetadata({
     title: {
       default: t("brand"),
       template: `%s | ${t("brand")}`,
+    },
+    icons: {
+      icon: BRAND_LOGO.src,
+      apple: BRAND_LOGO.src,
     },
     description:
       locale === "ar"
