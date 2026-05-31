@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Heart, Package, ShoppingCart, Star } from "lucide-react";
@@ -16,12 +17,15 @@ import {
 import { toast } from "sonner";
 import type { CatalogProduct } from "@/types/catalog";
 import { cn } from "@/utils/cn";
+import { mpCardHover } from "@/features/homepage/motion/marketplace-motion";
+
+const MotionArticle = motion.article;
 
 type MarketplaceProductCardProps = CatalogProduct & {
   className?: string;
 };
 
-/** Grid product card — compact marketplace density. */
+/** Grid product card — premium marketplace tile. */
 export function MarketplaceProductCard({
   id,
   slug,
@@ -49,9 +53,13 @@ export function MarketplaceProductCard({
     t("lifetimeLicense"),
   );
   const wished = hasItem(id ?? slug);
+  const reduceMotion = useReducedMotion();
 
   return (
-    <article className={cn("mp-card mp-card--grid group", className)}>
+    <MotionArticle
+      className={cn("mp-card mp-card--grid mp-card--premium group", className)}
+      whileHover={reduceMotion ? undefined : mpCardHover}
+    >
       <span className="mp-card__ambient" aria-hidden />
       <span className="mp-card__surface" aria-hidden />
       <Link href={`/products/${slug}`} className="mp-card__media mp-card__media--grid">
@@ -140,6 +148,6 @@ export function MarketplaceProductCard({
           </button>
         </div>
       </div>
-    </article>
+    </MotionArticle>
   );
 }

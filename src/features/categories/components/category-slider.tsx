@@ -13,7 +13,7 @@ import {
   MarketplaceSectionRevealChild,
 } from "@/features/homepage/components/marketplace/marketplace-section-reveal";
 import { MarketplaceSectionHeader } from "@/features/homepage/components/marketplace/marketplace-section-header";
-import { mpSpring, mpTap } from "@/features/homepage/motion/marketplace-motion";
+import { mpSpring, mpTap, mpCardHoverMini } from "@/features/homepage/motion/marketplace-motion";
 import type { CatalogCategory } from "@/types/catalog";
 
 type CategorySliderProps = {
@@ -37,26 +37,51 @@ export function CategorySlider({
   const updateDots = useCallback(() => {
     const el = scrollRef.current;
     if (!el) return;
+
     const maxScroll = el.scrollWidth - el.clientWidth;
-    if (maxScroll <= 0) {
+    if (maxScroll <= 8) {
       setPageCount(1);
       setDotIndex(0);
       return;
     }
-    const pages = Math.min(5, Math.ceil(el.scrollWidth / el.clientWidth));
+
+    const pages = Math.min(Math.ceil(el.scrollWidth / el.clientWidth), 8);
     setPageCount(pages);
-    setDotIndex(Math.round((el.scrollLeft / maxScroll) * (pages - 1)));
+    const progress = maxScroll > 0 ? el.scrollLeft / maxScroll : 0;
+    setDotIndex(Math.min(pages - 1, Math.round(progress * (pages - 1))));
   }, []);
 
+  const scrollToPage = useCallback(
+    (page: number) => {
+      const el = scrollRef.current;
+      if (!el || pageCount <= 1) return;
+      const maxScroll = el.scrollWidth - el.clientWidth;
+      const target =
+        page >= pageCount - 1 ? maxScroll : (page / (pageCount - 1)) * maxScroll;
+      el.scrollTo({ left: target, behavior: "smooth" });
+    },
+    [pageCount],
+  );
+
   useEffect(() => {
-    updateDots();
     const el = scrollRef.current;
     if (!el) return;
+
+    const measure = () => {
+      requestAnimationFrame(updateDots);
+    };
+
+    measure();
+    const observer = new ResizeObserver(measure);
+    observer.observe(el);
+
     el.addEventListener("scroll", updateDots, { passive: true });
-    window.addEventListener("resize", updateDots);
+    window.addEventListener("resize", measure);
+
     return () => {
+      observer.disconnect();
       el.removeEventListener("scroll", updateDots);
-      window.removeEventListener("resize", updateDots);
+      window.removeEventListener("resize", measure);
     };
   }, [updateDots, categories.length]);
 
@@ -72,15 +97,22 @@ export function CategorySlider({
         <MarketplaceSectionHeader title={t("browseCategories")} />
       </MarketplaceSectionRevealChild>
 
-      <div className="mp-scroll mp-scroll--fade">
-        <div ref={scrollRef} className="mp-cat-scroll">
+      <div className="mp-scroll mp-scroll--fade mp-cat-slider">
+        <div
+          ref={scrollRef}
+          className="mp-cat-scroll mp-cat-scroll--slider"
+          role="list"
+          aria-label={t("browseCategories")}
+        >
           <motion.button
             type="button"
-            layout
+            layout={false}
             whileTap={mpTap}
+            whileHover={mpCardHoverMini}
             transition={mpSpring.soft}
-            className={cn("mp-cat", activeSlug === null && "mp-cat--active")}
+            className={cn("mp-cat mp-cat--premium", activeSlug === null && "mp-cat--active")}
             onClick={() => onSelect(null)}
+            role="listitem"
           >
             <span className="mp-cat__icon mp-cat__icon--all" aria-hidden>
               ★
@@ -97,11 +129,17 @@ export function CategorySlider({
               <motion.button
                 key={category.id}
                 type="button"
-                layout
+                layout={false}
                 whileTap={mpTap}
+                whileHover={mpCardHoverMini}
                 transition={mpSpring.soft}
-                className={cn("mp-cat", `mp-cat--${theme}`, isActive && "mp-cat--active")}
+                className={cn(
+                  "mp-cat mp-cat--premium",
+                  `mp-cat--${theme}`,
+                  isActive && "mp-cat--active",
+                )}
                 onClick={() => onSelect(category.slug)}
+                role="listitem"
               >
                 <span className="mp-cat__icon" aria-hidden>
                   <Icon strokeWidth={1.5} className="h-[18px] w-[18px]" />
@@ -110,15 +148,21 @@ export function CategorySlider({
               </motion.button>
             );
           })}
+          <span className="mp-cat-scroll__spacer" aria-hidden />
         </div>
       </div>
 
       {pageCount > 1 && (
-        <div className="mp-dots" aria-hidden>
+        <div className="mp-dots mp-dots--slider" role="tablist" aria-label={t("browseCategories")}>
           {Array.from({ length: pageCount }).map((_, i) => (
-            <span
+            <button
               key={i}
+              type="button"
+              role="tab"
+              aria-selected={i === dotIndex}
+              aria-label={`Page ${i + 1}`}
               className={cn("mp-dot", i === dotIndex && "mp-dot--active")}
+              onClick={() => scrollToPage(i)}
             />
           ))}
         </div>

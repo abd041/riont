@@ -97,11 +97,13 @@ export function HeroSection({
   return (
     <section
       className={cn(
-        "nex-hero nex-hero-slider nex-hero--image-bg",
+        "nex-hero nex-hero-slider nex-hero--image-bg nex-hero--premium",
         compact && "nex-hero--compact",
       )}
       aria-label="Hero"
     >
+      <span className="nex-hero__float-orb nex-hero__float-orb--a" aria-hidden />
+      <span className="nex-hero__float-orb nex-hero__float-orb--b" aria-hidden />
       <div className="nex-hero-media absolute inset-0 z-[0] overflow-hidden">
         <Image
           src={HERO_BACKGROUND_IMAGE}
@@ -137,7 +139,7 @@ export function HeroSection({
             >
               <motion.span
                 variants={textItem}
-                className="nex-hero-badge nex-hero-badge--promo inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[9px] font-bold uppercase tracking-[0.14em]"
+                className="nex-hero-badge nex-hero-badge--promo inline-flex items-center gap-1.5 rounded-full border px-3 py-1 uppercase"
               >
                 <Zap className="h-3 w-3 shrink-0 text-violet-400" strokeWidth={2.5} />
                 {copy.tag}

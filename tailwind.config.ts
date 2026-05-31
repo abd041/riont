@@ -32,7 +32,27 @@ const config: Config = {
       },
       fontFamily: {
         sans: ["var(--font-inter)", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "var(--font-inter)", "system-ui", "sans-serif"],
         arabic: ["var(--font-arabic)", "system-ui", "sans-serif"],
+      },
+      boxShadow: {
+        glow: "0 0 32px rgba(139, 92, 246, 0.25)",
+        "glow-lg": "0 0 48px rgba(139, 92, 246, 0.35)",
+        premium: "0 8px 32px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(139, 92, 246, 0.08)",
+      },
+      animation: {
+        float: "nex-float 6s ease-in-out infinite",
+        "glow-pulse": "nex-glow-pulse 8s ease-in-out infinite",
+      },
+      keyframes: {
+        "nex-float": {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" },
+        },
+        "nex-glow-pulse": {
+          "0%, 100%": { opacity: "0.45" },
+          "50%": { opacity: "0.75" },
+        },
       },
       maxWidth: {
         content: "1440px",

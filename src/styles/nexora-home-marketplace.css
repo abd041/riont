@@ -4,34 +4,34 @@
  */
 
 :root {
-  --mp-page-x: 10px;
-  --mp-page-y: 8px;
-  --mp-section-gap: 10px;
+  --mp-page-x: 16px;
+  --mp-page-y: 10px;
+  --mp-section-gap: 16px;
   --mp-card-gap: 6px;
   --mp-topbar-h: 52px;
 }
 
 @media (min-width: 768px) {
   :root {
-    --mp-page-x: 14px;
-    --mp-page-y: 10px;
-    --mp-section-gap: 12px;
+    --mp-page-x: 20px;
+    --mp-page-y: 12px;
+    --mp-section-gap: 20px;
     --mp-card-gap: 8px;
   }
 }
 
 @media (min-width: 1280px) {
   :root {
-    --mp-page-x: 18px;
-    --mp-page-y: 12px;
-    --mp-section-gap: 14px;
+    --mp-page-x: 24px;
+    --mp-page-y: 14px;
+    --mp-section-gap: 24px;
   }
 }
 
 /* ─── Page shell ─── */
 .nex-main:has(.mp-page),
 .nex-main:has(.nex-home-marketplace) {
-  padding-block: var(--mp-page-y) 16px;
+  padding-block: var(--mp-page-y) 24px;
   padding-inline: 0;
 }
 
@@ -185,7 +185,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 8px;
-  padding-inline: 1px;
+  padding-inline: 0;
 }
 
 .mp-section__head-end {
@@ -532,7 +532,6 @@
   color: rgba(148, 163, 184, 0.55);
 }
 
-/* ─── Category slider ─── */
 .mp-cat-scroll {
   display: flex;
   gap: 8px;
@@ -544,6 +543,14 @@
 
 .mp-cat-scroll::-webkit-scrollbar {
   display: none;
+}
+
+.mp-cat-scroll--slider {
+  scroll-snap-type: none;
+}
+
+.mp-cat-scroll--slider .mp-cat {
+  scroll-snap-align: unset;
 }
 
 .mp-cat {
@@ -627,6 +634,7 @@
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.12);
   transition: width 0.28s ease, background 0.28s ease;
+  appearance: none;
 }
 
 .mp-dot--active {

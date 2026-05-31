@@ -177,7 +177,7 @@
 
 /* ═══ Marketplace rows ═══ */
 .mp-sections {
-  gap: 9px;
+  gap: var(--mp-section-gap);
 }
 
 .mp-row--deals .mp-section__title::before {

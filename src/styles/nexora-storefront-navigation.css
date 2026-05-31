@@ -257,13 +257,7 @@
 
 /* ─── Client homepage order: Most Requested → Categories → Grid ─── */
 .mp-sections--storefront-home {
-  gap: 6px;
-}
-
-@media (min-width: 768px) {
-  .mp-sections--storefront-home {
-    gap: 8px;
-  }
+  gap: var(--mp-section-gap);
 }
 
 .mp-row--featured {
@@ -271,7 +265,7 @@
 }
 
 .mp-row--featured .mp-section__head {
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 
 /* Most Requested — cards span full row width */
@@ -331,7 +325,7 @@
 }
 
 .mp-cat-section--primary .mp-section__head {
-  margin-bottom: 6px;
+  margin-bottom: 10px;
 }
 
 .mp-cat-section--primary .mp-cat {
@@ -369,7 +363,7 @@
 }
 
 .mp-browse-section--primary .mp-section__head {
-  margin-bottom: 8px;
+  margin-bottom: 10px;
 }
 
 .mp-browse-section--primary .mp-grid__inner {
@@ -400,11 +394,5 @@
 }
 
 .mp-page__inner {
-  gap: 6px;
-}
-
-@media (min-width: 768px) {
-  .mp-page__inner {
-    gap: 8px;
-  }
+  gap: var(--mp-section-gap);
 }

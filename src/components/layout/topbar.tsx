@@ -38,8 +38,9 @@ export function Topbar({
   }
 
   return (
-    <header className="nex-topbar nex-topbar--fullwidth sticky top-0 z-40 shrink-0">
-      <div className="nex-topbar__inner">
+    <header className="nex-topbar nex-topbar--fullwidth nex-topbar--floating sticky top-0 z-40 shrink-0">
+      <div className="nex-topbar__float">
+        <div className="nex-topbar__inner">
         <div className="nex-topbar-start nex-topbar-start--with-brand">
           <TopbarBrand />
         </div>
@@ -116,6 +117,7 @@ export function Topbar({
             <Menu className="h-5 w-5" />
           </Button>
         )}
+        </div>
         </div>
       </div>
     </header>

@@ -86,3 +86,15 @@ export const mpFilterTransition = {
 
 export const mpTap = { scale: 0.97 };
 export const mpHoverLift = { y: -2 };
+
+export const mpCardHover = {
+  y: -6,
+  scale: 1.02,
+  transition: { type: "spring" as const, stiffness: 420, damping: 28 },
+};
+
+export const mpCardHoverMini = {
+  y: -4,
+  scale: 1.03,
+  transition: { type: "spring" as const, stiffness: 450, damping: 30 },
+};

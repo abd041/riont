@@ -18,18 +18,20 @@
 @import "./nexora-storefront-navigation.css";
 @import "./nexora-storefront-trust.css";
 @import "./nexora-storefront-layout-v2.css";
+@import "./nexora-home-typography.css";
+@import "./nexora-premium-2026.css";
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --bg-void: #000000;
-  --bg-base: #040404;
-  --bg-elevated: #07070a;
-  --bg-surface: #0f0f16;
-  --bg-surface-2: #14141e;
-  --bg-overlay: rgba(10, 10, 15, 0.85);
+  --bg-void: #050505;
+  --bg-base: #050505;
+  --bg-elevated: #0b0b0f;
+  --bg-surface: #0b0b0f;
+  --bg-surface-2: #111118;
+  --bg-overlay: rgba(11, 11, 15, 0.88);
 
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-default: rgba(255, 255, 255, 0.1);
@@ -40,8 +42,8 @@
   --accent-500: #8b5cf6;
   --accent-600: #7c3aed;
   --accent-700: #6d28d9;
-  --accent-glow: rgba(139, 92, 246, 0.45);
-  --accent-glow-sm: rgba(139, 92, 246, 0.2);
+  --accent-glow: rgba(139, 92, 246, 0.5);
+  --accent-glow-sm: rgba(139, 92, 246, 0.22);
 
   --gradient-primary: linear-gradient(
     135deg,
@@ -75,8 +77,9 @@
   --sidebar-width: 232px;
   --right-sidebar-width: 300px;
   --topbar-height: 68px;
-  --radius-md: 10px;
-  --radius-lg: 14px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
 }
 
 @layer base {
@@ -85,7 +88,8 @@
   }
 
   body {
-    @apply bg-[#040404] text-[var(--text-secondary)] antialiased;
+    @apply bg-[#050505] text-[var(--text-secondary)] antialiased;
+    font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
   h1,

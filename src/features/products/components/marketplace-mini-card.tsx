@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { motion, useReducedMotion } from "framer-motion";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { Heart, Package, ShoppingCart, Star } from "lucide-react";
@@ -15,6 +16,9 @@ import {
 } from "@/features/products/utils/product-display";
 import type { CatalogProduct } from "@/types/catalog";
 import { cn } from "@/utils/cn";
+import { mpCardHoverMini } from "@/features/homepage/motion/marketplace-motion";
+
+const MotionArticle = motion.article;
 
 type MarketplaceMiniCardProps = {
   product: CatalogProduct;
@@ -36,10 +40,17 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
   const rating = productRating(slug);
   const category = productCategoryLabel(product, t("lifetimeLicense"));
   const wished = hasItem(id ?? slug);
+  const reduceMotion = useReducedMotion();
 
   return (
-    <article className={cn("mp-card mp-card--mini group", className)} role="listitem">
+    <MotionArticle
+      className={cn("mp-card mp-card--mini mp-card--premium group", className)}
+      role="listitem"
+      whileHover={reduceMotion ? undefined : mpCardHoverMini}
+    >
+      <span className="mp-card__ambient" aria-hidden /    >
       <span className="mp-card__ambient" aria-hidden />
+      <span className="mp-card__surface" aria-hidden />
       <Link href={`/products/${slug}`} className="mp-card__media">
         <span className="mp-card__media-vignette" aria-hidden />
         <span className="mp-card__media-shine" aria-hidden />
@@ -63,6 +74,8 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
             <Package className="h-7 w-7" strokeWidth={1.25} />
           </div>
         )}
+        <span className="mp-card__media-vignette" aria-hidden />
+        <span className="mp-card__media-shine" aria-hidden />
       </Link>
 
       <div className="mp-card__body mp-card__body--mini">
@@ -118,6 +131,6 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
           </div>
         </div>
       </div>
-    </article>
+    </MotionArticle>
   );
 }

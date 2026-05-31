@@ -494,12 +494,12 @@
 
 .mp-scroll--fade::before {
   inset-inline-start: 0;
-  background: linear-gradient(90deg, #000 0%, transparent 100%);
+  background: linear-gradient(90deg, var(--bg-void, #050505) 0%, transparent 100%);
 }
 
 .mp-scroll--fade::after {
   inset-inline-end: 0;
-  background: linear-gradient(270deg, #000 0%, transparent 100%);
+  background: linear-gradient(270deg, var(--bg-void, #050505) 0%, transparent 100%);
 }
 
 .mp-scroll__track {

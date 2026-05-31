@@ -64,7 +64,7 @@
   }
 }
 .nex-storefront--drawer-nav {
-  background: #000;
+  background: var(--bg-void);
 }
 
 /* ═══ Full-bleed topbar (no centered container) ═══ */
@@ -242,6 +242,7 @@
 .nex-storefront-container {
   position: relative;
   z-index: 1;
+  padding-inline: var(--mp-page-x);
 }
 
 /* ═══ Larger, more readable grid cards ═══ */
@@ -474,15 +475,7 @@
   transform: translateY(-2px);
 }
 
-/* ═══ Unified section headings (homepage + marketplace rows) ═══ */
-.mp-sections--storefront-home .mp-section__title,
-.mp-row .mp-section__title {
-  font-size: 14px;
-  font-weight: 700;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  line-height: 1.25;
-}
+/* Section heading scale lives in nexora-home-typography.css */
 
 /* Trust + reviews — full-width card rows */
 .mp-sections--storefront-home .mp-trust,

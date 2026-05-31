@@ -40,6 +40,14 @@ export function StorefrontShell({
         navOpen && "nex-storefront--nav-open",
       )}
     >
+      <div className="nex-storefront-ambient" aria-hidden>
+        <span className="nex-orb nex-orb--purple" />
+        <span className="nex-orb nex-orb--blue" />
+        <span className="nex-orb nex-orb--violet" />
+        <span className="nex-noise" />
+        <span className="nex-grid-overlay" />
+      </div>
+
       <Topbar
         showMenuButton={!hideNavSidebar}
         menuOpen={navOpen}

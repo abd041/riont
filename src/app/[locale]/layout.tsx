@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Inter, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { Inter, Inter_Tight, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { AppProviders } from "@/components/providers/app-providers";
 import "@/styles/globals.css";
@@ -10,6 +10,12 @@ import "@/styles/globals.css";
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
+});
+
+const interTight = Inter_Tight({
+  subsets: ["latin"],
+  variable: "--font-display",
+  weight: ["600", "700", "800"],
 });
 
 export async function generateMetadata({
@@ -57,7 +63,7 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} dir={dir} className="dark">
       <body
-        className={`${inter.variable} ${arabic.variable} ${
+        className={`${inter.variable} ${interTight.variable} ${arabic.variable} ${
           locale === "ar" ? "font-arabic" : "font-sans"
         } antialiased`}
       >
