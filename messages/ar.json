@@ -169,7 +169,20 @@
     "featureInstant": "تسليم فوري بعد الشراء",
     "featureAccess": "وصول كامل للمنتج",
     "featurePlatform": "تحميل رقمي — استخدمه على جهازك",
-    "checkoutComingSoon": "الدفع سيتوفر في الإصدار القادم."
+    "checkoutComingSoon": "الدفع سيتوفر في الإصدار القادم.",
+    "tabDetails": "التفاصيل",
+    "tabDescription": "الوصف",
+    "tabReviews": "التقييمات",
+    "detailsPlaceholder": "ستظهر تفاصيل المنتج هنا.",
+    "descriptionPlaceholder": "سيظهر الوصف الكامل هنا.",
+    "reviewsPlaceholder": "ستتوفر تقييمات العملاء قريباً.",
+    "shareProduct": "مشاركة",
+    "linkCopied": "تم نسخ الرابط",
+    "addedToWishlist": "تمت الإضافة إلى المفضلة",
+    "removedFromWishlist": "تمت الإزالة من المفضلة",
+    "inWishlist": "في المفضلة",
+    "manualDelivery": "خدمة يدوية",
+    "manualDeliveryHint": "خدمة شخصية — نعالج طلبك يدوياً"
   },
   "auth": {
     "welcomeBack": "مرحباً بعودتك",

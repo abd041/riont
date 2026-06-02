@@ -3,10 +3,12 @@
 import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { Heart, ShoppingCart } from "lucide-react";
+import { Heart, Share2, ShoppingCart } from "lucide-react";
 import { useCurrency } from "@/features/shared/currency/currency-provider";
 import { useCart } from "@/hooks/use-cart";
+import { useWishlist } from "@/hooks/use-wishlist";
 import { toast } from "sonner";
+import { cn } from "@/utils/cn";
 
 function discountPercent(price: number, compare?: number | null) {
   if (!compare || compare <= price) return null;
@@ -20,6 +22,7 @@ export function ProductDetailPurchase({
   imageUrl,
   priceCents,
   compareAtCents,
+  isInstant,
 }: {
   productId: string;
   slug: string;
@@ -27,14 +30,17 @@ export function ProductDetailPurchase({
   imageUrl: string | null;
   priceCents: number;
   compareAtCents?: number | null;
+  isInstant?: boolean;
 }) {
   const locale = useLocale();
   const t = useTranslations("product");
   const { formatPrice } = useCurrency();
   const { addItem } = useCart();
+  const { toggleItem, hasItem } = useWishlist();
   const [qty, setQty] = useState(1);
 
   const discount = discountPercent(priceCents, compareAtCents);
+  const wished = hasItem(productId);
 
   function addToCart() {
     for (let i = 0; i < qty; i++) {
@@ -49,8 +55,44 @@ export function ProductDetailPurchase({
     toast.success(t("addedToCart"));
   }
 
+  function toggleWishlist() {
+    const added = toggleItem({
+      productId,
+      slug,
+      name,
+      imageUrl,
+      priceCents,
+    });
+    toast.success(added ? t("addedToWishlist") : t("removedFromWishlist"));
+  }
+
+  async function shareProduct() {
+    const url = `${window.location.origin}/${locale}/products/${slug}`;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: name, url });
+        return;
+      }
+      await navigator.clipboard.writeText(url);
+      toast.success(t("linkCopied"));
+    } catch {
+      /* user cancelled share */
+    }
+  }
+
   return (
     <>
+      <div className="nex-pdp-meta-row">
+        <span
+          className={cn(
+            "nex-pdp-availability",
+            isInstant ? "nex-pdp-availability--instant" : "nex-pdp-availability--manual",
+          )}
+        >
+          {isInstant ? t("instantDelivery") : t("manualDelivery")}
+        </span>
+      </div>
+
       <div className="nex-pdp-pricing">
         <span className="nex-pdp-price" dir="ltr">
           {formatPrice(priceCents, locale)}
@@ -96,14 +138,21 @@ export function ProductDetailPurchase({
           {t("buyNowButton")}
         </Link>
 
-        <button
-          type="button"
-          className="nex-pdp-wishlist"
-          onClick={() => toast.message(t("addToWishlist"))}
-        >
-          <Heart strokeWidth={1.5} />
-          {t("addToWishlist")}
-        </button>
+        <div className="nex-pdp-secondary-actions">
+          <button
+            type="button"
+            className={cn("nex-pdp-wishlist", wished && "nex-pdp-wishlist--active")}
+            onClick={toggleWishlist}
+          >
+            <Heart strokeWidth={1.5} className={cn(wished && "fill-current")} />
+            {wished ? t("inWishlist") : t("addToWishlist")}
+          </button>
+
+          <button type="button" className="nex-pdp-share" onClick={shareProduct}>
+            <Share2 strokeWidth={1.5} />
+            {t("shareProduct")}
+          </button>
+        </div>
       </div>
     </>
   );

@@ -1230,3 +1230,109 @@
 .nex-main:has(.nex-checkout-page)::before {
   display: none;
 }
+
+/* ─── Mobile checkout density ─── */
+@media (max-width: 767px) {
+  .nex-checkout-page {
+    padding: 4px 8px 24px;
+    min-height: calc(100dvh - 56px);
+    background: #000;
+  }
+
+  .nex-co-ambient--one,
+  .nex-co-ambient--two {
+    opacity: 0.45;
+    filter: blur(70px);
+  }
+
+  .nex-co-layout {
+    gap: 14px;
+  }
+
+  .nex-co-columns {
+    gap: 12px;
+  }
+
+  .nex-co-columns::before {
+    display: none;
+  }
+
+  .nex-co-main {
+    gap: 12px;
+  }
+
+  .nex-co-header {
+    margin-bottom: 0;
+  }
+
+  .nex-co-card,
+  .nex-co-summary {
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+
+  .nex-co-card-head {
+    margin-bottom: 10px;
+    gap: 10px;
+  }
+
+  .nex-co-card-title {
+    font-size: 15px;
+  }
+
+  .nex-co-card-desc {
+    font-size: 12px;
+  }
+
+  .nex-co-field + .nex-co-field {
+    margin-top: 10px;
+  }
+
+  .nex-co-input,
+  .nex-co-textarea {
+    min-height: 42px;
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  .nex-co-textarea {
+    min-height: 72px;
+  }
+
+  .nex-co-coupon-hint {
+    margin-bottom: 8px;
+    font-size: 11px;
+  }
+
+  .nex-co-product {
+    gap: 10px;
+  }
+
+  .nex-co-product-thumb {
+    width: 56px;
+    height: 56px;
+  }
+
+  .nex-co-total-block {
+    margin-top: 8px;
+    padding-top: 12px;
+  }
+
+  .nex-co-total-amount {
+    font-size: 1.35rem;
+  }
+
+  .nex-co-notice {
+    margin-top: 12px;
+    padding: 12px 14px;
+  }
+
+  .nex-co-submit {
+    min-height: 44px;
+  }
+
+  .nex-main:has(.nex-checkout-page) {
+    padding-top: 8px;
+    padding-bottom: 16px;
+  }
+}

@@ -169,7 +169,20 @@
     "featureInstant": "Instant delivery after purchase",
     "featureAccess": "Full product access included",
     "featurePlatform": "Digital download — use on your device",
-    "checkoutComingSoon": "Checkout will be available in the next release."
+    "checkoutComingSoon": "Checkout will be available in the next release.",
+    "tabDetails": "Details",
+    "tabDescription": "Description",
+    "tabReviews": "Reviews",
+    "detailsPlaceholder": "Product details will appear here.",
+    "descriptionPlaceholder": "Full description will appear here.",
+    "reviewsPlaceholder": "Customer reviews will be available soon.",
+    "shareProduct": "Share",
+    "linkCopied": "Link copied to clipboard",
+    "addedToWishlist": "Added to wishlist",
+    "removedFromWishlist": "Removed from wishlist",
+    "inWishlist": "In wishlist",
+    "manualDelivery": "Manual service",
+    "manualDeliveryHint": "Personal service — we process your order manually"
   },
   "auth": {
     "welcomeBack": "Welcome Back",

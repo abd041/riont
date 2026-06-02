@@ -5,7 +5,7 @@ import { StorefrontPageShell } from "@/components/shared/storefront-page-shell";
 import type { CatalogProductDetail } from "@/types/catalog";
 import { ProductDetailGallery } from "./product-detail-gallery";
 import { ProductDetailPurchase } from "./product-detail-purchase";
-import { ProductDetailServices } from "./product-detail-services";
+import { ProductDetailTabs } from "./product-detail-tabs";
 
 function hashSlug(slug: string) {
   let hash = 0;
@@ -70,6 +70,12 @@ export async function ProductDetailView({
               )}
             </div>
 
+            {product.categorySlug && (
+              <Link href={backHref} className="nex-pdp-category">
+                {categoryLabel}
+              </Link>
+            )}
+
             <div className="nex-pdp-rating">
               <span className="nex-pdp-rating-stars" aria-hidden>
                 {Array.from({ length: 5 }).map((_, i) => (
@@ -92,13 +98,9 @@ export async function ProductDetailView({
               </li>
               <li className="nex-pdp-feature">
                 <Check strokeWidth={2} />
-                {t("featureInstant")}
+                {product.badge === "instant" ? t("featureInstant") : t("manualDeliveryHint")}
               </li>
             </ul>
-
-            {product.shortDescription && (
-              <p className="nex-pdp-description">{product.shortDescription}</p>
-            )}
 
             <ProductDetailPurchase
               productId={productId}
@@ -107,10 +109,16 @@ export async function ProductDetailView({
               imageUrl={product.imageUrl ?? null}
               priceCents={product.priceCents}
               compareAtCents={product.compareAtCents}
+              isInstant={product.badge === "instant"}
             />
           </div>
 
-          <ProductDetailServices />
+          <ProductDetailTabs
+            shortDescription={product.shortDescription}
+            description={product.description}
+            rating={rating}
+            reviewCount={reviews}
+          />
         </div>
       </div>
     </StorefrontPageShell>

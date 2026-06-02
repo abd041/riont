@@ -28,24 +28,24 @@
 @tailwind utilities;
 
 :root {
-  --bg-void: #050505;
-  --bg-base: #050505;
-  --bg-elevated: #0b0b0f;
-  --bg-surface: #0b0b0f;
-  --bg-surface-2: #111118;
-  --bg-overlay: rgba(11, 11, 15, 0.88);
+  --bg-void: #000000;
+  --bg-base: #000000;
+  --bg-elevated: #080808;
+  --bg-surface: #0a0a0a;
+  --bg-surface-2: #101010;
+  --bg-overlay: rgba(0, 0, 0, 0.92);
 
   --border-subtle: rgba(255, 255, 255, 0.06);
   --border-default: rgba(255, 255, 255, 0.1);
   --border-strong: rgba(255, 255, 255, 0.14);
-  --border-glow: rgba(139, 92, 246, 0.35);
+  --border-glow: rgba(91, 108, 168, 0.32);
 
-  --accent-400: #a78bfa;
-  --accent-500: #8b5cf6;
-  --accent-600: #7c3aed;
-  --accent-700: #6d28d9;
-  --accent-glow: rgba(139, 92, 246, 0.5);
-  --accent-glow-sm: rgba(139, 92, 246, 0.22);
+  --accent-400: #8b9fd4;
+  --accent-500: #5b6ea8;
+  --accent-600: #4a5a8f;
+  --accent-700: #3d4a75;
+  --accent-glow: rgba(91, 108, 168, 0.35);
+  --accent-glow-sm: rgba(91, 108, 168, 0.18);
 
   --gradient-primary: linear-gradient(
     135deg,
@@ -90,7 +90,7 @@
   }
 
   body {
-    @apply bg-[#050505] text-[var(--text-secondary)] antialiased;
+    @apply bg-black text-[var(--text-secondary)] antialiased;
     font-feature-settings: "cv02", "cv03", "cv04", "cv11";
   }
 
