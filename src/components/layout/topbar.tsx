@@ -65,7 +65,7 @@ export function Topbar({
         <TopbarCurrency />
 
         <Link
-          href="/products"
+          href="/wishlist"
           className={cn(
             "nex-topbar-action nex-topbar-wishlist relative",
             wishlistCount > 0 && "nex-topbar-wishlist--active",

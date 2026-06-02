@@ -216,7 +216,9 @@
     "summaryTitle": "Order summary",
     "subtotal": "Subtotal",
     "total": "Total",
-    "itemCount": "{count, plural, one {# item} other {# items}}"
+    "itemCount": "{count, plural, one {# item} other {# items}}",
+    "proceedCheckout": "Proceed to secure checkout",
+    "checkoutFirst": "Checkout first item"
   },
   "categories": {
     "title": "Categories",
@@ -363,7 +365,50 @@
       "viewOrder": "View order status",
       "continueShopping": "Continue shopping",
       "browse": "Browse products",
-      "missing": "Order reference not found."
+      "missing": "Order reference not found.",
+      "stepsLabel": "Order progress",
+      "stepSubmitted": "Submitted",
+      "stepPayment": "Payment",
+      "stepDelivery": "Delivery",
+      "whatNext": "We will review your order and send payment instructions by email. Track progress anytime from your order page."
+    },
+    "statusHero": {
+      "pending_review": {
+        "title": "Order under review",
+        "description": "Our team is reviewing your order. You will receive payment instructions soon."
+      },
+      "awaiting_payment": {
+        "title": "Awaiting payment",
+        "description": "Complete payment using the instructions below to continue processing."
+      },
+      "payment_received": {
+        "title": "Payment received",
+        "description": "We received your payment and are preparing your delivery."
+      },
+      "processing": {
+        "title": "Processing your order",
+        "description": "Your order is being fulfilled. Delivery details will appear here when ready."
+      },
+      "delivered": {
+        "title": "Order delivered",
+        "description": "Your digital products have been delivered. Save your credentials securely."
+      },
+      "completed": {
+        "title": "Order complete",
+        "description": "This order is fully complete. Thank you for shopping with us."
+      },
+      "cancelled": {
+        "title": "Order cancelled",
+        "description": "This order was cancelled. Contact support if you believe this is a mistake."
+      },
+      "needs_customer_response": {
+        "title": "Action required",
+        "description": "We need additional information from you to continue with this order."
+      },
+      "on_hold": {
+        "title": "Order on hold",
+        "description": "Your order is temporarily on hold. Check your email or contact support for details."
+      }
     },
     "errors": {
       "VALIDATION": "Please check the form and try again.",
@@ -376,6 +421,23 @@
       "COUPON_USAGE_LIMIT": "This discount code has reached its usage limit.",
       "INTERNAL": "Could not submit your order. Please try again."
     }
+  },
+  "account": {
+    "title": "Your account",
+    "subtitle": "Manage orders and saved items in one place.",
+    "navLabel": "Account navigation",
+    "orders": "My orders"
+  },
+  "wishlist": {
+    "title": "Your wishlist",
+    "subtitle": "Saved products ready when you are.",
+    "empty": "Your wishlist is empty. Heart items while browsing to save them here.",
+    "browse": "Browse products",
+    "remove": "Remove",
+    "addToCart": "Add to cart",
+    "buyNow": "Buy now",
+    "addedToCart": "Added to cart",
+    "itemCount": "{count, plural, one {# item} other {# items}}"
   },
   "errors": {
     "notFoundTitle": "Page not found",

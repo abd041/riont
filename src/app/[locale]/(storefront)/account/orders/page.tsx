@@ -5,11 +5,7 @@ import { listCustomerOrders } from "@/server/services/order.service";
 import { getSession } from "@/server/services/auth.service";
 import { OrderStatusBadge } from "@/features/orders/components/order-status-badge";
 import { OrderAmount } from "@/features/orders/components/order-amount";
-import {
-  PremiumPanel,
-  StorefrontPageHeader,
-  StorefrontPageShell,
-} from "@/components/shared";
+import { PremiumPanel } from "@/components/shared/premium-panel";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { OrderStatus } from "@/lib/domain/enums";
 
@@ -23,13 +19,8 @@ export default async function AccountOrdersPage() {
   const orders = await listCustomerOrders(user.id, locale);
 
   return (
-    <StorefrontPageShell>
-      <StorefrontPageHeader
-        title={t("myOrders")}
-        subtitle={t("myOrdersSubtitle")}
-        backHref="/products"
-        backLabel={t("browseProducts")}
-      />
+    <>
+      <h2 className="sf-section-title">{t("myOrders")}</h2>
 
       {orders.length === 0 ? (
         <EmptyState
@@ -72,6 +63,6 @@ export default async function AccountOrdersPage() {
           </ul>
         </PremiumPanel>
       )}
-    </StorefrontPageShell>
+    </>
   );
 }

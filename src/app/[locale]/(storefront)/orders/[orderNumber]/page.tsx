@@ -29,6 +29,7 @@ export default async function OrderDetailPage({
       locale={locale}
       showGuestTokenHint={Boolean(token && !user)}
       showSupportLink={Boolean(user)}
+      isGuest={!user}
     />
   );
 }

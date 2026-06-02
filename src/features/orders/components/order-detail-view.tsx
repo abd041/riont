@@ -1,38 +1,65 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { OrderStatusBadge } from "./order-status-badge";
+import { OrderStatus } from "@/lib/domain/enums";
 import { OrderAmount, OrderSummaryPricing } from "./order-amount";
+import {
+  getOrderStatusMessageKey,
+  OrderStatusHero,
+} from "./order-status-hero";
 import {
   PremiumPanel,
   StorefrontPageHeader,
   StorefrontPageShell,
 } from "@/components/shared";
 import type { CustomerOrder } from "@/types/order";
-import type { OrderStatus } from "@/lib/domain/enums";
+import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
 
 export async function OrderDetailView({
   order,
   locale,
   showGuestTokenHint,
   showSupportLink,
+  isGuest,
 }: {
   order: CustomerOrder;
   locale: string;
   showGuestTokenHint?: boolean;
   showSupportLink?: boolean;
+  isGuest?: boolean;
 }) {
   const t = await getTranslations("orders");
+  const tConfirmation = await getTranslations("orders.confirmation");
   const tSupport = await getTranslations("support");
-  const statusLabel = t(`status.${order.status as OrderStatus}`);
+  const status = order.status as OrderStatusType;
+  const statusLabel = t(`status.${status}`);
+  const messageKey = getOrderStatusMessageKey(status);
+
+  const showPaymentPanel =
+    Boolean(order.paymentInstructions) &&
+    (status === OrderStatus.AWAITING_PAYMENT ||
+      status === OrderStatus.PENDING_REVIEW ||
+      status === OrderStatus.PAYMENT_RECEIVED);
 
   return (
     <StorefrontPageShell>
       <StorefrontPageHeader
         title={order.orderNumber}
         subtitle={t("orderNumber")}
-        backHref="/account/orders"
-        backLabel={t("myOrders")}
-        actions={<OrderStatusBadge status={order.status} label={statusLabel} />}
+        backHref={isGuest ? "/products" : "/account/orders"}
+        backLabel={isGuest ? t("continueShopping") : t("myOrders")}
+      />
+
+      <OrderStatusHero
+        status={status}
+        statusLabel={statusLabel}
+        headline={t(`${messageKey}.title`)}
+        description={t(`${messageKey}.description`)}
+        stepsLabel={tConfirmation("stepsLabel")}
+        steps={{
+          submitted: tConfirmation("stepSubmitted"),
+          payment: tConfirmation("stepPayment"),
+          delivery: tConfirmation("stepDelivery"),
+        }}
       />
 
       {showGuestTokenHint && (
@@ -101,7 +128,7 @@ export async function OrderDetailView({
                   />
                   <div>
                     <p className="sf-timeline__label">
-                      {t(`status.${event.toStatus as OrderStatus}`)}
+                      {t(`status.${event.toStatus as OrderStatusType}`)}
                     </p>
                     {event.note && (
                       <p className="text-xs text-[var(--text-muted)]">{event.note}</p>
@@ -130,9 +157,9 @@ export async function OrderDetailView({
             />
           </PremiumPanel>
 
-          {order.paymentInstructions && (
-            <PremiumPanel title={t("paymentInstructions")}>
-              <p className="text-sm leading-relaxed text-[var(--text-muted)]">
+          {showPaymentPanel && order.paymentInstructions && (
+            <PremiumPanel title={t("paymentInstructions")} className="sf-order-payment-panel">
+              <p className="text-sm leading-relaxed text-[var(--text-secondary)]">
                 {order.paymentInstructions}
               </p>
             </PremiumPanel>

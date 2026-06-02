@@ -60,7 +60,7 @@ export function CheckoutForm({
           readOnly
         />
 
-        <CheckoutHeader />
+        <CheckoutHeader productSlug={product.slug} productName={product.name} />
 
         <div className="nex-co-columns">
           <CheckoutMotionStagger className="nex-co-main">

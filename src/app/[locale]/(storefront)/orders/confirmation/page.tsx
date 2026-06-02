@@ -1,10 +1,11 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { CheckCircle2 } from "lucide-react";
+import { OrderStatus } from "@/lib/domain/enums";
+import { CheckoutTrustBadges } from "@/features/checkout/components/checkout-trust-badges";
 import {
-  PremiumPanel,
-  StorefrontPageShell,
-} from "@/components/shared";
+  OrderStatusHero,
+} from "@/features/orders/components/order-status-hero";
+import { PremiumPanel, StorefrontPageShell } from "@/components/shared";
 
 export default async function OrderConfirmationPage({
   params,
@@ -16,6 +17,8 @@ export default async function OrderConfirmationPage({
   await params;
   const { order: orderNumber, token } = await searchParams;
   const t = await getTranslations("orders.confirmation");
+  const tOrders = await getTranslations("orders");
+  const status = OrderStatus.PENDING_REVIEW;
 
   if (!orderNumber) {
     return (
@@ -40,22 +43,32 @@ export default async function OrderConfirmationPage({
 
   return (
     <StorefrontPageShell variant="narrow">
+      <OrderStatusHero
+        status={status}
+        statusLabel={tOrders(`status.${status}`)}
+        headline={t("title")}
+        description={t("subtitle")}
+        stepsLabel={t("stepsLabel")}
+        steps={{
+          submitted: t("stepSubmitted"),
+          payment: t("stepPayment"),
+          delivery: t("stepDelivery"),
+        }}
+      />
+
       <PremiumPanel>
-        <div className="sf-success">
-          <div className="sf-success__icon">
-            <CheckCircle2 strokeWidth={1.5} />
-          </div>
-          <h1 className="sf-success__title">{t("title")}</h1>
-          <p className="sf-success__subtitle">{t("subtitle")}</p>
+        <div className="sf-success sf-success--compact">
           <p className="sf-success__meta">{t("orderLabel")}</p>
           <p className="sf-success__value" dir="ltr">
             {orderNumber}
           </p>
+
           {token && (
-            <p className="sf-alert sf-alert--warning" style={{ marginTop: 8, width: "100%" }}>
-              {t("saveLink")}
-            </p>
+            <p className="sf-alert sf-alert--warning sf-success__hint">{t("saveLink")}</p>
           )}
+
+          <p className="sf-success__next">{t("whatNext")}</p>
+
           <div className="sf-success__actions">
             <Link href={orderHref} className="sf-btn-primary">
               {t("viewOrder")}
@@ -63,6 +76,10 @@ export default async function OrderConfirmationPage({
             <Link href="/products" className="sf-btn-outline">
               {t("continueShopping")}
             </Link>
+          </div>
+
+          <div className="sf-confirmation-trust">
+            <CheckoutTrustBadges />
           </div>
         </div>
       </PremiumPanel>

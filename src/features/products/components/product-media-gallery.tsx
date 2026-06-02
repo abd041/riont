@@ -14,7 +14,7 @@ export function ProductMediaGallery({
 
   if (!primary) {
     return (
-      <div className="glass-card relative min-h-[320px] overflow-hidden rounded-[var(--radius-lg)]">
+      <div className="nex-pdp-gallery-main relative min-h-[320px]">
         <ProductImage alt={productName} className="absolute inset-0 min-h-[320px]" priority />
       </div>
     );
@@ -22,7 +22,7 @@ export function ProductMediaGallery({
 
   if (primary.type === "video") {
     return (
-      <div className="glass-card overflow-hidden rounded-[var(--radius-lg)]">
+      <div className="nex-pdp-gallery-main overflow-hidden">
         <video
           src={primary.url}
           controls
@@ -34,7 +34,7 @@ export function ProductMediaGallery({
   }
 
   return (
-    <div className="glass-card relative min-h-[320px] overflow-hidden rounded-[var(--radius-lg)]">
+    <div className="nex-pdp-gallery-main relative min-h-[320px]">
       <ProductImage
         src={primary.url}
         alt={primary.alt ?? productName}

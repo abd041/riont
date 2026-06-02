@@ -2,6 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { ErrorState } from "@/components/ui/error-state";
+import { StorefrontPageShell } from "@/components/shared/storefront-page-shell";
 
 export default function StorefrontError({
   reset,
@@ -13,13 +14,13 @@ export default function StorefrontError({
   const tCommon = useTranslations("common");
 
   return (
-    <div className="mx-auto max-w-content py-8">
+    <StorefrontPageShell variant="narrow">
       <ErrorState
         title={t("genericTitle")}
         description={t("genericDescription")}
         retryLabel={tCommon("retry")}
         onRetry={reset}
       />
-    </div>
+    </StorefrontPageShell>
   );
 }

@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 import { getSession } from "@/server/services/auth.service";
+import { AccountSectionShell } from "@/features/account/components/account-section-shell";
 
 export default async function AccountSectionLayout({
   children,
@@ -15,5 +16,5 @@ export default async function AccountSectionLayout({
     redirect(`/${locale}/login?next=/${locale}/account/orders`);
   }
 
-  return children;
+  return <AccountSectionShell>{children}</AccountSectionShell>;
 }

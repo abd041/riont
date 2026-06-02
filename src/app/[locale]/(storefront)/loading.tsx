@@ -1,14 +1,18 @@
 import { Skeleton } from "@/components/ui/skeleton";
+import { StorefrontPageShell } from "@/components/shared/storefront-page-shell";
 
 export default function StorefrontLoading() {
   return (
-    <div className="mx-auto max-w-content space-y-6">
-      <Skeleton className="h-10 w-48" />
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 8 }).map((_, i) => (
-          <Skeleton key={i} className="h-64 rounded-[var(--radius-lg)]" />
-        ))}
+    <StorefrontPageShell>
+      <div className="sf-loading">
+        <Skeleton className="sf-loading__title" />
+        <Skeleton className="sf-loading__subtitle" />
+        <div className="sf-loading__grid">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <Skeleton key={i} className="sf-loading__card" />
+          ))}
+        </div>
       </div>
-    </div>
+    </StorefrontPageShell>
   );
 }

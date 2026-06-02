@@ -60,7 +60,7 @@ const primaryNav = [
 
 const secondaryNav = [
   { href: "/account/orders", icon: ClipboardList, key: "orders" as const, match: "path-prefix" as const },
-  { href: "/products", icon: Heart, key: "wishlist" as const, match: "never" as const },
+  { href: "/wishlist", icon: Heart, key: "wishlist" as const, match: "path" as const },
   { href: "/products", icon: Ticket, key: "coupons" as const, match: "never" as const },
   { href: "/support", icon: Headphones, key: "support" as const, match: "path-prefix" as const },
 ] as const;
