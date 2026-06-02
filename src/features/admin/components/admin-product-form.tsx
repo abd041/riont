@@ -119,6 +119,22 @@ export function AdminProductForm({
               Featured on homepage
             </label>
           </div>
+          <div>
+            <label className="text-xs text-[var(--text-muted)]">Badge</label>
+            <select
+              name="badge"
+              defaultValue={product?.badge ?? "none"}
+              className="mt-1 flex h-10 w-full rounded-[var(--radius-md)] border border-[var(--border-default)] bg-surface px-3 text-sm"
+            >
+              <option value="none">Auto / none</option>
+              <option value="bestSeller">Best seller</option>
+              <option value="instant">Instant delivery</option>
+              <option value="hot">Hot</option>
+              <option value="trending">Trending</option>
+              <option value="limited">Limited</option>
+              <option value="offer">Special offer</option>
+            </select>
+          </div>
         </div>
 
         <div className="grid gap-6 lg:grid-cols-2">

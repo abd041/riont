@@ -182,7 +182,13 @@
     "removedFromWishlist": "Removed from wishlist",
     "inWishlist": "In wishlist",
     "manualDelivery": "Manual service",
-    "manualDeliveryHint": "Personal service — we process your order manually"
+    "manualDeliveryHint": "Personal service — we process your order manually",
+    "relatedProducts": "You may also like",
+    "selectOption": "Choose an option",
+    "badgeHot": "HOT",
+    "badgeTrending": "TRENDING",
+    "badgeLimited": "LIMITED",
+    "badgeOffer": "OFFER"
   },
   "auth": {
     "welcomeBack": "Welcome Back",

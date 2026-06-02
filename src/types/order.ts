@@ -22,6 +22,16 @@ export type CheckoutProduct = {
   deliveryMode: "auto" | "manual";
   imageUrl: string | null;
   fields: CheckoutField[];
+  variantId?: string | null;
+  variantName?: string | null;
+  variants: Array<{
+    id: string;
+    name: string;
+    priceCents: number;
+    compareAtCents?: number | null;
+    offerLabel?: string | null;
+    isDefault?: boolean;
+  }>;
 };
 
 export type OrderSubmitSuccess = {

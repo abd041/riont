@@ -6,6 +6,7 @@ import type {
   CatalogProductDetail,
   ProductBadge,
   ProductMediaItem,
+  ProductVariant,
 } from "@/types/catalog";
 import type { CheckoutField, CheckoutProduct } from "@/types/order";
 import { resolveLocalizedLabel, type LocalizedLabel } from "@/lib/i18n/json-label";
@@ -20,6 +21,7 @@ type ProductQueryRow = {
   is_featured: boolean;
   delivery_mode: "auto" | "manual";
   sales_count: number;
+  badge?: string | null;
   product_translations: Array<{
     name: string;
     slug: string;
@@ -57,6 +59,7 @@ const PRODUCT_SELECT = `
   is_featured,
   delivery_mode,
   sales_count,
+  badge,
   product_translations!inner (
     name,
     slug,
@@ -83,6 +86,7 @@ const PRODUCT_DETAIL_SELECT = `
   is_featured,
   delivery_mode,
   sales_count,
+  badge,
   product_translations!inner (
     name,
     slug,
@@ -116,9 +120,66 @@ function getCategoryTranslations(row: ProductQueryRow) {
 }
 
 function resolveBadge(row: ProductQueryRow): ProductBadge | undefined {
+  const manual = row.badge;
+  if (manual && manual !== "none") return manual as ProductBadge;
   if (row.sales_count >= 10) return "bestSeller";
   if (row.delivery_mode === "auto") return "instant";
   return undefined;
+}
+
+type VariantRow = {
+  id: string;
+  name: LocalizedLabel;
+  price_cents: number;
+  compare_at_cents: number | null;
+  offer_label: LocalizedLabel | null;
+  sort_order: number;
+  is_active: boolean;
+  is_default: boolean;
+};
+
+function mapVariant(row: VariantRow, locale: string): ProductVariant {
+  return {
+    id: row.id,
+    name: resolveLocalizedLabel(row.name, locale, "Option"),
+    priceCents: row.price_cents,
+    compareAtCents: row.compare_at_cents,
+    offerLabel: row.offer_label
+      ? resolveLocalizedLabel(row.offer_label, locale)
+      : null,
+    isDefault: row.is_default,
+  };
+}
+
+async function fetchProductVariants(
+  productId: string,
+  locale: string,
+): Promise<ProductVariant[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("product_variants")
+    .select(
+      "id, name, price_cents, compare_at_cents, offer_label, sort_order, is_active, is_default",
+    )
+    .eq("product_id", productId)
+    .eq("is_active", true)
+    .order("sort_order", { ascending: true });
+
+  if (error) return [];
+  return ((data ?? []) as VariantRow[]).map((row) => mapVariant(row, locale));
+}
+
+function pickVariant(
+  variants: ProductVariant[],
+  variantId?: string | null,
+): ProductVariant | null {
+  if (variants.length === 0) return null;
+  if (variantId) {
+    return variants.find((v) => v.id === variantId) ?? null;
+  }
+  return variants.find((v) => v.isDefault) ?? variants[0] ?? null;
 }
 
 function mapMedia(row: ProductQueryRow): ProductMediaItem[] {
@@ -182,6 +243,7 @@ function mapDetailRow(row: ProductQueryRow): CatalogProductDetail | null {
     metaDescription: translation.meta_description,
     ogImageUrl: resolveOgImage(translation.og_image_url) ?? base.imageUrl,
     media: mapMedia(row),
+    variants: [],
   };
 }
 
@@ -380,6 +442,7 @@ export async function getProductBySlug(
       media: demo.imageUrl
         ? [{ type: "image", url: demo.imageUrl, alt: demo.name }]
         : [],
+      variants: [],
     };
   }
 
@@ -405,10 +468,14 @@ export async function getProductBySlug(
         media: demo.imageUrl
           ? [{ type: "image", url: demo.imageUrl, alt: demo.name }]
           : [],
+        variants: [],
       };
     }
 
-    return mapDetailRow(data as unknown as ProductQueryRow);
+    const detail = mapDetailRow(data as unknown as ProductQueryRow);
+    if (!detail?.id) return detail;
+    const variants = await fetchProductVariants(detail.id, locale);
+    return { ...detail, variants };
   } catch (error) {
     if (!allowDemoFallback) throw error;
     const demo = demoProducts.find((p) => p.slug === slug);
@@ -419,8 +486,64 @@ export async function getProductBySlug(
       media: demo.imageUrl
         ? [{ type: "image", url: demo.imageUrl, alt: demo.name }]
         : [],
+      variants: [],
     };
   }
+}
+
+export async function listRelatedProducts(
+  locale: string,
+  productId: string,
+  limit = 4,
+): Promise<CatalogProduct[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  const supabase = await createClient();
+  const { data: links, error: linkError } = await supabase
+    .from("product_related")
+    .select("related_product_id, sort_order")
+    .eq("product_id", productId)
+    .order("sort_order", { ascending: true })
+    .limit(limit);
+
+  if (linkError || !links?.length) {
+    const { data: fallback } = await supabase
+      .from("products")
+      .select(PRODUCT_SELECT)
+      .eq("status", "active")
+      .neq("id", productId)
+      .eq("product_translations.locale", locale)
+      .eq("categories.category_translations.locale", locale)
+      .order("sales_count", { ascending: false })
+      .limit(limit);
+
+    return ((fallback ?? []) as unknown as ProductQueryRow[])
+      .map(mapRow)
+      .filter((p): p is CatalogProduct => p !== null);
+  }
+
+  const ids = (links as Array<{ related_product_id: string }>).map(
+    (l) => l.related_product_id,
+  );
+
+  const { data, error } = await supabase
+    .from("products")
+    .select(PRODUCT_SELECT)
+    .in("id", ids)
+    .eq("status", "active")
+    .eq("product_translations.locale", locale)
+    .eq("categories.category_translations.locale", locale);
+
+  if (error) return [];
+
+  const byId = new Map(
+    ((data ?? []) as unknown as ProductQueryRow[])
+      .map(mapRow)
+      .filter((p): p is CatalogProduct => p !== null)
+      .map((p) => [p.id!, p]),
+  );
+
+  return ids.map((id) => byId.get(id)).filter((p): p is CatalogProduct => Boolean(p));
 }
 
 type ProductFieldRow = {
@@ -495,6 +618,7 @@ function mapProductFields(
 export async function getProductForCheckout(
   locale: string,
   slug: string,
+  variantId?: string | null,
 ): Promise<CheckoutProduct | null> {
   const detail = await getProductBySlug(locale, slug);
   if (!detail?.id) {
@@ -511,6 +635,7 @@ export async function getProductForCheckout(
       deliveryMode: demo.badge === "instant" ? "auto" : "manual",
       imageUrl: demo.imageUrl ?? null,
       fields: DEMO_CHECKOUT_FIELDS[slug] ?? [],
+      variants: [],
     };
   }
 
@@ -529,16 +654,29 @@ export async function getProductForCheckout(
   if (fieldsResult.error) throw fieldsResult.error;
   if (productResult.error) throw productResult.error;
 
+  const variants = detail.variants ?? [];
+  const selected = pickVariant(variants, variantId);
+  if (variants.length > 0 && variantId && !selected) {
+    throw new ServiceError("VALIDATION", "Invalid product option selected");
+  }
+
+  const priceCents = selected?.priceCents ?? detail.priceCents;
+  const compareAtCents = selected?.compareAtCents ?? detail.compareAtCents ?? null;
+  const variantName = selected?.name ?? null;
+
   return {
     id: detail.id,
     slug: detail.slug,
-    name: detail.name,
+    name: variantName ? `${detail.name} — ${variantName}` : detail.name,
     categoryName: detail.category ?? null,
     shortDescription: detail.shortDescription ?? null,
-    priceCents: detail.priceCents,
-    compareAtCents: detail.compareAtCents ?? null,
+    priceCents,
+    compareAtCents,
     deliveryMode: productResult.data.delivery_mode,
     imageUrl: detail.imageUrl ?? null,
     fields: mapProductFields((fieldsResult.data ?? []) as ProductFieldRow[], locale),
+    variantId: selected?.id ?? null,
+    variantName,
+    variants,
   };
 }

@@ -30,6 +30,7 @@ export async function submitOrderAction(
   const termsRaw = formData.get("termsAccepted");
   const parsed = submitOrderSchema.safeParse({
     productSlug: formData.get("productSlug"),
+    variantId: formData.get("variantId") || undefined,
     locale: formData.get("locale"),
     quantity: formData.get("quantity") ?? 1,
     guestEmail: formData.get("guestEmail") || undefined,

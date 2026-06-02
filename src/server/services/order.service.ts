@@ -86,7 +86,11 @@ export async function submitOrder(
   input: SubmitOrderInput,
 ): Promise<OrderSubmitSuccess> {
   const user = await getSession();
-  const product = await getProductForCheckout(input.locale, input.productSlug);
+  const product = await getProductForCheckout(
+    input.locale,
+    input.productSlug,
+    input.variantId || undefined,
+  );
 
   if (!product || product.id.startsWith("demo-")) {
     throw new ServiceError("NOT_FOUND", "Product not found");
@@ -163,6 +167,10 @@ export async function submitOrder(
       unit_price_cents: product.priceCents,
       quantity: input.quantity,
       delivery_mode: product.deliveryMode,
+      variant_id: product.variantId ?? null,
+      variant_name_snapshot: product.variantName
+        ? { [input.locale]: product.variantName }
+        : null,
     })
     .select("id")
     .single();

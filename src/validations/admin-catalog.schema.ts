@@ -19,6 +19,10 @@ export const saveProductSchema = z.object({
     .transform((v) => (v === "" || v === undefined ? undefined : v)),
   isFeatured: z.coerce.boolean().optional(),
   sortOrder: z.coerce.number().int().optional(),
+  badge: z
+    .enum(["none", "bestSeller", "instant", "hot", "trending", "limited", "offer"])
+    .optional()
+    .default("none"),
   en: translationSchema,
   ar: translationSchema,
 });

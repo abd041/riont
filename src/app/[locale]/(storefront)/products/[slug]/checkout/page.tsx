@@ -6,11 +6,14 @@ import { getSession } from "@/server/services/auth.service";
 
 export default async function CheckoutPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ slug: string; locale: string }>;
+  searchParams: Promise<{ variant?: string }>;
 }) {
   const { slug, locale } = await params;
-  const product = await getProductForCheckout(locale, slug);
+  const { variant: variantId } = await searchParams;
+  const product = await getProductForCheckout(locale, slug, variantId);
   const user = await getSession();
 
   if (!product) notFound();

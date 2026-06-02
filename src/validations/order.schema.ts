@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const submitOrderSchema = z.object({
   productSlug: z.string().min(1).max(200),
+  variantId: z.string().uuid().optional().or(z.literal("")),
   locale: z.enum(["en", "ar"]),
   quantity: z.coerce.number().int().min(1).max(10).default(1),
   guestEmail: z.string().email().optional().or(z.literal("")),

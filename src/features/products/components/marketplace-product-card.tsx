@@ -71,6 +71,19 @@ export function MarketplaceProductCard({
         {badge === "bestSeller" && (
           <span className="mp-badge mp-badge--hot">{tProduct("bestSellerBadge")}</span>
         )}
+        {badge === "instant" && (
+          <span className="mp-badge mp-badge--instant">{tProduct("instantDelivery")}</span>
+        )}
+        {badge === "hot" && <span className="mp-badge mp-badge--hot">{tProduct("badgeHot")}</span>}
+        {badge === "trending" && (
+          <span className="mp-badge mp-badge--hot">{tProduct("badgeTrending")}</span>
+        )}
+        {badge === "limited" && (
+          <span className="mp-badge mp-badge--sale">{tProduct("badgeLimited")}</span>
+        )}
+        {badge === "offer" && (
+          <span className="mp-badge mp-badge--sale">{tProduct("badgeOffer")}</span>
+        )}
         <div className="mp-card__img-wrap">
           {imageUrl ? (
             <Image

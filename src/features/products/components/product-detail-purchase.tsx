@@ -23,6 +23,7 @@ export function ProductDetailPurchase({
   priceCents,
   compareAtCents,
   isInstant,
+  checkoutHref,
 }: {
   productId: string;
   slug: string;
@@ -31,6 +32,7 @@ export function ProductDetailPurchase({
   priceCents: number;
   compareAtCents?: number | null;
   isInstant?: boolean;
+  checkoutHref?: string;
 }) {
   const locale = useLocale();
   const t = useTranslations("product");
@@ -134,7 +136,7 @@ export function ProductDetailPurchase({
           {t("addToCart")}
         </button>
 
-        <Link href={`/products/${slug}/checkout`} className="nex-pdp-buy-now">
+        <Link href={checkoutHref ?? `/products/${slug}/checkout`} className="nex-pdp-buy-now">
           {t("buyNowButton")}
         </Link>
 

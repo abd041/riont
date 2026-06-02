@@ -9,6 +9,9 @@ import {
   saveCategory,
   saveCoupon,
   saveProduct,
+  saveAdminProductFields,
+  saveAdminProductRelated,
+  saveAdminProductVariants,
   updateSiteSettings,
   uploadProductImage,
 } from "@/server/services/admin-catalog.service";
@@ -33,6 +36,7 @@ function parseProductForm(formData: FormData) {
     compareAtCents: formData.get("compareAtCents") || undefined,
     isFeatured: formData.get("isFeatured") === "on",
     sortOrder: formData.get("sortOrder") || 0,
+    badge: formData.get("badge") || "none",
     en: {
       name: formData.get("enName"),
       slug: formData.get("enSlug"),
@@ -209,5 +213,118 @@ export async function saveSiteSettingsAction(
   } catch (error) {
     if (isRedirectError(error)) throw error;
     return { success: false, error: "Could not save settings" };
+  }
+}
+
+function parseJsonArray<T>(raw: FormDataEntryValue | null): T[] {
+  if (typeof raw !== "string" || !raw.trim()) return [];
+  try {
+    const parsed = JSON.parse(raw) as T[];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
+export async function saveProductVariantsAction(
+  _prev: CatalogActionResult | null,
+  formData: FormData,
+): Promise<CatalogActionResult> {
+  const productId = formData.get("productId");
+  if (typeof productId !== "string") {
+    return { success: false, error: "Invalid product" };
+  }
+
+  try {
+    await requireAdmin();
+    const variants = parseJsonArray<{
+      nameEn: string;
+      nameAr: string;
+      priceCents: number;
+      compareAtCents?: number | null;
+      offerLabelEn?: string;
+      offerLabelAr?: string;
+      isDefault?: boolean;
+      sortOrder?: number;
+    }>(formData.get("variantsJson"));
+
+    await saveAdminProductVariants(
+      productId,
+      variants.map((variant, index) => ({
+        ...variant,
+        isDefault: variant.isDefault ?? index === 0,
+        sortOrder: variant.sortOrder ?? index,
+      })),
+    );
+    revalidatePath(`/admin/products/${productId}`);
+    revalidatePath("/en/products");
+    revalidatePath("/ar/products");
+    return { success: true, message: "Options saved" };
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    return { success: false, error: "Could not save options" };
+  }
+}
+
+export async function saveProductFieldsAction(
+  _prev: CatalogActionResult | null,
+  formData: FormData,
+): Promise<CatalogActionResult> {
+  const productId = formData.get("productId");
+  if (typeof productId !== "string") {
+    return { success: false, error: "Invalid product" };
+  }
+
+  try {
+    await requireAdmin();
+    const fields = parseJsonArray<{
+      fieldKey: string;
+      fieldType: string;
+      labelEn: string;
+      labelAr: string;
+      helpEn?: string;
+      helpAr?: string;
+      required?: boolean;
+      isSensitive?: boolean;
+      sortOrder?: number;
+    }>(formData.get("fieldsJson"));
+
+    await saveAdminProductFields(
+      productId,
+      fields.map((field, index) => ({
+        ...field,
+        required: field.required ?? false,
+        isSensitive: field.isSensitive ?? false,
+        sortOrder: field.sortOrder ?? index,
+      })),
+    );
+    revalidatePath(`/admin/products/${productId}`);
+    return { success: true, message: "Fields saved" };
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    return { success: false, error: "Could not save fields" };
+  }
+}
+
+export async function saveProductRelatedAction(
+  _prev: CatalogActionResult | null,
+  formData: FormData,
+): Promise<CatalogActionResult> {
+  const productId = formData.get("productId");
+  if (typeof productId !== "string") {
+    return { success: false, error: "Invalid product" };
+  }
+
+  try {
+    await requireAdmin();
+    const relatedIds = parseJsonArray<string>(formData.get("relatedIdsJson"));
+    await saveAdminProductRelated(productId, relatedIds);
+    revalidatePath(`/admin/products/${productId}`);
+    revalidatePath("/en/products");
+    revalidatePath("/ar/products");
+    return { success: true, message: "Related products saved" };
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    return { success: false, error: "Could not save related products" };
   }
 }

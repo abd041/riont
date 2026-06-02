@@ -182,7 +182,13 @@
     "removedFromWishlist": "تمت الإزالة من المفضلة",
     "inWishlist": "في المفضلة",
     "manualDelivery": "خدمة يدوية",
-    "manualDeliveryHint": "خدمة شخصية — نعالج طلبك يدوياً"
+    "manualDeliveryHint": "خدمة شخصية — نعالج طلبك يدوياً",
+    "relatedProducts": "قد يعجبك أيضاً",
+    "selectOption": "اختر خياراً",
+    "badgeHot": "رائج",
+    "badgeTrending": "ترند",
+    "badgeLimited": "محدود",
+    "badgeOffer": "عرض"
   },
   "auth": {
     "welcomeBack": "مرحباً بعودتك",

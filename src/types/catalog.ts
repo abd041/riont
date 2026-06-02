@@ -1,11 +1,26 @@
 /** Shared catalog domain types (used by server services and storefront features). */
 
-export type ProductBadge = "bestSeller" | "instant";
+export type ProductBadge =
+  | "bestSeller"
+  | "instant"
+  | "hot"
+  | "trending"
+  | "limited"
+  | "offer";
 
 export type ProductMediaItem = {
   type: "image" | "video";
   url: string;
   alt: string | null;
+};
+
+export type ProductVariant = {
+  id: string;
+  name: string;
+  priceCents: number;
+  compareAtCents?: number | null;
+  offerLabel?: string | null;
+  isDefault?: boolean;
 };
 
 export interface CatalogProduct {
@@ -27,6 +42,7 @@ export interface CatalogProductDetail extends CatalogProduct {
   metaDescription?: string | null;
   ogImageUrl?: string | null;
   media: ProductMediaItem[];
+  variants: ProductVariant[];
 }
 
 export interface CatalogCategory {
@@ -39,3 +55,28 @@ export interface CatalogCategory {
   metaTitle?: string | null;
   metaDescription?: string | null;
 }
+
+export type AdminProductField = {
+  id?: string;
+  fieldKey: string;
+  fieldType: string;
+  labelEn: string;
+  labelAr: string;
+  helpEn?: string;
+  helpAr?: string;
+  required: boolean;
+  isSensitive: boolean;
+  sortOrder: number;
+};
+
+export type AdminProductVariant = {
+  id?: string;
+  nameEn: string;
+  nameAr: string;
+  priceCents: number;
+  compareAtCents?: number | null;
+  offerLabelEn?: string;
+  offerLabelAr?: string;
+  isDefault: boolean;
+  sortOrder: number;
+};

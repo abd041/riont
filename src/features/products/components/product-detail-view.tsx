@@ -4,8 +4,10 @@ import { ArrowLeft, Check, Star } from "lucide-react";
 import { StorefrontPageShell } from "@/components/shared/storefront-page-shell";
 import type { CatalogProductDetail } from "@/types/catalog";
 import { ProductDetailGallery } from "./product-detail-gallery";
-import { ProductDetailPurchase } from "./product-detail-purchase";
+import { ProductDetailInteractive } from "./product-detail-interactive";
+import { ProductDetailRelated } from "./product-detail-related";
 import { ProductDetailTabs } from "./product-detail-tabs";
+import { listRelatedProducts } from "@/server/services/product.service";
 
 function hashSlug(slug: string) {
   let hash = 0;
@@ -25,9 +27,11 @@ function ratingValue(slug: string) {
 export async function ProductDetailView({
   product,
   slug,
+  locale,
 }: {
   product: CatalogProductDetail;
   slug: string;
+  locale: string;
 }) {
   const t = await getTranslations("product");
   const tCatalog = await getTranslations("catalog");
@@ -38,6 +42,10 @@ export async function ProductDetailView({
   const backHref = product.categorySlug
     ? `/products?category=${product.categorySlug}`
     : "/products";
+
+  const relatedProducts = product.id
+    ? await listRelatedProducts(locale, product.id, 4)
+    : [];
 
   return (
     <StorefrontPageShell variant="wide">
@@ -102,14 +110,15 @@ export async function ProductDetailView({
               </li>
             </ul>
 
-            <ProductDetailPurchase
+            <ProductDetailInteractive
               productId={productId}
               slug={slug}
               name={product.name}
               imageUrl={product.imageUrl ?? null}
-              priceCents={product.priceCents}
-              compareAtCents={product.compareAtCents}
+              basePriceCents={product.priceCents}
+              baseCompareAtCents={product.compareAtCents}
               isInstant={product.badge === "instant"}
+              variants={product.variants ?? []}
             />
           </div>
 
@@ -119,6 +128,8 @@ export async function ProductDetailView({
             rating={rating}
             reviewCount={reviews}
           />
+
+          <ProductDetailRelated products={relatedProducts} />
         </div>
       </div>
     </StorefrontPageShell>

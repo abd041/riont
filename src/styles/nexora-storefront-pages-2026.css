@@ -1720,3 +1720,70 @@
     margin-bottom: 12px;
   }
 }
+
+/* ─── PDP variants & related ─── */
+.nex-pdp-variants {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 12px 0 14px;
+}
+
+.nex-pdp-variant {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  min-height: 42px;
+  padding: 8px 12px;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.nex-pdp-variant--active {
+  border-color: rgba(91, 108, 168, 0.45);
+  background: rgba(91, 108, 168, 0.12);
+  box-shadow: 0 0 18px rgba(91, 108, 168, 0.12);
+}
+
+.nex-pdp-variant__name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.nex-pdp-variant__offer {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #86efac;
+}
+
+.nex-pdp-related {
+  grid-column: 1 / -1;
+  padding-top: 8px;
+}
+
+.nex-pdp-related__title {
+  margin-bottom: 12px;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.nex-pdp-related__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .nex-pdp-related__grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

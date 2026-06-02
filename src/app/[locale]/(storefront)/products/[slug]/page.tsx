@@ -42,5 +42,5 @@ export default async function ProductDetailPage({
 
   if (!product) notFound();
 
-  return <ProductDetailView product={product} slug={slug} />;
+  return <ProductDetailView product={product} slug={slug} locale={locale} />;
 }

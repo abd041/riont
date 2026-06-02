@@ -8,6 +8,11 @@ import type {
   saveProductSchema,
   siteSettingsSchema,
 } from "@/validations/admin-catalog.schema";
+import type {
+  AdminProductField,
+  AdminProductVariant,
+  ProductBadge,
+} from "@/types/catalog";
 
 export type AdminProductListItem = {
   id: string;
@@ -29,6 +34,7 @@ export type AdminProductEdit = {
   compareAtCents: number | null;
   isFeatured: boolean;
   sortOrder: number;
+  badge: ProductBadge | "none";
   en: { name: string; slug: string; shortDescription: string; description: string };
   ar: { name: string; slug: string; shortDescription: string; description: string };
   imagePath: string | null;
@@ -102,6 +108,7 @@ export async function getAdminProductEdit(
       compare_at_cents,
       is_featured,
       sort_order,
+      badge,
       product_translations (locale, name, slug, short_description, description),
       product_media (storage_path, sort_order)
     `,
@@ -120,6 +127,7 @@ export async function getAdminProductEdit(
     compare_at_cents: number | null;
     is_featured: boolean;
     sort_order: number;
+    badge: ProductBadge | "none" | null;
     product_translations: Array<{
       locale: string;
       name: string;
@@ -155,6 +163,7 @@ export async function getAdminProductEdit(
     compareAtCents: row.compare_at_cents,
     isFeatured: row.is_featured,
     sortOrder: row.sort_order,
+    badge: row.badge ?? "none",
     en: pick("en"),
     ar: pick("ar"),
     imagePath: media?.storage_path ?? null,
@@ -176,6 +185,7 @@ export async function saveProduct(
     compare_at_cents: compareAt,
     is_featured: Boolean(input.isFeatured),
     sort_order: input.sortOrder ?? 0,
+    badge: input.badge ?? "none",
     updated_at: new Date().toISOString(),
   };
 
@@ -483,4 +493,196 @@ export async function updateSiteSettings(
     .eq("id", "default");
 
   if (error) throw error;
+}
+
+export async function getAdminProductFields(
+  productId: string,
+): Promise<AdminProductField[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("product_fields")
+    .select(
+      "id, field_key, field_type, label, help_text, required, is_sensitive, sort_order",
+    )
+    .eq("product_id", productId)
+    .order("sort_order");
+
+  if (error) throw error;
+
+  return (data ?? []).map((row) => {
+    const r = row as {
+      id: string;
+      field_key: string;
+      field_type: string;
+      label: Record<string, string>;
+      help_text: Record<string, string> | null;
+      required: boolean;
+      is_sensitive: boolean;
+      sort_order: number;
+    };
+    return {
+      id: r.id,
+      fieldKey: r.field_key,
+      fieldType: r.field_type,
+      labelEn: r.label.en ?? r.field_key,
+      labelAr: r.label.ar ?? r.field_key,
+      helpEn: r.help_text?.en ?? "",
+      helpAr: r.help_text?.ar ?? "",
+      required: r.required,
+      isSensitive: r.is_sensitive,
+      sortOrder: r.sort_order,
+    };
+  });
+}
+
+export async function saveAdminProductFields(
+  productId: string,
+  fields: AdminProductField[],
+): Promise<void> {
+  const admin = createAdminClient();
+  await admin.from("product_fields").delete().eq("product_id", productId);
+
+  if (fields.length === 0) return;
+
+  const rows = fields.map((field, index) => ({
+    product_id: productId,
+    field_key: field.fieldKey.trim(),
+    field_type: field.fieldType,
+    label: { en: field.labelEn.trim(), ar: field.labelAr.trim() },
+    help_text:
+      field.helpEn || field.helpAr
+        ? { en: field.helpEn?.trim() || null, ar: field.helpAr?.trim() || null }
+        : null,
+    required: field.required,
+    is_sensitive: field.isSensitive,
+    sort_order: field.sortOrder ?? index,
+  }));
+
+  const { error } = await admin.from("product_fields").insert(rows);
+  if (error) throw error;
+}
+
+export async function getAdminProductVariants(
+  productId: string,
+): Promise<AdminProductVariant[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("product_variants")
+    .select(
+      "id, name, price_cents, compare_at_cents, offer_label, sort_order, is_default",
+    )
+    .eq("product_id", productId)
+    .order("sort_order");
+
+  if (error) throw error;
+
+  return (data ?? []).map((row) => {
+    const r = row as {
+      id: string;
+      name: Record<string, string>;
+      price_cents: number;
+      compare_at_cents: number | null;
+      offer_label: Record<string, string> | null;
+      sort_order: number;
+      is_default: boolean;
+    };
+    return {
+      id: r.id,
+      nameEn: r.name.en ?? "Option",
+      nameAr: r.name.ar ?? "Option",
+      priceCents: r.price_cents,
+      compareAtCents: r.compare_at_cents,
+      offerLabelEn: r.offer_label?.en ?? "",
+      offerLabelAr: r.offer_label?.ar ?? "",
+      isDefault: r.is_default,
+      sortOrder: r.sort_order,
+    };
+  });
+}
+
+export async function saveAdminProductVariants(
+  productId: string,
+  variants: AdminProductVariant[],
+): Promise<void> {
+  const admin = createAdminClient();
+  await admin.from("product_variants").delete().eq("product_id", productId);
+
+  if (variants.length === 0) return;
+
+  const defaultIndex = variants.findIndex((v) => v.isDefault);
+  const rows = variants.map((variant, index) => ({
+    product_id: productId,
+    name: { en: variant.nameEn.trim(), ar: variant.nameAr.trim() },
+    price_cents: variant.priceCents,
+    compare_at_cents: variant.compareAtCents ?? null,
+    offer_label:
+      variant.offerLabelEn || variant.offerLabelAr
+        ? {
+            en: variant.offerLabelEn?.trim() || null,
+            ar: variant.offerLabelAr?.trim() || null,
+          }
+        : null,
+    sort_order: variant.sortOrder ?? index,
+    is_default: defaultIndex === -1 ? index === 0 : index === defaultIndex,
+    is_active: true,
+  }));
+
+  const { error } = await admin.from("product_variants").insert(rows);
+  if (error) throw error;
+}
+
+export async function getAdminProductRelatedIds(productId: string): Promise<string[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("product_related")
+    .select("related_product_id, sort_order")
+    .eq("product_id", productId)
+    .order("sort_order");
+
+  if (error) throw error;
+  return (data ?? []).map((row) => (row as { related_product_id: string }).related_product_id);
+}
+
+export async function saveAdminProductRelated(
+  productId: string,
+  relatedIds: string[],
+): Promise<void> {
+  const admin = createAdminClient();
+  await admin.from("product_related").delete().eq("product_id", productId);
+
+  const unique = [...new Set(relatedIds.filter((id) => id && id !== productId))];
+  if (unique.length === 0) return;
+
+  const rows = unique.map((relatedProductId, index) => ({
+    product_id: productId,
+    related_product_id: relatedProductId,
+    sort_order: index,
+  }));
+
+  const { error } = await admin.from("product_related").insert(rows);
+  if (error) throw error;
+}
+
+export async function listProductsForRelatedPicker(
+  excludeProductId?: string,
+): Promise<Array<{ id: string; name: string }>> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("products")
+    .select("id, product_translations!inner(name, locale)")
+    .eq("status", "active")
+    .eq("product_translations.locale", "en")
+    .order("sort_order");
+
+  if (error) throw error;
+
+  return (data ?? [])
+    .map((row) => {
+      const r = row as {
+        id: string;
+        product_translations: Array<{ name: string }>;
+      };
+      return { id: r.id, name: r.product_translations[0]?.name ?? "Product" };
+    })
+    .filter((p) => p.id !== excludeProductId);
 }

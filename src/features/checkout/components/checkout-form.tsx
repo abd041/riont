@@ -51,6 +51,9 @@ export function CheckoutForm({
 
       <form action={action} className="nex-co-layout">
         <input type="hidden" name="productSlug" value={product.slug} />
+        {product.variantId ? (
+          <input type="hidden" name="variantId" value={product.variantId} />
+        ) : null}
         <input type="hidden" name="locale" value={locale} />
         <input type="hidden" name="quantity" value={1} />
         <input
