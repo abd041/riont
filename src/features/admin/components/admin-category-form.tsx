@@ -17,7 +17,7 @@ export function AdminCategoryForm({ category }: { category?: AdminCategoryRow })
   }, [state]);
 
   return (
-    <form action={action} className="glass-card space-y-4 rounded-[var(--radius-lg)] p-6">
+    <form action={action} className="admin-panel admin-panel--flat">
       {category && <input type="hidden" name="categoryId" value={category.id} />}
       <Input name="sortOrder" type="number" placeholder="Sort order" defaultValue={category?.sortOrder ?? 0} />
       <Input name="iconUrl" placeholder="Icon path (e.g. catalog/categories/gaming.jpg)" defaultValue={category?.iconUrl ?? ""} />

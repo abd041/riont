@@ -31,7 +31,7 @@ export function AdminCouponForm({
 
   return (
     <div className="space-y-4">
-      <form action={saveAction} className="glass-card grid gap-3 rounded-[var(--radius-lg)] p-6 sm:grid-cols-2">
+      <form action={saveAction} className="admin-panel admin-panel--flat grid gap-3 sm:grid-cols-2">
         {coupon && <input type="hidden" name="couponId" value={coupon.id} />}
         <Input name="code" placeholder="CODE" required defaultValue={coupon?.code} />
         <select name="couponType" defaultValue={coupon?.couponType ?? "percent"} className="h-10 rounded-md border border-[var(--border-default)] bg-surface px-3 text-sm">

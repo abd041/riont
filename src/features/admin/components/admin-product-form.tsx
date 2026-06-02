@@ -37,7 +37,7 @@ export function AdminProductForm({
 
   return (
     <div className="space-y-6">
-      <form action={saveAction} className="glass-card space-y-6 rounded-[var(--radius-lg)] p-6">
+      <form action={saveAction} className="admin-panel admin-panel--flat">
         {product && <input type="hidden" name="productId" value={product.id} />}
 
         <div className="grid gap-4 sm:grid-cols-2">

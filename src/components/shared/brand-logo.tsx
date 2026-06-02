@@ -1,7 +1,7 @@
 import Image from "next/image";
 
 export const BRAND_LOGO = {
-  src: "/brand/riont-logo.png",
+  src: "/brand/riyont-logo.png",
   width: 1024,
   height: 559,
 } as const;

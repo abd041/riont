@@ -29,7 +29,8 @@ export function CategoriesBrowseShell({ categories }: CategoriesBrowseShellProps
   }, [categories, query]);
 
   return (
-    <div className="nex-browse-page nex-categories-page">
+    <div className="sf-browse-wrap">
+      <div className="nex-browse-page nex-categories-page">
       <header className="nex-browse-page-header">
         <div className="nex-browse-top">
           <Link href="/" className="nex-browse-back" aria-label={tCatalog("breadcrumbHome")}>
@@ -82,6 +83,7 @@ export function CategoriesBrowseShell({ categories }: CategoriesBrowseShellProps
           ))}
         </div>
       )}
+      </div>
     </div>
   );
 }

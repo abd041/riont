@@ -17,6 +17,7 @@ export async function generateMetadata({
   const { locale } = await params;
   const { category: categorySlug } = await searchParams;
   const t = await getTranslations({ locale, namespace: "nav" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
 
   if (categorySlug) {
     const category = await getCategoryBySlug(locale, categorySlug);
@@ -24,7 +25,7 @@ export async function generateMetadata({
       return buildPageMetadata({
         locale,
         path: `/products?category=${categorySlug}`,
-        title: category.metaTitle ?? `${category.name} | riont`,
+        title: category.metaTitle ?? `${category.name} | ${tCommon("brand")}`,
         description:
           category.metaDescription ??
           category.description ??
@@ -37,7 +38,7 @@ export async function generateMetadata({
   return buildPageMetadata({
     locale,
     path: "/products",
-    title: `${t("products")} | riont`,
+    title: `${t("products")} | ${tCommon("brand")}`,
     description:
       locale === "ar"
         ? "تصفّح كل المنتجات الرقمية — تسليم سريع وأسعار واضحة."

@@ -20,7 +20,13 @@ export default async function AuthLayout({
   }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-[var(--bg-base)] p-6">
+    <div className="sf-auth-page">
+      <div className="sf-auth-page__ambient" aria-hidden>
+        <span className="nex-orb nex-orb--purple" />
+        <span className="nex-orb nex-orb--blue" />
+        <span className="nex-noise" />
+      </div>
+
       <Link href="/" className="nex-auth-brand mb-8" aria-label={t("brand")}>
         <BrandLogo className="nex-brand-logo nex-brand-logo--auth" height={44} priority />
       </Link>

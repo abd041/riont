@@ -1,21 +1,30 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { Compass } from "lucide-react";
+import {
+  PremiumPanel,
+  StorefrontPageShell,
+} from "@/components/shared";
 
 export default async function NotFoundPage() {
   const t = await getTranslations("errors");
 
   return (
-    <div className="flex min-h-[60vh] items-center justify-center p-6">
-      <div className="glass-card max-w-md rounded-[var(--radius-lg)] p-10 text-center">
-        <h1 className="text-2xl font-bold">{t("notFoundTitle")}</h1>
-        <p className="mt-2 text-sm text-[var(--text-muted)]">
-          {t("notFoundDescription")}
-        </p>
-        <Button className="mt-6" asChild>
-          <Link href="/">{t("backHome")}</Link>
-        </Button>
-      </div>
-    </div>
+    <StorefrontPageShell variant="narrow">
+      <PremiumPanel>
+        <div className="sf-empty">
+          <div className="sf-empty__icon">
+            <Compass strokeWidth={1.5} />
+          </div>
+          <h1 className="sf-empty__title">{t("notFoundTitle")}</h1>
+          <p className="sf-empty__desc">{t("notFoundDescription")}</p>
+          <div className="sf-empty__action">
+            <Link href="/" className="sf-btn-primary">
+              {t("backHome")}
+            </Link>
+          </div>
+        </div>
+      </PremiumPanel>
+    </StorefrontPageShell>
   );
 }

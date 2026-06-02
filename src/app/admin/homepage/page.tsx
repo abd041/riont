@@ -1,5 +1,7 @@
 import { listAdminHomepageBlocks } from "@/server/services/content-block.service";
 import { AdminHomepageForm } from "@/features/admin/components/admin-homepage-form";
+import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
+import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 import type { HeroBlockContent, TrustBlockContent } from "@/server/services/content-block.service";
 
 function pickBlock<T>(
@@ -51,14 +53,11 @@ export default async function AdminHomepagePage() {
   const blocks = await listAdminHomepageBlocks();
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Homepage content</h1>
-        <p className="mt-1 text-sm text-[var(--text-muted)]">
-          Edit hero and trust bar copy per language. Empty fields fall back to
-          default translations until you save.
-        </p>
-      </div>
+    <AdminPageShell>
+      <AdminPageHeader
+        title="Homepage content"
+        description="Edit hero and trust bar copy per language. Empty fields fall back to default translations until you save."
+      />
       <AdminHomepageForm
         blocks={{
           enHero: pickBlock(blocks, "home_hero", "en", parseHero),
@@ -67,6 +66,6 @@ export default async function AdminHomepagePage() {
           arTrust: pickBlock(blocks, "home_trust", "ar", parseTrust),
         }}
       />
-    </div>
+    </AdminPageShell>
   );
 }

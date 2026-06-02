@@ -25,7 +25,7 @@ export function AdminCouponsPanel({ coupons }: { coupons: AdminCouponRow[] }) {
         />
       </div>
 
-      <div className="glass-card overflow-hidden rounded-[var(--radius-lg)]">
+      <div className="admin-table-wrap">
         <table className="w-full text-sm">
           <thead className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]">
             <tr>

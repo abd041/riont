@@ -2,13 +2,20 @@ import Link from "next/link";
 import { listAdminTickets } from "@/server/services/support.service";
 import type { SupportTicketStatus } from "@/types/support";
 import { Badge } from "@/components/ui/badge";
+import {
+  AdminDataTable,
+  AdminTableEmpty,
+} from "@/features/admin/components/admin-data-table";
+import { AdminFilterPills } from "@/features/admin/components/admin-filter-pills";
+import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
+import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 
-const FILTERS: Array<{ label: string; status?: SupportTicketStatus }> = [
+const FILTERS: Array<{ label: string; value?: SupportTicketStatus }> = [
   { label: "All" },
-  { label: "Waiting admin", status: "waiting_admin" },
-  { label: "Open", status: "open" },
-  { label: "Waiting customer", status: "waiting_customer" },
-  { label: "Resolved", status: "resolved" },
+  { label: "Waiting admin", value: "waiting_admin" },
+  { label: "Open", value: "open" },
+  { label: "Waiting customer", value: "waiting_customer" },
+  { label: "Resolved", value: "resolved" },
 ];
 
 export default async function AdminTicketsPage({
@@ -17,94 +24,52 @@ export default async function AdminTicketsPage({
   searchParams: Promise<{ status?: string }>;
 }) {
   const { status: statusParam } = await searchParams;
-  const statusFilter = FILTERS.find((f) => f.status === statusParam)?.status;
+  const statusFilter = FILTERS.find((f) => f.value === statusParam)?.value;
   const tickets = await listAdminTickets(statusFilter);
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Support tickets</h1>
-        <p className="text-sm text-[var(--text-muted)]">
-          Customer messages and fulfillment threads.
-        </p>
-      </div>
+    <AdminPageShell>
+      <AdminPageHeader
+        title="Support tickets"
+        description="Customer messages and fulfillment threads."
+      />
 
-      <div className="flex flex-wrap gap-2">
-        {FILTERS.map((filter) => {
-          const href = filter.status
-            ? `/admin/tickets?status=${filter.status}`
-            : "/admin/tickets";
-          const active =
-            (filter.status ?? undefined) === (statusFilter ?? undefined);
-          return (
-            <Link
-              key={filter.label}
-              href={href}
-              className={`rounded-full px-3 py-1 text-xs font-medium ${
-                active
-                  ? "bg-accent-500/20 text-accent-300"
-                  : "border border-[var(--border-default)] text-[var(--text-muted)]"
-              }`}
-            >
-              {filter.label}
-            </Link>
-          );
-        })}
-      </div>
+      <AdminFilterPills
+        filters={FILTERS}
+        activeValue={statusFilter}
+        basePath="/admin/tickets"
+      />
 
-      <div className="glass-card overflow-hidden rounded-[var(--radius-lg)]">
-        <table className="w-full text-left text-sm">
-          <thead className="border-b border-[var(--border-subtle)] bg-[var(--bg-surface)]">
-            <tr>
-              <th className="px-4 py-3">Ticket</th>
-              <th className="px-4 py-3">Subject</th>
-              <th className="px-4 py-3">Type</th>
-              <th className="px-4 py-3">Status</th>
-              <th className="px-4 py-3">Order</th>
-              <th className="px-4 py-3">Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            {tickets.length === 0 ? (
-              <tr>
-                <td colSpan={6} className="px-4 py-8 text-center text-[var(--text-muted)]">
-                  No tickets.
-                </td>
-              </tr>
-            ) : (
-              tickets.map((ticket) => (
-                <tr
-                  key={ticket.id}
-                  className="border-b border-[var(--border-subtle)] hover:bg-white/[0.02]"
+      <AdminDataTable
+        columns={["Ticket", "Subject", "Type", "Status", "Order", "Updated"]}
+      >
+        {tickets.length === 0 ? (
+          <AdminTableEmpty colSpan={6} message="No tickets." />
+        ) : (
+          tickets.map((ticket) => (
+            <tr key={ticket.id}>
+              <td>
+                <Link
+                  href={`/admin/tickets/${ticket.id}`}
+                  className="admin-table__link"
+                  dir="ltr"
                 >
-                  <td className="px-4 py-3">
-                    <Link
-                      href={`/admin/tickets/${ticket.id}`}
-                      className="font-medium text-accent-400 hover:underline"
-                      dir="ltr"
-                    >
-                      {ticket.ticketNumber}
-                    </Link>
-                  </td>
-                  <td className="px-4 py-3">{ticket.subject}</td>
-                  <td className="px-4 py-3 text-[var(--text-muted)]">
-                    {ticket.ticketType}
-                  </td>
-                  <td className="px-4 py-3">
-                    <Badge variant="accent">{ticket.status}</Badge>
-                  </td>
-                  <td className="px-4 py-3" dir="ltr">
-                    {ticket.orderNumber ?? "—"}
-                  </td>
-                  <td className="px-4 py-3 text-[var(--text-muted)]">
-                    {new Date(ticket.updatedAt).toLocaleString("en")}
-                  </td>
-                </tr>
-              ))
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+                  {ticket.ticketNumber}
+                </Link>
+              </td>
+              <td>{ticket.subject}</td>
+              <td className="text-[var(--text-muted)]">{ticket.ticketType}</td>
+              <td>
+                <Badge variant="accent">{ticket.status}</Badge>
+              </td>
+              <td dir="ltr">{ticket.orderNumber ?? "—"}</td>
+              <td className="text-[var(--text-muted)]">
+                {new Date(ticket.updatedAt).toLocaleString("en")}
+              </td>
+            </tr>
+          ))
+        )}
+      </AdminDataTable>
+    </AdminPageShell>
   );
 }

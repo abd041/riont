@@ -8,7 +8,7 @@ import { ArrowLeft } from "lucide-react";
 import { EmptyState } from "@/components/ui/empty-state";
 import { ErrorState } from "@/components/ui/error-state";
 import { Button } from "@/components/ui/button";
-import { BrowseProductCard } from "./browse-product-card";
+import { MarketplaceProductCard } from "./marketplace-product-card";
 import type { CatalogCategory, CatalogProduct } from "@/types/catalog";
 import { BrowseProductSearch } from "./browse-product-search";
 import {
@@ -96,7 +96,8 @@ export function ProductsBrowseShell({
   }
 
   return (
-    <div className="nex-browse-page">
+    <div className="sf-browse-wrap">
+      <div className="nex-browse-page">
       <header className="nex-browse-page-header">
         <div className="nex-browse-top">
           <Link href="/" className="nex-browse-back" aria-label={t("breadcrumbHome")}>
@@ -141,13 +142,18 @@ export function ProductsBrowseShell({
               }
             />
           ) : (
-            <div className="nex-browse-grid">
-              {filtered.map((product) => (
-                <BrowseProductCard key={product.slug} {...product} />
-              ))}
+            <div className="mp-grid mp-browse-section--primary">
+              <div className="mp-grid__inner">
+                {filtered.map((product) => (
+                  <div key={product.slug} className="mp-grid__cell">
+                    <MarketplaceProductCard {...product} />
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
+      </div>
       </div>
     </div>
   );

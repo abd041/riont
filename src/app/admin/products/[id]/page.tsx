@@ -5,6 +5,8 @@ import {
   listCategoryOptions,
 } from "@/server/services/admin-catalog.service";
 import { AdminProductForm } from "@/features/admin/components/admin-product-form";
+import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
+import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 
 export default async function AdminEditProductPage({
   params,
@@ -20,12 +22,15 @@ export default async function AdminEditProductPage({
   if (!product) notFound();
 
   return (
-    <div className="space-y-6">
-      <Link href="/admin/products" className="text-sm text-accent-400 hover:underline">
+    <AdminPageShell>
+      <Link href="/admin/products" className="admin-back">
         ← Products
       </Link>
-      <h1 className="text-2xl font-bold">Edit product</h1>
+      <AdminPageHeader
+        title="Edit product"
+        description={product.en.name}
+      />
       <AdminProductForm product={product} categories={categories} />
-    </div>
+    </AdminPageShell>
   );
 }

@@ -27,7 +27,7 @@ export default async function ContactPage() {
     <LegalPageShell title={t("contactTitle")}>
       <p>{t("contactIntro")}</p>
       <p>{t("contactSupportHint")}</p>
-      <Link href="/support" className="mp-legal-page__link">
+      <Link href="/support" className="sf-legal-page__link">
         {t("contactSupportLink")}
       </Link>
     </LegalPageShell>

@@ -1,6 +1,6 @@
 {
   "common": {
-    "brand": "riont",
+    "brand": "riyont",
     "welcomeBack": "Welcome back, {name}",
     "welcomeBackPrefix": "Welcome back,",
     "searchPlaceholder": "Search for products...",
@@ -212,7 +212,11 @@
     "increase": "Increase quantity",
     "decrease": "Decrease quantity",
     "checkoutItem": "Checkout",
-    "checkoutNote": "Each item checks out separately for now. Payment is completed externally after order approval."
+    "checkoutNote": "Each item checks out separately for now. Payment is completed externally after order approval.",
+    "summaryTitle": "Order summary",
+    "subtotal": "Subtotal",
+    "total": "Total",
+    "itemCount": "{count, plural, one {# item} other {# items}}"
   },
   "categories": {
     "title": "Categories",
@@ -323,6 +327,7 @@
   },
   "orders": {
     "myOrders": "My Orders",
+    "myOrdersSubtitle": "Track and manage your digital orders.",
     "empty": "You have no orders yet.",
     "browseProducts": "Browse products",
     "orderNumber": "Order number",
@@ -381,14 +386,14 @@
   },
   "legal": {
     "termsTitle": "Terms & Conditions",
-    "termsDescription": "Terms and conditions for using the riont digital marketplace.",
+    "termsDescription": "Terms and conditions for using the riyont digital marketplace.",
     "termsIntro": "These terms govern your use of our digital marketplace. By placing an order, you agree to these conditions.",
     "termsSection1Title": "Digital products",
     "termsSection1Body": "All products are digital goods or services. Delivery times vary by product type. Instant delivery items are fulfilled automatically after confirmed payment.",
     "termsSection2Title": "Account responsibility",
     "termsSection2Body": "You are responsible for providing accurate information during checkout and for keeping your account credentials secure.",
     "privacyTitle": "Privacy Policy",
-    "privacyDescription": "How riont collects, uses, and protects your personal information.",
+    "privacyDescription": "How riyont collects, uses, and protects your personal information.",
     "privacyIntro": "We respect your privacy and only collect information needed to process orders and provide support.",
     "privacySection1Title": "Information we collect",
     "privacySection1Body": "We may collect contact details, order history, and information you submit for service-based products.",
@@ -402,7 +407,7 @@
     "refundSection2Title": "Non-refundable cases",
     "refundSection2Body": "Delivered digital keys, activated accounts, or completed manual services may not be eligible for refund unless required by law.",
     "contactTitle": "Contact Us",
-    "contactDescription": "Get in touch with the riont support team.",
+    "contactDescription": "Get in touch with the riyont support team.",
     "contactIntro": "Need help with an order, product, or account? Our team is here to assist you.",
     "contactSupportHint": "For the fastest response, open a support ticket from your account.",
     "contactSupportLink": "Go to support"

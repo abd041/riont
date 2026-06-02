@@ -25,7 +25,7 @@ export function AdminSettingsForm({
   }, [state]);
 
   return (
-    <form action={action} className="glass-card space-y-4 rounded-[var(--radius-lg)] p-6">
+    <form action={action} className="admin-panel admin-panel--flat">
       <div>
         <label className="text-xs text-[var(--text-muted)]">Payment instructions (EN)</label>
         <textarea

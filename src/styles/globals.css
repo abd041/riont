@@ -20,6 +20,8 @@
 @import "./nexora-storefront-layout-v2.css";
 @import "./nexora-home-typography.css";
 @import "./nexora-premium-2026.css";
+@import "./nexora-storefront-pages-2026.css";
+@import "./nexora-admin-2026.css";
 
 @tailwind base;
 @tailwind components;

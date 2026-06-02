@@ -7,6 +7,9 @@ import {
   AdminTicketStatusForm,
 } from "@/features/admin/components/admin-ticket-actions";
 import { MessageAttachments } from "@/features/support/components/message-attachments";
+import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
+import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
+import { AdminPanel } from "@/features/admin/components/admin-panel";
 
 export default async function AdminTicketDetailPage({
   params,
@@ -18,60 +21,41 @@ export default async function AdminTicketDetailPage({
   if (!ticket) notFound();
 
   return (
-    <div className="space-y-6">
-      <div>
-        <Link href="/admin/tickets" className="text-sm text-accent-400 hover:underline">
-          ← Tickets
-        </Link>
-        <div className="mt-2 flex flex-wrap items-start justify-between gap-4">
-          <div>
-            <p className="text-sm text-[var(--text-muted)]" dir="ltr">
-              {ticket.ticketNumber}
-            </p>
-            <h1 className="text-2xl font-bold">{ticket.subject}</h1>
-            <p className="mt-1 text-sm text-[var(--text-muted)]">
-              {ticket.ticketType}
-              {ticket.orderNumber && (
-                <>
-                  {" "}
-                  · Order{" "}
-                  <span dir="ltr">{ticket.orderNumber}</span>
-                </>
-              )}
-            </p>
-          </div>
-          <Badge variant="accent">{ticket.status}</Badge>
-        </div>
-      </div>
+    <AdminPageShell>
+      <Link href="/admin/tickets" className="admin-back">
+        ← Tickets
+      </Link>
 
-      <div className="glass-card rounded-[var(--radius-lg)] p-6">
-        <h2 className="font-semibold">Thread</h2>
-        <div className="mt-4 space-y-4">
+      <AdminPageHeader
+        title={ticket.subject}
+        description={`${ticket.ticketType}${ticket.orderNumber ? ` · Order ${ticket.orderNumber}` : ""}`}
+        actions={<Badge variant="accent">{ticket.status}</Badge>}
+      />
+
+      <AdminPanel title="Thread">
+        <div className="admin-thread">
           {ticket.messages.map((msg) => (
             <div
               key={msg.id}
-              className={`rounded-md p-4 ${
-                msg.senderType === "admin"
-                  ? "bg-accent-500/10"
-                  : "bg-[var(--bg-surface)]"
+              className={`admin-message ${
+                msg.senderType === "admin" ? "admin-message--staff" : "admin-message--customer"
               }`}
             >
-              <p className="text-xs text-[var(--text-muted)]">
+              <p className="whitespace-pre-wrap">{msg.body}</p>
+              <MessageAttachments attachments={msg.attachments} />
+              <p className="admin-message__meta">
                 {msg.senderLabel} · {msg.senderType} ·{" "}
                 {new Date(msg.createdAt).toLocaleString("en")}
               </p>
-              <p className="mt-2 whitespace-pre-wrap text-sm">{msg.body}</p>
-              <MessageAttachments attachments={msg.attachments} />
             </div>
           ))}
         </div>
         <AdminTicketReplyForm ticketId={ticket.id} locale="en" />
-      </div>
+      </AdminPanel>
 
-      <div className="glass-card rounded-[var(--radius-lg)] p-6">
-        <h2 className="mb-4 font-semibold">Status</h2>
+      <AdminPanel title="Status">
         <AdminTicketStatusForm ticketId={ticket.id} />
-      </div>
-    </div>
+      </AdminPanel>
+    </AdminPageShell>
   );
 }

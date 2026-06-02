@@ -11,11 +11,12 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "categories" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
 
   return buildPageMetadata({
     locale,
     path: "/categories",
-    title: `${t("browseTitle")} | riont`,
+    title: `${t("browseTitle")} | ${tCommon("brand")}`,
     description:
       locale === "ar"
         ? "تصفّح تصنيفات المنتجات الرقمية — ألعاب، برامج، اشتراكات والمزيد."

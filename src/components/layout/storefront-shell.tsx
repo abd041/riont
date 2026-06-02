@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { MarketplaceFooter } from "@/features/homepage/components/marketplace/marketplace-footer";
 import { usePathname } from "@/i18n/navigation";
 import { useMobileNav } from "@/hooks/use-ui-store";
 import { Sidebar } from "./sidebar";
@@ -9,9 +10,20 @@ import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
 
+function isHomePath(pathname: string) {
+  return pathname === "/";
+}
+
 /** Full-width browse pages hide the nav drawer trigger (logo in topbar). */
 function isFullWidthBrowsePath(pathname: string) {
-  return pathname === "/products" || pathname === "/categories";
+  if (pathname === "/products" || pathname === "/categories") return true;
+
+  if (pathname.startsWith("/products/") && !pathname.includes("/checkout")) {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments.length === 2 && segments[0] === "products";
+  }
+
+  return false;
 }
 
 function isCheckoutPath(pathname: string) {
@@ -80,6 +92,11 @@ export function StorefrontShell({
 
       <main className="nex-main nex-storefront-main flex-1">
         <Container className="nex-storefront-container">{children}</Container>
+        {!isHomePath(pathname) && !isCheckout && (
+          <Container className="nex-storefront-container">
+            <MarketplaceFooter />
+          </Container>
+        )}
       </main>
 
       {!hideNavSidebar && navOpen && (

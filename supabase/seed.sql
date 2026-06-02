@@ -8,14 +8,14 @@ INSERT INTO categories (id, sort_order, icon_url) VALUES
 ON CONFLICT (id) DO UPDATE SET icon_url = EXCLUDED.icon_url;
 
 INSERT INTO category_translations (category_id, locale, name, slug, description, meta_title, meta_description) VALUES
-  ('a0000000-0000-4000-8000-000000000001', 'en', 'Instagram Services', 'instagram', 'Growth and verification services for Instagram.', 'Instagram Services | riont', 'Premium Instagram digital services with fast delivery.'),
-  ('a0000000-0000-4000-8000-000000000001', 'ar', 'خدمات إنستغرام', 'instagram', 'خدمات النمو والتوثيق لإنستغرام.', 'خدمات إنستغرام | riont', 'خدمات إنستغرام رقمية مميزة مع تسليم سريع.'),
-  ('a0000000-0000-4000-8000-000000000002', 'en', 'Gaming', 'gaming', 'Accounts, keys, and in-game digital goods.', 'Gaming | riont', 'Digital gaming products with instant delivery.'),
-  ('a0000000-0000-4000-8000-000000000002', 'ar', 'ألعاب', 'gaming', 'حسابات ومفاتيح ومنتجات رقمية للألعاب.', 'ألعاب | riont', 'منتجات ألعاب رقمية مع تسليم فوري.'),
-  ('a0000000-0000-4000-8000-000000000003', 'en', 'Software', 'software', 'Licenses and keys for productivity software.', 'Software | riont', 'Software license keys and digital downloads.'),
-  ('a0000000-0000-4000-8000-000000000003', 'ar', 'برامج', 'software', 'تراخيص ومفاتيح لبرامج الإنتاجية.', 'برامج | riont', 'مفاتيح ترخيص وبرامج رقمية.'),
-  ('a0000000-0000-4000-8000-000000000004', 'en', 'Subscriptions', 'subscriptions', 'Streaming and app subscriptions.', 'Subscriptions | riont', 'Premium subscription codes and renewals.'),
-  ('a0000000-0000-4000-8000-000000000004', 'ar', 'اشتراكات', 'subscriptions', 'اشتراكات البث والتطبيقات.', 'اشتراكات | riont', 'أكواد اشتراك بريميوم وتجديدات.')
+  ('a0000000-0000-4000-8000-000000000001', 'en', 'Instagram Services', 'instagram', 'Growth and verification services for Instagram.', 'Instagram Services | riyont', 'Premium Instagram digital services with fast delivery.'),
+  ('a0000000-0000-4000-8000-000000000001', 'ar', 'خدمات إنستغرام', 'instagram', 'خدمات النمو والتوثيق لإنستغرام.', 'خدمات إنستغرام | riyont', 'خدمات إنستغرام رقمية مميزة مع تسليم سريع.'),
+  ('a0000000-0000-4000-8000-000000000002', 'en', 'Gaming', 'gaming', 'Accounts, keys, and in-game digital goods.', 'Gaming | riyont', 'Digital gaming products with instant delivery.'),
+  ('a0000000-0000-4000-8000-000000000002', 'ar', 'ألعاب', 'gaming', 'حسابات ومفاتيح ومنتجات رقمية للألعاب.', 'ألعاب | riyont', 'منتجات ألعاب رقمية مع تسليم فوري.'),
+  ('a0000000-0000-4000-8000-000000000003', 'en', 'Software', 'software', 'Licenses and keys for productivity software.', 'Software | riyont', 'Software license keys and digital downloads.'),
+  ('a0000000-0000-4000-8000-000000000003', 'ar', 'برامج', 'software', 'تراخيص ومفاتيح لبرامج الإنتاجية.', 'برامج | riyont', 'مفاتيح ترخيص وبرامج رقمية.'),
+  ('a0000000-0000-4000-8000-000000000004', 'en', 'Subscriptions', 'subscriptions', 'Streaming and app subscriptions.', 'Subscriptions | riyont', 'Premium subscription codes and renewals.'),
+  ('a0000000-0000-4000-8000-000000000004', 'ar', 'اشتراكات', 'subscriptions', 'اشتراكات البث والتطبيقات.', 'اشتراكات | riyont', 'أكواد اشتراك بريميوم وتجديدات.')
 ON CONFLICT (category_id, locale) DO UPDATE SET
   name = EXCLUDED.name,
   slug = EXCLUDED.slug,
@@ -31,14 +31,14 @@ INSERT INTO products (id, category_id, status, delivery_mode, price_cents, compa
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO product_translations (product_id, locale, name, slug, short_description, description, meta_title, meta_description, og_image_url) VALUES
-  ('b0000000-0000-4000-8000-000000000001', 'en', 'Instagram Verified Badge', 'instagram-verified-badge', 'Blue verification badge delivery.', 'Get your Instagram profile verified with our premium delivery service. Includes setup guidance and status tracking.', 'Instagram Verified Badge | riont', 'Buy Instagram verification badge delivery — safe, fast, and reliable.', '/catalog/instagram-verified-badge.jpg'),
-  ('b0000000-0000-4000-8000-000000000001', 'ar', 'شارة توثيق إنستغرام', 'instagram-verified-badge', 'تسليم شارة التوثيق الزرقاء.', 'احصل على توثيق حسابك في إنستغرام مع خدمة تسليم مميزة تشمل الإرشاد والمتابعة.', 'شارة توثيق إنستغرام | riont', 'شراء شارة توثيق إنستغرام — آمن وسريع وموثوق.', '/catalog/instagram-verified-badge.jpg'),
-  ('b0000000-0000-4000-8000-000000000002', 'en', 'Steam Premium Account', 'steam-premium-account', 'Premium Steam account with games.', 'Pre-loaded Steam account with popular titles. Instant credentials delivery after order approval.', 'Steam Premium Account | riont', 'Premium Steam accounts with games — instant digital delivery.', '/catalog/steam-premium-account.jpg'),
-  ('b0000000-0000-4000-8000-000000000002', 'ar', 'حساب Steam مميز', 'steam-premium-account', 'حساب Steam مميز مع ألعاب.', 'حساب Steam محمّل بألعاب شائعة مع تسليم فوري للبيانات بعد الموافقة.', 'حساب Steam مميز | riont', 'حسابات Steam مميزة مع ألعاب — تسليم رقمي فوري.', '/catalog/steam-premium-account.jpg'),
-  ('b0000000-0000-4000-8000-000000000003', 'en', 'Spotify Premium 1 Year', 'spotify-premium-1year', '12 months premium subscription.', 'Full 12-month Spotify Premium upgrade code. Redeem on your existing account.', 'Spotify Premium 1 Year | riont', 'Spotify Premium 12-month subscription code with instant delivery.', '/catalog/spotify-premium-1year.jpg'),
-  ('b0000000-0000-4000-8000-000000000003', 'ar', 'سبوتيفاي بريميوم سنة', 'spotify-premium-1year', 'اشتراك بريميوم لمدة 12 شهراً.', 'كود ترقية Spotify Premium لمدة 12 شهراً — فعّله على حسابك الحالي.', 'سبوتيفاي بريميوم سنة | riont', 'كود Spotify Premium لسنة كاملة مع تسليم فوري.', '/catalog/spotify-premium-1year.jpg'),
-  ('b0000000-0000-4000-8000-000000000004', 'en', 'Windows 11 Pro Key', 'windows-11-pro', 'Genuine digital license key.', 'Genuine Windows 11 Pro digital license. One-time activation key delivered instantly.', 'Windows 11 Pro Key | riont', 'Buy Windows 11 Pro license key — genuine digital activation.', '/catalog/windows-11-pro.jpg'),
-  ('b0000000-0000-4000-8000-000000000004', 'ar', 'مفتاح Windows 11 Pro', 'windows-11-pro', 'مفتاح ترخيص رقمي أصلي.', 'ترخيص Windows 11 Pro رقمي أصلي — مفتاح تفعيل لمرة واحدة مع تسليم فوري.', 'مفتاح Windows 11 Pro | riont', 'شراء مفتاح Windows 11 Pro — تفعيل رقمي أصلي.', '/catalog/windows-11-pro.jpg')
+  ('b0000000-0000-4000-8000-000000000001', 'en', 'Instagram Verified Badge', 'instagram-verified-badge', 'Blue verification badge delivery.', 'Get your Instagram profile verified with our premium delivery service. Includes setup guidance and status tracking.', 'Instagram Verified Badge | riyont', 'Buy Instagram verification badge delivery — safe, fast, and reliable.', '/catalog/instagram-verified-badge.jpg'),
+  ('b0000000-0000-4000-8000-000000000001', 'ar', 'شارة توثيق إنستغرام', 'instagram-verified-badge', 'تسليم شارة التوثيق الزرقاء.', 'احصل على توثيق حسابك في إنستغرام مع خدمة تسليم مميزة تشمل الإرشاد والمتابعة.', 'شارة توثيق إنستغرام | riyont', 'شراء شارة توثيق إنستغرام — آمن وسريع وموثوق.', '/catalog/instagram-verified-badge.jpg'),
+  ('b0000000-0000-4000-8000-000000000002', 'en', 'Steam Premium Account', 'steam-premium-account', 'Premium Steam account with games.', 'Pre-loaded Steam account with popular titles. Instant credentials delivery after order approval.', 'Steam Premium Account | riyont', 'Premium Steam accounts with games — instant digital delivery.', '/catalog/steam-premium-account.jpg'),
+  ('b0000000-0000-4000-8000-000000000002', 'ar', 'حساب Steam مميز', 'steam-premium-account', 'حساب Steam مميز مع ألعاب.', 'حساب Steam محمّل بألعاب شائعة مع تسليم فوري للبيانات بعد الموافقة.', 'حساب Steam مميز | riyont', 'حسابات Steam مميزة مع ألعاب — تسليم رقمي فوري.', '/catalog/steam-premium-account.jpg'),
+  ('b0000000-0000-4000-8000-000000000003', 'en', 'Spotify Premium 1 Year', 'spotify-premium-1year', '12 months premium subscription.', 'Full 12-month Spotify Premium upgrade code. Redeem on your existing account.', 'Spotify Premium 1 Year | riyont', 'Spotify Premium 12-month subscription code with instant delivery.', '/catalog/spotify-premium-1year.jpg'),
+  ('b0000000-0000-4000-8000-000000000003', 'ar', 'سبوتيفاي بريميوم سنة', 'spotify-premium-1year', 'اشتراك بريميوم لمدة 12 شهراً.', 'كود ترقية Spotify Premium لمدة 12 شهراً — فعّله على حسابك الحالي.', 'سبوتيفاي بريميوم سنة | riyont', 'كود Spotify Premium لسنة كاملة مع تسليم فوري.', '/catalog/spotify-premium-1year.jpg'),
+  ('b0000000-0000-4000-8000-000000000004', 'en', 'Windows 11 Pro Key', 'windows-11-pro', 'Genuine digital license key.', 'Genuine Windows 11 Pro digital license. One-time activation key delivered instantly.', 'Windows 11 Pro Key | riyont', 'Buy Windows 11 Pro license key — genuine digital activation.', '/catalog/windows-11-pro.jpg'),
+  ('b0000000-0000-4000-8000-000000000004', 'ar', 'مفتاح Windows 11 Pro', 'windows-11-pro', 'مفتاح ترخيص رقمي أصلي.', 'ترخيص Windows 11 Pro رقمي أصلي — مفتاح تفعيل لمرة واحدة مع تسليم فوري.', 'مفتاح Windows 11 Pro | riyont', 'شراء مفتاح Windows 11 Pro — تفعيل رقمي أصلي.', '/catalog/windows-11-pro.jpg')
 ON CONFLICT (product_id, locale) DO UPDATE SET
   name = EXCLUDED.name,
   slug = EXCLUDED.slug,

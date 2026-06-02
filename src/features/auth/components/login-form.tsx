@@ -11,7 +11,6 @@ import {
 import type { AuthErrorCode } from "@/lib/auth/map-auth-error";
 import { mapSupabaseAuthError } from "@/lib/auth/map-auth-error";
 import { isAppleAuthEnabled } from "@/lib/env/public";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { AuthToastListener, type AuthNotice } from "./auth-toast-listener";
@@ -78,19 +77,16 @@ export function LoginForm({
   return (
     <>
       <AuthToastListener notice={authNotice} />
-      <div className="glass-card w-full max-w-md rounded-[var(--radius-lg)] p-8">
-        <h1 className="text-center text-2xl font-bold">
+      <div className="sf-auth-card">
+        <h1 className="sf-auth-card__title">
           {mode === "signIn" ? t("welcomeBack") : t("createAccountTitle")}
         </h1>
-        <p className="mt-2 text-center text-sm text-[var(--text-muted)]">
-          {t("subtitle")}
-        </p>
+        <p className="sf-auth-card__subtitle">{t("subtitle")}</p>
 
         <div className="mt-6 flex flex-col gap-3">
-          <Button
+          <button
             type="button"
-            variant="outline"
-            className="w-full"
+            className="sf-auth-oauth-btn"
             disabled={oauthLoading !== null || pending}
             onClick={() => signInWithOAuth("google")}
           >
@@ -98,12 +94,11 @@ export function LoginForm({
               <Loader2 className="h-4 w-4 animate-spin" />
             ) : null}
             {t("continueGoogle")}
-          </Button>
+          </button>
           {isAppleAuthEnabled() && (
-            <Button
+            <button
               type="button"
-              variant="outline"
-              className="w-full"
+              className="sf-auth-oauth-btn"
               disabled={oauthLoading !== null || pending}
               onClick={() => signInWithOAuth("apple")}
             >
@@ -111,14 +106,14 @@ export function LoginForm({
                 <Loader2 className="h-4 w-4 animate-spin" />
               ) : null}
               {t("continueApple")}
-            </Button>
+            </button>
           )}
         </div>
 
-        <div className="my-6 flex items-center gap-3">
-          <div className="h-px flex-1 bg-[var(--border-subtle)]" />
-          <span className="text-xs text-[var(--text-muted)]">{t("orEmail")}</span>
-          <div className="h-px flex-1 bg-[var(--border-subtle)]" />
+        <div className="sf-auth-divider">
+          <div className="sf-auth-divider__line" />
+          <span className="sf-auth-divider__label">{t("orEmail")}</span>
+          <div className="sf-auth-divider__line" />
         </div>
 
         {errorMessage && (
@@ -187,15 +182,19 @@ export function LoginForm({
               disabled={pending}
             />
           </div>
-          <Button type="submit" className="w-full" disabled={pending || oauthLoading !== null}>
+          <button
+            type="submit"
+            className="sf-btn-primary w-full"
+            disabled={pending || oauthLoading !== null}
+          >
             {pending && <Loader2 className="h-4 w-4 animate-spin" />}
             {submitLabel}
-          </Button>
+          </button>
         </form>
 
         <button
           type="button"
-          className="mt-4 w-full text-center text-sm text-accent-400 hover:text-accent-500"
+          className="sf-auth-switch"
           onClick={() => setMode(mode === "signIn" ? "signUp" : "signIn")}
           disabled={pending}
         >

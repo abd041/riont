@@ -1,6 +1,10 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
-import { Button } from "@/components/ui/button";
+import { CheckCircle2 } from "lucide-react";
+import {
+  PremiumPanel,
+  StorefrontPageShell,
+} from "@/components/shared";
 
 export default async function OrderConfirmationPage({
   params,
@@ -15,12 +19,18 @@ export default async function OrderConfirmationPage({
 
   if (!orderNumber) {
     return (
-      <div className="mx-auto max-w-content py-12 text-center">
-        <p className="text-[var(--text-muted)]">{t("missing")}</p>
-        <Button className="mt-6" asChild>
-          <Link href="/products">{t("browse")}</Link>
-        </Button>
-      </div>
+      <StorefrontPageShell variant="narrow">
+        <PremiumPanel>
+          <div className="sf-empty">
+            <p className="sf-empty__desc">{t("missing")}</p>
+            <div className="sf-empty__action">
+              <Link href="/products" className="sf-btn-primary">
+                {t("browse")}
+              </Link>
+            </div>
+          </div>
+        </PremiumPanel>
+      </StorefrontPageShell>
     );
   }
 
@@ -29,26 +39,33 @@ export default async function OrderConfirmationPage({
     : `/orders/${orderNumber}`;
 
   return (
-    <div className="mx-auto max-w-lg py-12 text-center">
-      <div className="glass-card rounded-[var(--radius-lg)] p-10">
-        <h1 className="text-2xl font-bold text-emerald-400">{t("title")}</h1>
-        <p className="mt-3 text-[var(--text-secondary)]">{t("subtitle")}</p>
-        <p className="mt-4 text-sm text-[var(--text-muted)]">{t("orderLabel")}</p>
-        <p className="text-xl font-semibold" dir="ltr">
-          {orderNumber}
-        </p>
-        {token && (
-          <p className="mt-4 text-sm text-amber-200/90">{t("saveLink")}</p>
-        )}
-        <div className="mt-8 flex flex-col gap-3">
-          <Button asChild size="lg">
-            <Link href={orderHref}>{t("viewOrder")}</Link>
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/products">{t("continueShopping")}</Link>
-          </Button>
+    <StorefrontPageShell variant="narrow">
+      <PremiumPanel>
+        <div className="sf-success">
+          <div className="sf-success__icon">
+            <CheckCircle2 strokeWidth={1.5} />
+          </div>
+          <h1 className="sf-success__title">{t("title")}</h1>
+          <p className="sf-success__subtitle">{t("subtitle")}</p>
+          <p className="sf-success__meta">{t("orderLabel")}</p>
+          <p className="sf-success__value" dir="ltr">
+            {orderNumber}
+          </p>
+          {token && (
+            <p className="sf-alert sf-alert--warning" style={{ marginTop: 8, width: "100%" }}>
+              {t("saveLink")}
+            </p>
+          )}
+          <div className="sf-success__actions">
+            <Link href={orderHref} className="sf-btn-primary">
+              {t("viewOrder")}
+            </Link>
+            <Link href="/products" className="sf-btn-outline">
+              {t("continueShopping")}
+            </Link>
+          </div>
         </div>
-      </div>
-    </div>
+      </PremiumPanel>
+    </StorefrontPageShell>
   );
 }

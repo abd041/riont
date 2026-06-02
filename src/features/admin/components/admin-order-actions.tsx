@@ -33,7 +33,7 @@ export function AdminStatusActions({
   if (allowedNext.length === 0) return null;
 
   return (
-    <div className="glass-card rounded-[var(--radius-lg)] p-6">
+    <div className="admin-panel admin-panel--flat">
       <h2 className="font-semibold">Update status</h2>
       <div className="mt-4 flex flex-wrap gap-2">
         {allowedNext.map((status) => (
@@ -57,7 +57,7 @@ export function AdminStatusActions({
 
 export function AdminNoteForm({ order }: { order: AdminOrderDetail }) {
   return (
-    <div className="glass-card rounded-[var(--radius-lg)] p-6">
+    <div className="admin-panel admin-panel--flat">
       <h2 className="font-semibold">Admin note (internal)</h2>
       <AdminActionForm
         action={updateAdminNoteAction}
@@ -137,7 +137,7 @@ export function AdminOrderItemsPanel({
   order: AdminOrderDetail;
 }) {
   return (
-    <div className="glass-card rounded-[var(--radius-lg)] p-6">
+    <div className="admin-panel admin-panel--flat">
       <h2 className="font-semibold">Line items & fulfillment</h2>
       <ul className="mt-4 space-y-6">
         {order.items.map((item) => (

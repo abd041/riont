@@ -1,4 +1,4 @@
-const APP_NAME = "riont";
+const APP_NAME = "riyont";
 
 export function orderSubmittedEmail(params: {
   locale: string;

@@ -12,7 +12,7 @@ const PAYMENT_METHODS = ["Visa", "Mastercard", "Apple Pay", "Mada"] as const;
 const SOCIAL_LINKS = [
   { icon: Globe, href: "https://twitter.com", label: "X" },
   { icon: Share2, href: "https://discord.com", label: "Discord" },
-  { icon: Mail, href: "mailto:support@riont.com", label: "Email" },
+  { icon: Mail, href: "mailto:support@riyont.com", label: "Email" },
 ] as const;
 
 export function MarketplaceFooter() {

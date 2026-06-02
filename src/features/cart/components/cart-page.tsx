@@ -3,112 +3,160 @@
 import Image from "next/image";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { Minus, Plus, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Minus, Plus, ShoppingBag, Shield, Trash2, Zap } from "lucide-react";
+import { EmptyState } from "@/components/ui/empty-state";
+import { PremiumPanel } from "@/components/shared/premium-panel";
+import { StorefrontPageHeader } from "@/components/shared/storefront-page-header";
+import { StorefrontPageShell } from "@/components/shared/storefront-page-shell";
 import { useCart } from "@/hooks/use-cart";
 import { useCurrency } from "@/features/shared/currency/currency-provider";
 
 export function CartPage() {
   const t = useTranslations("cart");
+  const tHome = useTranslations("home");
   const locale = useLocale();
   const { items, removeItem, updateQuantity } = useCart();
   const { formatPrice } = useCurrency();
 
+  const subtotalCents = items.reduce(
+    (sum, item) => sum + item.priceCents * item.quantity,
+    0,
+  );
+
   if (items.length === 0) {
     return (
-      <div className="glass-card rounded-[var(--radius-lg)] p-10 text-center">
-        <p className="text-[var(--text-muted)]">{t("empty")}</p>
-        <Button className="mt-6" asChild>
-          <Link href="/products">{t("browse")}</Link>
-        </Button>
-      </div>
+      <StorefrontPageShell variant="narrow">
+        <StorefrontPageHeader
+          title={t("title")}
+          backHref="/products"
+          backLabel={t("browse")}
+        />
+        <EmptyState
+          icon={<ShoppingBag strokeWidth={1.5} />}
+          title={t("empty")}
+          action={
+            <Link href="/products" className="sf-btn-primary">
+              {t("browse")}
+            </Link>
+          }
+        />
+      </StorefrontPageShell>
     );
   }
 
   return (
-    <div className="space-y-6">
-      <ul className="space-y-4">
-        {items.map((item) => (
-          <li
-            key={item.productId}
-            className="glass-card flex flex-wrap gap-4 rounded-[var(--radius-lg)] p-4 sm:flex-nowrap"
-          >
-            <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-[var(--radius-md)] bg-surface">
-              {item.imageUrl ? (
-                <Image
-                  src={item.imageUrl}
-                  alt={item.name}
-                  fill
-                  className="object-cover"
-                  sizes="80px"
-                />
-              ) : (
-                <div className="flex h-full items-center justify-center text-xs text-[var(--text-muted)]">
-                  —
+    <StorefrontPageShell>
+      <StorefrontPageHeader
+        title={t("title")}
+        subtitle={t("checkoutNote")}
+        backHref="/products"
+        backLabel={t("browse")}
+        meta={t("itemCount", { count: items.length })}
+      />
+
+      <div className="sf-cart-layout">
+        <PremiumPanel className="sf-panel--flat">
+          <ul className="sf-cart-list">
+            {items.map((item) => (
+              <li key={item.productId} className="sf-cart-item">
+                <div className="sf-cart-item__media">
+                  {item.imageUrl ? (
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.name}
+                      fill
+                      className="object-cover"
+                      sizes="88px"
+                    />
+                  ) : (
+                    <div className="flex h-full items-center justify-center text-xs text-[var(--text-muted)]">
+                      —
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div className="min-w-0 flex-1">
-              <Link
-                href={`/products/${item.slug}`}
-                className="font-medium hover:text-accent-400"
-              >
-                {item.name}
-              </Link>
-              <p className="mt-1 text-accent-400" dir="ltr">
-                {formatPrice(item.priceCents, locale)}
-              </p>
-              <div className="mt-3 flex flex-wrap items-center gap-2">
-                <div className="flex items-center rounded-[var(--radius-md)] border border-[var(--border-default)]">
-                  <button
-                    type="button"
-                    className="flex h-8 w-8 items-center justify-center hover:bg-surface"
-                    onClick={() =>
-                      updateQuantity(item.productId, item.quantity - 1)
-                    }
-                    aria-label={t("decrease")}
-                  >
-                    <Minus className="h-4 w-4" />
-                  </button>
-                  <span className="min-w-[2rem] text-center text-sm">
-                    {item.quantity}
-                  </span>
-                  <button
-                    type="button"
-                    className="flex h-8 w-8 items-center justify-center hover:bg-surface"
-                    onClick={() =>
-                      updateQuantity(item.productId, item.quantity + 1)
-                    }
-                    aria-label={t("increase")}
-                  >
-                    <Plus className="h-4 w-4" />
-                  </button>
+
+                <div className="min-w-0">
+                  <Link href={`/products/${item.slug}`} className="sf-cart-item__name">
+                    {item.name}
+                  </Link>
+                  <p className="sf-cart-item__price" dir="ltr">
+                    {formatPrice(item.priceCents, locale)}
+                  </p>
+                  <div className="sf-cart-item__actions">
+                    <div className="sf-qty">
+                      <button
+                        type="button"
+                        className="sf-qty__btn"
+                        onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                        aria-label={t("decrease")}
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      <span className="sf-qty__value">{item.quantity}</span>
+                      <button
+                        type="button"
+                        className="sf-qty__btn"
+                        onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                        aria-label={t("increase")}
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <button
+                      type="button"
+                      className="sf-btn-ghost"
+                      onClick={() => removeItem(item.productId)}
+                    >
+                      <Trash2 className="h-4 w-4" />
+                      {t("remove")}
+                    </button>
+                  </div>
                 </div>
-                <Button
-                  type="button"
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => removeItem(item.productId)}
-                >
-                  <Trash2 className="h-4 w-4" />
-                  {t("remove")}
-                </Button>
-              </div>
+
+                <div className="sf-cart-item__total">
+                  <p className="sf-cart-item__total-value" dir="ltr">
+                    {formatPrice(item.priceCents * item.quantity, locale)}
+                  </p>
+                  <Link
+                    href={`/products/${item.slug}/checkout`}
+                    className="sf-btn-primary"
+                    style={{ minHeight: 38, paddingInline: 16, fontSize: 13 }}
+                  >
+                    {t("checkoutItem")}
+                  </Link>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </PremiumPanel>
+
+        <aside>
+          <PremiumPanel title={t("summaryTitle")}>
+            <div className="sf-cart-summary__row">
+              <span>{t("subtotal")}</span>
+              <span dir="ltr">{formatPrice(subtotalCents, locale)}</span>
             </div>
-            <div className="flex w-full flex-col justify-end sm:w-auto sm:text-end">
-              <p className="text-sm font-semibold text-accent-400" dir="ltr">
-                {formatPrice(item.priceCents * item.quantity, locale)}
-              </p>
-              <Button className="mt-2" size="sm" asChild>
-                <Link href={`/products/${item.slug}/checkout`}>
-                  {t("checkoutItem")}
-                </Link>
-              </Button>
+            <div className="sf-cart-summary__row sf-cart-summary__total">
+              <span>{t("total")}</span>
+              <span className="sf-cart-summary__total-value" dir="ltr">
+                {formatPrice(subtotalCents, locale)}
+              </span>
             </div>
-          </li>
-        ))}
-      </ul>
-      <p className="text-xs text-[var(--text-muted)]">{t("checkoutNote")}</p>
-    </div>
+            <p className="sf-cart-note">{t("checkoutNote")}</p>
+          </PremiumPanel>
+
+          <div className="sf-trust-strip" style={{ marginTop: 12 }}>
+            <div className="sf-trust-strip__item">
+              <Shield className="sf-trust-strip__icon" strokeWidth={1.5} />
+              {tHome("footerTrustSecure")}
+            </div>
+            <div className="sf-trust-strip__item">
+              <Zap className="sf-trust-strip__icon" strokeWidth={1.5} />
+              {tHome("footerTrustInstant")}
+            </div>
+          </div>
+        </aside>
+      </div>
+    </StorefrontPageShell>
   );
 }

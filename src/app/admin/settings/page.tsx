@@ -1,18 +1,18 @@
 import { getAdminSiteSettings } from "@/server/services/admin-catalog.service";
 import { AdminSettingsForm } from "@/features/admin/components/admin-settings-form";
+import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
+import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 
 export default async function AdminSettingsPage() {
   const settings = await getAdminSiteSettings();
 
   return (
-    <div className="space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold">Site settings</h1>
-        <p className="text-sm text-[var(--text-muted)]">
-          Payment instructions and support contact shown to customers.
-        </p>
-      </div>
+    <AdminPageShell>
+      <AdminPageHeader
+        title="Site settings"
+        description="Payment instructions and support contact shown to customers."
+      />
       <AdminSettingsForm settings={settings} />
-    </div>
+    </AdminPageShell>
   );
 }

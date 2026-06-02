@@ -13,7 +13,7 @@ export function AdminInventoryPanel({
   availableStock: number;
 }) {
   return (
-    <div className="glass-card rounded-[var(--radius-lg)] p-6">
+    <div className="admin-panel admin-panel--flat">
       <h2 className="font-semibold">Inventory — {productName}</h2>
       <p className="mt-1 text-sm text-[var(--text-muted)]">
         Available stock: <span className="text-accent-400">{availableStock}</span>

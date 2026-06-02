@@ -1,19 +1,18 @@
 import { listAdminCoupons } from "@/server/services/admin-catalog.service";
 import { AdminCouponsPanel } from "@/features/admin/components/admin-coupons-panel";
+import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
+import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 
 export default async function AdminCouponsPage() {
   const coupons = await listAdminCoupons();
 
   return (
-    <div className="space-y-8">
-      <div>
-        <h1 className="text-2xl font-bold">Coupons</h1>
-        <p className="text-sm text-[var(--text-muted)]">
-          Create, edit, and remove discount codes for checkout.
-        </p>
-      </div>
-
+    <AdminPageShell>
+      <AdminPageHeader
+        title="Coupons"
+        description="Create, edit, and remove discount codes for checkout."
+      />
       <AdminCouponsPanel coupons={coupons} />
-    </div>
+    </AdminPageShell>
   );
 }

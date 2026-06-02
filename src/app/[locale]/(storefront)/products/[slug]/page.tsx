@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { getProductBySlug } from "@/server/services/product.service";
 import { ProductDetailView } from "@/features/products/components/product-detail-view";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -12,6 +13,7 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug, locale } = await params;
   const product = await getProductBySlug(locale, slug);
+  const tCommon = await getTranslations({ locale, namespace: "common" });
 
   if (!product) {
     return { title: "Product not found" };
@@ -20,7 +22,7 @@ export async function generateMetadata({
   return buildPageMetadata({
     locale,
     path: `/products/${slug}`,
-    title: product.metaTitle ?? `${product.name} | riont`,
+    title: product.metaTitle ?? `${product.name} | ${tCommon("brand")}`,
     description:
       product.metaDescription ??
       product.shortDescription ??

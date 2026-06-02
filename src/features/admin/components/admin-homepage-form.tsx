@@ -23,7 +23,7 @@ function HeroForm({
   >(saveHeroBlockAction, null);
 
   return (
-    <form action={action} className="glass-card space-y-4 rounded-[var(--radius-lg)] p-6">
+    <form action={action} className="admin-panel admin-panel--flat">
       <h3 className="font-semibold">Hero ({locale.toUpperCase()})</h3>
       <input type="hidden" name="locale" value={locale} />
       <div>
@@ -84,7 +84,7 @@ function TrustForm({
   const items = initial?.items ?? [];
 
   return (
-    <form action={action} className="glass-card space-y-4 rounded-[var(--radius-lg)] p-6">
+    <form action={action} className="admin-panel admin-panel--flat">
       <h3 className="font-semibold">Trust bar ({locale.toUpperCase()})</h3>
       <input type="hidden" name="locale" value={locale} />
       {[1, 2, 3, 4].map((n) => (
