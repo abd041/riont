@@ -115,6 +115,7 @@ export const ORDER_STATUS_LABELS: Record<string, { en: string; ar: string }> = {
   processing: { en: "Processing", ar: "قيد المعالجة" },
   delivered: { en: "Delivered", ar: "تم التسليم" },
   completed: { en: "Completed", ar: "مكتمل" },
+  refunded: { en: "Refunded", ar: "مسترد" },
   cancelled: { en: "Cancelled", ar: "ملغى" },
   needs_customer_response: { en: "Needs your response", ar: "بحاجة لردك" },
   on_hold: { en: "On hold", ar: "معلّق" },

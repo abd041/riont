@@ -12,6 +12,7 @@ export const OrderStatus = {
   PROCESSING: "processing",
   DELIVERED: "delivered",
   COMPLETED: "completed",
+  REFUNDED: "refunded",
   CANCELLED: "cancelled",
   NEEDS_CUSTOMER_RESPONSE: "needs_customer_response",
   ON_HOLD: "on_hold",

@@ -1,5 +1,7 @@
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { isSupabaseConfigured } from "@/lib/env/public";
+import type { SubmitProductReviewInput } from "@/validations/review.schema";
 
 export type ProductReview = {
   id: string;
@@ -97,4 +99,63 @@ export async function getReviewSummariesForProducts(
   }
 
   return result;
+}
+
+export async function submitCustomerProductReview(
+  input: SubmitProductReviewInput,
+  userId?: string | null,
+  profileName?: string | null,
+): Promise<{ success: true } | { success: false; code: string }> {
+  if (!isSupabaseConfigured()) {
+    return { success: false, code: "NOT_CONFIGURED" };
+  }
+
+  const admin = createAdminClient();
+
+  if (userId) {
+    const { data: existing } = await admin
+      .from("product_reviews")
+      .select("id")
+      .eq("product_id", input.productId)
+      .eq("user_id", userId)
+      .maybeSingle();
+
+    if (existing) {
+      return { success: false, code: "ALREADY_REVIEWED" };
+    }
+  }
+
+  const authorName =
+    input.authorName?.trim() ||
+    profileName?.trim() ||
+    (userId ? "Customer" : "");
+
+  if (!authorName) {
+    return { success: false, code: "NAME_REQUIRED" };
+  }
+
+  if (!userId && !input.guestEmail?.trim()) {
+    return { success: false, code: "EMAIL_REQUIRED" };
+  }
+
+  const { error } = await admin.from("product_reviews").insert({
+    product_id: input.productId,
+    user_id: userId ?? null,
+    guest_email: userId ? null : input.guestEmail?.trim() || null,
+    author_name: authorName,
+    rating: input.rating,
+    body: input.body.trim(),
+    locale: input.locale,
+    is_approved: false,
+    sort_order: 0,
+  });
+
+  if (error) {
+    if (error.code === "23505") {
+      return { success: false, code: "ALREADY_REVIEWED" };
+    }
+    return { success: false, code: "INTERNAL" };
+  }
+
+  return { success: true };
 }

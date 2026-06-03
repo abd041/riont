@@ -5,10 +5,17 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/utils/cn";
 import { Star } from "lucide-react";
 import type { ProductReview } from "@/server/services/review.service";
+import { ProductReviewForm } from "./product-review-form";
 
 type TabId = "details" | "description" | "reviews";
 
 type ProductDetailTabsProps = {
+  productId: string;
+  productSlug: string;
+  locale: string;
+  isLoggedIn: boolean;
+  userEmail?: string | null;
+  userDisplayName?: string | null;
   shortDescription?: string | null;
   description?: string | null;
   rating: number;
@@ -18,6 +25,12 @@ type ProductDetailTabsProps = {
 };
 
 export function ProductDetailTabs({
+  productId,
+  productSlug,
+  locale,
+  isLoggedIn,
+  userEmail,
+  userDisplayName,
   shortDescription,
   description,
   rating,
@@ -71,15 +84,19 @@ export function ProductDetailTabs({
 
         {active === "reviews" && (
           <div className="nex-pdp-tabs__reviews">
-            <div className="nex-pdp-tabs__review-score">
-              <Star className="nex-pdp-tabs__review-star" strokeWidth={0} aria-hidden />
-              <span className="nex-pdp-tabs__review-value">{rating.toFixed(1)}</span>
-              <span className="nex-pdp-tabs__review-count">
-                {t("reviews", { rating: rating.toFixed(1), count: reviewCount })}
-              </span>
-            </div>
+            {hasDbReviews ? (
+              <div className="nex-pdp-tabs__review-score">
+                <Star className="nex-pdp-tabs__review-star" strokeWidth={0} aria-hidden />
+                <span className="nex-pdp-tabs__review-value">{rating.toFixed(1)}</span>
+                <span className="nex-pdp-tabs__review-count">
+                  {t("reviews", { rating: rating.toFixed(1), count: reviewCount })}
+                </span>
+              </div>
+            ) : (
+              <p className="nex-pdp-tabs__text">{t("noReviewsYet")}</p>
+            )}
 
-            {hasDbReviews && reviews.length > 0 ? (
+            {reviews.length > 0 ? (
               <ul className="nex-pdp-review-list">
                 {reviews.map((review) => (
                   <li key={review.id} className="nex-pdp-review-item">
@@ -93,9 +110,16 @@ export function ProductDetailTabs({
                   </li>
                 ))}
               </ul>
-            ) : (
-              <p className="nex-pdp-tabs__text">{t("reviewsPlaceholder")}</p>
-            )}
+            ) : null}
+
+            <ProductReviewForm
+              productId={productId}
+              productSlug={productSlug}
+              locale={locale}
+              isLoggedIn={isLoggedIn}
+              userEmail={userEmail}
+              userDisplayName={userDisplayName}
+            />
           </div>
         )}
       </div>

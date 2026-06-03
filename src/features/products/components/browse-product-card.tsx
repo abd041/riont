@@ -57,8 +57,8 @@ export function BrowseProductCard(product: CatalogProduct) {
 
   const theme = themeForProduct(slug, categorySlug);
   const discount = discountPercent(priceCents, compareAtCents);
-  const reviews = productReviewCount({ slug, reviewCount });
-  const rating = productRating({ slug, averageRating });
+  const reviews = productReviewCount({ reviewCount });
+  const rating = productRating({ averageRating, reviewCount });
   const subtitleBySlug: Record<string, string> = {
     "windows-11-pro": t("lifetimeLicense"),
     "spotify-premium-1year": t("oneYear"),
@@ -96,11 +96,13 @@ export function BrowseProductCard(product: CatalogProduct) {
           {name}
         </Link>
         <p className="nex-bp-sub">{subtitle}</p>
-        <div className="nex-bp-rating">
-          <Star className="nex-bp-star" strokeWidth={1.5} />
-          <span>{rating.toFixed(1)}</span>
-          <span className="nex-bp-reviews">{t("reviewsShort", { count: reviews })}</span>
-        </div>
+        {rating != null ? (
+          <div className="nex-bp-rating">
+            <Star className="nex-bp-star" strokeWidth={1.5} />
+            <span>{rating.toFixed(1)}</span>
+            <span className="nex-bp-reviews">{t("reviewsShort", { count: reviews })}</span>
+          </div>
+        ) : null}
         <div className="nex-bp-price-row">
           <span className="nex-bp-price" dir="ltr">
             {formatPrice(priceCents, locale)}

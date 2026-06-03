@@ -192,6 +192,7 @@ export async function submitOrder(
       coupon_code_snapshot: couponCodeSnapshot,
       locale: input.locale,
       customer_note: input.customerNote?.trim() || null,
+      payment_method: input.paymentMethod?.trim() || null,
       terms_accepted_at: new Date().toISOString(),
     })
     .select("id")
@@ -357,6 +358,7 @@ export async function submitCartOrder(
       coupon_code_snapshot: couponCodeSnapshot,
       locale: input.locale,
       customer_note: input.customerNote?.trim() || null,
+      payment_method: input.paymentMethod?.trim() || null,
       terms_accepted_at: new Date().toISOString(),
     })
     .select("id")

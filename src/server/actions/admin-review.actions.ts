@@ -3,15 +3,17 @@
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import type { AdminActionResult } from "@/server/actions/admin-order.actions";
-import {
-  createAdminProductReview,
-  deleteAdminProductReview,
-} from "@/server/services/admin-review.service";
 import { writeAuditLog } from "@/server/services/audit.service";
 import {
+  approveReviewSchema,
   adminReviewSchema,
   deleteReviewSchema,
 } from "@/validations/admin-review.schema";
+import {
+  approveAdminProductReview,
+  createAdminProductReview,
+  deleteAdminProductReview,
+} from "@/server/services/admin-review.service";
 
 export type AdminReviewActionResult =
   | { success: true }
@@ -79,6 +81,39 @@ export async function deleteProductReviewAdminFormAction(
     return { success: true, message: "Review deleted" };
   }
   return { success: false, error: result.error };
+}
+
+export async function approveProductReviewAdminFormAction(
+  prev: AdminActionResult | null,
+  formData: FormData,
+): Promise<AdminActionResult> {
+  void prev;
+  const parsed = approveReviewSchema.safeParse({
+    reviewId: formData.get("reviewId"),
+    productId: formData.get("productId"),
+  });
+
+  if (!parsed.success) {
+    return { success: false, error: "Invalid request" };
+  }
+
+  try {
+    const { user } = await requireAdmin();
+    await approveAdminProductReview(parsed.data.reviewId);
+
+    void writeAuditLog({
+      actorUserId: user.id,
+      action: "product.review_approved",
+      entityType: "product",
+      entityId: parsed.data.productId,
+    });
+
+    revalidatePath(`/admin/products/${parsed.data.productId}`);
+    revalidatePath(`/products`);
+    return { success: true, message: "Review approved" };
+  } catch {
+    return { success: false, error: "Could not approve review" };
+  }
 }
 
 export async function deleteProductReviewAction(

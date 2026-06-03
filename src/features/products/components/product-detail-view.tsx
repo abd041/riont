@@ -10,29 +10,20 @@ import { ProductDetailTabs } from "./product-detail-tabs";
 import { listRelatedProducts } from "@/server/services/product.service";
 import { getProductReviewSummary } from "@/server/services/review.service";
 
-function hashSlug(slug: string) {
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) hash += slug.charCodeAt(i);
-  return hash;
-}
-
-function fallbackReviewCount(slug: string) {
-  return 80 + (hashSlug(slug) % 420);
-}
-
-function fallbackRating(slug: string) {
-  const variants = [4.7, 4.8, 4.9];
-  return variants[hashSlug(slug) % variants.length];
-}
-
 export async function ProductDetailView({
   product,
   slug,
   locale,
+  isLoggedIn,
+  userEmail,
+  userDisplayName,
 }: {
   product: CatalogProductDetail;
   slug: string;
   locale: string;
+  isLoggedIn: boolean;
+  userEmail?: string | null;
+  userDisplayName?: string | null;
 }) {
   const t = await getTranslations("product");
   const tCatalog = await getTranslations("catalog");
@@ -50,12 +41,8 @@ export async function ProductDetailView({
   ]);
 
   const hasReviews = (reviewSummary?.count ?? 0) > 0;
-  const rating = hasReviews
-    ? reviewSummary!.averageRating
-    : fallbackRating(slug);
-  const reviews = hasReviews
-    ? reviewSummary!.count
-    : fallbackReviewCount(slug);
+  const rating = hasReviews ? reviewSummary!.averageRating : 0;
+  const reviews = hasReviews ? reviewSummary!.count : 0;
 
   return (
     <StorefrontPageShell variant="wide">
@@ -94,21 +81,20 @@ export async function ProductDetailView({
               </Link>
             )}
 
-            <div className="nex-pdp-rating">
-              <span className="nex-pdp-rating-stars" aria-hidden>
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} strokeWidth={0} />
-                ))}
-              </span>
-              <span className="nex-pdp-rating-text">
-                {hasReviews
-                  ? t("reviews", { rating: rating.toFixed(1), count: reviews })
-                  : t("reviewsFallback", {
-                      rating: rating.toFixed(1),
-                      count: reviews,
-                    })}
-              </span>
-            </div>
+            {hasReviews ? (
+              <div className="nex-pdp-rating">
+                <span className="nex-pdp-rating-stars" aria-hidden>
+                  {Array.from({ length: 5 }).map((_, i) => (
+                    <Star key={i} strokeWidth={0} />
+                  ))}
+                </span>
+                <span className="nex-pdp-rating-text">
+                  {t("reviews", { rating: rating.toFixed(1), count: reviews })}
+                </span>
+              </div>
+            ) : (
+              <p className="nex-pdp-rating-text nex-pdp-rating-text--empty">{t("noReviewsYet")}</p>
+            )}
 
             <ul className="nex-pdp-features">
               <li className="nex-pdp-feature">
@@ -139,6 +125,12 @@ export async function ProductDetailView({
           </div>
 
           <ProductDetailTabs
+            productId={productId}
+            productSlug={slug}
+            locale={locale}
+            isLoggedIn={isLoggedIn}
+            userEmail={userEmail}
+            userDisplayName={userDisplayName}
             shortDescription={product.shortDescription}
             description={product.description}
             rating={rating}

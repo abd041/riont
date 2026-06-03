@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  approveProductReviewAdminFormAction,
   createProductReviewAdminFormAction,
   deleteProductReviewAdminFormAction,
 } from "@/server/actions/admin-review.actions";
@@ -33,20 +34,33 @@ export function AdminProductReviews({
                 <span className="font-medium text-sm">
                   {review.authorName} · {review.rating}/5 · {review.locale.toUpperCase()}
                 </span>
-                <span className="text-xs text-[var(--text-muted)]">
-                  {review.isApproved ? "Approved" : "Hidden"}
+                <span
+                  className={`text-xs ${review.isApproved ? "text-emerald-400" : "text-amber-400"}`}
+                >
+                  {review.isApproved ? "Approved" : "Pending approval"}
                 </span>
               </div>
               <p className="mt-2 text-sm text-[var(--text-muted)]">{review.body}</p>
-              <AdminActionForm
-                action={deleteProductReviewAdminFormAction}
-                submitLabel="Delete"
-                variant="outline"
-                className="mt-3"
-              >
-                <input type="hidden" name="reviewId" value={review.id} />
-                <input type="hidden" name="productId" value={productId} />
-              </AdminActionForm>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {!review.isApproved ? (
+                  <AdminActionForm
+                    action={approveProductReviewAdminFormAction}
+                    submitLabel="Approve"
+                    variant="primary"
+                  >
+                    <input type="hidden" name="reviewId" value={review.id} />
+                    <input type="hidden" name="productId" value={productId} />
+                  </AdminActionForm>
+                ) : null}
+                <AdminActionForm
+                  action={deleteProductReviewAdminFormAction}
+                  submitLabel="Delete"
+                  variant="outline"
+                >
+                  <input type="hidden" name="reviewId" value={review.id} />
+                  <input type="hidden" name="productId" value={productId} />
+                </AdminActionForm>
+              </div>
             </li>
           ))}
         </ul>

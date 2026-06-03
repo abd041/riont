@@ -37,7 +37,7 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
 
   const { id, slug, name, priceCents, compareAtCents, imageUrl, badge } = product;
   const discount = discountPercent(priceCents, compareAtCents);
-  const rating = productRating({ slug, averageRating: product.averageRating });
+  const rating = productRating(product);
   const category = productCategoryLabel(product, t("lifetimeLicense"));
   const wished = hasItem(id ?? slug);
   const reduceMotion = useReducedMotion();
@@ -48,7 +48,6 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
       role="listitem"
       whileHover={reduceMotion ? undefined : mpCardHoverMini}
     >
-      <span className="mp-card__ambient" aria-hidden /    >
       <span className="mp-card__ambient" aria-hidden />
       <span className="mp-card__surface" aria-hidden />
       <Link href={`/products/${slug}`} className="mp-card__media">
@@ -82,10 +81,12 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
         <Link href={`/products/${slug}`} className="mp-card__info">
           <h3 className="mp-card__name">{name}</h3>
           <p className="mp-card__cat">{category}</p>
-          <p className="mp-card__rating">
-            <Star className="mp-card__star" strokeWidth={1.5} />
-            {rating}
-          </p>
+          {rating != null ? (
+            <p className="mp-card__rating">
+              <Star className="mp-card__star" strokeWidth={1.5} />
+              {rating.toFixed(1)}
+            </p>
+          ) : null}
         </Link>
 
         <div className="mp-card__actions mp-card__actions--mini">

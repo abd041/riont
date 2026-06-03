@@ -5,34 +5,19 @@ export function discountPercent(price: number, compare?: number | null): number 
   return Math.round(((compare - price) / compare) * 100);
 }
 
-function hashSlug(slug: string): number {
-  let hash = 0;
-  for (let i = 0; i < slug.length; i++) hash += slug.charCodeAt(i);
-  return hash;
-}
-
-function fallbackRating(slug: string): number {
-  return [4.7, 4.8, 4.9][hashSlug(slug) % 3];
-}
-
-function fallbackReviewCount(slug: string): number {
-  return 80 + (hashSlug(slug) % 420);
-}
-
-export function productRating(product: Pick<CatalogProduct, "slug" | "averageRating">): number {
-  if (product.averageRating != null && product.averageRating > 0) {
+export function productRating(
+  product: Pick<CatalogProduct, "averageRating" | "reviewCount">,
+): number | null {
+  if ((product.reviewCount ?? 0) > 0 && product.averageRating != null) {
     return product.averageRating;
   }
-  return fallbackRating(product.slug);
+  return null;
 }
 
 export function productReviewCount(
-  product: Pick<CatalogProduct, "slug" | "reviewCount">,
+  product: Pick<CatalogProduct, "reviewCount">,
 ): number {
-  if (product.reviewCount != null && product.reviewCount > 0) {
-    return product.reviewCount;
-  }
-  return fallbackReviewCount(product.slug);
+  return product.reviewCount ?? 0;
 }
 
 export function hasRealReviews(product: Pick<CatalogProduct, "reviewCount">): boolean {

@@ -30,7 +30,8 @@ const VALID_TRANSITIONS: Record<string, OrderStatusType[]> = {
     OrderStatus.NEEDS_CUSTOMER_RESPONSE,
     OrderStatus.ON_HOLD,
   ],
-  [OrderStatus.DELIVERED]: [OrderStatus.COMPLETED],
+  [OrderStatus.DELIVERED]: [OrderStatus.COMPLETED, OrderStatus.REFUNDED],
+  [OrderStatus.COMPLETED]: [OrderStatus.REFUNDED],
   [OrderStatus.NEEDS_CUSTOMER_RESPONSE]: [
     OrderStatus.PROCESSING,
     OrderStatus.CANCELLED,
@@ -241,6 +242,7 @@ export async function getAdminOrderDetail(
       user_id,
       submitted_at,
       payment_received_at,
+      payment_method,
       order_items (
         id,
         product_id,
@@ -284,6 +286,7 @@ export async function getAdminOrderDetail(
     user_id: string | null;
     submitted_at: string;
     payment_received_at: string | null;
+    payment_method: string | null;
     order_items: Array<{
       id: string;
       product_id: string;
@@ -367,6 +370,7 @@ export async function getAdminOrderDetail(
     userId: row.user_id,
     submittedAt: row.submitted_at,
     paymentReceivedAt: row.payment_received_at,
+    paymentMethod: row.payment_method,
     paymentStatus: derivePaymentStatus(row.status, row.payment_received_at),
     items,
     fields,
@@ -387,6 +391,7 @@ export type AdminOrderExportRow = {
   coupon: string;
   submittedAt: string;
   paymentReceivedAt: string;
+  paymentMethod: string;
 };
 
 export async function listOrdersForExport(
@@ -407,6 +412,7 @@ export async function listOrdersForExport(
       coupon_code_snapshot,
       submitted_at,
       payment_received_at,
+      payment_method,
       guest_email,
       user_id,
       profiles (display_name),
@@ -434,6 +440,7 @@ export async function listOrdersForExport(
       coupon_code_snapshot: string | null;
       submitted_at: string;
       payment_received_at: string | null;
+      payment_method: string | null;
       guest_email: string | null;
       user_id: string | null;
       profiles:
@@ -464,6 +471,7 @@ export async function listOrdersForExport(
       coupon: row.coupon_code_snapshot ?? "",
       submittedAt: row.submitted_at,
       paymentReceivedAt: row.payment_received_at ?? "",
+      paymentMethod: row.payment_method ?? "",
     };
   });
 }
@@ -482,6 +490,7 @@ export function ordersToCsv(rows: AdminOrderExportRow[]): string {
     "coupon",
     "submitted_at",
     "payment_received_at",
+    "payment_method",
   ];
 
   const escape = (value: string) => {
@@ -505,6 +514,7 @@ export function ordersToCsv(rows: AdminOrderExportRow[]): string {
         row.coupon,
         row.submittedAt,
         row.paymentReceivedAt,
+        row.paymentMethod,
       ]
         .map(escape)
         .join(","),

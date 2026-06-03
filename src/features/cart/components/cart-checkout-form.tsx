@@ -15,6 +15,7 @@ import {
 import { CheckoutDiscountCard } from "@/features/checkout/components/checkout-discount-card";
 import { CheckoutPremiumCheckbox } from "@/features/checkout/components/checkout-premium-checkbox";
 import { CheckoutDynamicField } from "@/features/checkout/components/checkout-details-card";
+import { CheckoutPaymentMethodField } from "@/features/checkout/components/checkout-payment-method-field";
 import { useCurrency } from "@/features/shared/currency/currency-provider";
 
 export function CartCheckoutForm({
@@ -183,6 +184,8 @@ export function CartCheckoutForm({
                     </div>
                   ) : null,
                 )}
+
+                <CheckoutPaymentMethodField pending={pending} />
 
                 <div className="nex-co-field">
                   <label htmlFor="customerNote" className="nex-co-label">

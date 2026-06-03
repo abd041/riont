@@ -18,6 +18,7 @@ const STATUS_LABELS: Record<OrderStatusType, string> = {
   [OrderStatus.PROCESSING]: "Processing",
   [OrderStatus.DELIVERED]: "Delivered",
   [OrderStatus.COMPLETED]: "Completed",
+  [OrderStatus.REFUNDED]: "Refunded",
   [OrderStatus.CANCELLED]: "Cancelled",
   [OrderStatus.NEEDS_CUSTOMER_RESPONSE]: "Needs customer response",
   [OrderStatus.ON_HOLD]: "On hold",

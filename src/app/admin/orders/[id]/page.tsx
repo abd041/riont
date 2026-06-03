@@ -19,6 +19,18 @@ import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 import { AdminPanel } from "@/features/admin/components/admin-panel";
 import { PAYMENT_STATUS_LABELS } from "@/lib/order/payment-status";
 
+const PAYMENT_METHOD_LABELS: Record<string, string> = {
+  bank_transfer: "Bank transfer",
+  whatsapp: "WhatsApp",
+  cash: "Cash",
+  other: "Other",
+};
+
+function formatPaymentMethod(value: string | null): string {
+  if (!value) return "—";
+  return PAYMENT_METHOD_LABELS[value] ?? value;
+}
+
 const STATUS_LABELS: Record<OrderStatusType, string> = {
   [OrderStatus.PENDING_REVIEW]: "Pending review",
   [OrderStatus.AWAITING_PAYMENT]: "Awaiting payment",
@@ -26,6 +38,7 @@ const STATUS_LABELS: Record<OrderStatusType, string> = {
   [OrderStatus.PROCESSING]: "Processing",
   [OrderStatus.DELIVERED]: "Delivered",
   [OrderStatus.COMPLETED]: "Completed",
+  [OrderStatus.REFUNDED]: "Refunded",
   [OrderStatus.CANCELLED]: "Cancelled",
   [OrderStatus.NEEDS_CUSTOMER_RESPONSE]: "Needs customer response",
   [OrderStatus.ON_HOLD]: "On hold",
@@ -128,6 +141,12 @@ export default async function AdminOrderDetailPage({
                 className={`admin-payment-badge admin-payment-badge--${order.paymentStatus}`}
               >
                 {PAYMENT_STATUS_LABELS[order.paymentStatus]}
+              </span>
+            </div>
+            <div className="admin-summary-row">
+              <span className="admin-summary-row__label">Payment method</span>
+              <span className="text-sm text-[var(--text-muted)]">
+                {formatPaymentMethod(order.paymentMethod)}
               </span>
             </div>
             {order.paymentReceivedAt && (

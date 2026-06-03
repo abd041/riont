@@ -45,6 +45,7 @@ export type AdminOrderDetail = {
   userId: string | null;
   submittedAt: string;
   paymentReceivedAt: string | null;
+  paymentMethod: string | null;
   paymentStatus: PaymentStatus;
   items: AdminOrderItem[];
   fields: AdminOrderFieldValue[];

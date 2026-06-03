@@ -73,6 +73,16 @@ export async function createAdminProductReview(input: {
   if (error) throw error;
 }
 
+export async function approveAdminProductReview(reviewId: string): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from("product_reviews")
+    .update({ is_approved: true })
+    .eq("id", reviewId);
+
+  if (error) throw error;
+}
+
 export async function deleteAdminProductReview(reviewId: string): Promise<void> {
   const admin = createAdminClient();
   const { error } = await admin.from("product_reviews").delete().eq("id", reviewId);

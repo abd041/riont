@@ -17,3 +17,5 @@ export const deleteReviewSchema = z.object({
   reviewId: z.string().uuid(),
   productId: z.string().uuid(),
 });
+
+export const approveReviewSchema = deleteReviewSchema;

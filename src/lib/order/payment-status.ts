@@ -13,7 +13,7 @@ export function derivePaymentStatus(
   status: OrderStatusType,
   paymentReceivedAt: string | null | undefined,
 ): PaymentStatus {
-  if (status === OrderStatus.CANCELLED) return "failed";
+  if (status === OrderStatus.CANCELLED || status === OrderStatus.REFUNDED) return "failed";
   if (paymentReceivedAt) return "paid";
   if (PAID_STATUSES.includes(status)) return "paid";
   return "unpaid";

@@ -36,6 +36,7 @@ export async function submitOrderAction(
     guestEmail: formData.get("guestEmail") || undefined,
     customerNote: formData.get("customerNote") || undefined,
     couponCode: formData.get("couponCode") || undefined,
+    paymentMethod: formData.get("paymentMethod") || undefined,
     termsAccepted:
       termsRaw === "on" || termsRaw === "true" ? true : undefined,
     fieldValues: parseFieldValues(formData),

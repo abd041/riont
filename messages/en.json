@@ -190,7 +190,26 @@
     "badgeHot": "HOT",
     "badgeTrending": "TRENDING",
     "badgeLimited": "LIMITED",
-    "badgeOffer": "OFFER"
+    "badgeOffer": "OFFER",
+    "noReviewsYet": "No reviews yet",
+    "writeReview": "Write a review",
+    "reviewModerationHint": "Your review is sent for moderation and appears after approval.",
+    "reviewAuthorName": "Your name",
+    "reviewGuestEmail": "Your email",
+    "reviewRating": "Rating",
+    "reviewBody": "Your review",
+    "reviewBodyPlaceholder": "Share your experience with this product…",
+    "reviewSubmit": "Submit review",
+    "reviewSubmitting": "Submitting…",
+    "reviewSubmitted": "Thank you! Your review was submitted and is pending approval.",
+    "reviewErrors": {
+      "VALIDATION": "Please check your rating and review text.",
+      "ALREADY_REVIEWED": "You have already reviewed this product.",
+      "NAME_REQUIRED": "Please enter your name.",
+      "EMAIL_REQUIRED": "Please enter your email.",
+      "NOT_CONFIGURED": "Reviews are not available right now.",
+      "INTERNAL": "Could not submit your review. Please try again."
+    }
   },
   "auth": {
     "welcomeBack": "Welcome Back",
@@ -337,6 +356,15 @@
     "couponHint": "Enter a valid code to unlock discounts.",
     "couponApplied": "Code {code} applied to your order.",
     "applyCoupon": "Apply",
+    "paymentMethod": "Preferred payment method",
+    "paymentMethodPlaceholder": "Select how you plan to pay (optional)",
+    "paymentMethodHint": "Helps us send the right external payment instructions after approval.",
+    "paymentMethods": {
+      "bank_transfer": "Bank transfer",
+      "whatsapp": "WhatsApp",
+      "cash": "Cash",
+      "other": "Other"
+    },
     "yourOrder": "Your Order",
     "instantDelivery": "Instant Delivery",
     "subtotal": "Subtotal",
@@ -379,6 +407,7 @@
       "processing": "Processing",
       "delivered": "Delivered",
       "completed": "Completed",
+      "refunded": "Refunded",
       "cancelled": "Cancelled",
       "needs_customer_response": "Needs your response",
       "on_hold": "On hold"

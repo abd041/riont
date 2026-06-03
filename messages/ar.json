@@ -190,7 +190,26 @@
     "badgeHot": "رائج",
     "badgeTrending": "ترند",
     "badgeLimited": "محدود",
-    "badgeOffer": "عرض"
+    "badgeOffer": "عرض",
+    "noReviewsYet": "لا توجد تقييمات بعد",
+    "writeReview": "اكتب تقييماً",
+    "reviewModerationHint": "يُرسل تقييمك للمراجعة ويظهر بعد الموافقة.",
+    "reviewAuthorName": "اسمك",
+    "reviewGuestEmail": "بريدك الإلكتروني",
+    "reviewRating": "التقييم",
+    "reviewBody": "تقييمك",
+    "reviewBodyPlaceholder": "شاركنا تجربتك مع هذا المنتج…",
+    "reviewSubmit": "إرسال التقييم",
+    "reviewSubmitting": "جاري الإرسال…",
+    "reviewSubmitted": "شكراً! تم إرسال تقييمك وهو بانتظار الموافقة.",
+    "reviewErrors": {
+      "VALIDATION": "يرجى التحقق من التقييم ونص المراجعة.",
+      "ALREADY_REVIEWED": "لقد قيّمت هذا المنتج مسبقاً.",
+      "NAME_REQUIRED": "يرجى إدخال اسمك.",
+      "EMAIL_REQUIRED": "يرجى إدخال بريدك الإلكتروني.",
+      "NOT_CONFIGURED": "التقييمات غير متاحة حالياً.",
+      "INTERNAL": "تعذر إرسال التقييم. يرجى المحاولة مرة أخرى."
+    }
   },
   "auth": {
     "welcomeBack": "مرحباً بعودتك",
@@ -337,6 +356,15 @@
     "couponHint": "أدخل كوداً صالحاً للحصول على الخصم.",
     "couponApplied": "تم تطبيق الكود {code} على طلبك.",
     "applyCoupon": "تطبيق",
+    "paymentMethod": "طريقة الدفع المفضلة",
+    "paymentMethodPlaceholder": "اختر كيف تنوي الدفع (اختياري)",
+    "paymentMethodHint": "يساعدنا على إرسال تعليمات الدفع الخارجية المناسبة بعد الموافقة.",
+    "paymentMethods": {
+      "bank_transfer": "تحويل بنكي",
+      "whatsapp": "واتساب",
+      "cash": "نقداً",
+      "other": "أخرى"
+    },
     "yourOrder": "طلبك",
     "instantDelivery": "تسليم فوري",
     "subtotal": "المجموع الفرعي",
@@ -379,6 +407,7 @@
       "processing": "قيد المعالجة",
       "delivered": "تم التسليم",
       "completed": "مكتمل",
+      "refunded": "مسترد",
       "cancelled": "ملغى",
       "needs_customer_response": "بحاجة لردك",
       "on_hold": "معلّق"

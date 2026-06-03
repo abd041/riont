@@ -8,6 +8,7 @@ export const submitOrderSchema = z.object({
   guestEmail: z.string().email().optional().or(z.literal("")),
   customerNote: z.string().max(2000).optional(),
   couponCode: z.string().max(50).optional(),
+  paymentMethod: z.string().max(80).optional(),
   termsAccepted: z.literal(true),
   fieldValues: z.record(z.string(), z.string().max(5000)).default({}),
 });
@@ -27,6 +28,7 @@ export const submitCartOrderSchema = z.object({
   guestEmail: z.string().email().optional().or(z.literal("")),
   customerNote: z.string().max(2000).optional(),
   couponCode: z.string().max(50).optional(),
+  paymentMethod: z.string().max(80).optional(),
   termsAccepted: z.literal(true),
 });
 

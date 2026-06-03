@@ -11,6 +11,7 @@ const variantMap: Partial<
   processing: "accent",
   delivered: "success",
   completed: "success",
+  refunded: "default",
   cancelled: "default",
   needs_customer_response: "warning",
   on_hold: "warning",

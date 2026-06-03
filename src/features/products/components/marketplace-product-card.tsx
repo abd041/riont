@@ -49,8 +49,8 @@ export function MarketplaceProductCard({
   const { toggleItem, hasItem } = useWishlist();
 
   const discount = discountPercent(priceCents, compareAtCents);
-  const rating = productRating({ slug, averageRating });
-  const reviews = productReviewCount({ slug, reviewCount });
+  const rating = productRating({ averageRating, reviewCount });
+  const reviews = productReviewCount({ reviewCount });
   const subtitle = productCategoryLabel(
     { slug, name, category, priceCents },
     t("lifetimeLicense"),
@@ -131,11 +131,13 @@ export function MarketplaceProductCard({
         <Link href={`/products/${slug}`} className="mp-card__info">
           <h3 className="mp-card__name">{name}</h3>
           <p className="mp-card__cat">{subtitle}</p>
-          <div className="mp-card__rating-row">
-            <Star className="mp-card__star" strokeWidth={1.5} />
-            <span>{rating}</span>
-            <span className="mp-card__reviews">{t("reviewsShort", { count: reviews })}</span>
-          </div>
+          {rating != null ? (
+            <div className="mp-card__rating-row">
+              <Star className="mp-card__star" strokeWidth={1.5} />
+              <span>{rating.toFixed(1)}</span>
+              <span className="mp-card__reviews">{t("reviewsShort", { count: reviews })}</span>
+            </div>
+          ) : null}
         </Link>
 
         <div className="mp-card__actions">

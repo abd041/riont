@@ -4,6 +4,7 @@ import { UserRound } from "lucide-react";
 import { useTranslations } from "next-intl";
 import type { CheckoutField } from "@/types/order";
 import { CheckoutMotionItem } from "./checkout-motion";
+import { CheckoutPaymentMethodField } from "./checkout-payment-method-field";
 
 type CheckoutDetailsCardProps = {
   fields: CheckoutField[];
@@ -64,6 +65,8 @@ export function CheckoutDetailsCard({
             pending={pending}
           />
         ))}
+
+        <CheckoutPaymentMethodField pending={pending} />
 
         <div className="nex-co-field">
           <label htmlFor="customerNote" className="nex-co-label">

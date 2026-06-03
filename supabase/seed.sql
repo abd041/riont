@@ -3,17 +3,20 @@
 INSERT INTO categories (id, sort_order, icon_url) VALUES
   ('a0000000-0000-4000-8000-000000000001', 1, 'catalog/categories/instagram.jpg'),
   ('a0000000-0000-4000-8000-000000000002', 2, 'catalog/categories/gaming.jpg'),
-  ('a0000000-0000-4000-8000-000000000003', 3, 'catalog/categories/software.jpg'),
-  ('a0000000-0000-4000-8000-000000000004', 4, 'catalog/categories/subscriptions.jpg'),
-  ('a0000000-0000-4000-8000-000000000005', 5, 'catalog/categories/gift-cards.jpg'),
-  ('a0000000-0000-4000-8000-000000000006', 6, 'catalog/categories/python.jpg')
+  ('a0000000-0000-4000-8000-000000000007', 3, 'catalog/categories/gaming.jpg'),
+  ('a0000000-0000-4000-8000-000000000003', 4, 'catalog/categories/software.jpg'),
+  ('a0000000-0000-4000-8000-000000000004', 5, 'catalog/categories/subscriptions.jpg'),
+  ('a0000000-0000-4000-8000-000000000005', 6, 'catalog/categories/gift-cards.jpg'),
+  ('a0000000-0000-4000-8000-000000000006', 7, 'catalog/categories/python.jpg')
 ON CONFLICT (id) DO UPDATE SET icon_url = EXCLUDED.icon_url, sort_order = EXCLUDED.sort_order;
 
 INSERT INTO category_translations (category_id, locale, name, slug, description, meta_title, meta_description) VALUES
   ('a0000000-0000-4000-8000-000000000001', 'en', 'Instagram Services', 'instagram', 'Growth and verification services for Instagram.', 'Instagram Services | riyont', 'Premium Instagram digital services with fast delivery.'),
   ('a0000000-0000-4000-8000-000000000001', 'ar', 'خدمات إنستغرام', 'instagram', 'خدمات النمو والتوثيق لإنستغرام.', 'خدمات إنستغرام | riyont', 'خدمات إنستغرام رقمية مميزة مع تسليم سريع.'),
-  ('a0000000-0000-4000-8000-000000000002', 'en', 'Steam Accounts', 'steam', 'Private and shared Steam accounts with instant delivery.', 'Steam Accounts | riyont', 'Premium Steam accounts — private and shared options.'),
-  ('a0000000-0000-4000-8000-000000000002', 'ar', 'حسابات Steam', 'steam', 'حسابات Steam خاصة ومشتركة مع تسليم فوري.', 'حسابات Steam | riyont', 'حسابات Steam مميزة — خيارات خاصة ومشتركة.'),
+  ('a0000000-0000-4000-8000-000000000002', 'en', 'Steam Private', 'steam-private', 'Private Steam accounts with full access and instant delivery.', 'Steam Private Accounts | riyont', 'Premium private Steam accounts with instant credentials.'),
+  ('a0000000-0000-4000-8000-000000000002', 'ar', 'Steam خاص', 'steam-private', 'حسابات Steam خاصة مع وصول كامل وتسليم فوري.', 'حسابات Steam خاصة | riyont', 'حسابات Steam خاصة مميزة مع بيانات فورية.'),
+  ('a0000000-0000-4000-8000-000000000007', 'en', 'Steam Shared', 'steam-shared', 'Shared Steam accounts at lower prices.', 'Steam Shared Accounts | riyont', 'Affordable shared Steam accounts with instant delivery.'),
+  ('a0000000-0000-4000-8000-000000000007', 'ar', 'Steam مشترك', 'steam-shared', 'حسابات Steam مشتركة بأسعار أقل.', 'حسابات Steam مشتركة | riyont', 'حسابات Steam مشتركة بأسعار مناسبة وتسليم فوري.'),
   ('a0000000-0000-4000-8000-000000000003', 'en', 'Python Tools', 'python-tools', 'Scripts, bots, and automation tools.', 'Python Tools | riyont', 'Python tools and automation utilities.'),
   ('a0000000-0000-4000-8000-000000000003', 'ar', 'أدوات Python', 'python-tools', 'سكربتات وبوتات وأدوات أتمتة.', 'أدوات Python | riyont', 'أدوات Python وأتمتة.'),
   ('a0000000-0000-4000-8000-000000000004', 'en', 'Instagram Verification', 'instagram-verification', 'Official-style verification services.', 'Instagram Verification | riyont', 'Instagram verification services.'),
