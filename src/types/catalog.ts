@@ -36,6 +36,8 @@ export interface CatalogProduct {
   imageUrl?: string | null;
   deliveryMode?: "auto" | "manual";
   inStock?: boolean;
+  isFeatured?: boolean;
+  salesCount?: number;
   averageRating?: number;
   reviewCount?: number;
 }

@@ -231,6 +231,8 @@ function mapRow(row: ProductQueryRow): CatalogProduct | null {
       primaryImageUrl(row, translation) ??
       productThumbnailUrl(translation.slug, categoryTranslation?.slug),
     deliveryMode: row.delivery_mode,
+    isFeatured: row.is_featured,
+    salesCount: row.sales_count,
   };
 }
 
@@ -379,6 +381,68 @@ export async function listProducts(
 
 export async function listFeaturedProducts(locale: string): Promise<CatalogProduct[]> {
   return listProducts(locale, { featured: true, limit: 8 });
+}
+
+const HOMEPAGE_MIN_PRODUCTS = 10;
+const CATEGORY_MIN_PRODUCTS = 4;
+const HOMEPAGE_PRODUCT_LIMIT = 48;
+
+function mergeCatalogWithDemo(
+  live: CatalogProduct[],
+  options?: { categorySlug?: string; limit?: number },
+): CatalogProduct[] {
+  if (!allowDemoFallback) {
+    return options?.limit ? live.slice(0, options.limit) : live;
+  }
+
+  const minProducts = options?.categorySlug ? CATEGORY_MIN_PRODUCTS : HOMEPAGE_MIN_PRODUCTS;
+  if (live.length >= minProducts) {
+    return options?.limit ? live.slice(0, options.limit) : live;
+  }
+
+  const demo = getDemoProducts({
+    categorySlug: options?.categorySlug,
+    limit: options?.limit ?? HOMEPAGE_PRODUCT_LIMIT,
+  });
+
+  const seen = new Set(live.map((product) => product.slug));
+  const merged = [...live];
+
+  for (const product of demo) {
+    if (seen.has(product.slug)) continue;
+    merged.push({
+      ...product,
+      id: product.id ?? `demo-${product.slug}`,
+      inStock: true,
+    });
+    seen.add(product.slug);
+  }
+
+  const cap = options?.limit ?? HOMEPAGE_PRODUCT_LIMIT;
+  return merged.slice(0, cap);
+}
+
+/** Homepage pool: live catalog plus demo fill when the store is still sparse. */
+export async function listHomepageProducts(locale: string): Promise<CatalogProduct[]> {
+  const live = await listProducts(locale, {
+    limit: HOMEPAGE_PRODUCT_LIMIT,
+    sortBy: "sales_count",
+  });
+
+  return mergeCatalogWithDemo(live);
+}
+
+/** Browse / category pages — fills sparse categories from demo catalog in dev. */
+export async function listBrowseProducts(
+  locale: string,
+  options?: {
+    categorySlug?: string;
+    limit?: number;
+    sortBy?: "sort_order" | "sales_count";
+  },
+): Promise<CatalogProduct[]> {
+  const live = await listProducts(locale, options);
+  return mergeCatalogWithDemo(live, options);
 }
 
 export async function listBestSellingProducts(

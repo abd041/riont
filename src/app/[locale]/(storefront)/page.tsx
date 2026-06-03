@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { getTranslations, getLocale } from "next-intl/server";
 import { HeroSection, HomeMarketplace } from "@/features/homepage";
 import { MarketplacePageShell } from "@/features/homepage/components/marketplace/marketplace-page-shell";
-import { listProducts } from "@/server/services/product.service";
+import { listHomepageProducts } from "@/server/services/product.service";
 import { listCategories } from "@/server/services/category.service";
 import { getHomePageContent } from "@/server/services/content-block.service";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -29,7 +29,7 @@ export async function generateMetadata({
 export default async function HomePage() {
   const locale = await getLocale();
   const [products, categories, homeContent] = await Promise.all([
-    listProducts(locale, { limit: 32 }),
+    listHomepageProducts(locale),
     listCategories(locale),
     getHomePageContent(locale),
   ]);

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ProductsBrowseShell } from "@/features/products/components/products-browse-shell";
-import { listProducts, searchProducts } from "@/server/services/product.service";
+import { listBrowseProducts, searchProducts } from "@/server/services/product.service";
 import { getCategoryBySlug, listCategories } from "@/server/services/category.service";
 import type { CatalogProduct } from "@/types/catalog";
 import { buildPageMetadata } from "@/lib/seo/metadata";
@@ -69,7 +69,7 @@ async function ProductsBrowseContent({
       ? await searchProducts(locale, trimmedQuery, {
           categorySlug: category?.slug ?? categorySlug,
         })
-      : await listProducts(locale, {
+      : await listBrowseProducts(locale, {
           categorySlug: category?.slug ?? categorySlug,
         });
   } catch {

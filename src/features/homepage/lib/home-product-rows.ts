@@ -3,16 +3,23 @@ import type { CatalogProduct } from "@/types/catalog";
 const SERVICE_SLUGS = new Set([
   "subscriptions",
   "instagram",
+  "instagram-verification",
   "gift-cards",
   "software",
+  "python-tools",
+  "steam-private",
+  "steam-shared",
+  "gaming",
 ]);
+
+const MOST_REQUESTED_LIMIT = 8;
 
 function discountRatio(p: CatalogProduct): number {
   if (!p.compareAtCents || p.compareAtCents <= p.priceCents) return 0;
   return (p.compareAtCents - p.priceCents) / p.compareAtCents;
 }
 
-/** Preserve order, drop duplicate slugs (best sellers appear first in merged rows). */
+/** Preserve order, drop duplicate slugs. */
 function uniqueBySlug(products: CatalogProduct[], limit?: number): CatalogProduct[] {
   const seen = new Set<string>();
   const result: CatalogProduct[] = [];
@@ -27,27 +34,42 @@ function uniqueBySlug(products: CatalogProduct[], limit?: number): CatalogProduc
   return result;
 }
 
+function sortBySales(products: CatalogProduct[]): CatalogProduct[] {
+  return [...products].sort(
+    (a, b) => (b.salesCount ?? 0) - (a.salesCount ?? 0),
+  );
+}
+
 /** Build compact homepage rows from one product pool — no duplicate architecture. */
 export function buildHomeProductRows(products: CatalogProduct[]) {
   const pool = products.length > 0 ? products : [];
+  const bySales = sortBySales(pool);
 
   const withDeals = pool
     .filter((p) => discountRatio(p) > 0)
     .sort((a, b) => discountRatio(b) - discountRatio(a));
 
+  const featured = pool.filter((p) => p.isFeatured);
   const bestSellers = pool.filter((p) => p.badge === "bestSeller");
   const services = pool.filter((p) =>
     p.categorySlug ? SERVICE_SLUGS.has(p.categorySlug) : false,
   );
 
+  const mostRequestedPool = uniqueBySlug([
+    ...featured,
+    ...bestSellers,
+    ...bySales,
+    ...pool,
+  ]);
+
   return {
-    mostRequested: uniqueBySlug([...bestSellers, ...pool], 8),
+    mostRequested: mostRequestedPool.slice(0, MOST_REQUESTED_LIMIT),
     trending: uniqueBySlug(
       [...pool].sort((a, b) => discountRatio(b) - discountRatio(a)),
       6,
     ),
     recentlyAdded: uniqueBySlug([...pool].slice(-6).reverse(), 6),
-    bestSellers: uniqueBySlug([...bestSellers, ...pool], 6),
+    bestSellers: uniqueBySlug([...bestSellers, ...bySales], 6),
     recommended: uniqueBySlug(
       pool.filter((_, i) => i % 2 === 0),
       6,

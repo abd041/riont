@@ -31,11 +31,15 @@ const THUMB_BY_SLUG: Record<string, string> = {
 const THUMB_BY_CATEGORY: Record<string, string> = {
   gaming: "/catalog/thumbs/gaming.svg",
   games: "/catalog/thumbs/gaming.svg",
+  "steam-private": "/catalog/thumbs/gaming.svg",
+  "steam-shared": "/catalog/thumbs/gaming.svg",
   subscriptions: "/catalog/thumbs/subscriptions.svg",
   software: "/catalog/thumbs/software.svg",
   "gift-cards": "/catalog/thumbs/gift-cards.svg",
   gifts: "/catalog/thumbs/gift-cards.svg",
   instagram: "/catalog/thumbs/social.svg",
+  "instagram-verification": "/catalog/thumbs/social.svg",
+  "python-tools": "/catalog/thumbs/tools.svg",
   accounts: "/catalog/thumbs/social.svg",
 };
 
