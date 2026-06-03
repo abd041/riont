@@ -15,6 +15,7 @@
     "language": "Language",
     "account": "Account",
     "signOut": "Sign out",
+    "signingOut": "Signing out…",
     "comingSoon": "Coming soon",
     "retry": "Try again",
     "notifications": "Notifications"

@@ -44,6 +44,17 @@ export function UserMenu() {
       </div>
       <Button
         variant="ghost"
+        size="sm"
+        className="hidden sm:inline-flex h-9 gap-1.5 text-[var(--text-muted)] hover:text-white"
+        onClick={() => void signOut()}
+        disabled={signingOut}
+        aria-label={t("signOut")}
+      >
+        <LogOut className="h-4 w-4" />
+        {signingOut ? t("signingOut") : t("signOut")}
+      </Button>
+      <Button
+        variant="ghost"
         size="icon"
         className="sm:hidden"
         onClick={() => void signOut()}

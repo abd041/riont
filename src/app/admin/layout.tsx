@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import Link from "next/link";
 import { AdminNav } from "@/features/admin/components/admin-nav";
+import { AdminSignOutButton } from "@/features/admin/components/admin-sign-out-button";
 import { BrandLogo } from "@/components/shared/brand-logo";
 import "@/styles/globals.css";
 
@@ -45,6 +46,7 @@ export default async function AdminLayout({
                 <Link href="/en" className="admin-header__store-link">
                   Storefront →
                 </Link>
+                <AdminSignOutButton />
               </div>
             </div>
           </header>

@@ -19,9 +19,11 @@ import {
   Headphones,
   Moon,
   Sun,
+  LogOut,
 } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { isNavActive, type NavItemConfig } from "./sidebar-nav";
+import { useStorefrontAuth } from "@/features/auth/components/storefront-auth-provider";
 
 const primaryNav = [
   { href: "/", icon: Home, key: "home" as const, exact: true },
@@ -104,6 +106,7 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
   const tPromo = useTranslations("promo");
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const { user, signingOut, signOut } = useStorefrontAuth();
 
   return (
     <aside className="nex-sidebar nex-sidebar--storefront flex shrink-0 flex-col">
@@ -138,6 +141,24 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
               label={t(item.key)}
             />
           ))}
+          {user ? (
+            <button
+              type="button"
+              className="nex-nav-link nex-nav-link--signout"
+              disabled={signingOut}
+              onClick={() => {
+                onNavigate?.();
+                void signOut();
+              }}
+            >
+              <span className="nex-nav-link__icon" aria-hidden>
+                <LogOut strokeWidth={iconStroke} />
+              </span>
+              <span className="nex-nav-link__text">
+                {signingOut ? tCommon("signingOut") : tCommon("signOut")}
+              </span>
+            </button>
+          ) : null}
         </div>
       </nav>
 
