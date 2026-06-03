@@ -10,6 +10,11 @@ import {
 import { AdminFilterPills } from "@/features/admin/components/admin-filter-pills";
 import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
 import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
+import {
+  AdminExportOrdersLink,
+  AdminPageActions,
+  AdminSearchForm,
+} from "@/features/admin/components/admin-page-actions";
 
 const STATUS_LABELS: Record<OrderStatusType, string> = {
   [OrderStatus.PENDING_REVIEW]: "Pending review",
@@ -35,11 +40,11 @@ const FILTERS: Array<{ label: string; value?: OrderStatusType }> = [
 export default async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string }>;
+  searchParams: Promise<{ status?: string; q?: string }>;
 }) {
-  const { status: statusParam } = await searchParams;
+  const { status: statusParam, q } = await searchParams;
   const statusFilter = FILTERS.find((f) => f.value === statusParam)?.value;
-  const orders = await listAdminOrders(statusFilter);
+  const orders = await listAdminOrders(statusFilter, { search: q, limit: 100 });
 
   return (
     <AdminPageShell>
@@ -47,6 +52,16 @@ export default async function AdminOrdersPage({
         title="Orders"
         description="Review, approve, fulfill, and complete customer orders."
       />
+
+      <AdminPageActions>
+        <AdminSearchForm
+          basePath="/admin/orders"
+          placeholder="Search order number…"
+          defaultValue={q}
+          hiddenParams={{ status: statusFilter }}
+        />
+        <AdminExportOrdersLink status={statusFilter} />
+      </AdminPageActions>
 
       <AdminFilterPills
         filters={FILTERS}

@@ -76,6 +76,16 @@ export async function fulfillAutoOrderItem(
     m.notifyDeliveryReady(orderItemId).catch(() => undefined),
   );
 
+  void import("@/server/services/audit.service").then(({ writeAuditLog }) =>
+    writeAuditLog({
+      actorUserId: adminUserId,
+      action: "order.auto_delivered",
+      entityType: "order_item",
+      entityId: orderItemId,
+      metadata: item ? { orderId: (item as { order_id: string }).order_id } : undefined,
+    }),
+  );
+
   return { deliveryText };
 }
 
@@ -123,6 +133,16 @@ export async function manualDeliverOrderItem(
 
   void import("@/server/services/notification.service").then((m) =>
     m.notifyDeliveryReady(orderItemId).catch(() => undefined),
+  );
+
+  void import("@/server/services/audit.service").then(({ writeAuditLog }) =>
+    writeAuditLog({
+      actorUserId: adminUserId,
+      action: "order.manual_delivered",
+      entityType: "order_item",
+      entityId: orderItemId,
+      metadata: item ? { orderId: (item as { order_id: string }).order_id } : undefined,
+    }),
   );
 }
 

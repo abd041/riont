@@ -4,6 +4,7 @@ import { ServiceError } from "@/lib/domain/errors";
 import { decryptField } from "@/lib/encryption/field";
 import { resolveLocalizedLabel, type LocalizedLabel } from "@/lib/i18n/json-label";
 import { getCustomerDeliveryForItem } from "@/server/services/delivery-content.service";
+import { writeAuditLog } from "@/server/services/audit.service";
 import type { AdminOrderDetail, AdminOrderListItem } from "@/types/admin";
 import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
 
@@ -104,6 +105,14 @@ export async function transitionOrderStatus(params: {
     m.notifyOrderStatusChanged(params.orderId, params.toStatus).catch(() => undefined),
   );
 
+  void writeAuditLog({
+    actorUserId: params.adminUserId,
+    action: "order.status_changed",
+    entityType: "order",
+    entityId: params.orderId,
+    metadata: { fromStatus, toStatus: params.toStatus, note: params.note ?? null },
+  });
+
   if (params.toStatus === OrderStatus.PROCESSING) {
     void import("@/server/services/support.service").then((m) =>
       m.ensureFulfillmentTicketsForOrder(params.orderId).catch(() => undefined),
@@ -134,8 +143,10 @@ export async function transitionOrderStatus(params: {
 
 export async function listAdminOrders(
   status?: OrderStatusType,
-  limit = 50,
+  options?: { limit?: number; search?: string },
 ): Promise<AdminOrderListItem[]> {
+  const limit = options?.limit ?? 50;
+  const search = options?.search?.trim();
   const admin = createAdminClient();
   let query = admin
     .from("orders")
@@ -158,6 +169,10 @@ export async function listAdminOrders(
 
   if (status) {
     query = query.eq("status", status);
+  }
+
+  if (search) {
+    query = query.ilike("order_number", `%${search}%`);
   }
 
   const { data, error } = await query;
@@ -350,4 +365,144 @@ export async function getAdminOrderDetail(
     fields,
     timeline,
   };
+}
+
+export type AdminOrderExportRow = {
+  orderNumber: string;
+  status: string;
+  customer: string;
+  guestEmail: string;
+  product: string;
+  subtotal: string;
+  discount: string;
+  total: string;
+  currency: string;
+  coupon: string;
+  submittedAt: string;
+  paymentReceivedAt: string;
+};
+
+export async function listOrdersForExport(
+  status?: OrderStatusType,
+  limit = 500,
+): Promise<AdminOrderExportRow[]> {
+  const admin = createAdminClient();
+  let query = admin
+    .from("orders")
+    .select(
+      `
+      order_number,
+      status,
+      subtotal_cents,
+      discount_cents,
+      total_cents,
+      currency,
+      coupon_code_snapshot,
+      submitted_at,
+      payment_received_at,
+      guest_email,
+      user_id,
+      profiles (display_name),
+      order_items (product_name_snapshot)
+    `,
+    )
+    .order("submitted_at", { ascending: false })
+    .limit(limit);
+
+  if (status) {
+    query = query.eq("status", status);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+
+  return (data ?? []).map((raw) => {
+    const row = raw as {
+      order_number: string;
+      status: string;
+      subtotal_cents: number;
+      discount_cents: number;
+      total_cents: number;
+      currency: string;
+      coupon_code_snapshot: string | null;
+      submitted_at: string;
+      payment_received_at: string | null;
+      guest_email: string | null;
+      user_id: string | null;
+      profiles:
+        | { display_name: string | null }
+        | { display_name: string | null }[]
+        | null;
+      order_items: Array<{ product_name_snapshot: Record<string, string> }>;
+    };
+
+    const profile = Array.isArray(row.profiles) ? row.profiles[0] : row.profiles;
+    const first = row.order_items?.[0]?.product_name_snapshot;
+    const productName = first?.en ?? first?.ar ?? "Product";
+    const fmt = (cents: number) => (cents / 100).toFixed(2);
+
+    return {
+      orderNumber: row.order_number,
+      status: row.status,
+      customer: profile?.display_name ?? row.user_id ?? "Guest",
+      guestEmail: row.guest_email ?? "",
+      product:
+        row.order_items.length > 1
+          ? `${productName} +${row.order_items.length - 1}`
+          : productName,
+      subtotal: fmt(row.subtotal_cents),
+      discount: fmt(row.discount_cents),
+      total: fmt(row.total_cents),
+      currency: row.currency,
+      coupon: row.coupon_code_snapshot ?? "",
+      submittedAt: row.submitted_at,
+      paymentReceivedAt: row.payment_received_at ?? "",
+    };
+  });
+}
+
+export function ordersToCsv(rows: AdminOrderExportRow[]): string {
+  const headers = [
+    "order_number",
+    "status",
+    "customer",
+    "guest_email",
+    "product",
+    "subtotal",
+    "discount",
+    "total",
+    "currency",
+    "coupon",
+    "submitted_at",
+    "payment_received_at",
+  ];
+
+  const escape = (value: string) => {
+    const safe = value.replace(/"/g, '""');
+    return `"${safe}"`;
+  };
+
+  const lines = [
+    headers.join(","),
+    ...rows.map((row) =>
+      [
+        row.orderNumber,
+        row.status,
+        row.customer,
+        row.guestEmail,
+        row.product,
+        row.subtotal,
+        row.discount,
+        row.total,
+        row.currency,
+        row.coupon,
+        row.submittedAt,
+        row.paymentReceivedAt,
+      ]
+        .map(escape)
+        .join(","),
+    ),
+  ];
+
+  return lines.join("\r\n");
 }

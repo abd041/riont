@@ -18,6 +18,7 @@ import {
   manualDeliverSchema,
   transitionOrderSchema,
 } from "@/validations/admin.schema";
+import { writeAuditLog } from "@/server/services/audit.service";
 import { createAdminClient } from "@/lib/supabase/admin";
 
 export type AdminActionResult =
@@ -165,8 +166,15 @@ export async function addInventoryAction(
   }
 
   try {
-    await requireAdmin();
+    const { user } = await requireAdmin();
     const count = await addInventoryLines(parsed.data.productId, lines);
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "inventory.imported",
+      entityType: "product",
+      entityId: parsed.data.productId,
+      metadata: { count },
+    });
     revalidatePath("/admin/orders");
     return {
       success: true,
@@ -192,7 +200,7 @@ export async function updateAdminNoteAction(
   }
 
   try {
-    await requireAdmin();
+    const { user } = await requireAdmin();
     const admin = createAdminClient();
     const { error } = await admin
       .from("orders")
@@ -203,6 +211,13 @@ export async function updateAdminNoteAction(
       .eq("id", parsed.data.orderId);
 
     if (error) throw error;
+
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "order.note_updated",
+      entityType: "order",
+      entityId: parsed.data.orderId,
+    });
 
     revalidatePath(`/admin/orders/${parsed.data.orderId}`);
     return { success: true };

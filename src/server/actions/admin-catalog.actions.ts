@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { requireAdmin } from "@/lib/auth/require-admin";
+import { writeAuditLog } from "@/server/services/audit.service";
 import {
   archiveProduct,
   saveCategory,
@@ -62,13 +63,20 @@ export async function saveProductAction(
   }
 
   try {
-    await requireAdmin();
+    const { user } = await requireAdmin();
     const { productId } = await saveProduct(parsed.data);
 
     const image = formData.get("image");
     if (image instanceof File && image.size > 0) {
       await uploadProductImage(productId, image);
     }
+
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: parsed.data.productId ? "product.updated" : "product.created",
+      entityType: "product",
+      entityId: productId,
+    });
 
     revalidatePath("/admin/products");
     revalidatePath(`/admin/products/${productId}`);
@@ -91,8 +99,14 @@ export async function archiveProductAction(
   }
 
   try {
-    await requireAdmin();
+    const { user } = await requireAdmin();
     await archiveProduct(productId);
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "product.archived",
+      entityType: "product",
+      entityId: productId,
+    });
     revalidatePath("/admin/products");
     return { success: true, message: "Product archived" };
   } catch (error) {
@@ -206,8 +220,14 @@ export async function saveSiteSettingsAction(
   }
 
   try {
-    await requireAdmin();
+    const { user } = await requireAdmin();
     await updateSiteSettings(parsed.data);
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "settings.updated",
+      entityType: "site_settings",
+      entityId: "default",
+    });
     revalidatePath("/admin/settings");
     return { success: true, message: "Settings saved" };
   } catch (error) {
@@ -236,7 +256,7 @@ export async function saveProductVariantsAction(
   }
 
   try {
-    await requireAdmin();
+    const { user } = await requireAdmin();
     const variants = parseJsonArray<{
       nameEn: string;
       nameAr: string;
@@ -256,6 +276,13 @@ export async function saveProductVariantsAction(
         sortOrder: variant.sortOrder ?? index,
       })),
     );
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "product.options_saved",
+      entityType: "product",
+      entityId: productId,
+      metadata: { count: variants.length },
+    });
     revalidatePath(`/admin/products/${productId}`);
     revalidatePath("/en/products");
     revalidatePath("/ar/products");
@@ -276,7 +303,7 @@ export async function saveProductFieldsAction(
   }
 
   try {
-    await requireAdmin();
+    const { user } = await requireAdmin();
     const fields = parseJsonArray<{
       fieldKey: string;
       fieldType: string;
@@ -298,6 +325,13 @@ export async function saveProductFieldsAction(
         sortOrder: field.sortOrder ?? index,
       })),
     );
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "product.fields_saved",
+      entityType: "product",
+      entityId: productId,
+      metadata: { count: fields.length },
+    });
     revalidatePath(`/admin/products/${productId}`);
     return { success: true, message: "Fields saved" };
   } catch (error) {
@@ -316,9 +350,16 @@ export async function saveProductRelatedAction(
   }
 
   try {
-    await requireAdmin();
+    const { user } = await requireAdmin();
     const relatedIds = parseJsonArray<string>(formData.get("relatedIdsJson"));
     await saveAdminProductRelated(productId, relatedIds);
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "product.related_saved",
+      entityType: "product",
+      entityId: productId,
+      metadata: { count: relatedIds.length },
+    });
     revalidatePath(`/admin/products/${productId}`);
     revalidatePath("/en/products");
     revalidatePath("/ar/products");
