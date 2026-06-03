@@ -1,4 +1,5 @@
 import type { OrderStatus } from "@/lib/domain/enums";
+import type { PaymentStatus } from "@/lib/order/payment-status";
 
 export type AdminOrderListItem = {
   id: string;
@@ -43,6 +44,8 @@ export type AdminOrderDetail = {
   guestEmail: string | null;
   userId: string | null;
   submittedAt: string;
+  paymentReceivedAt: string | null;
+  paymentStatus: PaymentStatus;
   items: AdminOrderItem[];
   fields: AdminOrderFieldValue[];
   timeline: Array<{

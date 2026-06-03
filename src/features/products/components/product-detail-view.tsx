@@ -8,6 +8,7 @@ import { ProductDetailInteractive } from "./product-detail-interactive";
 import { ProductDetailRelated } from "./product-detail-related";
 import { ProductDetailTabs } from "./product-detail-tabs";
 import { listRelatedProducts } from "@/server/services/product.service";
+import { getProductReviewSummary } from "@/server/services/review.service";
 
 function hashSlug(slug: string) {
   let hash = 0;
@@ -15,11 +16,11 @@ function hashSlug(slug: string) {
   return hash;
 }
 
-function reviewCount(slug: string) {
+function fallbackReviewCount(slug: string) {
   return 80 + (hashSlug(slug) % 420);
 }
 
-function ratingValue(slug: string) {
+function fallbackRating(slug: string) {
   const variants = [4.7, 4.8, 4.9];
   return variants[hashSlug(slug) % variants.length];
 }
@@ -36,16 +37,25 @@ export async function ProductDetailView({
   const t = await getTranslations("product");
   const tCatalog = await getTranslations("catalog");
   const productId = product.id ?? slug;
-  const rating = ratingValue(slug);
-  const reviews = reviewCount(slug);
   const categoryLabel = product.category?.trim() || tCatalog("breadcrumbGames");
   const backHref = product.categorySlug
     ? `/products?category=${product.categorySlug}`
     : "/products";
 
-  const relatedProducts = product.id
-    ? await listRelatedProducts(locale, product.id, 4)
-    : [];
+  const [relatedProducts, reviewSummary] = await Promise.all([
+    product.id ? listRelatedProducts(locale, product.id, 4) : Promise.resolve([]),
+    product.id && !product.id.startsWith("demo-")
+      ? getProductReviewSummary(product.id, locale)
+      : Promise.resolve(null),
+  ]);
+
+  const hasReviews = (reviewSummary?.count ?? 0) > 0;
+  const rating = hasReviews
+    ? reviewSummary!.averageRating
+    : fallbackRating(slug);
+  const reviews = hasReviews
+    ? reviewSummary!.count
+    : fallbackReviewCount(slug);
 
   return (
     <StorefrontPageShell variant="wide">
@@ -91,7 +101,12 @@ export async function ProductDetailView({
                 ))}
               </span>
               <span className="nex-pdp-rating-text">
-                {t("reviews", { rating, count: reviews })}
+                {hasReviews
+                  ? t("reviews", { rating: rating.toFixed(1), count: reviews })
+                  : t("reviewsFallback", {
+                      rating: rating.toFixed(1),
+                      count: reviews,
+                    })}
               </span>
             </div>
 
@@ -127,6 +142,8 @@ export async function ProductDetailView({
             description={product.description}
             rating={rating}
             reviewCount={reviews}
+            reviews={reviewSummary?.reviews ?? []}
+            hasDbReviews={hasReviews}
           />
 
           <ProductDetailRelated products={relatedProducts} />

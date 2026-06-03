@@ -11,6 +11,10 @@ export type CheckoutField = {
   isSensitive: boolean;
 };
 
+export type CartCheckoutLine = CheckoutProduct & {
+  quantity: number;
+};
+
 export type CheckoutProduct = {
   id: string;
   slug: string;

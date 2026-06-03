@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { cn } from "@/utils/cn";
 import { Star } from "lucide-react";
+import type { ProductReview } from "@/server/services/review.service";
 
 type TabId = "details" | "description" | "reviews";
 
@@ -12,6 +13,8 @@ type ProductDetailTabsProps = {
   description?: string | null;
   rating: number;
   reviewCount: number;
+  reviews: ProductReview[];
+  hasDbReviews: boolean;
 };
 
 export function ProductDetailTabs({
@@ -19,6 +22,8 @@ export function ProductDetailTabs({
   description,
   rating,
   reviewCount,
+  reviews,
+  hasDbReviews,
 }: ProductDetailTabsProps) {
   const t = useTranslations("product");
   const [active, setActive] = useState<TabId>("details");
@@ -70,10 +75,27 @@ export function ProductDetailTabs({
               <Star className="nex-pdp-tabs__review-star" strokeWidth={0} aria-hidden />
               <span className="nex-pdp-tabs__review-value">{rating.toFixed(1)}</span>
               <span className="nex-pdp-tabs__review-count">
-                {t("reviews", { rating, count: reviewCount })}
+                {t("reviews", { rating: rating.toFixed(1), count: reviewCount })}
               </span>
             </div>
-            <p className="nex-pdp-tabs__text">{t("reviewsPlaceholder")}</p>
+
+            {hasDbReviews && reviews.length > 0 ? (
+              <ul className="nex-pdp-review-list">
+                {reviews.map((review) => (
+                  <li key={review.id} className="nex-pdp-review-item">
+                    <div className="nex-pdp-review-item__head">
+                      <span className="nex-pdp-review-item__author">{review.authorName}</span>
+                      <span className="nex-pdp-review-item__rating" aria-label={`${review.rating} stars`}>
+                        {review.rating}/5
+                      </span>
+                    </div>
+                    <p className="nex-pdp-review-item__body">{review.body}</p>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="nex-pdp-tabs__text">{t("reviewsPlaceholder")}</p>
+            )}
           </div>
         )}
       </div>

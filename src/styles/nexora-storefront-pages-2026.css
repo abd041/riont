@@ -1706,6 +1706,64 @@
   color: rgba(255, 255, 255, 0.45);
 }
 
+.nex-pdp-review-list {
+  margin-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.nex-pdp-review-item {
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.nex-pdp-review-item__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.nex-pdp-review-item__author {
+  font-size: 13px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.nex-pdp-review-item__rating {
+  font-size: 12px;
+  color: #fbbf24;
+}
+
+.nex-pdp-review-item__body {
+  font-size: 13px;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.nex-cart-checkout-lines {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.nex-cart-checkout-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.nex-cart-checkout-product-fields {
+  padding-top: 12px;
+  margin-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
 @media (max-width: 767px) {
   .sf-pdp-wrap .nex-pdp-layout {
     gap: 14px;

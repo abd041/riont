@@ -83,26 +83,29 @@ export function CheckoutDetailsCard({
   );
 }
 
-function CheckoutDynamicField({
+export function CheckoutDynamicField({
   field,
   fieldValues,
   onFieldChange,
   pending,
+  inputId,
 }: {
   field: CheckoutField;
   fieldValues: Record<string, string>;
   onFieldChange: (key: string, value: string) => void;
   pending: boolean;
+  inputId?: string;
 }) {
+  const id = inputId ?? field.fieldKey;
   return (
     <div className="nex-co-field">
-      <label htmlFor={field.fieldKey} className="nex-co-label">
+      <label htmlFor={id} className="nex-co-label">
         {field.label}
         {field.required ? <span className="nex-co-required"> *</span> : null}
       </label>
       {field.fieldType === "textarea" ? (
         <textarea
-          id={field.fieldKey}
+          id={id}
           required={field.required}
           disabled={pending}
           rows={4}
@@ -112,7 +115,7 @@ function CheckoutDynamicField({
         />
       ) : (
         <input
-          id={field.fieldKey}
+          id={id}
           type={
             field.fieldType === "password"
               ? "password"

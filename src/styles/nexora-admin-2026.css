@@ -474,6 +474,30 @@
   color: rgba(255, 255, 255, 0.52);
 }
 
+.admin-payment-badge {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.admin-payment-badge--unpaid {
+  background: rgba(251, 191, 36, 0.15);
+  color: #fbbf24;
+}
+
+.admin-payment-badge--paid {
+  background: rgba(52, 211, 153, 0.15);
+  color: #34d399;
+}
+
+.admin-payment-badge--failed {
+  background: rgba(248, 113, 113, 0.15);
+  color: #f87171;
+}
+
 @media (max-width: 768px) {
   .admin-header__meta {
     justify-self: end;

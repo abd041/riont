@@ -184,3 +184,59 @@ export async function getAdminCustomerDetail(
     orders: orderRows,
   };
 }
+
+export type AdminCustomerExportRow = {
+  email: string;
+  displayName: string;
+  locale: string;
+  orderCount: number;
+  totalSpent: string;
+  createdAt: string;
+};
+
+export async function listCustomersForExport(
+  limit = 2000,
+): Promise<AdminCustomerExportRow[]> {
+  const customers = await listAdminCustomers(limit);
+  return customers.map((c) => ({
+    email: c.email,
+    displayName: c.displayName ?? "",
+    locale: c.locale,
+    orderCount: c.orderCount,
+    totalSpent: (c.totalSpentCents / 100).toFixed(2),
+    createdAt: c.createdAt,
+  }));
+}
+
+export function customersToCsv(rows: AdminCustomerExportRow[]): string {
+  const headers = [
+    "email",
+    "display_name",
+    "locale",
+    "order_count",
+    "total_spent_usd",
+    "created_at",
+  ];
+  const escape = (value: string) => {
+    if (/[",\n\r]/.test(value)) return `"${value.replace(/"/g, '""')}"`;
+    return value;
+  };
+
+  const lines = [
+    headers.join(","),
+    ...rows.map((row) =>
+      [
+        row.email,
+        row.displayName,
+        row.locale,
+        String(row.orderCount),
+        row.totalSpent,
+        row.createdAt,
+      ]
+        .map(escape)
+        .join(","),
+    ),
+  ];
+
+  return lines.join("\r\n");
+}

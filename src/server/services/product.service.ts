@@ -8,7 +8,7 @@ import type {
   ProductMediaItem,
   ProductVariant,
 } from "@/types/catalog";
-import type { CheckoutField, CheckoutProduct } from "@/types/order";
+import type { CartCheckoutLine, CheckoutField, CheckoutProduct } from "@/types/order";
 import { resolveLocalizedLabel, type LocalizedLabel } from "@/lib/i18n/json-label";
 import { isSupabaseConfigured } from "@/lib/env/public";
 import { resolveMediaUrl } from "@/lib/storage/media-url";
@@ -660,23 +660,61 @@ export async function getProductForCheckout(
     throw new ServiceError("VALIDATION", "Invalid product option selected");
   }
 
+  return mapDetailToCheckoutProduct(detail, {
+    fields: mapProductFields((fieldsResult.data ?? []) as ProductFieldRow[], locale),
+    deliveryMode: productResult.data.delivery_mode as "auto" | "manual",
+    selected,
+  });
+}
+
+function mapDetailToCheckoutProduct(
+  detail: NonNullable<Awaited<ReturnType<typeof getProductBySlug>>>,
+  opts: {
+    fields: CheckoutField[];
+    deliveryMode: "auto" | "manual";
+    selected: ReturnType<typeof pickVariant>;
+  },
+): CheckoutProduct {
+  const { fields, deliveryMode, selected } = opts;
   const priceCents = selected?.priceCents ?? detail.priceCents;
   const compareAtCents = selected?.compareAtCents ?? detail.compareAtCents ?? null;
   const variantName = selected?.name ?? null;
+  const variants = detail.variants ?? [];
 
   return {
-    id: detail.id,
+    id: detail.id!,
     slug: detail.slug,
     name: variantName ? `${detail.name} — ${variantName}` : detail.name,
     categoryName: detail.category ?? null,
     shortDescription: detail.shortDescription ?? null,
     priceCents,
     compareAtCents,
-    deliveryMode: productResult.data.delivery_mode,
+    deliveryMode,
     imageUrl: detail.imageUrl ?? null,
-    fields: mapProductFields((fieldsResult.data ?? []) as ProductFieldRow[], locale),
+    fields,
     variantId: selected?.id ?? null,
     variantName,
     variants,
   };
+}
+
+export async function getCartCheckoutLines(
+  locale: string,
+  items: Array<{ slug: string; quantity: number; variantId?: string }>,
+): Promise<CartCheckoutLine[]> {
+  const lines: CartCheckoutLine[] = [];
+
+  for (const item of items) {
+    const product = await getProductForCheckout(
+      locale,
+      item.slug,
+      item.variantId || undefined,
+    );
+    if (!product || product.id.startsWith("demo-")) {
+      throw new ServiceError("NOT_FOUND", `Product not found: ${item.slug}`);
+    }
+    lines.push({ ...product, quantity: item.quantity });
+  }
+
+  return lines;
 }

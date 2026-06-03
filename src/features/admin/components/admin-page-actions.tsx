@@ -4,6 +4,14 @@ export function AdminPageActions({ children }: { children: React.ReactNode }) {
   return <div className="admin-page-actions">{children}</div>;
 }
 
+export function AdminExportCustomersLink() {
+  return (
+    <Link href="/api/admin/customers/export" className="admin-btn admin-btn--outline" download>
+      Export CSV
+    </Link>
+  );
+}
+
 export function AdminExportOrdersLink({
   status,
 }: {

@@ -17,6 +17,7 @@ import { AdminInventoryPanel } from "@/features/admin/components/admin-inventory
 import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
 import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 import { AdminPanel } from "@/features/admin/components/admin-panel";
+import { PAYMENT_STATUS_LABELS } from "@/lib/order/payment-status";
 
 const STATUS_LABELS: Record<OrderStatusType, string> = {
   [OrderStatus.PENDING_REVIEW]: "Pending review",
@@ -121,6 +122,22 @@ export default async function AdminOrderDetailPage({
 
         <aside className="space-y-5">
           <AdminPanel title="Summary">
+            <div className="admin-summary-row">
+              <span className="admin-summary-row__label">Payment</span>
+              <span
+                className={`admin-payment-badge admin-payment-badge--${order.paymentStatus}`}
+              >
+                {PAYMENT_STATUS_LABELS[order.paymentStatus]}
+              </span>
+            </div>
+            {order.paymentReceivedAt && (
+              <div className="admin-summary-row">
+                <span className="admin-summary-row__label">Paid at</span>
+                <span className="text-sm text-[var(--text-muted)]">
+                  {new Date(order.paymentReceivedAt).toLocaleString("en")}
+                </span>
+              </div>
+            )}
             <div className="admin-summary-row">
               <span className="admin-summary-row__label">Subtotal</span>
               <span dir="ltr">${(order.subtotalCents / 100).toFixed(2)}</span>

@@ -13,7 +13,8 @@ import { quoteCoupon } from "@/server/services/coupon.service";
 import { getCustomerDeliveryForItem } from "@/server/services/delivery-content.service";
 import { getPaymentInstructions } from "@/server/services/site-settings.service";
 import { getProductForCheckout } from "@/server/services/product.service";
-import type { SubmitOrderInput } from "@/validations/order.schema";
+import type { CheckoutField } from "@/types/order";
+import type { SubmitCartOrderInput, SubmitOrderInput } from "@/validations/order.schema";
 import type {
   CustomerOrder,
   OrderListItem,
@@ -63,6 +64,47 @@ async function fetchProductNameSnapshot(
     snapshot[row.locale] = row.name;
   }
   return snapshot;
+}
+
+function buildFieldInserts(params: {
+  orderId: string;
+  orderItemId: string;
+  fields: CheckoutField[];
+  fieldValues: Record<string, string>;
+  locale: string;
+}) {
+  return params.fields
+    .map((field) => {
+      const raw = (params.fieldValues[field.fieldKey] ?? "").trim();
+      if (!raw) return null;
+
+      const labelSnapshot: LocalizedLabel = { [params.locale]: field.label };
+
+      if (field.isSensitive) {
+        return {
+          order_id: params.orderId,
+          order_item_id: params.orderItemId,
+          product_field_id: field.id.startsWith("demo-") ? null : field.id,
+          field_key: field.fieldKey,
+          field_label_snapshot: labelSnapshot,
+          value_encrypted: encryptField(raw),
+          value_plain: null,
+          is_sensitive: true,
+        };
+      }
+
+      return {
+        order_id: params.orderId,
+        order_item_id: params.orderItemId,
+        product_field_id: field.id.startsWith("demo-") ? null : field.id,
+        field_key: field.fieldKey,
+        field_label_snapshot: labelSnapshot,
+        value_encrypted: null,
+        value_plain: raw,
+        is_sensitive: false,
+      };
+    })
+    .filter((row): row is NonNullable<typeof row> => row !== null);
 }
 
 async function assertAutoStock(
@@ -179,38 +221,13 @@ export async function submitOrder(
     throw new ServiceError("INTERNAL", "Failed to create order item");
   }
 
-  const fieldInserts = product.fields
-    .map((field) => {
-      const raw = (input.fieldValues[field.fieldKey] ?? "").trim();
-      if (!raw) return null;
-
-      const labelSnapshot: LocalizedLabel = { [input.locale]: field.label };
-
-      if (field.isSensitive) {
-        return {
-          order_id: order.id,
-          order_item_id: orderItem.id,
-          product_field_id: field.id.startsWith("demo-") ? null : field.id,
-          field_key: field.fieldKey,
-          field_label_snapshot: labelSnapshot,
-          value_encrypted: encryptField(raw),
-          value_plain: null,
-          is_sensitive: true,
-        };
-      }
-
-      return {
-        order_id: order.id,
-        order_item_id: orderItem.id,
-        product_field_id: field.id.startsWith("demo-") ? null : field.id,
-        field_key: field.fieldKey,
-        field_label_snapshot: labelSnapshot,
-        value_encrypted: null,
-        value_plain: raw,
-        is_sensitive: false,
-      };
-    })
-    .filter((row): row is NonNullable<typeof row> => row !== null);
+  const fieldInserts = buildFieldInserts({
+    orderId: order.id,
+    orderItemId: orderItem.id,
+    fields: product.fields,
+    fieldValues: input.fieldValues,
+    locale: input.locale,
+  });
 
   if (fieldInserts.length > 0) {
     const { error: fieldsError } = await admin
@@ -227,6 +244,178 @@ export async function submitOrder(
     from_status: null,
     to_status: OrderStatus.PENDING_REVIEW,
     note: "Order submitted",
+  });
+
+  let guestToken: string | undefined;
+  if (!user) {
+    guestToken = generateGuestAccessToken();
+    const expiresAt = new Date();
+    expiresAt.setDate(expiresAt.getDate() + 90);
+
+    await admin.from("guest_order_access").insert({
+      order_id: order.id,
+      token_hash: hashGuestToken(guestToken),
+      expires_at: expiresAt.toISOString(),
+    });
+  }
+
+  void import("@/server/services/notification.service").then((m) =>
+    m.notifyOrderSubmitted(order.id).catch(() => undefined),
+  );
+
+  return {
+    orderNumber,
+    orderId: order.id,
+    guestToken,
+  };
+}
+
+export async function submitCartOrder(
+  input: SubmitCartOrderInput,
+): Promise<OrderSubmitSuccess> {
+  const user = await getSession();
+  const guestEmail = input.guestEmail?.trim() || undefined;
+  if (!user && !guestEmail) {
+    throw new ServiceError("VALIDATION", "Email is required for guest orders");
+  }
+
+  const resolved: Array<{
+    product: Awaited<ReturnType<typeof getProductForCheckout>> & object;
+    quantity: number;
+    fieldValues: Record<string, string>;
+  }> = [];
+
+  for (const item of input.items) {
+    const product = await getProductForCheckout(
+      input.locale,
+      item.productSlug,
+      item.variantId || undefined,
+    );
+
+    if (!product || product.id.startsWith("demo-")) {
+      throw new ServiceError("NOT_FOUND", `Product not found: ${item.productSlug}`);
+    }
+
+    for (const field of product.fields) {
+      const value = (item.fieldValues[field.fieldKey] ?? "").trim();
+      if (field.required && !value) {
+        throw new ServiceError(
+          "VALIDATION",
+          `Missing required field: ${field.fieldKey}`,
+        );
+      }
+    }
+
+    resolved.push({
+      product,
+      quantity: item.quantity,
+      fieldValues: item.fieldValues,
+    });
+  }
+
+  const admin = createAdminClient();
+  let subtotalCents = 0;
+
+  for (const line of resolved) {
+    subtotalCents += line.product.priceCents * line.quantity;
+    if (line.product.deliveryMode === "auto") {
+      await assertAutoStock(admin, line.product.id, line.quantity);
+    }
+  }
+
+  let discountCents = 0;
+  let couponId: string | null = null;
+  let couponCodeSnapshot: string | null = null;
+
+  if (input.couponCode?.trim()) {
+    const couponResult = await quoteCoupon(input.couponCode, subtotalCents);
+    if (!couponResult.success) {
+      throw new ServiceError("VALIDATION", mapCouponError(couponResult.code));
+    }
+    discountCents = couponResult.quote.discountCents;
+    couponId = couponResult.quote.couponId;
+    couponCodeSnapshot = couponResult.quote.code;
+  }
+
+  const totalCents = subtotalCents - discountCents;
+  const orderNumber = generateOrderNumber();
+
+  const { data: order, error: orderError } = await admin
+    .from("orders")
+    .insert({
+      order_number: orderNumber,
+      user_id: user?.id ?? null,
+      guest_email: guestEmail ?? null,
+      status: OrderStatus.PENDING_REVIEW,
+      subtotal_cents: subtotalCents,
+      discount_cents: discountCents,
+      total_cents: totalCents,
+      currency: "USD",
+      coupon_id: couponId,
+      coupon_code_snapshot: couponCodeSnapshot,
+      locale: input.locale,
+      customer_note: input.customerNote?.trim() || null,
+      terms_accepted_at: new Date().toISOString(),
+    })
+    .select("id")
+    .single();
+
+  if (orderError || !order) {
+    throw new ServiceError("INTERNAL", "Failed to create order");
+  }
+
+  const allFieldInserts: ReturnType<typeof buildFieldInserts> = [];
+
+  for (const line of resolved) {
+    const nameSnapshot = await fetchProductNameSnapshot(admin, line.product.id);
+
+    const { data: orderItem, error: itemError } = await admin
+      .from("order_items")
+      .insert({
+        order_id: order.id,
+        product_id: line.product.id,
+        product_name_snapshot: nameSnapshot,
+        unit_price_cents: line.product.priceCents,
+        quantity: line.quantity,
+        delivery_mode: line.product.deliveryMode,
+        variant_id: line.product.variantId ?? null,
+        variant_name_snapshot: line.product.variantName
+          ? { [input.locale]: line.product.variantName }
+          : null,
+      })
+      .select("id")
+      .single();
+
+    if (itemError || !orderItem) {
+      throw new ServiceError("INTERNAL", "Failed to create order item");
+    }
+
+    allFieldInserts.push(
+      ...buildFieldInserts({
+        orderId: order.id,
+        orderItemId: orderItem.id,
+        fields: line.product.fields,
+        fieldValues: line.fieldValues,
+        locale: input.locale,
+      }),
+    );
+  }
+
+  if (allFieldInserts.length > 0) {
+    const { error: fieldsError } = await admin
+      .from("order_field_values")
+      .insert(allFieldInserts);
+
+    if (fieldsError) {
+      throw new ServiceError("INTERNAL", "Failed to save order fields");
+    }
+  }
+
+  await admin.from("order_status_history").insert({
+    order_id: order.id,
+    from_status: null,
+    to_status: OrderStatus.PENDING_REVIEW,
+    note: "Cart order submitted",
   });
 
   let guestToken: string | undefined;

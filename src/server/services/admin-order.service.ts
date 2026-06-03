@@ -5,6 +5,9 @@ import { decryptField } from "@/lib/encryption/field";
 import { resolveLocalizedLabel, type LocalizedLabel } from "@/lib/i18n/json-label";
 import { getCustomerDeliveryForItem } from "@/server/services/delivery-content.service";
 import { writeAuditLog } from "@/server/services/audit.service";
+import {
+  derivePaymentStatus,
+} from "@/lib/order/payment-status";
 import type { AdminOrderDetail, AdminOrderListItem } from "@/types/admin";
 import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
 
@@ -237,6 +240,7 @@ export async function getAdminOrderDetail(
       guest_email,
       user_id,
       submitted_at,
+      payment_received_at,
       order_items (
         id,
         product_id,
@@ -279,6 +283,7 @@ export async function getAdminOrderDetail(
     guest_email: string | null;
     user_id: string | null;
     submitted_at: string;
+    payment_received_at: string | null;
     order_items: Array<{
       id: string;
       product_id: string;
@@ -361,6 +366,8 @@ export async function getAdminOrderDetail(
     guestEmail: row.guest_email,
     userId: row.user_id,
     submittedAt: row.submitted_at,
+    paymentReceivedAt: row.payment_received_at,
+    paymentStatus: derivePaymentStatus(row.status, row.payment_received_at),
     items,
     fields,
     timeline,

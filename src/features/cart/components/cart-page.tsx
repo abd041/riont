@@ -143,21 +143,10 @@ export function CartPage() {
               </span>
             </div>
 
-            {items.length === 1 ? (
-              <Link href={`/products/${items[0].slug}/checkout`} className="sf-btn-primary w-full">
-                {t("proceedCheckout")}
-              </Link>
-            ) : (
-              <div className="sf-cart-checkout-actions">
-                <Link
-                  href={`/products/${items[0].slug}/checkout`}
-                  className="sf-btn-primary w-full"
-                >
-                  {t("checkoutFirst")}
-                </Link>
-                <p className="sf-cart-note">{t("checkoutNote")}</p>
-              </div>
-            )}
+            <Link href="/cart/checkout" className="sf-btn-primary w-full">
+              {t("proceedCheckout")}
+            </Link>
+            <p className="sf-cart-note">{t("checkoutNote")}</p>
           </PremiumPanel>
 
           <div className="sf-trust-strip" style={{ marginTop: 12 }}>

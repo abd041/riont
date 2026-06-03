@@ -7,6 +7,7 @@ import {
 import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
 import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 import {
+  AdminExportCustomersLink,
   AdminPageActions,
   AdminSearchForm,
 } from "@/features/admin/components/admin-page-actions";
@@ -32,6 +33,7 @@ export default async function AdminCustomersPage({
           placeholder="Search by email or name…"
           defaultValue={q}
         />
+        <AdminExportCustomersLink />
       </AdminPageActions>
 
       <AdminDataTable
