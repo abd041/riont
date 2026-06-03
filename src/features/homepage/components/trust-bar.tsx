@@ -18,17 +18,20 @@ export function TrustBar({ content }: { content?: TrustBlockContent | null }) {
     defaultKeys.map((key) => t(key));
 
   return (
-    <div className="mp-trust__features">
+    <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
       {labels.map((label, index) => {
         const Icon = defaultIcons[index] ?? Tag;
         return (
-          <div key={`${label}-${index}`} className="mp-trust__feature">
-            <span className="mp-trust__feature-icon" aria-hidden>
-              <Icon strokeWidth={1.5} />
-            </span>
-            <div className="mp-trust__feature-copy">
-              <p className="mp-trust__feature-title">{label}</p>
+          <div
+            key={`${label}-${index}`}
+            className="glass-card flex items-center gap-3 rounded-[var(--radius-md)] p-4"
+          >
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-accent-500/15">
+              <Icon className="h-4 w-4 text-accent-500" />
             </div>
+            <span className="text-sm font-medium text-[var(--text-primary)]">
+              {label}
+            </span>
           </div>
         );
       })}

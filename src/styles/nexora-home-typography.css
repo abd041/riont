@@ -4,15 +4,6 @@
  */
 
 /* ─── Compact hero ─── */
-.nex-hero--compact-static .nex-hero-title {
-  font-size: clamp(0.72rem, 2.8vw, 0.88rem);
-  letter-spacing: 0.08em;
-}
-
-.nex-hero--compact-static .nex-hero-title-accent {
-  display: none;
-}
-
 .nex-hero--compact .nex-hero-badge {
   font-size: 9px;
   font-weight: 700;

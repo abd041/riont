@@ -284,8 +284,8 @@
 }
 
 .nex-hero--compact.nex-hero--premium .nex-hero-title {
-  font-size: clamp(1rem, 3.8vw, 1.35rem) !important;
-  line-height: 1.08;
+  font-size: clamp(1.35rem, 5vw, 2rem) !important;
+  line-height: 1.05;
 }
 
 .nex-hero--premium .nex-hero-title-accent {

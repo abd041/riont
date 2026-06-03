@@ -85,38 +85,24 @@ export function HeroSection({
   }, []);
 
   useEffect(() => {
-    if (compact) return;
     const ms = reduceMotion ? slideIntervalMs * 1.5 : slideIntervalMs;
     const id = window.setInterval(advanceSlide, ms);
     return () => window.clearInterval(id);
-  }, [advanceSlide, compact, reduceMotion, slideIntervalMs]);
+  }, [advanceSlide, reduceMotion, slideIntervalMs]);
 
-  const slideIndex = compact ? 0 : activeIndex;
-  const activeSlide = HERO_SLIDES[slideIndex];
-  const copy = slideCopy[slideIndex];
+  const activeSlide = HERO_SLIDES[activeIndex];
+  const copy = slideCopy[activeIndex];
 
   return (
     <section
       className={cn(
         "nex-hero nex-hero-slider nex-hero--image-bg nex-hero--premium",
-        compact && "nex-hero--compact nex-hero--compact-static",
+        compact && "nex-hero--compact",
       )}
       aria-label="Hero"
     >
-      <span
-        className={cn(
-          "nex-hero__float-orb nex-hero__float-orb--a",
-          compact && "hidden",
-        )}
-        aria-hidden
-      />
-      <span
-        className={cn(
-          "nex-hero__float-orb nex-hero__float-orb--b",
-          compact && "hidden",
-        )}
-        aria-hidden
-      />
+      <span className="nex-hero__float-orb nex-hero__float-orb--a" aria-hidden />
+      <span className="nex-hero__float-orb nex-hero__float-orb--b" aria-hidden />
       <div className="nex-hero-media absolute inset-0 z-[0] overflow-hidden">
         <Image
           src={HERO_BACKGROUND_IMAGE}
@@ -136,7 +122,7 @@ export function HeroSection({
         className={cn(
           "relative z-[10] flex flex-col justify-between",
           compact
-            ? "min-h-[92px] px-3 py-2 md:min-h-[108px] md:px-4 md:py-2.5"
+            ? "min-h-[118px] px-3 py-2.5 md:min-h-[152px] md:px-5 md:py-3"
             : "min-h-[380px] px-7 py-6 md:min-h-[392px] md:px-8 md:py-7",
         )}
       >
@@ -152,21 +138,13 @@ export function HeroSection({
             >
               <motion.span
                 variants={textItem}
-                className={cn(
-                  "nex-hero-badge nex-hero-badge--promo inline-flex items-center gap-1.5 rounded-full border px-3 py-1 uppercase",
-                  compact && "hidden",
-                )}
+                className="nex-hero-badge nex-hero-badge--promo inline-flex items-center gap-1.5 rounded-full border px-3 py-1 uppercase"
               >
                 <Zap className="h-3 w-3 shrink-0 text-violet-400" strokeWidth={2.5} />
                 {copy.tag}
               </motion.span>
 
-              <h1
-                className={cn(
-                  "nex-hero-title overflow-hidden uppercase",
-                  compact ? "mt-0" : "mt-3",
-                )}
-              >
+              <h1 className="nex-hero-title mt-3 overflow-hidden uppercase">
                 <motion.span
                   variants={lineItem}
                   className="nex-hero-title-line block text-white"
@@ -183,10 +161,7 @@ export function HeroSection({
 
               <motion.p
                 variants={textItem}
-                className={cn(
-                  "nex-hero-subtitle mt-2",
-                  compact && "hidden",
-                )}
+                className={cn("nex-hero-subtitle mt-2", compact && "mt-1.5")}
               >
                 {copy.subtitle}
               </motion.p>
@@ -195,7 +170,7 @@ export function HeroSection({
                 variants={textItem}
                 className={cn(
                   "flex flex-wrap items-center gap-2.5",
-                  compact ? "mt-2" : "mt-5",
+                  compact ? "mt-3" : "mt-5",
                 )}
               >
                 <Link
@@ -243,11 +218,15 @@ export function HeroSection({
           </div>
         )}
 
-        {!compact && (
-          <div
-            className="nex-hero-slide-dots mt-4 flex gap-1.5 md:absolute md:bottom-7 md:end-8 md:mt-0"
-            aria-hidden
-          >
+        <div
+          className={cn(
+            "nex-hero-slide-dots flex gap-1.5",
+            compact
+              ? "mt-2 md:absolute md:bottom-4 md:end-6 md:mt-0"
+              : "mt-4 md:absolute md:bottom-7 md:end-8 md:mt-0",
+          )}
+          aria-hidden
+        >
           {HERO_SLIDES.map((slide, index) => (
             <span
               key={slide.id}
@@ -258,8 +237,7 @@ export function HeroSection({
               }`}
             />
           ))}
-          </div>
-        )}
+        </div>
       </div>
     </section>
   );

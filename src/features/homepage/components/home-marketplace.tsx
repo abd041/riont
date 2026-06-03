@@ -7,6 +7,8 @@ import { useHomeCategoryFilter } from "@/hooks/use-ui-store";
 import { CategorySlider } from "@/features/categories/components/category-slider";
 import { ProductRowSection } from "./sections/product-row-section";
 import { FilteredProductsSection } from "./sections/filtered-products-section";
+import { MarketplaceTrustSection } from "./sections/marketplace-trust-section";
+import { MarketplaceReviewsSection } from "./sections/marketplace-reviews-section";
 import { MarketplaceFooter } from "./marketplace/marketplace-footer";
 
 type HomeMarketplaceProps = {
@@ -53,6 +55,8 @@ export function HomeMarketplace({ products, categories }: HomeMarketplaceProps) 
         variant="primary"
       />
 
+      <MarketplaceTrustSection />
+      <MarketplaceReviewsSection />
       <MarketplaceFooter />
     </div>
   );
