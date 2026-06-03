@@ -163,21 +163,24 @@
 }
 
 /* ═══ Main column — full width, no icon rail offset ═══ */
-.nex-storefront--drawer-nav .nex-storefront-main {
+.nex-storefront--drawer-nav .nex-storefront-main,
+.nex-storefront--no-nav .nex-storefront-main {
   margin-inline-start: 0;
   width: 100%;
   min-width: 0;
 }
 
 @media (min-width: 1024px) {
-  .nex-storefront--drawer-nav {
+  .nex-storefront--drawer-nav,
+  .nex-storefront--no-nav {
     min-height: 100vh;
     height: 100vh;
     max-height: 100vh;
     overflow: hidden;
   }
 
-  .nex-storefront--drawer-nav .nex-storefront-main {
+  .nex-storefront--drawer-nav .nex-storefront-main,
+  .nex-storefront--no-nav .nex-storefront-main {
     margin-inline-start: 0 !important;
     width: 100%;
     min-height: 0;

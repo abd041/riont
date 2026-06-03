@@ -21,15 +21,10 @@ body {
     margin-inline-start: 0;
   }
 
+  /* Main column is the scrollport (.nex-main and .nex-storefront-main share one element). */
   .nex-storefront-main {
     margin-inline-start: var(--sidebar-width);
-    min-height: 0;
-    height: 100vh;
-    max-height: 100vh;
-    overflow: hidden;
-  }
-
-  .nex-storefront-main .nex-main {
+    flex: 1 1 auto;
     min-height: 0;
     overflow-x: hidden;
     overflow-y: auto;
