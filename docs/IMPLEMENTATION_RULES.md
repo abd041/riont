@@ -3,7 +3,7 @@
 > **Required reading before any application code.**  
 > **Master plan:** [MASTER_ARCHITECTURE.md](./MASTER_ARCHITECTURE.md)  
 > Stack: Next.js 15 + Supabase + Tailwind v4 + next-intl.  
-> Order platform only — external payment; no in-app payment SDKs (not planned).
+> Order platform only — **[external payment + admin confirm](./PAYMENT_MODEL.md)**; no in-app payment SDKs (not planned).
 
 ---
 

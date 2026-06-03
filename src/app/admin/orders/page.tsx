@@ -50,7 +50,7 @@ export default async function AdminOrdersPage({
     <AdminPageShell>
       <AdminPageHeader
         title="Orders"
-        description="Review, approve, fulfill, and complete customer orders."
+        description="External payment model: new rows are order requests (unpaid). Mark Payment received only after you verify the transfer."
       />
 
       <AdminPageActions>

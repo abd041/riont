@@ -1,6 +1,7 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { STORAGE_KEYS } from "@/constants/storage-keys";
+import { cartLineKey } from "@/features/cart/cart-line-key";
 import type { CartLine } from "@/features/cart/types";
 
 type CartState = {
@@ -8,8 +9,12 @@ type CartState = {
   _hasHydrated: boolean;
   setHasHydrated: (value: boolean) => void;
   addItem: (line: Omit<CartLine, "quantity">, quantity?: number) => void;
-  removeItem: (productId: string) => void;
-  updateQuantity: (productId: string, quantity: number) => void;
+  removeItem: (productId: string, variantId?: string | null) => void;
+  updateQuantity: (
+    productId: string,
+    quantity: number,
+    variantId?: string | null,
+  ) => void;
   clearCart: () => void;
 };
 
@@ -22,11 +27,12 @@ export const useCartStore = create<CartState>()(
 
       addItem: (line, quantity = 1) =>
         set((state) => {
-          const existing = state.items.find((i) => i.productId === line.productId);
+          const key = cartLineKey(line);
+          const existing = state.items.find((i) => cartLineKey(i) === key);
           if (existing) {
             return {
               items: state.items.map((i) =>
-                i.productId === line.productId
+                cartLineKey(i) === key
                   ? { ...i, quantity: i.quantity + quantity }
                   : i,
               ),
@@ -35,19 +41,25 @@ export const useCartStore = create<CartState>()(
           return { items: [...state.items, { ...line, quantity }] };
         }),
 
-      removeItem: (productId) =>
-        set((state) => ({
-          items: state.items.filter((i) => i.productId !== productId),
-        })),
-
-      updateQuantity: (productId, quantity) =>
+      removeItem: (productId, variantId) =>
         set((state) => {
+          const key = cartLineKey({ productId, variantId });
+          return {
+            items: state.items.filter((i) => cartLineKey(i) !== key),
+          };
+        }),
+
+      updateQuantity: (productId, quantity, variantId) =>
+        set((state) => {
+          const key = cartLineKey({ productId, variantId });
           if (quantity < 1) {
-            return { items: state.items.filter((i) => i.productId !== productId) };
+            return {
+              items: state.items.filter((i) => cartLineKey(i) !== key),
+            };
           }
           return {
             items: state.items.map((i) =>
-              i.productId === productId ? { ...i, quantity } : i,
+              cartLineKey(i) === key ? { ...i, quantity } : i,
             ),
           };
         }),

@@ -24,6 +24,9 @@ export function ProductDetailPurchase({
   compareAtCents,
   isInstant,
   checkoutHref,
+  variantId,
+  variantLabel,
+  inStock = true,
 }: {
   productId: string;
   slug: string;
@@ -33,6 +36,9 @@ export function ProductDetailPurchase({
   compareAtCents?: number | null;
   isInstant?: boolean;
   checkoutHref?: string;
+  variantId?: string | null;
+  variantLabel?: string | null;
+  inStock?: boolean;
 }) {
   const locale = useLocale();
   const t = useTranslations("product");
@@ -44,16 +50,21 @@ export function ProductDetailPurchase({
   const discount = discountPercent(priceCents, compareAtCents);
   const wished = hasItem(productId);
 
+  const cartDisplayName = variantLabel ? `${name} — ${variantLabel}` : name;
+
   function addToCart() {
-    for (let i = 0; i < qty; i++) {
-      addItem({
+    addItem(
+      {
         productId,
         slug,
-        name,
+        name: cartDisplayName,
         imageUrl,
         priceCents,
-      });
-    }
+        variantId: variantId ?? null,
+        variantLabel: variantLabel ?? null,
+      },
+      qty,
+    );
     toast.success(t("addedToCart"));
   }
 
@@ -69,7 +80,10 @@ export function ProductDetailPurchase({
   }
 
   async function shareProduct() {
-    const url = `${window.location.origin}/${locale}/products/${slug}`;
+    const variantQuery = variantId
+      ? `?variant=${encodeURIComponent(variantId)}`
+      : "";
+    const url = `${window.location.origin}/${locale}/products/${slug}${variantQuery}`;
     try {
       if (navigator.share) {
         await navigator.share({ title: name, url });
@@ -88,10 +102,16 @@ export function ProductDetailPurchase({
         <span
           className={cn(
             "nex-pdp-availability",
-            isInstant ? "nex-pdp-availability--instant" : "nex-pdp-availability--manual",
+            !inStock && "nex-pdp-availability--soldout",
+            inStock && isInstant && "nex-pdp-availability--instant",
+            inStock && !isInstant && "nex-pdp-availability--manual",
           )}
         >
-          {isInstant ? t("instantDelivery") : t("manualDelivery")}
+          {!inStock
+            ? t("soldOut")
+            : isInstant
+              ? t("instantDelivery")
+              : t("manualDelivery")}
         </span>
       </div>
 
@@ -131,14 +151,25 @@ export function ProductDetailPurchase({
           </div>
         </div>
 
-        <button type="button" className="nex-pdp-add-cart" onClick={addToCart}>
+        <button
+          type="button"
+          className="nex-pdp-add-cart"
+          onClick={addToCart}
+          disabled={!inStock}
+        >
           <ShoppingCart strokeWidth={2} className="h-5 w-5" />
           {t("addToCart")}
         </button>
 
-        <Link href={checkoutHref ?? `/products/${slug}/checkout`} className="nex-pdp-buy-now">
-          {t("buyNowButton")}
-        </Link>
+        {inStock ? (
+          <Link href={checkoutHref ?? `/products/${slug}/checkout`} className="nex-pdp-buy-now">
+            {t("buyNowButton")}
+          </Link>
+        ) : (
+          <span className="nex-pdp-buy-now nex-pdp-buy-now--disabled" aria-disabled>
+            {t("soldOut")}
+          </span>
+        )}
 
         <div className="nex-pdp-secondary-actions">
           <button

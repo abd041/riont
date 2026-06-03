@@ -8,6 +8,7 @@ import { EmptyState } from "@/components/ui/empty-state";
 import { PremiumPanel } from "@/components/shared/premium-panel";
 import { StorefrontPageHeader } from "@/components/shared/storefront-page-header";
 import { StorefrontPageShell } from "@/components/shared/storefront-page-shell";
+import { cartLineKey } from "@/features/cart/cart-line-key";
 import { useCart } from "@/hooks/use-cart";
 import { useCurrency } from "@/features/shared/currency/currency-provider";
 
@@ -57,8 +58,14 @@ export function CartPage() {
       <div className="sf-cart-layout">
         <PremiumPanel className="sf-panel--flat">
           <ul className="sf-cart-list">
-            {items.map((item) => (
-              <li key={item.productId} className="sf-cart-item">
+            {items.map((item) => {
+              const lineKey = cartLineKey(item);
+              const itemCheckoutHref = item.variantId
+                ? `/products/${item.slug}/checkout?variant=${encodeURIComponent(item.variantId)}`
+                : `/products/${item.slug}/checkout`;
+
+              return (
+              <li key={lineKey} className="sf-cart-item">
                 <div className="sf-cart-item__media">
                   {item.imageUrl ? (
                     <Image
@@ -87,7 +94,13 @@ export function CartPage() {
                       <button
                         type="button"
                         className="sf-qty__btn"
-                        onClick={() => updateQuantity(item.productId, item.quantity - 1)}
+                        onClick={() =>
+                          updateQuantity(
+                            item.productId,
+                            item.quantity - 1,
+                            item.variantId,
+                          )
+                        }
                         aria-label={t("decrease")}
                       >
                         <Minus className="h-4 w-4" />
@@ -96,7 +109,13 @@ export function CartPage() {
                       <button
                         type="button"
                         className="sf-qty__btn"
-                        onClick={() => updateQuantity(item.productId, item.quantity + 1)}
+                        onClick={() =>
+                          updateQuantity(
+                            item.productId,
+                            item.quantity + 1,
+                            item.variantId,
+                          )
+                        }
                         aria-label={t("increase")}
                       >
                         <Plus className="h-4 w-4" />
@@ -105,7 +124,7 @@ export function CartPage() {
                     <button
                       type="button"
                       className="sf-btn-ghost"
-                      onClick={() => removeItem(item.productId)}
+                      onClick={() => removeItem(item.productId, item.variantId)}
                     >
                       <Trash2 className="h-4 w-4" />
                       {t("remove")}
@@ -118,7 +137,7 @@ export function CartPage() {
                     {formatPrice(item.priceCents * item.quantity, locale)}
                   </p>
                   <Link
-                    href={`/products/${item.slug}/checkout`}
+                    href={itemCheckoutHref}
                     className="sf-btn-primary"
                     style={{ minHeight: 38, paddingInline: 16, fontSize: 13 }}
                   >
@@ -126,7 +145,8 @@ export function CartPage() {
                   </Link>
                 </div>
               </li>
-            ))}
+            );
+            })}
           </ul>
         </PremiumPanel>
 

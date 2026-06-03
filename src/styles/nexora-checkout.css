@@ -512,10 +512,25 @@
   gap: 12px;
 }
 
+.nex-co-coupon-msg {
+  flex: 1 1 100%;
+  font-size: 12px;
+  margin: 0;
+}
+
+.nex-co-coupon-msg--ok {
+  color: #86efac;
+}
+
+.nex-co-coupon-msg--err {
+  color: #fca5a5;
+}
+
 @media (min-width: 540px) {
   .nex-co-coupon-row {
     flex-direction: row;
     align-items: stretch;
+    flex-wrap: wrap;
   }
 }
 

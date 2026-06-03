@@ -35,6 +35,9 @@ export function MarketplaceProductCard({
   compareAtCents,
   badge,
   imageUrl,
+  averageRating,
+  reviewCount,
+  inStock,
   className,
 }: MarketplaceProductCardProps) {
   const locale = useLocale();
@@ -46,12 +49,13 @@ export function MarketplaceProductCard({
   const { toggleItem, hasItem } = useWishlist();
 
   const discount = discountPercent(priceCents, compareAtCents);
-  const rating = productRating(slug);
-  const reviews = productReviewCount(slug);
+  const rating = productRating({ slug, averageRating });
+  const reviews = productReviewCount({ slug, reviewCount });
   const subtitle = productCategoryLabel(
     { slug, name, category, priceCents },
     t("lifetimeLicense"),
   );
+  const soldOut = inStock === false;
   const wished = hasItem(id ?? slug);
   const reduceMotion = useReducedMotion();
 
@@ -71,7 +75,10 @@ export function MarketplaceProductCard({
         {badge === "bestSeller" && (
           <span className="mp-badge mp-badge--hot">{tProduct("bestSellerBadge")}</span>
         )}
-        {badge === "instant" && (
+        {soldOut && (
+          <span className="mp-badge mp-badge--sale">{tProduct("soldOut")}</span>
+        )}
+        {badge === "instant" && !soldOut && (
           <span className="mp-badge mp-badge--instant">{tProduct("instantDelivery")}</span>
         )}
         {badge === "hot" && <span className="mp-badge mp-badge--hot">{tProduct("badgeHot")}</span>}
@@ -146,7 +153,9 @@ export function MarketplaceProductCard({
             type="button"
             className="mp-btn-icon mp-btn-icon--cart"
             aria-label={tProduct("addToCart")}
+            disabled={soldOut}
             onClick={() => {
+              if (soldOut) return;
               addItem({
                 productId: id ?? slug,
                 slug,

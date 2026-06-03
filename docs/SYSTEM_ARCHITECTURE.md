@@ -2,7 +2,8 @@
 
 > **Master plan:** [MASTER_ARCHITECTURE.md](./MASTER_ARCHITECTURE.md)  
 > **Stack:** Next.js 15 + Supabase (Postgres, Auth, Storage)  
-> **Scope:** Order management + fulfillment — external payment only (no integrated payments, not planned)
+> **Scope:** Order management + fulfillment — external payment only (no integrated payments, not planned)  
+> **Payment workflow:** See **[PAYMENT_MODEL.md](./PAYMENT_MODEL.md)** (client-approved: external pay + admin confirm)
 
 ---
 

@@ -91,14 +91,15 @@ export function HeroSection({
     return () => window.clearInterval(id);
   }, [advanceSlide, compact, reduceMotion, slideIntervalMs]);
 
-  const activeSlide = HERO_SLIDES[activeIndex];
-  const copy = slideCopy[activeIndex];
+  const slideIndex = compact ? 0 : activeIndex;
+  const activeSlide = HERO_SLIDES[slideIndex];
+  const copy = slideCopy[slideIndex];
 
   return (
     <section
       className={cn(
         "nex-hero nex-hero-slider nex-hero--image-bg nex-hero--premium",
-        compact && "nex-hero--compact",
+        compact && "nex-hero--compact nex-hero--compact-static",
       )}
       aria-label="Hero"
     >

@@ -41,6 +41,7 @@ export function CartCheckoutForm({
     Record<string, Record<string, string>>
   >({});
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [couponDiscountCents, setCouponDiscountCents] = useState(0);
 
   const [state, action, pending] = useActionState<
     CartCheckoutActionResult | null,
@@ -54,6 +55,7 @@ export function CartCheckoutForm({
       cartItems.map((item) => ({
         slug: item.slug,
         quantity: item.quantity,
+        variantId: item.variantId ?? undefined,
       })),
     )
       .then((data) => {
@@ -93,6 +95,7 @@ export function CartCheckoutForm({
     cartItems.map((item) => ({
       productSlug: item.slug,
       quantity: item.quantity,
+      variantId: item.variantId ?? undefined,
     })),
   );
 
@@ -197,7 +200,11 @@ export function CartCheckoutForm({
               </div>
             </div>
 
-            <CheckoutDiscountCard pending={pending} />
+            <CheckoutDiscountCard
+              pending={pending}
+              subtotalCents={subtotalCents}
+              onQuoted={(quote) => setCouponDiscountCents(quote?.discountCents ?? 0)}
+            />
           </div>
 
           <aside className="nex-co-summary-wrap">
@@ -239,16 +246,27 @@ export function CartCheckoutForm({
                 </div>
               </dl>
 
+              {couponDiscountCents > 0 && (
+                <div className="nex-co-price-row nex-co-price-row--savings">
+                  <span>{t("coupon")}</span>
+                  <span dir="ltr">-{formatPrice(couponDiscountCents, locale)}</span>
+                </div>
+              )}
               <div className="nex-co-total-block">
                 <span className="nex-co-total-label">{t("total")}</span>
                 <span className="nex-co-total-amount" dir="ltr">
-                  {formatPrice(subtotalCents, locale)}
+                  {formatPrice(Math.max(0, subtotalCents - couponDiscountCents), locale)}
                 </span>
               </div>
 
-              <div className="nex-co-notice">
-                <p className="text-sm text-[var(--text-muted)]">{paymentInstructions}</p>
+              <div className="nex-co-notice nex-co-notice--model">
+                <p className="text-sm">{t("externalPaymentNotice")}</p>
               </div>
+              {paymentInstructions ? (
+                <div className="nex-co-notice">
+                  <p className="text-sm text-[var(--text-muted)]">{paymentInstructions}</p>
+                </div>
+              ) : null}
 
               <CheckoutPremiumCheckbox
                 id="cartTermsAccepted"

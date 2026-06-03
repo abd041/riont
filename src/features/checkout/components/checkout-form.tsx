@@ -28,6 +28,7 @@ export function CheckoutForm({
 }) {
   const tOrders = useTranslations("orders.errors");
   const [fieldValues, setFieldValues] = useState<Record<string, string>>({});
+  const [couponDiscountCents, setCouponDiscountCents] = useState(0);
   const [state, action, pending] = useActionState<
     OrderActionResult | null,
     FormData
@@ -75,7 +76,11 @@ export function CheckoutForm({
               userEmail={userEmail}
               pending={pending}
             />
-            <CheckoutDiscountCard pending={pending} />
+            <CheckoutDiscountCard
+              pending={pending}
+              subtotalCents={product.priceCents}
+              onQuoted={(quote) => setCouponDiscountCents(quote?.discountCents ?? 0)}
+            />
           </CheckoutMotionStagger>
 
           <CheckoutOrderSummary
@@ -84,6 +89,7 @@ export function CheckoutForm({
             paymentInstructions={paymentInstructions}
             pending={pending}
             errorMessage={errorMessage}
+            discountCents={couponDiscountCents}
           />
         </div>
       </form>

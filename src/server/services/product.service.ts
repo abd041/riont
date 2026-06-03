@@ -13,6 +13,8 @@ import { resolveLocalizedLabel, type LocalizedLabel } from "@/lib/i18n/json-labe
 import { isSupabaseConfigured } from "@/lib/env/public";
 import { resolveMediaUrl } from "@/lib/storage/media-url";
 import { ServiceError } from "@/lib/domain/errors";
+import { getAvailableStockCounts } from "@/server/services/inventory.service";
+import { getReviewSummariesForProducts } from "@/server/services/review.service";
 
 type ProductQueryRow = {
   id: string;
@@ -228,7 +230,43 @@ function mapRow(row: ProductQueryRow): CatalogProduct | null {
     imageUrl:
       primaryImageUrl(row, translation) ??
       productThumbnailUrl(translation.slug, categoryTranslation?.slug),
+    deliveryMode: row.delivery_mode,
   };
+}
+
+async function enrichCatalogProducts(
+  products: CatalogProduct[],
+  locale: string,
+): Promise<CatalogProduct[]> {
+  const ids = products.map((p) => p.id).filter((id): id is string => Boolean(id));
+  if (ids.length === 0) return products;
+
+  const [stockMap, reviewMap] = await Promise.all([
+    getAvailableStockCounts(ids),
+    getReviewSummariesForProducts(ids, locale),
+  ]);
+
+  return products.map((product) => {
+    if (!product.id) return product;
+
+    const inStock =
+      product.deliveryMode === "manual"
+        ? true
+        : (stockMap.get(product.id) ?? 0) > 0;
+
+    const review = reviewMap.get(product.id);
+
+    return {
+      ...product,
+      inStock,
+      averageRating: review?.averageRating,
+      reviewCount: review?.count,
+    };
+  });
+}
+
+function filterInStockProducts(products: CatalogProduct[]): CatalogProduct[] {
+  return products.filter((p) => p.inStock !== false);
 }
 
 function mapDetailRow(row: ProductQueryRow): CatalogProductDetail | null {
@@ -307,9 +345,12 @@ async function listFromDatabase(
 
   if (error) throw error;
 
-  return (data as unknown as ProductQueryRow[])
+  const mapped = (data as unknown as ProductQueryRow[])
     .map(mapRow)
     .filter((p): p is CatalogProduct => p !== null);
+
+  const enriched = await enrichCatalogProducts(mapped, locale);
+  return filterInStockProducts(enriched);
 }
 
 export async function listProducts(
@@ -474,8 +515,12 @@ export async function getProductBySlug(
 
     const detail = mapDetailRow(data as unknown as ProductQueryRow);
     if (!detail?.id) return detail;
-    const variants = await fetchProductVariants(detail.id, locale);
-    return { ...detail, variants };
+    const [variants, enriched] = await Promise.all([
+      fetchProductVariants(detail.id, locale),
+      enrichCatalogProducts([detail], locale),
+    ]);
+    const stockMeta = enriched[0];
+    return { ...detail, ...stockMeta, variants };
   } catch (error) {
     if (!allowDemoFallback) throw error;
     const demo = demoProducts.find((p) => p.slug === slug);
@@ -517,9 +562,11 @@ export async function listRelatedProducts(
       .order("sales_count", { ascending: false })
       .limit(limit);
 
-    return ((fallback ?? []) as unknown as ProductQueryRow[])
+    const fallbackMapped = ((fallback ?? []) as unknown as ProductQueryRow[])
       .map(mapRow)
       .filter((p): p is CatalogProduct => p !== null);
+    const enrichedFallback = await enrichCatalogProducts(fallbackMapped, locale);
+    return filterInStockProducts(enrichedFallback);
   }
 
   const ids = (links as Array<{ related_product_id: string }>).map(
@@ -543,7 +590,11 @@ export async function listRelatedProducts(
       .map((p) => [p.id!, p]),
   );
 
-  return ids.map((id) => byId.get(id)).filter((p): p is CatalogProduct => Boolean(p));
+  const ordered = ids
+    .map((id) => byId.get(id))
+    .filter((p): p is CatalogProduct => Boolean(p));
+  const enriched = await enrichCatalogProducts(ordered, locale);
+  return filterInStockProducts(enriched);
 }
 
 type ProductFieldRow = {

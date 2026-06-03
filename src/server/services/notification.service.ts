@@ -93,8 +93,8 @@ async function notifyAdminsNewOrder(
 
   const base = appUrl();
   const adminUrl = `${base}/admin/orders`;
-  const subject = `New order ${orderNumber}`;
-  const html = `<p>A new order <strong>${orderNumber}</strong> is pending review.</p><p><a href="${adminUrl}">Open admin queue</a></p>`;
+  const subject = `New order request ${orderNumber}`;
+  const html = `<p>A new <strong>order request</strong> <strong>${orderNumber}</strong> is pending review (payment not confirmed yet).</p><p><a href="${adminUrl}">Open admin queue</a></p>`;
 
   for (const row of admins ?? []) {
     const email = await getUserEmail((row as { id: string }).id);

@@ -10,6 +10,8 @@ import {
 } from "@/server/services/admin-catalog.service";
 import { AdminProductForm } from "@/features/admin/components/admin-product-form";
 import { AdminProductExtras } from "@/features/admin/components/admin-product-extras";
+import { AdminProductReviews } from "@/features/admin/components/admin-product-reviews";
+import { listAdminProductReviews } from "@/server/services/admin-review.service";
 import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
 import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 
@@ -19,7 +21,7 @@ export default async function AdminEditProductPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = await params;
-  const [product, categories, variants, fields, relatedIds, productOptions] =
+  const [product, categories, variants, fields, relatedIds, productOptions, reviews] =
     await Promise.all([
       getAdminProductEdit(id),
       listCategoryOptions(),
@@ -27,6 +29,7 @@ export default async function AdminEditProductPage({
       getAdminProductFields(id),
       getAdminProductRelatedIds(id),
       listProductsForRelatedPicker(id),
+      listAdminProductReviews(id),
     ]);
 
   if (!product) notFound();
@@ -45,6 +48,7 @@ export default async function AdminEditProductPage({
         initialRelatedIds={relatedIds}
         productOptions={productOptions}
       />
+      <AdminProductReviews productId={product.id} reviews={reviews} />
     </AdminPageShell>
   );
 }

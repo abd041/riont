@@ -11,12 +11,32 @@ function hashSlug(slug: string): number {
   return hash;
 }
 
-export function productRating(slug: string): number {
+function fallbackRating(slug: string): number {
   return [4.7, 4.8, 4.9][hashSlug(slug) % 3];
 }
 
-export function productReviewCount(slug: string): number {
+function fallbackReviewCount(slug: string): number {
   return 80 + (hashSlug(slug) % 420);
+}
+
+export function productRating(product: Pick<CatalogProduct, "slug" | "averageRating">): number {
+  if (product.averageRating != null && product.averageRating > 0) {
+    return product.averageRating;
+  }
+  return fallbackRating(product.slug);
+}
+
+export function productReviewCount(
+  product: Pick<CatalogProduct, "slug" | "reviewCount">,
+): number {
+  if (product.reviewCount != null && product.reviewCount > 0) {
+    return product.reviewCount;
+  }
+  return fallbackReviewCount(product.slug);
+}
+
+export function hasRealReviews(product: Pick<CatalogProduct, "reviewCount">): boolean {
+  return (product.reviewCount ?? 0) > 0;
 }
 
 export function productCategoryLabel(product: CatalogProduct, fallback: string): string {

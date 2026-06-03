@@ -6,6 +6,7 @@ import {
   OrderStatusHero,
 } from "@/features/orders/components/order-status-hero";
 import { PremiumPanel, StorefrontPageShell } from "@/components/shared";
+import { ClearCartOnConfirmation } from "@/features/cart/components/clear-cart-on-confirmation";
 
 export default async function OrderConfirmationPage({
   params,
@@ -43,6 +44,7 @@ export default async function OrderConfirmationPage({
 
   return (
     <StorefrontPageShell variant="narrow">
+      <ClearCartOnConfirmation />
       <OrderStatusHero
         status={status}
         statusLabel={tOrders(`status.${status}`)}

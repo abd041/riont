@@ -34,6 +34,10 @@ export interface CatalogProduct {
   badge?: ProductBadge;
   shortDescription?: string | null;
   imageUrl?: string | null;
+  deliveryMode?: "auto" | "manual";
+  inStock?: boolean;
+  averageRating?: number;
+  reviewCount?: number;
 }
 
 export interface CatalogProductDetail extends CatalogProduct {

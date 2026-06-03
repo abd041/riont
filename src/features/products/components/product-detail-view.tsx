@@ -133,6 +133,7 @@ export async function ProductDetailView({
               basePriceCents={product.priceCents}
               baseCompareAtCents={product.compareAtCents}
               isInstant={product.badge === "instant"}
+              inStock={product.inStock !== false}
               variants={product.variants ?? []}
             />
           </div>

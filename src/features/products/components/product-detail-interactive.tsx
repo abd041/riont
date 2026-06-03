@@ -13,6 +13,7 @@ export function ProductDetailInteractive({
   basePriceCents,
   baseCompareAtCents,
   isInstant,
+  inStock = true,
   variants,
 }: {
   productId: string;
@@ -22,6 +23,7 @@ export function ProductDetailInteractive({
   basePriceCents: number;
   baseCompareAtCents?: number | null;
   isInstant?: boolean;
+  inStock?: boolean;
   variants: ProductVariant[];
 }) {
   const defaultVariant = useMemo(
@@ -70,7 +72,10 @@ export function ProductDetailInteractive({
         priceCents={priceCents}
         compareAtCents={compareAtCents}
         isInstant={isInstant}
+        inStock={inStock}
         checkoutHref={checkoutHref}
+        variantId={selected?.id ?? null}
+        variantLabel={selected?.name ?? null}
       />
     </>
   );

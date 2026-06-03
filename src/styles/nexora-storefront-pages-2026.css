@@ -1604,6 +1604,24 @@
   color: rgba(196, 208, 240, 0.85);
 }
 
+.nex-pdp-availability--soldout {
+  border: 1px solid rgba(248, 113, 113, 0.28);
+  background: rgba(248, 113, 113, 0.1);
+  color: #fca5a5;
+}
+
+.nex-pdp-buy-now--disabled {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.06);
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+  cursor: not-allowed;
+}
+
 .nex-pdp-secondary-actions {
   display: grid;
   grid-template-columns: 1fr 1fr;

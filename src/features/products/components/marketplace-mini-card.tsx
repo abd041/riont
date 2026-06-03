@@ -37,7 +37,7 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
 
   const { id, slug, name, priceCents, compareAtCents, imageUrl, badge } = product;
   const discount = discountPercent(priceCents, compareAtCents);
-  const rating = productRating(slug);
+  const rating = productRating({ slug, averageRating: product.averageRating });
   const category = productCategoryLabel(product, t("lifetimeLicense"));
   const wished = hasItem(id ?? slug);
   const reduceMotion = useReducedMotion();

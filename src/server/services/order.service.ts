@@ -124,6 +124,7 @@ async function assertAutoStock(
   }
 }
 
+/** Creates an order request (unpaid). See docs/PAYMENT_MODEL.md — payment confirmed by admin later. */
 export async function submitOrder(
   input: SubmitOrderInput,
 ): Promise<OrderSubmitSuccess> {
@@ -270,6 +271,7 @@ export async function submitOrder(
   };
 }
 
+/** Multi-line order request. See docs/PAYMENT_MODEL.md. */
 export async function submitCartOrder(
   input: SubmitCartOrderInput,
 ): Promise<OrderSubmitSuccess> {

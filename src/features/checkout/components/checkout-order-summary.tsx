@@ -24,6 +24,7 @@ type CheckoutOrderSummaryProps = {
   paymentInstructions: string;
   pending: boolean;
   errorMessage: string | null;
+  discountCents?: number;
 };
 
 export function CheckoutOrderSummary({
@@ -32,6 +33,7 @@ export function CheckoutOrderSummary({
   paymentInstructions,
   pending,
   errorMessage,
+  discountCents = 0,
 }: CheckoutOrderSummaryProps) {
   const t = useTranslations("checkout");
   const { formatPrice, currency } = useCurrency();
@@ -45,14 +47,15 @@ export function CheckoutOrderSummary({
       product.compareAtCents && product.compareAtCents > sub
         ? product.compareAtCents - sub
         : 0;
+    const beforeDiscount = sub + fee + tax;
     return {
       subtotal: sub,
       serviceFee: fee,
       estimatedTax: tax,
       savings: save,
-      total: sub + fee + tax,
+      total: Math.max(0, beforeDiscount - discountCents),
     };
-  }, [product.compareAtCents, product.priceCents]);
+  }, [product.compareAtCents, product.priceCents, discountCents]);
 
   const isInstant = product.deliveryMode === "auto";
 
@@ -110,6 +113,12 @@ export function CheckoutOrderSummary({
             <dt>{t("estimatedTax")}</dt>
             <dd dir="ltr">{formatPrice(estimatedTax, locale)}</dd>
           </div>
+          {discountCents > 0 && (
+            <div className="nex-co-price-row nex-co-price-row--savings">
+              <dt>{t("coupon")}</dt>
+              <dd dir="ltr">-{formatPrice(discountCents, locale)}</dd>
+            </div>
+          )}
           <div className="nex-co-price-row nex-co-price-row--savings">
             <dt>{t("savings")}</dt>
             <dd dir="ltr" className={savings <= 0 ? "is-zero" : undefined}>
@@ -128,10 +137,16 @@ export function CheckoutOrderSummary({
           </span>
         </div>
 
-        <div className="nex-co-notice">
+        <div className="nex-co-notice nex-co-notice--model">
           <Info className="nex-co-notice-icon" strokeWidth={1.5} aria-hidden />
-          <p>{paymentInstructions}</p>
+          <p>{t("externalPaymentNotice")}</p>
         </div>
+
+        {paymentInstructions ? (
+          <div className="nex-co-notice">
+            <p className="text-sm text-[var(--text-muted)]">{paymentInstructions}</p>
+          </div>
+        ) : null}
 
         <CheckoutPremiumCheckbox
           id="termsAccepted"

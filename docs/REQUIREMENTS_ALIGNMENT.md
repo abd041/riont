@@ -194,7 +194,17 @@ Admin product editor: Delivery tab includes deliverables copy (separate from inv
 
 ---
 
-## 5. Explicitly out of scope (not planned)
+## 5. Payment model (client approved)
+
+**Decision:** External payment + admin confirmation. Full detail: **[PAYMENT_MODEL.md](./PAYMENT_MODEL.md)**.
+
+- Checkout creates an **order request** (`pending_review`); payment happens outside the site.
+- Admin marks **payment received** after verifying the transfer; then fulfillment runs.
+- Admin notifications on submit = **new request**, not “payment completed.”
+
+---
+
+## 6. Explicitly out of scope (not planned)
 
 | Client wording | MVP approach |
 |----------------|--------------|
@@ -209,7 +219,7 @@ Admin product editor: Delivery tab includes deliverables copy (separate from inv
 
 ---
 
-## 6. “Instant after payment” (MVP)
+## 7. “Instant after payment” (MVP)
 
 | Client phrase | MVP behavior |
 |---------------|--------------|
@@ -219,7 +229,7 @@ One admin step confirms external payment; then fulfillment runs as designed.
 
 ---
 
-## 7. Clean codebase commitment
+## 8. Clean codebase commitment
 
 Your priority is met by:
 
@@ -234,7 +244,7 @@ Your priority is met by:
 
 ---
 
-## 8. Pre-build checklist (nothing critical missing)
+## 9. Pre-build checklist (nothing critical missing)
 
 - [x] Next.js + Supabase locked  
 - [x] Order + delivery + support + admin  
@@ -246,14 +256,14 @@ Your priority is met by:
 - [x] Deliverables/requirements content  
 - [x] Order notifications  
 - [x] Hostinger + Vercel  
-- [ ] **Client confirms** no in-app payments (external only)  
+- [x] **Client confirms** no in-app payments (external only) — see [PAYMENT_MODEL.md](./PAYMENT_MODEL.md)  
 - [ ] **Client confirms** subscriptions/wallet out of scope  
 - [ ] **Client provides** payment instruction text (bank/WhatsApp) for launch  
 - [ ] **Sign-off** MASTER + IMPLEMENTATION_RULES  
 
 ---
 
-## 9. Recommended sidebar nav (MVP storefront)
+## 10. Recommended sidebar nav (MVP storefront)
 
 Align with references; omit out-of-scope nav:
 

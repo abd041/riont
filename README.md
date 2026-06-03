@@ -9,6 +9,7 @@ Order management + fulfillment for digital products. Premium dark UI · EN + AR 
 | Priority | Document |
 |----------|----------|
 | **1** | **[docs/MASTER_ARCHITECTURE.md](docs/MASTER_ARCHITECTURE.md)** — **Final source of truth** |
+| **1b** | **[docs/PAYMENT_MODEL.md](docs/PAYMENT_MODEL.md)** — **Payment: external + admin confirm (approved)** |
 | **2** | [docs/REQUIREMENTS_ALIGNMENT.md](docs/REQUIREMENTS_ALIGNMENT.md) — **Client requirements vs plan** |
 | **3** | [docs/IMPLEMENTATION_RULES.md](docs/IMPLEMENTATION_RULES.md) — Mandatory engineering standards |
 | **4** | [docs/MVP_ROADMAP.md](docs/MVP_ROADMAP.md) — Scope + 6-week summary |
@@ -19,7 +20,7 @@ Order management + fulfillment for digital products. Premium dark UI · EN + AR 
 
 Next.js 15 · Supabase (Postgres, Auth, Storage) · Tailwind v4 · Radix · Framer Motion · next-intl · Resend · Sentry · Vercel · (Upstash · Inngest optional)
 
-**Payments:** External only — no Stripe / PayPal / Binance / payment webhooks (not planned).
+**Payments:** [External + admin confirm](docs/PAYMENT_MODEL.md) — no in-app payment SDKs (not planned).
 
 ---
 
@@ -27,6 +28,7 @@ Next.js 15 · Supabase (Postgres, Auth, Storage) · Tailwind v4 · Radix · Fram
 
 | Doc | Topic |
 |-----|-------|
+| [PAYMENT_MODEL.md](docs/PAYMENT_MODEL.md) | External payment + admin workflow |
 | [MASTER_ARCHITECTURE.md](docs/MASTER_ARCHITECTURE.md) | Full plan §1–13 |
 | [IMPLEMENTATION_RULES.md](docs/IMPLEMENTATION_RULES.md) | Code standards |
 | [TECH_STACK.md](docs/TECH_STACK.md) | Env vars |

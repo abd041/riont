@@ -5,4 +5,6 @@ export type CartLine = {
   imageUrl: string | null;
   priceCents: number;
   quantity: number;
+  variantId?: string | null;
+  variantLabel?: string | null;
 };
