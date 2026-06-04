@@ -1,0 +1,114 @@
+/**
+ * Products browse (/products) — dedicated responsive polish
+ */
+
+@media (max-width: 1023px) {
+  .nex-browse-filters-wrap--open .nex-browse-filters {
+    max-height: min(68vh, 560px);
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
+  }
+}
+
+@media (max-width: 767px) {
+  .sf-browse-wrap {
+    min-width: 0;
+    overflow-x: clip;
+  }
+
+  .nex-browse-page {
+    padding-bottom: 32px;
+  }
+
+  .nex-browse-page-header {
+    margin-bottom: 12px;
+  }
+
+  .nex-browse-toolbar {
+    gap: 12px;
+  }
+
+  .nex-browse-toolbar .nex-search {
+    min-height: 48px;
+    height: 48px;
+  }
+
+  .nex-browse-sort {
+    width: 100%;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .nex-browse-sort-select {
+    flex: 1;
+    min-width: 0;
+    width: 100%;
+    max-width: none;
+    min-height: 48px;
+    height: 48px;
+    font-size: max(16px, 1rem);
+  }
+
+  .nex-browse-filters-toggle {
+    position: sticky;
+    top: calc(var(--mp-topbar-h, 52px) + 4px);
+    z-index: 4;
+    margin-bottom: 0;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  }
+
+  .nex-browse-filters-wrap--open {
+    margin-bottom: 14px;
+  }
+
+  .nex-browse-filters {
+    padding: 14px 12px;
+  }
+
+  .nex-browse-cat-link {
+    min-height: 44px;
+    padding: 0 12px;
+    font-size: 14px;
+  }
+
+  .nex-browse-check {
+    min-height: 44px;
+    padding: 4px 0;
+    font-size: 14px;
+  }
+
+  .nex-browse-check input {
+    width: 18px;
+    height: 18px;
+  }
+
+  .nex-browse-clear {
+    min-height: 44px;
+    height: 44px;
+  }
+
+  .nex-browse-main .mp-grid__inner {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 399px) {
+  .nex-browse-main .mp-browse-section--primary .mp-grid__inner,
+  .nex-browse-page .mp-browse-section--primary .mp-grid__inner {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+@media (min-width: 400px) and (max-width: 639px) {
+  .nex-browse-main .mp-browse-section--primary .mp-grid__inner {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nex-browse-body {
+    grid-template-columns: 200px minmax(0, 1fr);
+    gap: 14px;
+  }
+}

@@ -11,7 +11,8 @@
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "seed:inventory": "node scripts/seed-inventory.mjs",
-    "db:seed": "npx supabase db seed"
+    "db:seed": "npx supabase db seed",
+    "db:seed:linked": "npx supabase db seed --linked"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",

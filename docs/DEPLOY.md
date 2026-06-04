@@ -30,6 +30,10 @@ In **Supabase Dashboard → SQL Editor**, run each file under `supabase/migratio
 | 4 | `20250525100000_support_rls.sql` |
 | 5 | `20250526100000_content_blocks_rls.sql` |
 | 6 | `20250526110000_support_attachments.sql` |
+| 7 | `20250526000000_product_variants_related.sql` |
+| 8 | `20250527000000_product_reviews.sql` |
+| 9 | `20250528000000_product_reviews_rls.sql` |
+| 10 | `20250529000000_reviews_customer_ops.sql` |
 
 Alternatively, with the [Supabase CLI](https://supabase.com/docs/guides/cli) linked to the project:
 
@@ -83,9 +87,21 @@ WHERE id = (
 
 3. Sign in and open `/admin` (redirects to `/admin/orders`).
 
-### 6. Optional — dev catalog seed
+### 6. Catalog seed (recommended for production parity)
 
-For a demo catalog (categories, products, sample `product_fields`), run `supabase/seed.sql` in the SQL Editor **after** core migration.
+`supabase/seed.sql` loads **30 products**, **7 categories**, a sample coupon, and demo reviews. Run it **after** all migrations (through `20250529000000_reviews_customer_ops.sql`).
+
+| Environment | Command |
+|-------------|---------|
+| Local Supabase | `npm run db:seed` |
+| Linked remote project | `npx supabase link` then `npm run db:seed:linked` |
+| Dashboard only | Paste `supabase/seed.sql` into **SQL Editor** → Run |
+
+After seeding **production**, set on Vercel:
+
+`CATALOG_DEMO_FALLBACK=false`
+
+so `/products` lists only real database rows (the app can merge demo catalog when fewer than 10 products exist and this flag is not `false`).
 
 For encrypted auto-delivery inventory in dev:
 
@@ -204,7 +220,9 @@ vercel --prod
 
 | Item | Done |
 |------|------|
-| All 6 migrations applied | ☐ |
+| All migrations applied (through `20250529000000`) | ☐ |
+| Catalog seed run (`npm run db:seed` or SQL Editor) | ☐ |
+| `CATALOG_DEMO_FALLBACK=false` on Vercel after seed | ☐ |
 | Buckets `product-images` (public), `support-attachments` (private) | ☐ |
 | Admin user promoted (`profiles.role = 'admin'`) | ☐ |
 | Vercel env vars set (especially encryption keys) | ☐ |

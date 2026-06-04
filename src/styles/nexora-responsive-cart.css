@@ -1,0 +1,145 @@
+/**
+ * Cart (/cart) + Wishlist (/wishlist) — dedicated responsive polish
+ */
+
+.sf-cart-item__checkout-btn {
+  min-height: 38px;
+  padding-inline: 16px;
+  font-size: 13px;
+}
+
+.sf-trust-strip--cart {
+  margin-top: 12px;
+}
+
+@media (max-width: 959px) {
+  .sf-cart-layout {
+    gap: 20px;
+  }
+  .sf-cart-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .sf-cart-layout > aside {
+    order: -1;
+  }
+}
+
+@media (max-width: 767px) {
+  .sf-cart-layout > aside {
+    order: 0;
+  }
+
+  .sf-cart-item {
+    grid-template-columns: 72px minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    gap: 12px 14px;
+    padding: 14px;
+  }
+
+  .sf-cart-item__media {
+    grid-row: 1 / 3;
+    width: 72px;
+    height: 72px;
+  }
+
+  .sf-cart-item__name {
+    font-size: 14px;
+    overflow-wrap: anywhere;
+  }
+
+  .sf-cart-item__actions {
+    grid-column: 2;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 4px;
+  }
+
+  .sf-cart-item__actions .sf-btn-ghost {
+    min-height: 40px;
+    padding: 8px 12px;
+  }
+
+  .sf-cart-item__total {
+    grid-column: 1 / -1;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    width: 100%;
+    margin-top: 4px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .sf-cart-item__total .sf-btn-primary,
+  .sf-cart-item__total .sf-btn-outline {
+    flex: 1 1 140px;
+    min-height: 44px;
+    justify-content: center;
+    font-size: 13px;
+    padding-inline: 14px;
+  }
+
+  .sf-cart-checkout-actions {
+    gap: 12px;
+  }
+
+  .sf-cart-checkout-actions .sf-btn-primary,
+  .sf-cart-checkout-actions .sf-btn-outline {
+    min-height: 48px;
+    font-size: 15px;
+  }
+
+  .sf-trust-strip {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .sf-trust-strip__item {
+    min-height: 44px;
+    padding: 12px 14px;
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 479px) {
+  .sf-cart-item {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .sf-cart-item__media {
+    width: 72px;
+    height: 72px;
+  }
+
+  .sf-cart-item__total {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sf-cart-item__total .sf-btn-primary,
+  .sf-cart-item__total .sf-btn-outline {
+    flex: 1 1 auto;
+    width: 100%;
+  }
+}
+
+/* Wishlist reuses sf-cart-item */
+@media (max-width: 767px) {
+  .sf-cart-list .sf-cart-item .sf-cart-item__total {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .sf-cart-list .sf-cart-item .sf-cart-item__total .sf-btn-primary,
+  .sf-cart-list .sf-cart-item .sf-cart-item__total .sf-btn-outline {
+    width: 100%;
+    min-height: 44px;
+  }
+}

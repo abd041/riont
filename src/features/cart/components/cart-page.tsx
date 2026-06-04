@@ -138,8 +138,7 @@ export function CartPage() {
                   </p>
                   <Link
                     href={itemCheckoutHref}
-                    className="sf-btn-primary"
-                    style={{ minHeight: 38, paddingInline: 16, fontSize: 13 }}
+                    className="sf-btn-primary sf-cart-item__checkout-btn"
                   >
                     {t("checkoutItem")}
                   </Link>
@@ -169,7 +168,7 @@ export function CartPage() {
             <p className="sf-cart-note">{t("checkoutNote")}</p>
           </PremiumPanel>
 
-          <div className="sf-trust-strip" style={{ marginTop: 12 }}>
+          <div className="sf-trust-strip sf-trust-strip--cart">
             <div className="sf-trust-strip__item">
               <Shield className="sf-trust-strip__icon" strokeWidth={1.5} />
               {tHome("footerTrustSecure")}

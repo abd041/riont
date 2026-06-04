@@ -104,8 +104,7 @@ export function WishlistPage() {
                 </button>
                 <Link
                   href={`/products/${item.slug}/checkout`}
-                  className="sf-btn-outline"
-                  style={{ minHeight: 38, paddingInline: 16, fontSize: 13 }}
+                  className="sf-btn-outline sf-cart-item__checkout-btn"
                 >
                   {t("buyNow")}
                 </Link>

@@ -23,6 +23,18 @@
 @import "./nexora-storefront-pages-2026.css";
 @import "./nexora-admin-2026.css";
 @import "./nexora-responsive.css";
+@import "./nexora-responsive-pages.css";
+@import "./nexora-responsive-home.css";
+@import "./nexora-responsive-products.css";
+@import "./nexora-responsive-categories.css";
+@import "./nexora-responsive-cart.css";
+@import "./nexora-responsive-auth.css";
+@import "./nexora-responsive-account.css";
+@import "./nexora-responsive-admin.css";
+@import "./nexora-responsive-pdp.css";
+@import "./nexora-responsive-checkout.css";
+@import "./nexora-responsive-flows.css";
+@import "./nexora-responsive-chrome.css";
 
 @tailwind base;
 @tailwind components;

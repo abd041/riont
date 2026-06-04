@@ -1,4 +1,17 @@
--- Optional dev seed — run after core, variants, and 20250527000000_product_reviews.sql migrations
+-- Demo catalog seed (30 products, 7 categories, coupons, sample reviews)
+--
+-- Prerequisites: all migrations through 20250529000000_reviews_customer_ops.sql
+--
+-- Local:
+--   npm run db:seed
+--   (or paste this file in Supabase Dashboard → SQL Editor)
+--
+-- Production (linked Supabase project):
+--   npx supabase link --project-ref YOUR_REF
+--   npm run db:seed:linked
+--
+-- After seeding production, set on Vercel: CATALOG_DEMO_FALLBACK=false
+-- so the storefront uses only database products (not demo merge).
 
 INSERT INTO categories (id, sort_order, icon_url) VALUES
   ('a0000000-0000-4000-8000-000000000001', 1, 'catalog/categories/instagram.jpg'),

@@ -216,7 +216,7 @@ export function CartCheckoutForm({
               <ul className="nex-cart-checkout-lines">
                 {lines.map((line) => (
                   <li key={line.slug} className="nex-cart-checkout-line">
-                    <div className="nex-co-product-thumb-wrap" style={{ width: 56, height: 56 }}>
+                    <div className="nex-co-product-thumb-wrap">
                       {line.imageUrl ? (
                         <Image
                           src={line.imageUrl}
