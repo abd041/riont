@@ -112,7 +112,14 @@ const PRODUCT_DETAIL_SELECT = `
   )
 `;
 
-const allowDemoFallback = process.env.NODE_ENV !== "production";
+/** Dev/staging: demo on errors and missing Supabase. Sparse fill: see mergeCatalogWithDemo. */
+const allowDemoFallback =
+  process.env.CATALOG_DEMO_FALLBACK === "true" ||
+  (process.env.CATALOG_DEMO_FALLBACK !== "false" &&
+    process.env.NODE_ENV !== "production");
+
+/** Fill homepage/browse when the live catalog is still sparse (dev + production). */
+const allowSparseCatalogFill = process.env.CATALOG_DEMO_FALLBACK !== "false";
 
 function getCategoryTranslations(row: ProductQueryRow) {
   const categories = Array.isArray(row.categories)
@@ -391,7 +398,7 @@ function mergeCatalogWithDemo(
   live: CatalogProduct[],
   options?: { categorySlug?: string; limit?: number },
 ): CatalogProduct[] {
-  if (!allowDemoFallback) {
+  if (!allowSparseCatalogFill) {
     return options?.limit ? live.slice(0, options.limit) : live;
   }
 

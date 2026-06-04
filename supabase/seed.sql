@@ -73,8 +73,6 @@ ON CONFLICT (id) DO UPDATE SET
   delivery_mode = EXCLUDED.delivery_mode,
   sort_order = EXCLUDED.sort_order;
 
-  sort_order = EXCLUDED.sort_order;
-
 DELETE FROM product_translations
 WHERE product_id IN (
   'b0000000-0000-4000-8000-000000000001',

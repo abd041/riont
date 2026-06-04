@@ -10,7 +10,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "seed:inventory": "node scripts/seed-inventory.mjs"
+    "seed:inventory": "node scripts/seed-inventory.mjs",
+    "db:seed": "npx supabase db seed"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
