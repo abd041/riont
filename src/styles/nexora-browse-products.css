@@ -773,9 +773,9 @@
   gap: 24px;
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .nex-pdp-layout {
-    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) 260px;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr) minmax(220px, 260px);
     gap: 28px;
     align-items: start;
   }

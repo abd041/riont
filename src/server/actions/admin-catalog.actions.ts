@@ -16,6 +16,8 @@ import {
   updateSiteSettings,
   uploadProductImage,
 } from "@/server/services/admin-catalog.service";
+import { ServiceError } from "@/lib/domain/errors";
+import { parseDollarsInput } from "@/lib/admin/money";
 import {
   saveCategorySchema,
   saveCouponSchema,
@@ -24,17 +26,42 @@ import {
 } from "@/validations/admin-catalog.schema";
 
 export type CatalogActionResult =
-  | { success: true; message?: string }
+  | { success: true; message?: string; categoryId?: string }
   | { success: false; error: string };
 
+function formatProductValidationError(
+  issues: Array<{ path: PropertyKey[]; message: string }>,
+): string {
+  const first = issues[0];
+  if (!first) return "Please check the form and try again.";
+  const field = first.path.map(String).join(" · ");
+  const friendly: Record<string, string> = {
+    priceCents: "Sale price",
+    compareAtCents: "Original price",
+    categoryId: "Category",
+    "en.name": "English product name",
+    "en.slug": "English link name",
+    "ar.name": "Arabic product name",
+    "ar.slug": "Arabic link name",
+  };
+  const label = friendly[field] ?? field;
+  return `${label}: ${first.message}`;
+}
+
 function parseProductForm(formData: FormData) {
+  const priceCents = parseDollarsInput(formData.get("priceDollars"));
+  const compareAtCents = parseDollarsInput(formData.get("compareAtDollars"));
+
   return saveProductSchema.safeParse({
     productId: formData.get("productId") || undefined,
     categoryId: formData.get("categoryId"),
     status: formData.get("status"),
     deliveryMode: formData.get("deliveryMode"),
-    priceCents: formData.get("priceCents"),
-    compareAtCents: formData.get("compareAtCents") || undefined,
+    priceCents: priceCents ?? formData.get("priceCents"),
+    compareAtCents:
+      compareAtCents !== undefined
+        ? compareAtCents
+        : formData.get("compareAtCents") || undefined,
     isFeatured: formData.get("isFeatured") === "on",
     sortOrder: formData.get("sortOrder") || 0,
     badge: formData.get("badge") || "none",
@@ -59,7 +86,10 @@ export async function saveProductAction(
 ): Promise<CatalogActionResult> {
   const parsed = parseProductForm(formData);
   if (!parsed.success) {
-    return { success: false, error: "Invalid product data" };
+    return {
+      success: false,
+      error: formatProductValidationError(parsed.error.issues),
+    };
   }
 
   try {
@@ -82,10 +112,30 @@ export async function saveProductAction(
     revalidatePath(`/admin/products/${productId}`);
     revalidatePath("/en/products");
     revalidatePath("/ar/products");
-    redirect(`/admin/products/${productId}`);
+
+    const isCreate = !parsed.data.productId;
+    redirect(
+      isCreate
+        ? `/admin/products/${productId}?welcome=1`
+        : `/admin/products/${productId}?saved=1`,
+    );
   } catch (error) {
     if (isRedirectError(error)) throw error;
-    return { success: false, error: "Could not save product" };
+    if (error instanceof ServiceError) {
+      return { success: false, error: error.message };
+    }
+    const code =
+      error && typeof error === "object" && "code" in error
+        ? String((error as { code: string }).code)
+        : "";
+    if (code === "23505") {
+      return {
+        success: false,
+        error:
+          "That link name is already used. Change the English or Arabic link name and try again.",
+      };
+    }
+    return { success: false, error: "Could not save product. Please try again." };
   }
 }
 
@@ -136,18 +186,43 @@ export async function saveCategoryAction(
   });
 
   if (!parsed.success) {
-    return { success: false, error: "Invalid category data" };
+    const first = parsed.error.issues[0];
+    const field = first?.path.map(String).join(" · ") ?? "form";
+    return {
+      success: false,
+      error: first ? `${field}: ${first.message}` : "Invalid category data",
+    };
   }
 
   try {
     await requireAdmin();
-    await saveCategory(parsed.data);
+    const { categoryId } = await saveCategory(parsed.data);
     revalidatePath("/admin/categories");
     revalidatePath("/en/categories");
-    return { success: true, message: "Category saved" };
+    revalidatePath("/ar/categories");
+    const isCreate = !parsed.data.categoryId;
+    return {
+      success: true,
+      message: isCreate ? "Category created" : "Category updated",
+      categoryId,
+    };
   } catch (error) {
     if (isRedirectError(error)) throw error;
-    return { success: false, error: "Could not save category" };
+    if (error instanceof ServiceError) {
+      return { success: false, error: error.message };
+    }
+    const code =
+      error && typeof error === "object" && "code" in error
+        ? String((error as { code: string }).code)
+        : "";
+    if (code === "23505") {
+      return {
+        success: false,
+        error:
+          "That link name is already used. Change the English or Arabic link name.",
+      };
+    }
+    return { success: false, error: "Could not save category. Please try again." };
   }
 }
 

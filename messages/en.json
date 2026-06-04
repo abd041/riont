@@ -298,6 +298,8 @@
     "priceRange": "Price Range",
     "platform": "Platform",
     "clearFilters": "Clear Filters",
+    "showFilters": "Show filters",
+    "hideFilters": "Hide filters",
     "platformWindows": "Windows",
     "platformPlayStation": "PlayStation",
     "platformXbox": "Xbox",

@@ -170,12 +170,44 @@ export async function getAdminProductEdit(
   };
 }
 
+async function assertProductSlugAvailable(
+  locale: string,
+  slug: string,
+  excludeProductId?: string,
+): Promise<void> {
+  const admin = createAdminClient();
+  let query = admin
+    .from("product_translations")
+    .select("product_id")
+    .eq("locale", locale)
+    .eq("slug", slug);
+
+  if (excludeProductId) {
+    query = query.neq("product_id", excludeProductId);
+  }
+
+  const { data, error } = await query.maybeSingle();
+  if (error) throw error;
+  if (data) {
+    const label = locale === "ar" ? "Arabic" : "English";
+    throw new ServiceError(
+      "CONFLICT",
+      `${label} link name “${slug}” is already used by another product. Please choose a different one.`,
+    );
+  }
+}
+
 export async function saveProduct(
   input: z.infer<typeof saveProductSchema>,
 ): Promise<{ productId: string }> {
   const admin = createAdminClient();
   const compareAt =
     input.compareAtCents === undefined ? null : Number(input.compareAtCents);
+
+  const enSlug = input.en.slug.trim() || slugify(input.en.name);
+  const arSlug = input.ar.slug.trim() || slugify(input.ar.name);
+  await assertProductSlugAvailable("en", enSlug, input.productId);
+  await assertProductSlugAvailable("ar", arSlug, input.productId);
 
   const productPayload = {
     category_id: input.categoryId,
@@ -207,9 +239,12 @@ export async function saveProduct(
     productId = (data as { id: string }).id;
   }
 
-  for (const locale of ["en", "ar"] as const) {
-    const tr = input[locale];
-    const slug = tr.slug.trim() || slugify(tr.name);
+  const translations = [
+    { locale: "en" as const, tr: input.en, slug: enSlug },
+    { locale: "ar" as const, tr: input.ar, slug: arSlug },
+  ];
+
+  for (const { locale, tr, slug } of translations) {
     const { error } = await admin.from("product_translations").upsert(
       {
         product_id: productId,
@@ -251,10 +286,20 @@ export async function setProductImagePath(
   if (error) throw error;
 }
 
+const MAX_PRODUCT_IMAGE_BYTES = 5 * 1024 * 1024;
+
 export async function uploadProductImage(
   productId: string,
   file: File,
 ): Promise<string> {
+  if (file.size > MAX_PRODUCT_IMAGE_BYTES) {
+    throw new ServiceError("VALIDATION", "Image must be 5 MB or smaller.");
+  }
+  const allowed = ["image/jpeg", "image/png", "image/webp"];
+  if (!allowed.includes(file.type)) {
+    throw new ServiceError("VALIDATION", "Image must be JPG, PNG, or WebP.");
+  }
+
   const admin = createAdminClient();
   const ext = file.name.split(".").pop()?.toLowerCase() ?? "jpg";
   const path = `products/${productId}/${crypto.randomUUID()}.${ext}`;
@@ -278,8 +323,10 @@ export type AdminCategoryRow = {
   iconUrl: string | null;
   enName: string;
   enSlug: string;
+  enDescription: string;
   arName: string;
   arSlug: string;
+  arDescription: string;
 };
 
 export async function listAdminCategories(): Promise<AdminCategoryRow[]> {
@@ -291,7 +338,7 @@ export async function listAdminCategories(): Promise<AdminCategoryRow[]> {
       id,
       sort_order,
       icon_url,
-      category_translations (locale, name, slug)
+      category_translations (locale, name, slug, description)
     `,
     )
     .order("sort_order");
@@ -303,7 +350,12 @@ export async function listAdminCategories(): Promise<AdminCategoryRow[]> {
       id: string;
       sort_order: number;
       icon_url: string | null;
-      category_translations: Array<{ locale: string; name: string; slug: string }>;
+      category_translations: Array<{
+        locale: string;
+        name: string;
+        slug: string;
+        description: string | null;
+      }>;
     };
     const en = r.category_translations.find((t) => t.locale === "en");
     const ar = r.category_translations.find((t) => t.locale === "ar");
@@ -313,10 +365,19 @@ export async function listAdminCategories(): Promise<AdminCategoryRow[]> {
       iconUrl: r.icon_url,
       enName: en?.name ?? "",
       enSlug: en?.slug ?? "",
+      enDescription: en?.description ?? "",
       arName: ar?.name ?? "",
       arSlug: ar?.slug ?? "",
+      arDescription: ar?.description ?? "",
     };
   });
+}
+
+export async function getAdminCategoryById(
+  id: string,
+): Promise<AdminCategoryRow | null> {
+  const rows = await listAdminCategories();
+  return rows.find((c) => c.id === id) ?? null;
 }
 
 export async function listCategoryOptions(): Promise<
@@ -326,20 +387,53 @@ export async function listCategoryOptions(): Promise<
   return rows.map((c) => ({ id: c.id, name: c.enName }));
 }
 
+async function assertCategorySlugAvailable(
+  locale: string,
+  slug: string,
+  excludeCategoryId?: string,
+): Promise<void> {
+  const admin = createAdminClient();
+  let query = admin
+    .from("category_translations")
+    .select("category_id")
+    .eq("locale", locale)
+    .eq("slug", slug);
+
+  if (excludeCategoryId) {
+    query = query.neq("category_id", excludeCategoryId);
+  }
+
+  const { data, error } = await query.maybeSingle();
+  if (error) throw error;
+  if (data) {
+    const label = locale === "ar" ? "Arabic" : "English";
+    throw new ServiceError(
+      "CONFLICT",
+      `${label} link name “${slug}” is already used by another category.`,
+    );
+  }
+}
+
 export async function saveCategory(
   input: z.infer<typeof saveCategorySchema>,
-): Promise<void> {
+): Promise<{ categoryId: string }> {
   const admin = createAdminClient();
   let categoryId = input.categoryId;
 
+  const enSlug = input.en.slug.trim() || slugify(input.en.name);
+  const arSlug = input.ar.slug.trim() || slugify(input.ar.name);
+  await assertCategorySlugAvailable("en", enSlug, categoryId);
+  await assertCategorySlugAvailable("ar", arSlug, categoryId);
+
   if (categoryId) {
-    await admin
+    const { error } = await admin
       .from("categories")
       .update({
         sort_order: input.sortOrder,
         icon_url: input.iconUrl?.trim() || null,
       })
       .eq("id", categoryId);
+    if (error) throw error;
   } else {
     const { data, error } = await admin
       .from("categories")
@@ -353,19 +447,26 @@ export async function saveCategory(
     categoryId = (data as { id: string }).id;
   }
 
-  for (const locale of ["en", "ar"] as const) {
-    const tr = input[locale];
-    await admin.from("category_translations").upsert(
+  const translations = [
+    { locale: "en" as const, tr: input.en, slug: enSlug },
+    { locale: "ar" as const, tr: input.ar, slug: arSlug },
+  ];
+
+  for (const { locale, tr, slug } of translations) {
+    const { error } = await admin.from("category_translations").upsert(
       {
         category_id: categoryId!,
         locale,
         name: tr.name.trim(),
-        slug: tr.slug.trim() || slugify(tr.name),
+        slug,
         description: tr.description?.trim() || null,
       },
       { onConflict: "category_id,locale" },
     );
+    if (error) throw error;
   }
+
+  return { categoryId: categoryId! };
 }
 
 export type AdminCouponRow = {

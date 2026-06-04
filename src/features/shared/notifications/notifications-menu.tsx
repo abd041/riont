@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { Bell } from "lucide-react";
@@ -18,7 +19,21 @@ export function NotificationsMenu({
   const t = useTranslations("notifications");
   const locale = useLocale();
   const router = useRouter();
+  const [open, setOpen] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
   const unread = notifications.filter((n) => !n.readAt).length;
+
+  useEffect(() => {
+    function onPointerDown(event: MouseEvent) {
+      if (!rootRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+    if (open) {
+      document.addEventListener("pointerdown", onPointerDown);
+      return () => document.removeEventListener("pointerdown", onPointerDown);
+    }
+  }, [open]);
 
   async function handleMarkAll() {
     await markAllNotificationsReadAction();
@@ -31,11 +46,18 @@ export function NotificationsMenu({
   }
 
   return (
-    <div className="group relative">
+    <div
+      ref={rootRef}
+      className="nex-notifications-menu relative"
+      data-open={open ? "true" : "false"}
+    >
       <button
         type="button"
         aria-label={t("title")}
+        aria-expanded={open}
+        aria-haspopup="true"
         className="nex-topbar-action relative"
+        onClick={() => setOpen((value) => !value)}
       >
         <Bell strokeWidth={1.75} />
         {unread > 0 && (
@@ -45,20 +67,20 @@ export function NotificationsMenu({
         )}
       </button>
 
-      <div className="invisible absolute end-0 top-full z-50 mt-2 w-80 max-w-[calc(100vw-2rem)] rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-elevated)] opacity-0 shadow-xl transition-all group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+      <div className="nex-notifications-panel absolute end-0 top-full z-50 mt-2 w-80 max-w-[min(20rem,calc(100vw-1.5rem))] rounded-[var(--radius-lg)] border border-[var(--border-default)] bg-[var(--bg-elevated)] shadow-xl">
         <div className="flex items-center justify-between border-b border-[var(--border-subtle)] px-4 py-3">
           <p className="text-sm font-semibold text-white">{t("title")}</p>
           {unread > 0 && (
             <button
               type="button"
               onClick={() => void handleMarkAll()}
-              className="text-xs text-violet-400 hover:text-violet-300"
+              className="min-h-[36px] px-2 text-xs text-violet-400 hover:text-violet-300"
             >
               {t("markAllRead")}
             </button>
           )}
         </div>
-        <ul className="max-h-72 overflow-y-auto py-1">
+        <ul className="max-h-[min(18rem,50vh)] overflow-y-auto py-1">
           {notifications.length === 0 ? (
             <li className="px-4 py-6 text-center text-sm text-[var(--text-muted)]">
               {t("empty")}
@@ -69,19 +91,19 @@ export function NotificationsMenu({
                 <button
                   type="button"
                   onClick={() => void handleMarkOne(n.id)}
-                  className={`w-full px-4 py-3 text-start transition hover:bg-white/[0.03] ${
+                  className={`min-h-[44px] w-full px-4 py-3 text-start transition hover:bg-white/[0.03] ${
                     n.readAt ? "opacity-70" : ""
                   }`}
                 >
                   <p className="text-sm font-medium text-white">{n.title}</p>
-                  {n.body && (
-                    <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-muted)]">
-                      {n.body}
+                    {n.body && (
+                      <p className="mt-0.5 line-clamp-2 text-xs text-[var(--text-muted)]">
+                        {n.body}
+                      </p>
+                    )}
+                    <p className="mt-1 text-xs text-[var(--text-muted)]">
+                      {new Date(n.createdAt).toLocaleString(locale)}
                     </p>
-                  )}
-                  <p className="mt-1 text-[10px] text-[var(--text-muted)]">
-                    {new Date(n.createdAt).toLocaleString(locale)}
-                  </p>
                 </button>
               </li>
             ))
@@ -90,7 +112,8 @@ export function NotificationsMenu({
         <div className="border-t border-[var(--border-subtle)] p-2">
           <Link
             href="/account/orders"
-            className="block rounded-md px-3 py-2 text-center text-xs text-violet-400 hover:bg-white/[0.03]"
+            className="flex min-h-[44px] items-center justify-center rounded-md px-3 py-2 text-center text-xs text-violet-400 hover:bg-white/[0.03]"
+            onClick={() => setOpen(false)}
           >
             {t("title")}
           </Link>

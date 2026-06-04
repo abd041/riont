@@ -1,5 +1,6 @@
 "use client";
 
+import { getTicketStatusLabel } from "@/lib/admin/labels";
 import { AdminActionForm } from "./admin-action-form";
 import {
   adminReplyTicketAction,
@@ -61,7 +62,7 @@ export function AdminTicketStatusForm({ ticketId }: { ticketId: string }) {
         <AdminActionForm
           key={status}
           action={adminUpdateTicketStatusAction}
-          submitLabel={status.replace(/_/g, " ")}
+          submitLabel={getTicketStatusLabel(status)}
           variant="outline"
         >
           <input type="hidden" name="ticketId" value={ticketId} />

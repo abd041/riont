@@ -11,7 +11,7 @@ type AdminDataTableProps = {
 export function AdminDataTable({
   columns,
   children,
-  scrollable = false,
+  scrollable = true,
   className,
 }: AdminDataTableProps) {
   return (

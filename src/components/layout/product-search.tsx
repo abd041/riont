@@ -46,7 +46,7 @@ export function ProductSearch({ className }: { className?: string }) {
         onChange={(e) => setQuery(e.target.value)}
         placeholder={t("searchPlaceholder")}
         aria-label={t("searchPlaceholder")}
-        className="h-full w-full bg-transparent ps-11 pe-[4.5rem] text-sm text-white placeholder:text-[var(--text-muted)] focus:outline-none"
+        className="nex-search-input h-full w-full bg-transparent ps-11 pe-3 text-base text-white placeholder:text-[var(--text-muted)] focus:outline-none sm:pe-[4.5rem] sm:text-sm"
       />
       <kbd className="nex-search-kbd pointer-events-none absolute end-3 hidden px-2 py-1 font-mono sm:inline">
         {t("searchShortcut")}

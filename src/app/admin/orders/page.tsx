@@ -1,6 +1,10 @@
 import Link from "next/link";
 import { OrderStatus } from "@/lib/domain/enums";
 import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
+import {
+  getOrderStatusLabel,
+  ORDER_STATUS_FILTER_LABELS,
+} from "@/lib/admin/labels";
 import { listAdminOrders } from "@/server/services/admin-order.service";
 import { OrderStatusBadge } from "@/features/orders/components/order-status-badge";
 import {
@@ -16,26 +20,13 @@ import {
   AdminSearchForm,
 } from "@/features/admin/components/admin-page-actions";
 
-const STATUS_LABELS: Record<OrderStatusType, string> = {
-  [OrderStatus.PENDING_REVIEW]: "Pending review",
-  [OrderStatus.AWAITING_PAYMENT]: "Awaiting payment",
-  [OrderStatus.PAYMENT_RECEIVED]: "Payment received",
-  [OrderStatus.PROCESSING]: "Processing",
-  [OrderStatus.DELIVERED]: "Delivered",
-  [OrderStatus.COMPLETED]: "Completed",
-  [OrderStatus.REFUNDED]: "Refunded",
-  [OrderStatus.CANCELLED]: "Cancelled",
-  [OrderStatus.NEEDS_CUSTOMER_RESPONSE]: "Needs response",
-  [OrderStatus.ON_HOLD]: "On hold",
-};
-
 const FILTERS: Array<{ label: string; value?: OrderStatusType }> = [
   { label: "All" },
-  { label: "Pending review", value: OrderStatus.PENDING_REVIEW },
-  { label: "Awaiting payment", value: OrderStatus.AWAITING_PAYMENT },
-  { label: "Payment received", value: OrderStatus.PAYMENT_RECEIVED },
-  { label: "Processing", value: OrderStatus.PROCESSING },
-  { label: "Delivered", value: OrderStatus.DELIVERED },
+  { label: ORDER_STATUS_FILTER_LABELS[OrderStatus.PENDING_REVIEW], value: OrderStatus.PENDING_REVIEW },
+  { label: ORDER_STATUS_FILTER_LABELS[OrderStatus.AWAITING_PAYMENT], value: OrderStatus.AWAITING_PAYMENT },
+  { label: ORDER_STATUS_FILTER_LABELS[OrderStatus.PAYMENT_RECEIVED], value: OrderStatus.PAYMENT_RECEIVED },
+  { label: ORDER_STATUS_FILTER_LABELS[OrderStatus.PROCESSING], value: OrderStatus.PROCESSING },
+  { label: ORDER_STATUS_FILTER_LABELS[OrderStatus.DELIVERED], value: OrderStatus.DELIVERED },
 ];
 
 export default async function AdminOrdersPage({
@@ -92,7 +83,7 @@ export default async function AdminOrdersPage({
               <td>
                 <OrderStatusBadge
                   status={order.status}
-                  label={STATUS_LABELS[order.status]}
+                  label={getOrderStatusLabel(order.status)}
                 />
               </td>
               <td dir="ltr">

@@ -22,6 +22,7 @@
 @import "./nexora-premium-2026.css";
 @import "./nexora-storefront-pages-2026.css";
 @import "./nexora-admin-2026.css";
+@import "./nexora-responsive.css";
 
 @tailwind base;
 @tailwind components;

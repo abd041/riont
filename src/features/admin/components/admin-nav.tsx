@@ -4,37 +4,87 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/utils/cn";
 
-const links = [
-  { href: "/admin/orders", label: "Orders" },
-  { href: "/admin/tickets", label: "Support" },
-  { href: "/admin/customers", label: "Customers" },
-  { href: "/admin/products", label: "Products" },
-  { href: "/admin/activity", label: "Activity" },
-  { href: "/admin/homepage", label: "Homepage" },
-  { href: "/admin/categories", label: "Categories" },
-  { href: "/admin/coupons", label: "Coupons" },
-  { href: "/admin/settings", label: "Settings" },
+type NavLink = {
+  href: string;
+  label: string;
+  exact?: boolean;
+};
+
+type NavGroup = {
+  label: string | null;
+  links: NavLink[];
+};
+
+export const ADMIN_NAV_GROUPS: NavGroup[] = [
+  {
+    label: null,
+    links: [{ href: "/admin", label: "Dashboard", exact: true }],
+  },
+  {
+    label: "Sales",
+    links: [
+      { href: "/admin/orders", label: "Orders" },
+      { href: "/admin/tickets", label: "Support" },
+      { href: "/admin/customers", label: "Customers" },
+    ],
+  },
+  {
+    label: "Catalog",
+    links: [
+      { href: "/admin/products", label: "Products" },
+      { href: "/admin/categories", label: "Categories" },
+      { href: "/admin/coupons", label: "Coupons" },
+    ],
+  },
+  {
+    label: "Site",
+    links: [{ href: "/admin/homepage", label: "Homepage" }],
+  },
+  {
+    label: "More",
+    links: [
+      { href: "/admin/settings", label: "Settings" },
+      { href: "/admin/activity", label: "History" },
+    ],
+  },
 ];
+
+function isLinkActive(pathname: string, link: NavLink): boolean {
+  if (link.exact) return pathname === link.href;
+  return pathname === link.href || pathname.startsWith(`${link.href}/`);
+}
 
 export function AdminNav() {
   const pathname = usePathname();
 
   return (
     <nav className="admin-nav" aria-label="Admin navigation">
-      {links.map((link) => {
-        const active =
-          pathname === link.href || pathname.startsWith(`${link.href}/`);
+      {ADMIN_NAV_GROUPS.map((group) => (
+        <div key={group.label ?? "overview"} className="admin-nav__group">
+          {group.label && (
+            <span className="admin-nav__group-label">{group.label}</span>
+          )}
+          <div className="admin-nav__links">
+            {group.links.map((link) => {
+              const active = isLinkActive(pathname, link);
 
-        return (
-          <Link
-            key={link.href}
-            href={link.href}
-            className={cn("admin-nav__link", active && "admin-nav__link--active")}
-          >
-            {link.label}
-          </Link>
-        );
-      })}
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "admin-nav__link",
+                    active && "admin-nav__link--active",
+                  )}
+                  aria-current={active ? "page" : undefined}
+                >
+                  {link.label}
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      ))}
     </nav>
   );
 }

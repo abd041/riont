@@ -24,8 +24,8 @@ export default async function AdminActivityPage() {
   return (
     <AdminPageShell>
       <AdminPageHeader
-        title="Activity log"
-        description="Recent admin actions across orders, products, and settings."
+        title="History"
+        description="A record of changes made in the admin — orders, products, and settings."
       />
 
       <AdminDataTable

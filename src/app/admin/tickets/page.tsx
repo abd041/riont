@@ -1,4 +1,8 @@
 import Link from "next/link";
+import {
+  getTicketStatusLabel,
+  getTicketTypeLabel,
+} from "@/lib/admin/labels";
 import { listAdminTickets } from "@/server/services/support.service";
 import type { SupportTicketStatus } from "@/types/support";
 import { Badge } from "@/components/ui/badge";
@@ -12,9 +16,9 @@ import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 
 const FILTERS: Array<{ label: string; value?: SupportTicketStatus }> = [
   { label: "All" },
-  { label: "Waiting admin", value: "waiting_admin" },
+  { label: "Needs your reply", value: "waiting_admin" },
   { label: "Open", value: "open" },
-  { label: "Waiting customer", value: "waiting_customer" },
+  { label: "Waiting on customer", value: "waiting_customer" },
   { label: "Resolved", value: "resolved" },
 ];
 
@@ -58,9 +62,11 @@ export default async function AdminTicketsPage({
                 </Link>
               </td>
               <td>{ticket.subject}</td>
-              <td className="text-[var(--text-muted)]">{ticket.ticketType}</td>
+              <td className="text-[var(--text-muted)]">
+                {getTicketTypeLabel(ticket.ticketType)}
+              </td>
               <td>
-                <Badge variant="accent">{ticket.status}</Badge>
+                <Badge variant="accent">{getTicketStatusLabel(ticket.status)}</Badge>
               </td>
               <td dir="ltr">{ticket.orderNumber ?? "—"}</td>
               <td className="text-[var(--text-muted)]">

@@ -2,6 +2,7 @@
 
 import { OrderStatus } from "@/lib/domain/enums";
 import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
+import { getOrderStatusLabel, getDeliveryModeLabel } from "@/lib/admin/labels";
 import { AdminActionForm } from "./admin-action-form";
 import {
   fulfillAutoItemAction,
@@ -10,19 +11,6 @@ import {
   updateAdminNoteAction,
 } from "@/server/actions/admin-order.actions";
 import type { AdminOrderDetail, AdminOrderItem } from "@/types/admin";
-
-const STATUS_LABELS: Record<OrderStatusType, string> = {
-  [OrderStatus.PENDING_REVIEW]: "Pending review",
-  [OrderStatus.AWAITING_PAYMENT]: "Awaiting payment",
-  [OrderStatus.PAYMENT_RECEIVED]: "Payment received",
-  [OrderStatus.PROCESSING]: "Processing",
-  [OrderStatus.DELIVERED]: "Delivered",
-  [OrderStatus.COMPLETED]: "Completed",
-  [OrderStatus.REFUNDED]: "Refunded",
-  [OrderStatus.CANCELLED]: "Cancelled",
-  [OrderStatus.NEEDS_CUSTOMER_RESPONSE]: "Needs customer response",
-  [OrderStatus.ON_HOLD]: "On hold",
-};
 
 export function AdminStatusActions({
   order,
@@ -41,7 +29,7 @@ export function AdminStatusActions({
           <AdminActionForm
             key={status}
             action={transitionOrderAction}
-            submitLabel={STATUS_LABELS[status]}
+            submitLabel={getOrderStatusLabel(status)}
             variant={status === OrderStatus.CANCELLED ? "outline" : "primary"}
           >
             <input type="hidden" name="orderId" value={order.id} />
@@ -150,7 +138,8 @@ export function AdminOrderItemsPanel({
               <div>
                 <p className="font-medium">{item.productName}</p>
                 <p className="text-xs text-[var(--text-muted)]">
-                  {item.deliveryMode} · {item.fulfillmentStatus} · qty {item.quantity}
+                  {getDeliveryModeLabel(item.deliveryMode)} · {item.fulfillmentStatus} · qty{" "}
+                  {item.quantity}
                 </p>
               </div>
               <span className="text-sm text-accent-400" dir="ltr">

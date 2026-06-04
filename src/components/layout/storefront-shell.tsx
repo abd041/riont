@@ -103,7 +103,7 @@ export function StorefrontShell({
         <Button
           variant="ghost"
           size="icon"
-          className="nex-nav-close fixed end-4 top-4 z-[60] lg:hidden"
+          className="nex-nav-close fixed end-4 top-4 z-[60] flex h-11 w-11 items-center justify-center lg:hidden"
           onClick={closeNav}
           aria-label="Close menu"
         >

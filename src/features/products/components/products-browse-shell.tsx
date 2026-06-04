@@ -1,6 +1,8 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import { SlidersHorizontal } from "lucide-react";
+import { cn } from "@/utils/cn";
 import { useTranslations } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useRouter, Link } from "@/i18n/navigation";
@@ -60,6 +62,7 @@ export function ProductsBrowseShell({
   const t = useTranslations("catalog");
   const searchParams = useSearchParams();
   const router = useRouter();
+  const [filtersOpen, setFiltersOpen] = useState(false);
 
   const sort = (searchParams.get("sort") as SortOption) || "popular";
   const maxPrice = Number(searchParams.get("maxPrice")) || MAX_PRICE_CENTS;
@@ -125,10 +128,26 @@ export function ProductsBrowseShell({
       </header>
 
       <div className="nex-browse-body">
-        <ProductsFilterSidebar
-          categories={categories}
-          activeCategorySlug={activeCategorySlug}
-        />
+        <button
+          type="button"
+          className="nex-browse-filters-toggle"
+          aria-expanded={filtersOpen}
+          onClick={() => setFiltersOpen((open) => !open)}
+        >
+          <SlidersHorizontal className="h-4 w-4" aria-hidden />
+          {filtersOpen ? t("hideFilters") : t("showFilters")}
+        </button>
+        <div
+          className={cn(
+            "nex-browse-filters-wrap",
+            filtersOpen && "nex-browse-filters-wrap--open",
+          )}
+        >
+          <ProductsFilterSidebar
+            categories={categories}
+            activeCategorySlug={activeCategorySlug}
+          />
+        </div>
 
         <div className="nex-browse-main">
           {filtered.length === 0 ? (

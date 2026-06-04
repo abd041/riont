@@ -1,0 +1,447 @@
+/**
+ * Cross-device responsive fixes — storefront + admin
+ * Load last in globals.css
+ */
+
+/* Prevent horizontal page shift from full-bleed elements */
+html {
+  overflow-x: clip;
+}
+
+/* Readable type floor on small screens */
+@media (max-width: 639px) {
+  .mp-section__meta,
+  .mp-footer__copy {
+    font-size: max(11px, 0.6875rem);
+  }
+
+  .mp-footer__about,
+  .mp-footer__col a {
+    font-size: max(11px, 0.6875rem);
+  }
+
+  .mp-footer__col-title {
+    font-size: max(10px, 0.625rem);
+  }
+
+  .mp-footer__tagline {
+    font-size: max(10px, 0.625rem);
+  }
+
+  .nex-hero--compact .nex-hero-badge {
+    font-size: max(10px, 0.625rem);
+  }
+
+  .nex-hero--compact .nex-hero-subtitle,
+  .nex-hero--compact .nex-hero-cta {
+    font-size: max(12px, 0.75rem);
+  }
+
+  .mp-grid-pagination__btn {
+    min-width: 40px;
+    min-height: 40px;
+    height: 40px;
+  }
+}
+
+/* ─── Topbar: no 100vw overflow ─── */
+.nex-topbar--fullwidth {
+  width: 100%;
+  max-width: 100%;
+  margin-inline: 0;
+}
+
+@media (max-width: 767px) {
+  .nex-topbar__inner {
+    gap: 6px;
+    padding: 0 8px;
+    min-height: 48px;
+  }
+
+  .nex-topbar-center {
+    min-width: 0;
+    flex: 1 1 120px;
+  }
+
+  .nex-topbar-end {
+    gap: 4px;
+  }
+
+  .nex-topbar-action {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .nex-topbar-wishlist {
+    display: none;
+  }
+
+  .nex-topbar-pill.nex-lang-btn {
+    display: none;
+  }
+
+  .nex-search input {
+    padding-inline-end: 12px !important;
+    font-size: 16px; /* avoids iOS zoom on focus */
+  }
+
+  .nex-search {
+    min-height: 44px;
+  }
+
+  .nex-topbar-menu-btn {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .nex-topbar-wishlist {
+    display: none;
+  }
+}
+
+/* ─── Notifications: tap-friendly panel ─── */
+.nex-notifications-menu[data-open="true"] .nex-notifications-panel {
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.nex-notifications-panel {
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 0.2s ease,
+    visibility 0.2s ease;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .nex-notifications-menu:hover .nex-notifications-panel,
+  .nex-notifications-menu:focus-within .nex-notifications-panel {
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
+/* ─── Product browse: collapsible filters on mobile ─── */
+.nex-browse-filters-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: 44px;
+  margin-bottom: 10px;
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(139, 92, 246, 0.12);
+  font-size: 14px;
+  font-weight: 600;
+  color: #e9d5ff;
+  cursor: pointer;
+}
+
+@media (min-width: 1024px) {
+  .nex-browse-filters-toggle {
+    display: none;
+  }
+}
+
+@media (max-width: 1023.98px) {
+  .nex-browse-filters-wrap {
+    display: none;
+  }
+
+  .nex-browse-filters-wrap--open {
+    display: block;
+    margin-bottom: 12px;
+  }
+
+  .nex-browse-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+  }
+
+  .nex-browse-sort {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .nex-browse-sort-select {
+    flex: 1;
+    max-width: none;
+  }
+}
+
+/* ─── Browse grid: safer min column width ─── */
+@media (max-width: 399px) {
+  .nex-browse-grid .mp-grid__inner,
+  .mp-browse-section--primary .mp-grid__inner {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── PDP: 2 columns on tablet; full 3-col at xl ─── */
+@media (min-width: 1024px) and (max-width: 1279px) {
+  .nex-pdp-layout {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
+  }
+
+  .nex-pdp-layout > :nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ─── Categories grid ─── */
+@media (max-width: 479px) {
+  .nex-categories-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* ─── Cart / checkout spacing ─── */
+@media (max-width: 959px) {
+  .sf-cart-layout {
+    gap: 20px;
+  }
+
+  .nex-co-columns {
+    gap: 18px;
+  }
+}
+
+@media (max-width: 479px) {
+  .sf-cart-item {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 12px;
+    padding: 12px;
+  }
+
+  .sf-cart-item__media {
+    width: 72px;
+    height: 72px;
+  }
+}
+
+/* iOS: 16px inputs avoid focus zoom */
+@media (max-width: 767px) {
+  .nex-co-input,
+  .nex-co-textarea,
+  .nex-browse-sort-select,
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="search"],
+  input[type="password"],
+  input[type="number"],
+  select,
+  textarea {
+    font-size: max(16px, 1rem);
+  }
+}
+
+@media (max-width: 639px) {
+  .sf-qty__btn,
+  .nex-pdp-qty button {
+    width: 44px;
+    height: 44px;
+  }
+
+  .sf-qty__btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .sf-account-nav__link {
+    min-height: 44px;
+    padding-block: 10px;
+  }
+
+  .nex-nav-close {
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .nex-pdp-wishlist {
+    min-height: 44px;
+    padding: 8px 0;
+    align-items: center;
+  }
+
+  .sf-pdp-wrap .nex-pdp-info,
+  .sf-pdp-wrap .nex-pdp-gallery-main,
+  .sf-pdp-wrap .nex-pdp-tabs {
+    padding: 16px;
+  }
+}
+
+/* ─── Admin tables: always scroll on small screens ─── */
+.admin-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 767px) {
+  .admin-table {
+    min-width: 520px;
+  }
+
+  .admin-table th,
+  .admin-table td {
+    padding: 10px 12px;
+  }
+}
+
+/* ─── Admin nav: horizontal scroll on tablet ─── */
+@media (max-width: 1100px) {
+  .admin-header__inner {
+    gap: 12px;
+  }
+
+  .admin-nav {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+    max-width: 100%;
+    padding-bottom: 4px;
+    scrollbar-width: thin;
+  }
+
+  .admin-nav__group {
+    flex-shrink: 0;
+  }
+
+  .admin-nav__link {
+    min-height: 40px;
+    padding: 8px 14px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+
+  .admin-header__meta {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  .admin-header__store-link {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .admin-header__meta > span:first-child {
+    display: none;
+  }
+
+  .admin-new-product-layout {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-product-preview {
+    position: static;
+  }
+
+  .admin-container {
+    padding-inline: 12px;
+  }
+
+  .admin-header__inner {
+    padding-inline: 12px;
+  }
+}
+
+/* ─── Admin touch targets ─── */
+.admin-header__signout {
+  min-height: 40px;
+  padding: 8px 12px;
+}
+
+.admin-table__action {
+  min-height: 36px;
+  padding: 6px 12px;
+}
+
+/* ─── Storefront container padding ─── */
+@media (max-width: 639px) {
+  .nex-storefront-container {
+    padding-inline: 12px;
+  }
+
+  .mp-page__inner,
+  .nex-browse-page {
+    padding-inline: 0;
+  }
+}
+
+/* ─── Safe area for notched phones ─── */
+@supports (padding: max(0px, env(safe-area-inset-top))) {
+  .nex-topbar--fullwidth {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+
+  .admin-header {
+    padding-top: max(0px, env(safe-area-inset-top));
+  }
+}
+
+/* ─── Landscape phones: shorter hero ─── */
+@media (max-height: 500px) and (orientation: landscape) {
+  .nex-hero--compact {
+    min-height: auto !important;
+  }
+}
+
+/* ─── Admin forms: full width on narrow screens ─── */
+@media (max-width: 639px) {
+  .admin-form-grid {
+    grid-template-columns: 1fr !important;
+  }
+
+  .admin-panel__actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .admin-panel__actions .admin-btn,
+  .admin-panel__actions .admin-btn--outline {
+    width: 100%;
+    justify-content: center;
+    min-height: 44px;
+  }
+
+  .admin-shortcut {
+    min-height: 44px;
+  }
+}
+
+/* ─── Legal / content pages ─── */
+@media (max-width: 639px) {
+  .mp-legal-page__title {
+    font-size: 1.35rem;
+  }
+
+  .mp-legal-page__body {
+    font-size: 15px;
+    line-height: 1.65;
+  }
+}
+
+/* Reduced motion: keep scroll usable */
+@media (prefers-reduced-motion: reduce) {
+  .nex-notifications-panel {
+    transition: none;
+  }
+}

@@ -298,6 +298,8 @@
     "priceRange": "نطاق السعر",
     "platform": "المنصة",
     "clearFilters": "مسح الفلاتر",
+    "showFilters": "عرض الفلاتر",
+    "hideFilters": "إخفاء الفلاتر",
     "platformWindows": "ويندوز",
     "platformPlayStation": "بلايستيشن",
     "platformXbox": "إكس بوكس",

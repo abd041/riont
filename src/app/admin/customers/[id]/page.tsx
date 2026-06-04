@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { OrderStatus } from "@/lib/domain/enums";
-import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
+import { getOrderStatusLabel } from "@/lib/admin/labels";
 import { getAdminCustomerDetail } from "@/server/services/admin-customer.service";
 import { OrderStatusBadge } from "@/features/orders/components/order-status-badge";
 import {
@@ -11,18 +10,6 @@ import {
 import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
 import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 
-const STATUS_LABELS: Record<OrderStatusType, string> = {
-  [OrderStatus.PENDING_REVIEW]: "Pending review",
-  [OrderStatus.AWAITING_PAYMENT]: "Awaiting payment",
-  [OrderStatus.PAYMENT_RECEIVED]: "Payment received",
-  [OrderStatus.PROCESSING]: "Processing",
-  [OrderStatus.DELIVERED]: "Delivered",
-  [OrderStatus.COMPLETED]: "Completed",
-  [OrderStatus.REFUNDED]: "Refunded",
-  [OrderStatus.CANCELLED]: "Cancelled",
-  [OrderStatus.NEEDS_CUSTOMER_RESPONSE]: "Needs response",
-  [OrderStatus.ON_HOLD]: "On hold",
-};
 export default async function AdminCustomerDetailPage({
   params,
 }: {
@@ -90,7 +77,7 @@ export default async function AdminCustomerDetailPage({
               <td>
                 <OrderStatusBadge
                   status={order.status}
-                  label={STATUS_LABELS[order.status]}
+                  label={getOrderStatusLabel(order.status)}
                 />
               </td>
               <td dir="ltr">

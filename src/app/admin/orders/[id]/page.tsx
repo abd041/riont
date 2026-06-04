@@ -5,8 +5,7 @@ import {
   getAllowedNextStatuses,
 } from "@/server/services/admin-order.service";
 import { getAvailableStock } from "@/server/services/inventory.service";
-import { OrderStatus } from "@/lib/domain/enums";
-import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
+import { getOrderStatusLabel } from "@/lib/admin/labels";
 import { OrderStatusBadge } from "@/features/orders/components/order-status-badge";
 import {
   AdminNoteForm,
@@ -30,19 +29,6 @@ function formatPaymentMethod(value: string | null): string {
   if (!value) return "—";
   return PAYMENT_METHOD_LABELS[value] ?? value;
 }
-
-const STATUS_LABELS: Record<OrderStatusType, string> = {
-  [OrderStatus.PENDING_REVIEW]: "Pending review",
-  [OrderStatus.AWAITING_PAYMENT]: "Awaiting payment",
-  [OrderStatus.PAYMENT_RECEIVED]: "Payment received",
-  [OrderStatus.PROCESSING]: "Processing",
-  [OrderStatus.DELIVERED]: "Delivered",
-  [OrderStatus.COMPLETED]: "Completed",
-  [OrderStatus.REFUNDED]: "Refunded",
-  [OrderStatus.CANCELLED]: "Cancelled",
-  [OrderStatus.NEEDS_CUSTOMER_RESPONSE]: "Needs customer response",
-  [OrderStatus.ON_HOLD]: "On hold",
-};
 
 export default async function AdminOrderDetailPage({
   params,
@@ -85,7 +71,7 @@ export default async function AdminOrderDetailPage({
         actions={
           <OrderStatusBadge
             status={order.status}
-            label={STATUS_LABELS[order.status]}
+            label={getOrderStatusLabel(order.status)}
           />
         }
       />
@@ -119,7 +105,7 @@ export default async function AdminOrderDetailPage({
               {order.timeline.map((event, i) => (
                 <li key={`${event.createdAt}-${i}`} className="admin-timeline__item">
                   <p className="admin-timeline__label">
-                    {STATUS_LABELS[event.toStatus]}
+                    {getOrderStatusLabel(event.toStatus)}
                   </p>
                   {event.note && (
                     <p className="admin-timeline__note">{event.note}</p>

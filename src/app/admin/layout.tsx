@@ -35,10 +35,10 @@ export default async function AdminLayout({
           <header className="admin-header">
             <div className="admin-header__inner">
               <div className="admin-header__start">
-                <Link href="/admin/orders" className="admin-header__brand-link" aria-label="Riyont admin">
+                <Link href="/admin" className="admin-header__brand-link" aria-label="Riyont admin">
                   <BrandLogo className="nex-brand-logo" height={32} />
                 </Link>
-                <p className="admin-header__title">Operations</p>
+                <p className="admin-header__title">Admin</p>
               </div>
               <AdminNav />
               <div className="admin-header__meta">
@@ -51,7 +51,9 @@ export default async function AdminLayout({
             </div>
           </header>
 
-          <main className="admin-main">{children}</main>
+          <main className="admin-main">
+            <div className="admin-container">{children}</div>
+          </main>
         </div>
         <Toaster theme="dark" richColors position="top-center" />
       </body>

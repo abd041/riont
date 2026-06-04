@@ -1,5 +1,10 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import {
+  getMessageSenderLabel,
+  getTicketStatusLabel,
+  getTicketTypeLabel,
+} from "@/lib/admin/labels";
 import { getTicketById } from "@/server/services/support.service";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -28,8 +33,10 @@ export default async function AdminTicketDetailPage({
 
       <AdminPageHeader
         title={ticket.subject}
-        description={`${ticket.ticketType}${ticket.orderNumber ? ` · Order ${ticket.orderNumber}` : ""}`}
-        actions={<Badge variant="accent">{ticket.status}</Badge>}
+        description={`${getTicketTypeLabel(ticket.ticketType)}${ticket.orderNumber ? ` · Order ${ticket.orderNumber}` : ""}`}
+        actions={
+          <Badge variant="accent">{getTicketStatusLabel(ticket.status)}</Badge>
+        }
       />
 
       <AdminPanel title="Thread">
@@ -44,7 +51,7 @@ export default async function AdminTicketDetailPage({
               <p className="whitespace-pre-wrap">{msg.body}</p>
               <MessageAttachments attachments={msg.attachments} />
               <p className="admin-message__meta">
-                {msg.senderLabel} · {msg.senderType} ·{" "}
+                {msg.senderLabel} · {getMessageSenderLabel(msg.senderType)} ·{" "}
                 {new Date(msg.createdAt).toLocaleString("en")}
               </p>
             </div>

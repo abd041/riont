@@ -1,4 +1,8 @@
 import Link from "next/link";
+import {
+  getDeliveryModeLabel,
+  getProductStatusLabel,
+} from "@/lib/admin/labels";
 import { listAdminProducts } from "@/server/services/admin-catalog.service";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,8 +45,8 @@ export default async function AdminProductsPage() {
                 )}
               </td>
               <td>{p.categoryName}</td>
-              <td>{p.status}</td>
-              <td>{p.deliveryMode}</td>
+              <td>{getProductStatusLabel(p.status)}</td>
+              <td>{getDeliveryModeLabel(p.deliveryMode)}</td>
               <td dir="ltr">${(p.priceCents / 100).toFixed(2)}</td>
             </tr>
           ))

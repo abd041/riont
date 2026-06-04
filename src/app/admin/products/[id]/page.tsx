@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { AdminProductCreatedBanner } from "@/features/admin/components/admin-product-created-banner";
 import {
   getAdminProductEdit,
   getAdminProductFields,
@@ -17,10 +18,13 @@ import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 
 export default async function AdminEditProductPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ id: string }>;
+  searchParams: Promise<{ welcome?: string; saved?: string }>;
 }) {
   const { id } = await params;
+  const { welcome, saved } = await searchParams;
   const [product, categories, variants, fields, relatedIds, productOptions, reviews] =
     await Promise.all([
       getAdminProductEdit(id),
@@ -39,7 +43,24 @@ export default async function AdminEditProductPage({
       <Link href="/admin/products" className="admin-back">
         ← Products
       </Link>
-      <AdminPageHeader title="Edit product" description={product.en.name} />
+      <AdminPageHeader
+        title="Edit product"
+        description={`${product.en.name} — update details below, then scroll for stock, variants, and reviews.`}
+      />
+
+      {welcome === "1" && (
+        <AdminProductCreatedBanner
+          productName={product.en.name}
+          deliveryMode={product.deliveryMode}
+        />
+      )}
+
+      {saved === "1" && !welcome && (
+        <div className="admin-banner admin-banner--success" role="status">
+          <p className="admin-banner__title">Changes saved</p>
+        </div>
+      )}
+
       <AdminProductForm product={product} categories={categories} />
       <AdminProductExtras
         productId={product.id}
