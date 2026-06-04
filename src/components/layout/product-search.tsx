@@ -10,6 +10,15 @@ export function ProductSearch({ className }: { className?: string }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState("");
+  const [compactPlaceholder, setCompactPlaceholder] = useState(false);
+
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setCompactPlaceholder(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {
@@ -44,9 +53,13 @@ export function ProductSearch({ className }: { className?: string }) {
         name="q"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
-        placeholder={t("searchPlaceholder")}
+        placeholder={
+          compactPlaceholder
+            ? t("searchPlaceholderShort")
+            : t("searchPlaceholder")
+        }
         aria-label={t("searchPlaceholder")}
-        className="nex-search-input h-full w-full bg-transparent ps-11 pe-3 text-base text-white placeholder:text-[var(--text-muted)] focus:outline-none sm:pe-[4.5rem] sm:text-sm"
+        className="nex-search-input h-full w-full min-w-0 bg-transparent ps-10 pe-2 text-base text-white placeholder:text-[var(--text-muted)] focus:outline-none max-sm:ps-9 sm:pe-[4.5rem] sm:ps-11 sm:text-sm"
       />
       <kbd className="nex-search-kbd pointer-events-none absolute end-3 hidden px-2 py-1 font-mono sm:inline">
         {t("searchShortcut")}

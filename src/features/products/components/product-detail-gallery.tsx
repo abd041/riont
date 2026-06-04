@@ -24,18 +24,11 @@ export function ProductDetailGallery({
     );
   }
 
-  const baseThumbs =
-    images.length > 0
-      ? images
-      : [{ type: "image" as const, url: active.url, alt: active.alt }];
-
-  const thumbs =
-    baseThumbs.length === 1
-      ? Array.from({ length: 5 }, () => baseThumbs[0]!)
-      : baseThumbs.slice(0, 5);
+  const thumbs = images.slice(0, 5);
+  const showThumbs = thumbs.length > 1;
 
   return (
-    <div>
+    <div className="nex-pdp-gallery">
       <div className="nex-pdp-gallery-main relative">
         <Image
           src={active.url}
@@ -46,8 +39,8 @@ export function ProductDetailGallery({
           priority
         />
       </div>
-      {thumbs.length > 0 && (
-        <div className="nex-pdp-thumbs">
+      {showThumbs && (
+        <div className="nex-pdp-thumbs" role="list" aria-label={productName}>
           {thumbs.map((item, index) => (
             <button
               key={`${item.url}-${index}`}

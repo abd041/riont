@@ -60,7 +60,7 @@ export async function ProductDetailView({
             <span aria-hidden>›</span>
             <Link href={backHref}>{categoryLabel}</Link>
             <span aria-hidden>›</span>
-            <span>{product.name}</span>
+            <span className="nex-pdp-breadcrumbs__current">{product.name}</span>
           </nav>
         </div>
 

@@ -740,7 +740,7 @@
   width: 100%;
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 4px 40px;
+  padding: 0 0 48px;
 }
 
 .nex-pdp-breadcrumbs {
@@ -767,6 +767,14 @@
   color: #4b5563;
 }
 
+.nex-pdp-breadcrumbs__current {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: rgba(255, 255, 255, 0.72);
+}
+
 .nex-pdp-layout {
   display: grid;
   grid-template-columns: 1fr;
@@ -781,13 +789,23 @@
   }
 }
 
+.nex-pdp-gallery {
+  min-width: 0;
+}
+
 .nex-pdp-gallery-main {
   position: relative;
-  aspect-ratio: 16 / 11;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
   border-radius: 16px;
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: linear-gradient(145deg, rgba(20, 14, 32, 0.6), rgba(8, 8, 12, 1));
+}
+
+@media (min-width: 640px) {
+  .nex-pdp-gallery-main {
+    aspect-ratio: 16 / 11;
+  }
 }
 
 .nex-pdp-thumbs {
@@ -795,14 +813,19 @@
   gap: 10px;
   margin-top: 12px;
   overflow-x: auto;
-  padding-bottom: 4px;
+  overflow-y: hidden;
+  padding-bottom: 6px;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 .nex-pdp-thumb {
   position: relative;
-  width: 72px;
-  height: 72px;
+  width: 64px;
+  height: 64px;
   flex-shrink: 0;
+  scroll-snap-align: start;
   overflow: hidden;
   border-radius: 10px;
   border: 2px solid transparent;
@@ -816,6 +839,13 @@
 .nex-pdp-thumb--active {
   border-color: #8b5cf6;
   box-shadow: 0 0 16px rgba(139, 92, 246, 0.35);
+}
+
+@media (min-width: 640px) {
+  .nex-pdp-thumb {
+    width: 72px;
+    height: 72px;
+  }
 }
 
 .nex-pdp-thumb img {

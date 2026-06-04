@@ -37,10 +37,15 @@ export function TopbarUserMenu() {
 
   if (!user) {
     return (
-      <Link href="/login" className="nex-topbar-login hidden sm:inline-flex">
-        <User className="me-1.5 inline h-4 w-4" strokeWidth={1.75} />
-        {t("login")}
-      </Link>
+      <div className="nex-topbar-auth">
+        <Link href="/login" className="nex-topbar-login">
+          <User className="nex-topbar-login__icon" strokeWidth={1.75} aria-hidden />
+          <span className="nex-topbar-login__label">{t("login")}</span>
+        </Link>
+        <Link href="/login?mode=signup" className="nex-topbar-signup">
+          {t("signUp")}
+        </Link>
+      </div>
     );
   }
 

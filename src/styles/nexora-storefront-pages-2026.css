@@ -1142,20 +1142,58 @@
   cursor: not-allowed;
 }
 
-.sf-auth-switch {
-  margin-top: 16px;
-  width: 100%;
-  border: none;
-  background: transparent;
-  font-size: 13px;
-  font-weight: 500;
-  color: #a78bfa;
-  cursor: pointer;
-  transition: color 0.2s ease;
+.sf-auth-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px;
+  margin-top: 20px;
+  padding: 4px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(0, 0, 0, 0.25);
 }
 
-.sf-auth-switch:hover:not(:disabled) {
-  color: #c4b5fd;
+.sf-auth-tab {
+  min-height: 44px;
+  padding: 0 12px;
+  border: none;
+  border-radius: 10px;
+  background: transparent;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.sf-auth-tab:hover:not(:disabled) {
+  color: rgba(255, 255, 255, 0.82);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.sf-auth-tab--active {
+  color: #fff;
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.45), rgba(109, 40, 217, 0.35));
+  box-shadow:
+    0 4px 14px rgba(109, 40, 217, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.sf-auth-tab:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.sf-auth-footer-hint {
+  margin: 16px 0 0;
+  text-align: center;
+  font-size: 13px;
+  font-weight: 500;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.42);
 }
 
 /* ─── Legal (upgrade) ─── */
@@ -1867,7 +1905,12 @@
 
   .sf-pdp-wrap .nex-pdp-info,
   .sf-pdp-wrap .nex-pdp-tabs {
-    padding: 14px 16px;
+    padding: 16px;
+  }
+
+  .sf-pdp-wrap .nex-pdp-gallery-main {
+    border: none;
+    background: transparent;
   }
 
   .sf-pdp-toolbar {

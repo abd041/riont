@@ -6,7 +6,7 @@ export default async function LoginPage({
   searchParams,
 }: {
   params: Promise<{ locale: string }>;
-  searchParams: Promise<{ registered?: string; error?: string }>;
+  searchParams: Promise<{ registered?: string; error?: string; mode?: string }>;
 }) {
   const { locale } = await params;
   const query = await searchParams;
@@ -15,5 +15,9 @@ export default async function LoginPage({
   if (query.registered === "1") authNotice = "registered";
   if (query.error === "auth") authNotice = "authFailed";
 
-  return <LoginForm locale={locale} authNotice={authNotice} />;
+  const initialMode = query.mode === "signup" ? "signUp" : "signIn";
+
+  return (
+    <LoginForm locale={locale} authNotice={authNotice} initialMode={initialMode} />
+  );
 }

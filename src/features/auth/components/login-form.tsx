@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -13,17 +13,24 @@ import { mapSupabaseAuthError } from "@/lib/auth/map-auth-error";
 import { isAppleAuthEnabled } from "@/lib/env/public";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
+import { cn } from "@/utils/cn";
 import { AuthToastListener, type AuthNotice } from "./auth-toast-listener";
 
 export function LoginForm({
   locale,
   authNotice,
+  initialMode = "signIn",
 }: {
   locale: string;
   authNotice: AuthNotice;
+  initialMode?: "signIn" | "signUp";
 }) {
   const t = useTranslations("auth");
-  const [mode, setMode] = useState<"signIn" | "signUp">("signIn");
+  const [mode, setMode] = useState<"signIn" | "signUp">(initialMode);
+
+  useEffect(() => {
+    setMode(initialMode);
+  }, [initialMode]);
   const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(
     null,
   );
@@ -82,6 +89,35 @@ export function LoginForm({
           {mode === "signIn" ? t("welcomeBack") : t("createAccountTitle")}
         </h1>
         <p className="sf-auth-card__subtitle">{t("subtitle")}</p>
+
+        <div className="sf-auth-tabs" role="tablist" aria-label={t("subtitle")}>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "signIn"}
+            className={cn(
+              "sf-auth-tab",
+              mode === "signIn" && "sf-auth-tab--active",
+            )}
+            disabled={pending || oauthLoading !== null}
+            onClick={() => setMode("signIn")}
+          >
+            {t("tabSignIn")}
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={mode === "signUp"}
+            className={cn(
+              "sf-auth-tab",
+              mode === "signUp" && "sf-auth-tab--active",
+            )}
+            disabled={pending || oauthLoading !== null}
+            onClick={() => setMode("signUp")}
+          >
+            {t("tabSignUp")}
+          </button>
+        </div>
 
         <div className="mt-6 flex flex-col gap-3">
           <button
@@ -192,14 +228,9 @@ export function LoginForm({
           </button>
         </form>
 
-        <button
-          type="button"
-          className="sf-auth-switch"
-          onClick={() => setMode(mode === "signIn" ? "signUp" : "signIn")}
-          disabled={pending}
-        >
+        <p className="sf-auth-footer-hint">
           {mode === "signIn" ? t("noAccount") : t("hasAccount")}
-        </button>
+        </p>
       </div>
     </>
   );
