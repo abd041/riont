@@ -6,7 +6,7 @@ import type { ProductReview } from "@/server/services/review.service";
 import { buildHomeProductRows } from "@/features/homepage/lib/home-product-rows";
 import { useHomeCategoryFilter } from "@/hooks/use-ui-store";
 import { CategorySlider } from "@/features/categories/components/category-slider";
-import { StickyHomeCategoryBar } from "@/features/categories/components/sticky-home-category-bar";
+import { StickyCategoryBar } from "@/features/categories/components/sticky-category-bar";
 import { ProductRowSection } from "./sections/product-row-section";
 import { FilteredProductsSection } from "./sections/filtered-products-section";
 import { MarketplaceTrustSection } from "./sections/marketplace-trust-section";
@@ -85,7 +85,8 @@ export function HomeMarketplace({
 
       <div ref={categorySentinelRef} className="mp-cat-sentinel" aria-hidden />
 
-      <StickyHomeCategoryBar
+      <StickyCategoryBar
+        mode="home"
         categories={categories}
         activeSlug={activeSlug}
         onSelect={setActiveSlug}

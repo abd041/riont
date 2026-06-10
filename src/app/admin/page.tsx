@@ -23,6 +23,20 @@ export default async function AdminDashboardPage() {
         description="Start here — see what needs your attention, then open Orders or Support."
       />
 
+      {stats.productsLive < 10 && (
+        <div className="admin-dashboard-notice" role="status">
+          <p className="admin-dashboard-notice__title">Catalog looks thin</p>
+          <p className="admin-dashboard-notice__body">
+            Only {stats.productsLive} live product{stats.productsLive === 1 ? "" : "s"}{" "}
+            are visible on the storefront. Run the demo seed (
+            <code>npm run db:seed:linked</code> on production, or paste{" "}
+            <code>supabase/seed.sql</code> in Supabase SQL Editor), then set{" "}
+            <code>CATALOG_DEMO_FALLBACK=false</code> on Vercel. See{" "}
+            <code>docs/DEPLOY.md</code> §6.
+          </p>
+        </div>
+      )}
+
       <section className="admin-dashboard-attention" aria-label="Needs attention">
         <h2 className="admin-dashboard-section__title">Needs your attention</h2>
         <div className="admin-stats admin-stats--dashboard">

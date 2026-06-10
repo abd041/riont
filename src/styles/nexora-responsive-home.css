@@ -351,6 +351,11 @@
   -webkit-line-clamp: 1;
 }
 
+.mp-sticky-cats a.mp-cat--compact {
+  text-decoration: none;
+  color: inherit;
+}
+
 @media (max-width: 767px) {
   .mp-sticky-cats {
     display: block;

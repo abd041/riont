@@ -77,6 +77,10 @@
 }
 
 @media (max-width: 767px) {
+  .nex-browse-page .mp-sticky-cats {
+    display: block;
+  }
+
   .sf-browse-wrap {
     min-width: 0;
     overflow-x: clip;

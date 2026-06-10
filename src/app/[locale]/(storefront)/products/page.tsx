@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getLocale, getTranslations } from "next-intl/server";
 import { ProductsBrowseShell } from "@/features/products/components/products-browse-shell";
+import { ProductsBrowseFallback } from "@/features/products/components/products-browse-fallback";
 import { listBrowseProducts, searchProducts } from "@/server/services/product.service";
 import { getCategoryBySlug, listCategories } from "@/server/services/category.service";
 import type { CatalogProduct } from "@/types/catalog";
@@ -106,13 +107,7 @@ export default async function ProductsPage({
   const resolved = await searchParams;
 
   return (
-    <Suspense
-      fallback={
-        <div className="nex-browse-page">
-          <h1 className="nex-browse-title">…</h1>
-        </div>
-      }
-    >
+    <Suspense fallback={<ProductsBrowseFallback />}>
       <ProductsBrowseContent searchParams={resolved} />
     </Suspense>
   );

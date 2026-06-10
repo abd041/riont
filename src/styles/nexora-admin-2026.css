@@ -776,6 +776,33 @@
   color: #c4b5fd;
 }
 
+.admin-dashboard-notice {
+  margin-bottom: 16px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  border: 1px solid rgba(245, 158, 11, 0.28);
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.admin-dashboard-notice__title {
+  margin: 0 0 6px;
+  font-size: 14px;
+  font-weight: 700;
+  color: #fcd34d;
+}
+
+.admin-dashboard-notice__body {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.admin-dashboard-notice__body code {
+  font-size: 12px;
+  color: rgba(253, 230, 138, 0.95);
+}
+
 .admin-dashboard-attention,
 .admin-dashboard-overview,
 .admin-dashboard-shortcuts {

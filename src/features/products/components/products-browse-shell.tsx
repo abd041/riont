@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { StickyCategoryBar } from "@/features/categories/components/sticky-category-bar";
 import { motion, useReducedMotion } from "framer-motion";
 import {
   mpStaggerContainer,
@@ -68,7 +69,34 @@ export function ProductsBrowseShell({
   const searchParams = useSearchParams();
   const router = useRouter();
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const [stickyCategories, setStickyCategories] = useState(false);
+  const browseSentinelRef = useRef<HTMLDivElement>(null);
   const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const sentinel = browseSentinelRef.current;
+    if (!sentinel) return;
+
+    const topbarOffset =
+      Number.parseInt(
+        getComputedStyle(document.documentElement).getPropertyValue("--mp-topbar-h"),
+        10,
+      ) || 52;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setStickyCategories(!entry.isIntersecting);
+      },
+      {
+        root: null,
+        threshold: 0,
+        rootMargin: `-${topbarOffset}px 0px 0px 0px`,
+      },
+    );
+
+    observer.observe(sentinel);
+    return () => observer.disconnect();
+  }, []);
 
   const sort = (searchParams.get("sort") as SortOption) || "popular";
   const maxPrice = Number(searchParams.get("maxPrice")) || MAX_PRICE_CENTS;
@@ -133,6 +161,15 @@ export function ProductsBrowseShell({
           </div>
         </div>
       </header>
+
+      <div ref={browseSentinelRef} className="mp-cat-sentinel" aria-hidden />
+
+      <StickyCategoryBar
+        mode="browse"
+        categories={categories}
+        activeSlug={activeCategorySlug ?? null}
+        visible={stickyCategories}
+      />
 
       <div className="nex-browse-body">
         {filtersOpen && (
