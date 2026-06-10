@@ -34,6 +34,7 @@ In **Supabase Dashboard → SQL Editor**, run each file under `supabase/migratio
 | 8 | `20250527000000_product_reviews.sql` |
 | 9 | `20250528000000_product_reviews_rls.sql` |
 | 10 | `20250529000000_reviews_customer_ops.sql` |
+| 11 | `20250530000000_store_reviews.sql` |
 
 Alternatively, with the [Supabase CLI](https://supabase.com/docs/guides/cli) linked to the project:
 

@@ -19,6 +19,7 @@ import {
 } from "./hero-animation.default";
 import { cn } from "@/lib/utils/cn";
 import { HERO_SLIDES } from "./hero-slides";
+import { MarketplaceAmbientDecor } from "./marketplace-ambient-decor";
 
 /** Client hero banner artwork — replace file in public/hero/ to update. */
 const HERO_BACKGROUND_IMAGE = "/hero/hero-marketplace-bg.png";
@@ -168,9 +169,7 @@ export function HeroSection({
     >
       <span className="nex-hero__float-orb nex-hero__float-orb--a" aria-hidden />
       <span className="nex-hero__float-orb nex-hero__float-orb--b" aria-hidden />
-      <span className="nex-hero__ambient-mark" aria-hidden>
-        R
-      </span>
+      <MarketplaceAmbientDecor variant="hero" showMark />
       <span className="nex-hero__ambient-orb nex-hero__ambient-orb--a" aria-hidden />
       <span className="nex-hero__ambient-orb nex-hero__ambient-orb--b" aria-hidden />
       <div className="nex-hero-media absolute inset-0 z-[0] overflow-hidden">

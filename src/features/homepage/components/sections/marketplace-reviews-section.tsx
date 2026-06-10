@@ -10,6 +10,7 @@ import {
   MarketplaceSectionRevealChild,
 } from "../marketplace/marketplace-section-reveal";
 import { MarketplaceSectionHeader } from "../marketplace/marketplace-section-header";
+import { StoreReviewForm } from "../store-review-form";
 
 const fallbackReviewKeys = ["review1", "review2", "review3"] as const;
 
@@ -36,10 +37,18 @@ function ReviewStars({ rating }: { rating: number }) {
 
 type MarketplaceReviewsSectionProps = {
   reviews?: ProductReview[];
+  locale: string;
+  isLoggedIn: boolean;
+  userEmail?: string | null;
+  userDisplayName?: string | null;
 };
 
 export function MarketplaceReviewsSection({
   reviews = [],
+  locale,
+  isLoggedIn,
+  userEmail,
+  userDisplayName,
 }: MarketplaceReviewsSectionProps) {
   const t = useTranslations("home");
 
@@ -73,11 +82,19 @@ export function MarketplaceReviewsSection({
             ))}
       </div>
 
-      <p className="mp-reviews__cta">
-        <Link href="/products" className="mp-reviews__cta-link">
-          {t("reviewsShopCta")}
-        </Link>
-      </p>
+      <div className="mp-reviews__footer">
+        <StoreReviewForm
+          locale={locale}
+          isLoggedIn={isLoggedIn}
+          userEmail={userEmail}
+          userDisplayName={userDisplayName}
+        />
+        <p className="mp-reviews__cta">
+          <Link href="/products" className="mp-reviews__cta-link">
+            {t("reviewsShopCta")}
+          </Link>
+        </p>
+      </div>
     </MarketplaceSectionReveal>
   );
 }

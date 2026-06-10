@@ -24,6 +24,7 @@ import {
   filterProductsByPlatform,
   MAX_PRICE_CENTS,
 } from "./products-filter-sidebar";
+import { BrowseMobileFilterStrip } from "./browse-mobile-filter-strip";
 
 export type SortOption = "popular" | "price-asc" | "price-desc" | "name";
 
@@ -170,6 +171,8 @@ export function ProductsBrowseShell({
         activeSlug={activeCategorySlug ?? null}
         visible={stickyCategories}
       />
+
+      <BrowseMobileFilterStrip onOpenFullFilters={() => setFiltersOpen(true)} />
 
       <div className="nex-browse-body">
         {filtersOpen && (

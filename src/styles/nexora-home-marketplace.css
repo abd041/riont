@@ -136,6 +136,135 @@
   font-size: 11px;
 }
 
+/* ─── Ambient decor (floating icons + particles) ─── */
+.nex-ambient-decor {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.nex-ambient-decor__particles {
+  position: absolute;
+  inset: 0;
+  opacity: 0.65;
+  background-image:
+    radial-gradient(1px 1px at 72% 28%, rgba(167, 139, 250, 0.55), transparent),
+    radial-gradient(1px 1px at 85% 45%, rgba(139, 92, 246, 0.45), transparent),
+    radial-gradient(1.5px 1.5px at 68% 55%, rgba(196, 181, 253, 0.4), transparent),
+    radial-gradient(1px 1px at 78% 62%, rgba(139, 92, 246, 0.35), transparent),
+    radial-gradient(1px 1px at 90% 35%, rgba(167, 139, 250, 0.3), transparent),
+    radial-gradient(1px 1px at 62% 40%, rgba(139, 92, 246, 0.25), transparent);
+  animation: nex-ambient-particles-drift 14s ease-in-out infinite alternate;
+}
+
+.nex-ambient-icon {
+  position: absolute;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+  background: rgba(12, 8, 22, 0.55);
+  color: rgba(196, 181, 253, 0.7);
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.15);
+  animation: nex-ambient-icon-float 9s ease-in-out infinite alternate;
+}
+
+.nex-ambient-icon svg {
+  width: 13px;
+  height: 13px;
+}
+
+.nex-ambient-icon--steam {
+  top: 20%;
+  inset-inline-end: 16%;
+  animation-delay: 0s;
+}
+
+.nex-ambient-icon--discord {
+  top: 46%;
+  inset-inline-end: 8%;
+  animation-delay: -2.5s;
+}
+
+.nex-ambient-icon--windows {
+  bottom: 16%;
+  inset-inline-end: 20%;
+  animation-delay: -5s;
+}
+
+.nex-ambient-icon--gift {
+  top: 30%;
+  inset-inline-end: 26%;
+  animation-delay: -7s;
+}
+
+.nex-ambient-decor--promo .nex-ambient-icon {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  opacity: 0.85;
+}
+
+.nex-ambient-decor--promo .nex-ambient-icon svg {
+  width: 11px;
+  height: 11px;
+}
+
+.nex-ambient-decor--promo .nex-ambient-icon--steam {
+  top: 18%;
+  inset-inline-end: 12%;
+}
+
+.nex-ambient-decor--promo .nex-ambient-icon--discord {
+  top: 52%;
+  inset-inline-end: 6%;
+}
+
+.nex-ambient-decor--promo .nex-ambient-icon--windows {
+  bottom: 14%;
+  inset-inline-end: 14%;
+}
+
+.nex-ambient-decor--promo .nex-ambient-icon--gift {
+  top: 34%;
+  inset-inline-end: 20%;
+}
+
+.nex-ambient-decor--promo .nex-ambient-decor__particles {
+  opacity: 0.45;
+}
+
+@keyframes nex-ambient-icon-float {
+  from {
+    transform: translate3d(0, 0, 0) rotate(0deg);
+  }
+  to {
+    transform: translate3d(-6px, 8px, 0) rotate(-4deg);
+  }
+}
+
+@keyframes nex-ambient-particles-drift {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 0.55;
+  }
+  to {
+    transform: translate3d(-4px, 6px, 0);
+    opacity: 0.75;
+  }
+}
+
+.nex-ambient-decor--static .nex-ambient-icon,
+.nex-ambient-decor--static .nex-ambient-decor__particles {
+  animation: none;
+}
+
 /* ─── Hero ambient layer (RIYONT-033) ─── */
 .nex-hero__ambient-mark {
   position: absolute;
@@ -201,9 +330,27 @@
   inset-inline-end: 6%;
 }
 
+.nex-hero--compact .nex-ambient-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 6px;
+  opacity: 0.75;
+}
+
+.nex-hero--compact .nex-ambient-icon svg {
+  width: 10px;
+  height: 10px;
+}
+
+.nex-hero--compact .nex-ambient-decor__particles {
+  opacity: 0.4;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .nex-hero__ambient-orb--a,
-  .nex-hero__ambient-orb--b {
+  .nex-hero__ambient-orb--b,
+  .nex-ambient-icon,
+  .nex-ambient-decor__particles {
     animation: none;
   }
 }
@@ -238,15 +385,42 @@
   animation: mp-promo-glow 6s ease-in-out infinite alternate;
 }
 
+.mp-promo-banner__sheen {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(167, 139, 250, 0.08) 45%,
+    transparent 70%
+  );
+  animation: mp-promo-sheen 7s ease-in-out infinite;
+}
+
 .mp-promo-banner__text {
   position: relative;
   z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   margin: 0;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.04em;
   text-align: center;
   color: rgba(237, 233, 254, 0.92);
+}
+
+.mp-promo-banner__spark {
+  flex-shrink: 0;
+  width: 14px;
+  height: 14px;
+  color: #c4b5fd;
+  filter: drop-shadow(0 0 6px rgba(139, 92, 246, 0.55));
+  animation: mp-promo-spark 2.8s ease-in-out infinite;
 }
 
 @media (min-width: 768px) {
@@ -271,8 +445,34 @@
   }
 }
 
+@keyframes mp-promo-sheen {
+  0%,
+  100% {
+    opacity: 0.4;
+    transform: translateX(-8%);
+  }
+  50% {
+    opacity: 0.9;
+    transform: translateX(8%);
+  }
+}
+
+@keyframes mp-promo-spark {
+  0%,
+  100% {
+    opacity: 0.65;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.12);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .mp-promo-banner__glow {
+  .mp-promo-banner__glow,
+  .mp-promo-banner__sheen,
+  .mp-promo-banner__spark {
     animation: none;
   }
 }

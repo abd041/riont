@@ -302,6 +302,12 @@ WHERE product_id IN (
   'b0000000-0000-4000-8000-000000000003'
 );
 
+INSERT INTO store_reviews (author_name, rating, body, locale, sort_order, is_approved) VALUES
+  ('Jordan L.', 5, 'Best digital store I have used — fast delivery and clear checkout.', 'en', 0, true),
+  ('Maya R.', 4, 'Great variety of products. Support replied within an hour.', 'en', 1, true),
+  ('كريم س.', 5, 'تجربة ممتازة ودعم سريع بالعربية.', 'ar', 0, true)
+ON CONFLICT DO NOTHING;
+
 INSERT INTO exchange_rates (base_currency, target_currency, rate) VALUES
   ('USD', 'EUR', 0.92),
   ('USD', 'SAR', 3.75),

@@ -17,12 +17,20 @@ type HomeMarketplaceProps = {
   products: CatalogProduct[];
   categories: CatalogCategory[];
   featuredReviews?: ProductReview[];
+  locale: string;
+  isLoggedIn: boolean;
+  userEmail?: string | null;
+  userDisplayName?: string | null;
 };
 
 export function HomeMarketplace({
   products,
   categories,
   featuredReviews = [],
+  locale,
+  isLoggedIn,
+  userEmail,
+  userDisplayName,
 }: HomeMarketplaceProps) {
   const { activeSlug, setActiveSlug } = useHomeCategoryFilter();
 
@@ -101,7 +109,13 @@ export function HomeMarketplace({
       />
 
       <MarketplaceTrustSection />
-      <MarketplaceReviewsSection reviews={featuredReviews} />
+      <MarketplaceReviewsSection
+        reviews={featuredReviews}
+        locale={locale}
+        isLoggedIn={isLoggedIn}
+        userEmail={userEmail}
+        userDisplayName={userDisplayName}
+      />
       <MarketplaceFooter />
     </div>
   );

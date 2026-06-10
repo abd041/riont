@@ -2,6 +2,120 @@
  * Products browse (/products) — dedicated responsive polish
  */
 
+/* Mobile filter strip — platform + price always visible (PDF page 13) */
+.nex-browse-mobile-filters {
+  display: none;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+  padding: 12px 14px;
+  border-radius: var(--radius-md, 14px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(8, 8, 14, 0.92);
+}
+
+@media (max-width: 1023px) {
+  .nex-browse-mobile-filters {
+    display: flex;
+  }
+}
+
+.nex-browse-mobile-filters__row {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+
+.nex-browse-mobile-filters__label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.55);
+}
+
+.nex-browse-mobile-filters__chips {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  padding-bottom: 2px;
+}
+
+.nex-browse-mobile-filters__chips::-webkit-scrollbar {
+  display: none;
+}
+
+.nex-browse-mobile-filters__chip {
+  flex: 0 0 auto;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm, 10px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 11px;
+  font-weight: 600;
+  transition: border-color 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.nex-browse-mobile-filters__chip--active {
+  border-color: rgba(139, 92, 246, 0.45);
+  background: rgba(139, 92, 246, 0.14);
+  color: #e9d5ff;
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.2);
+}
+
+.nex-browse-mobile-filters__price-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.nex-browse-mobile-filters__price-value {
+  font-size: 11px;
+  font-weight: 600;
+  color: rgba(196, 181, 253, 0.9);
+}
+
+.nex-browse-mobile-filters__range {
+  width: 100%;
+}
+
+.nex-browse-mobile-filters__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.nex-browse-mobile-filters__more,
+.nex-browse-mobile-filters__clear {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  padding: 0 12px;
+  border-radius: var(--radius-sm, 10px);
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.nex-browse-mobile-filters__more {
+  border: 1px solid rgba(139, 92, 246, 0.25);
+  background: rgba(139, 92, 246, 0.1);
+  color: #ddd6fe;
+}
+
+.nex-browse-mobile-filters__clear {
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+}
+
 @media (max-width: 1023px) {
   .nex-browse-filters-backdrop {
     position: fixed;

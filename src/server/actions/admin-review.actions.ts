@@ -8,11 +8,15 @@ import {
   approveReviewSchema,
   adminReviewSchema,
   deleteReviewSchema,
+  approveStoreReviewSchema,
+  deleteStoreReviewSchema,
 } from "@/validations/admin-review.schema";
 import {
   approveAdminProductReview,
+  approveAdminStoreReview,
   createAdminProductReview,
   deleteAdminProductReview,
+  deleteAdminStoreReview,
 } from "@/server/services/admin-review.service";
 
 export type AdminReviewActionResult =
@@ -142,6 +146,70 @@ export async function deleteProductReviewAction(
 
     revalidatePath(`/admin/products/${parsed.data.productId}`);
     return { success: true };
+  } catch {
+    return { success: false, error: "Could not delete review" };
+  }
+}
+
+export async function approveStoreReviewAdminFormAction(
+  prev: AdminActionResult | null,
+  formData: FormData,
+): Promise<AdminActionResult> {
+  void prev;
+  const parsed = approveStoreReviewSchema.safeParse({
+    reviewId: formData.get("reviewId"),
+  });
+
+  if (!parsed.success) {
+    return { success: false, error: "Invalid request" };
+  }
+
+  try {
+    const { user } = await requireAdmin();
+    await approveAdminStoreReview(parsed.data.reviewId);
+
+    void writeAuditLog({
+      actorUserId: user.id,
+      action: "store.review_approved",
+      entityType: "store",
+      entityId: parsed.data.reviewId,
+    });
+
+    revalidatePath("/admin/reviews");
+    revalidatePath("/");
+    return { success: true, message: "Store review approved" };
+  } catch {
+    return { success: false, error: "Could not approve review" };
+  }
+}
+
+export async function deleteStoreReviewAdminFormAction(
+  prev: AdminActionResult | null,
+  formData: FormData,
+): Promise<AdminActionResult> {
+  void prev;
+  const parsed = deleteStoreReviewSchema.safeParse({
+    reviewId: formData.get("reviewId"),
+  });
+
+  if (!parsed.success) {
+    return { success: false, error: "Invalid request" };
+  }
+
+  try {
+    const { user } = await requireAdmin();
+    await deleteAdminStoreReview(parsed.data.reviewId);
+
+    void writeAuditLog({
+      actorUserId: user.id,
+      action: "store.review_deleted",
+      entityType: "store",
+      entityId: parsed.data.reviewId,
+    });
+
+    revalidatePath("/admin/reviews");
+    revalidatePath("/");
+    return { success: true, message: "Store review deleted" };
   } catch {
     return { success: false, error: "Could not delete review" };
   }

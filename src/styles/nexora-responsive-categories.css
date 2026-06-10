@@ -141,3 +141,34 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* Categories loading skeleton */
+.sf-loading--categories {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 8px 0 24px;
+}
+
+.sf-loading__categories-title {
+  height: 28px;
+  width: min(220px, 60%);
+  border-radius: var(--radius-sm, 10px);
+}
+
+.sf-loading__categories-subtitle {
+  height: 14px;
+  width: min(320px, 85%);
+  border-radius: var(--radius-sm, 10px);
+}
+
+.sf-loading__categories-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 12px;
+}
+
+.sf-loading__categories-card {
+  height: 168px;
+  border-radius: var(--radius-md, 14px);
+}

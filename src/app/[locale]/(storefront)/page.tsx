@@ -7,6 +7,7 @@ import { listHomepageProducts } from "@/server/services/product.service";
 import { listCategories } from "@/server/services/category.service";
 import { listFeaturedReviews } from "@/server/services/review.service";
 import { getHomePageContent } from "@/server/services/content-block.service";
+import { getSession, getProfile } from "@/server/services/auth.service";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
 export async function generateMetadata({
@@ -30,12 +31,16 @@ export async function generateMetadata({
 
 export default async function HomePage() {
   const locale = await getLocale();
-  const [products, categories, homeContent, featuredReviews] = await Promise.all([
-    listHomepageProducts(locale),
-    listCategories(locale),
-    getHomePageContent(locale),
-    listFeaturedReviews(locale, 6),
-  ]);
+  const [products, categories, homeContent, featuredReviews, user] =
+    await Promise.all([
+      listHomepageProducts(locale),
+      listCategories(locale),
+      getHomePageContent(locale),
+      listFeaturedReviews(locale, 6),
+      getSession(),
+    ]);
+
+  const profile = user ? await getProfile(user.id) : null;
 
   return (
     <MarketplacePageShell>
@@ -45,6 +50,10 @@ export default async function HomePage() {
         products={products}
         categories={categories}
         featuredReviews={featuredReviews}
+        locale={locale}
+        isLoggedIn={!!user}
+        userEmail={user?.email}
+        userDisplayName={profile?.display_name}
       />
     </MarketplacePageShell>
   );

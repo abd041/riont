@@ -88,3 +88,65 @@ export async function deleteAdminProductReview(reviewId: string): Promise<void> 
   const { error } = await admin.from("product_reviews").delete().eq("id", reviewId);
   if (error) throw error;
 }
+
+export type AdminStoreReview = {
+  id: string;
+  authorName: string;
+  rating: number;
+  body: string;
+  locale: string;
+  isApproved: boolean;
+  sortOrder: number;
+  createdAt: string;
+};
+
+export async function listAdminStoreReviews(): Promise<AdminStoreReview[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("store_reviews")
+    .select(
+      "id, author_name, rating, body, locale, is_approved, sort_order, created_at",
+    )
+    .order("created_at", { ascending: false });
+
+  if (error) throw error;
+
+  return (data ?? []).map((row) => {
+    const r = row as {
+      id: string;
+      author_name: string;
+      rating: number;
+      body: string;
+      locale: string;
+      is_approved: boolean;
+      sort_order: number;
+      created_at: string;
+    };
+    return {
+      id: r.id,
+      authorName: r.author_name,
+      rating: r.rating,
+      body: r.body,
+      locale: r.locale,
+      isApproved: r.is_approved,
+      sortOrder: r.sort_order,
+      createdAt: r.created_at,
+    };
+  });
+}
+
+export async function approveAdminStoreReview(reviewId: string): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from("store_reviews")
+    .update({ is_approved: true })
+    .eq("id", reviewId);
+
+  if (error) throw error;
+}
+
+export async function deleteAdminStoreReview(reviewId: string): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin.from("store_reviews").delete().eq("id", reviewId);
+  if (error) throw error;
+}

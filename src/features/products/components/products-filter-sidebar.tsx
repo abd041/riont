@@ -27,7 +27,7 @@ const SLUG_ICON: Record<string, LucideIcon> = {
   instagram: Users,
 };
 
-const PLATFORMS = [
+export const BROWSE_PLATFORMS = [
   { id: "windows", labelKey: "platformWindows" as const, categories: ["software"] },
   { id: "playstation", labelKey: "platformPlayStation" as const, categories: ["gaming"] },
   { id: "xbox", labelKey: "platformXbox" as const, categories: ["gaming"] },
@@ -161,7 +161,7 @@ export function ProductsFilterSidebar({
           {t("platform")}
         </h3>
         <div className="nex-browse-platform-list">
-          {PLATFORMS.map(({ id, labelKey }) => (
+          {BROWSE_PLATFORMS.map(({ id, labelKey }) => (
             <label key={id} className="nex-browse-check">
               <input
                 type="checkbox"
@@ -195,7 +195,7 @@ export function filterProductsByPlatform<T extends { categorySlug?: string }>(
   if (platformIds.length === 0) return products;
   const allowedSlugs = new Set<string>();
   for (const id of platformIds) {
-    const platform = PLATFORMS.find((p) => p.id === id);
+    const platform = BROWSE_PLATFORMS.find((p) => p.id === id);
     platform?.categories.forEach((s) => allowedSlugs.add(s));
   }
   if (allowedSlugs.size === 0) return products;

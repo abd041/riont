@@ -298,13 +298,18 @@
   }
 
   .mp-row--featured .mp-scroll__cell--full {
-    flex: 0 0 80px;
-    min-width: 80px;
+    /* ~4.5 cards visible on 375px (PDF page 9) */
+    --mp-featured-cell-w: calc(
+      (100vw - var(--mp-page-x) * 2 - var(--mp-rail-inset, 4px) * 2 - 8px * 4) / 4.5
+    );
+    flex: 0 0 var(--mp-featured-cell-w);
+    min-width: var(--mp-featured-cell-w);
     scroll-snap-align: start;
   }
 
   .mp-row--featured .mp-scroll__cell--full .mp-card--mini {
-    width: 80px;
+    width: 100%;
+    max-width: none;
   }
 }
 

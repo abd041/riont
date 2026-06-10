@@ -1,0 +1,36 @@
+/**
+ * Unified radius + glow tokens (PDF pages 16–17)
+ */
+
+input:not([type="checkbox"]):not([type="radio"]):not([type="range"]),
+select,
+textarea,
+.nex-search input,
+.nex-browse-sort-select,
+.mp-store-review-form__input,
+.mp-store-review-form__textarea,
+.nex-pdp-review-form__input,
+.nex-pdp-review-form__textarea {
+  border-radius: var(--radius-sm, 10px);
+}
+
+[role="dialog"],
+[role="menu"],
+.dropdown-menu,
+.nex-browse-filters,
+.mp-promo-banner,
+.mp-card,
+.mp-cat {
+  border-radius: var(--radius-md, 14px);
+}
+
+button[class*="primary"],
+.mp-store-review-form__submit,
+.nex-browse-mobile-filters__chip--active {
+  box-shadow: 0 0 14px rgba(139, 92, 246, 0.18);
+}
+
+button[class*="primary"]:hover:not(:disabled),
+.mp-store-review-form__submit:hover:not(:disabled) {
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.32);
+}

@@ -36,6 +36,7 @@
 @import "./nexora-responsive-flows.css";
 @import "./nexora-responsive-chrome.css";
 @import "./nexora-typography-hierarchy.css";
+@import "./nexora-ui-unified.css";
 
 @tailwind base;
 @tailwind components;
