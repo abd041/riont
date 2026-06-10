@@ -299,6 +299,24 @@
   color: #ddd6fe;
 }
 
+.nex-sidebar--storefront .nex-nav-link--admin {
+  color: rgba(196, 181, 253, 0.95);
+}
+
+.nex-sidebar--storefront .nex-nav-link--admin .nex-nav-link__icon {
+  background: rgba(139, 92, 246, 0.14);
+  border-color: rgba(139, 92, 246, 0.28);
+}
+
+.nex-sidebar--storefront .nex-nav-link--admin .nex-nav-link__icon svg {
+  color: #c4b5fd;
+}
+
+.nex-sidebar--storefront .nex-nav-link--admin:hover {
+  background: rgba(139, 92, 246, 0.1) !important;
+  border-color: rgba(139, 92, 246, 0.22) !important;
+}
+
 .nex-sidebar--storefront .nex-nav-link--signout {
   margin-top: 4px;
   color: rgba(252, 165, 165, 0.92);

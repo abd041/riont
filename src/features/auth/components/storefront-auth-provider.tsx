@@ -53,6 +53,33 @@ export function StorefrontAuthProvider({
 
   useEffect(() => {
     const supabase = createClient();
+
+    async function syncUserFromSession() {
+      const {
+        data: { user: sessionUser },
+      } = await supabase.auth.getUser();
+
+      if (!sessionUser) {
+        setUser(null);
+        setNotifications([]);
+        return;
+      }
+
+      const { data: profile } = await supabase
+        .from("profiles")
+        .select("display_name, role")
+        .eq("id", sessionUser.id)
+        .maybeSingle();
+
+      setUser({
+        id: sessionUser.id,
+        email: sessionUser.email ?? "",
+        displayName: profile?.display_name ?? null,
+        role: (profile?.role as UserRole | undefined) ?? UserRole.CUSTOMER,
+      });
+    }
+
+    void syncUserFromSession();
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange(async (event, session) => {

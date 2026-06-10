@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import NextLink from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { Link, usePathname } from "@/i18n/navigation";
@@ -20,7 +21,9 @@ import {
   Moon,
   Sun,
   LogOut,
+  LayoutDashboard,
 } from "lucide-react";
+import { UserRole } from "@/lib/domain/enums";
 import { cn } from "@/utils/cn";
 import { isNavActive, type NavItemConfig } from "./sidebar-nav";
 import { useStorefrontAuth } from "@/features/auth/components/storefront-auth-provider";
@@ -141,6 +144,18 @@ export function Sidebar({ onNavigate }: { onNavigate?: () => void }) {
               label={t(item.key)}
             />
           ))}
+          {user?.role === UserRole.ADMIN ? (
+            <NextLink
+              href="/admin"
+              onClick={onNavigate}
+              className="nex-nav-link nex-nav-link--admin"
+            >
+              <span className="nex-nav-link__icon" aria-hidden>
+                <LayoutDashboard strokeWidth={iconStroke} />
+              </span>
+              <span className="nex-nav-link__text">{t("adminDashboard")}</span>
+            </NextLink>
+          ) : null}
           {user ? (
             <button
               type="button"
