@@ -29,6 +29,8 @@ export type ServiceResult<T> =
 
 import type { AuthErrorCode } from "@/lib/auth/map-auth-error";
 
+export type AuthActionSuccessIntent = "signedIn" | "registered";
+
 export type AuthActionResult =
-  | { success: true }
+  | { success: true; intent: AuthActionSuccessIntent }
   | { success: false; code: AuthErrorCode };

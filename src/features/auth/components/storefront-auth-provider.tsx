@@ -14,6 +14,7 @@ import { toast } from "sonner";
 import { useTranslations } from "next-intl";
 import { createClient } from "@/lib/supabase/client";
 import { signOutAction } from "@/server/actions/auth.actions";
+import { UserRole } from "@/lib/domain/enums";
 import type { StorefrontUser } from "@/types/auth";
 import type { UserNotification } from "@/server/services/notification-list.service";
 
@@ -67,7 +68,7 @@ export function StorefrontAuthProvider({
 
       const { data: profile } = await supabase
         .from("profiles")
-        .select("display_name")
+        .select("display_name, role")
         .eq("id", session.user.id)
         .maybeSingle();
 
@@ -75,6 +76,7 @@ export function StorefrontAuthProvider({
         id: session.user.id,
         email: session.user.email ?? "",
         displayName: profile?.display_name ?? null,
+        role: (profile?.role as UserRole | undefined) ?? UserRole.CUSTOMER,
       });
     });
 

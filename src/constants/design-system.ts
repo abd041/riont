@@ -103,8 +103,8 @@ export const marketplace = {
     xl: 5,
   },
   heroCompactHeight: { mobile: 140, tablet: 168, desktop: 188 },
-  miniCardWidth: 128,
-  categoryChipWidth: 68,
+  miniCardWidth: 113,
+  categoryChipWidth: 60,
 } as const;
 
 /** CSS custom property names exposed on :root via marketplace stylesheet. */

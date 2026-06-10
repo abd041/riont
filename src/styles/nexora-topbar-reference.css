@@ -231,7 +231,7 @@
 .nex-topbar-cart-badge {
   position: absolute;
   top: 4px;
-  right: 4px;
+  inset-inline-end: 4px;
   display: flex;
   min-width: 18px;
   height: 18px;
@@ -244,11 +244,6 @@
   font-weight: 700;
   color: #fff;
   box-shadow: 0 0 12px rgba(139, 92, 246, 0.45);
-}
-
-[dir="rtl"] .nex-topbar-cart-badge {
-  right: auto;
-  left: 4px;
 }
 
 /* User block */

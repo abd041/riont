@@ -53,7 +53,7 @@ export function Topbar({
         <button
           type="button"
           onClick={switchLocale}
-          className="nex-topbar-pill nex-lang-btn hidden sm:inline-flex"
+          className="nex-topbar-pill nex-lang-btn"
         >
           <span className="nex-topbar-pill-flag" aria-hidden>
             {locale === "en" ? "🇬🇧" : "🇸🇦"}

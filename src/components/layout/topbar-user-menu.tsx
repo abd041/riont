@@ -1,9 +1,17 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import NextLink from "next/link";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { ChevronDown, ClipboardList, LogOut, User } from "lucide-react";
+import {
+  ChevronDown,
+  ClipboardList,
+  LayoutDashboard,
+  LogOut,
+  User,
+} from "lucide-react";
+import { UserRole } from "@/lib/domain/enums";
 import { useStorefrontAuth } from "@/features/auth/components/storefront-auth-provider";
 import { cn } from "@/utils/cn";
 
@@ -93,6 +101,17 @@ export function TopbarUserMenu() {
           <ClipboardList strokeWidth={1.75} />
           {tNav("orders")}
         </Link>
+        {user.role === UserRole.ADMIN && (
+          <NextLink
+            href="/admin"
+            className="nex-topbar-user-dropdown__item"
+            role="menuitem"
+            onClick={() => setOpen(false)}
+          >
+            <LayoutDashboard strokeWidth={1.75} />
+            {tNav("adminDashboard")}
+          </NextLink>
+        )}
         <button
           type="button"
           className="nex-topbar-user-dropdown__item nex-topbar-user-dropdown__item--danger"

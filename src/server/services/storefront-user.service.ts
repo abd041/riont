@@ -1,3 +1,4 @@
+import { UserRole } from "@/lib/domain/enums";
 import { getProfile, getSession } from "@/server/services/auth.service";
 import type { StorefrontUser } from "@/types/auth";
 
@@ -11,5 +12,6 @@ export async function getStorefrontUser(): Promise<StorefrontUser | null> {
     id: sessionUser.id,
     email: sessionUser.email,
     displayName: profile?.display_name ?? null,
+    role: profile?.role ?? UserRole.CUSTOMER,
   };
 }

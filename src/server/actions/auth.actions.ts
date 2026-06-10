@@ -1,16 +1,10 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { mapSupabaseAuthError } from "@/lib/auth/map-auth-error";
 import type { AuthActionResult } from "@/lib/domain/errors";
 import { signInSchema, signUpSchema } from "@/validations/auth.schema";
-
-function localeFromForm(formData: FormData): string {
-  const raw = formData.get("locale");
-  return typeof raw === "string" && raw.length > 0 ? raw : "en";
-}
 
 export async function signInWithEmailAction(
   _prev: AuthActionResult | null,
@@ -25,7 +19,6 @@ export async function signInWithEmailAction(
     return { success: false, code: "VALIDATION" };
   }
 
-  const locale = localeFromForm(formData);
   const supabase = await createClient();
   const { error } = await supabase.auth.signInWithPassword({
     email: parsed.data.email,
@@ -37,7 +30,7 @@ export async function signInWithEmailAction(
   }
 
   revalidatePath("/", "layout");
-  redirect(`/${locale}`);
+  return { success: true, intent: "signedIn" };
 }
 
 export async function signUpWithEmailAction(
@@ -54,7 +47,6 @@ export async function signUpWithEmailAction(
     return { success: false, code: "VALIDATION" };
   }
 
-  const locale = localeFromForm(formData);
   const supabase = await createClient();
   const { data, error } = await supabase.auth.signUp({
     email: parsed.data.email,
@@ -80,10 +72,10 @@ export async function signUpWithEmailAction(
   revalidatePath("/", "layout");
 
   if (data.session) {
-    redirect(`/${locale}`);
+    return { success: true, intent: "signedIn" };
   }
 
-  redirect(`/${locale}/login?registered=1`);
+  return { success: true, intent: "registered" };
 }
 
 export async function signOutAction(): Promise<{ success: boolean }> {

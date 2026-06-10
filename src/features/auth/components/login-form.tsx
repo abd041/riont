@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -13,19 +13,27 @@ import { mapSupabaseAuthError } from "@/lib/auth/map-auth-error";
 import { isAppleAuthEnabled } from "@/lib/env/public";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
+import { useRouter } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
 import { AuthToastListener, type AuthNotice } from "./auth-toast-listener";
+
+const OAUTH_LOADING_TIMEOUT_MS = 15_000;
 
 export function LoginForm({
   locale,
   authNotice,
   initialMode = "signIn",
+  redirectTo,
 }: {
   locale: string;
   authNotice: AuthNotice;
   initialMode?: "signIn" | "signUp";
+  /** Locale-safe post-login path (from server). */
+  redirectTo: string;
 }) {
   const t = useTranslations("auth");
+  const tToast = useTranslations("auth.toast");
+  const router = useRouter();
   const [mode, setMode] = useState<"signIn" | "signUp">(initialMode);
 
   useEffect(() => {
@@ -44,21 +52,53 @@ export function LoginForm({
     null,
   );
 
+  const handledSuccess = useRef<string | null>(null);
+
   const state = mode === "signIn" ? signInState : signUpState;
   const errorCode: AuthErrorCode | null =
     state?.success === false ? state.code : null;
   const errorMessage = errorCode ? t(`errors.${errorCode}`) : null;
   const pending = mode === "signIn" ? signInPending : signUpPending;
 
+  useEffect(() => {
+    if (!signInState?.success) return;
+    const key = `signIn-${signInState.intent}`;
+    if (handledSuccess.current === key) return;
+    handledSuccess.current = key;
+    router.replace(redirectTo);
+    router.refresh();
+  }, [signInState, redirectTo, router]);
+
+  useEffect(() => {
+    if (!signUpState?.success) return;
+    const key = `signUp-${signUpState.intent}`;
+    if (handledSuccess.current === key) return;
+    handledSuccess.current = key;
+    if (signUpState.intent === "registered") {
+      toast.success(tToast("registered"));
+      router.replace("/login?registered=1");
+    } else {
+      router.replace(redirectTo);
+    }
+    router.refresh();
+  }, [signUpState, redirectTo, router, tToast]);
+
+  useEffect(() => {
+    if (!oauthLoading) return;
+    const id = window.setTimeout(() => setOauthLoading(null), OAUTH_LOADING_TIMEOUT_MS);
+    return () => window.clearTimeout(id);
+  }, [oauthLoading]);
+
   async function signInWithOAuth(provider: "google" | "apple") {
     setOauthLoading(provider);
     try {
       const supabase = createClient();
-      const redirectTo = `${window.location.origin}/auth/callback?next=/${locale}`;
+      const next = encodeURIComponent(redirectTo);
+      const redirectToUrl = `${window.location.origin}/auth/callback?next=${next}`;
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: { redirectTo },
+        options: { redirectTo: redirectToUrl },
       });
 
       if (error) {

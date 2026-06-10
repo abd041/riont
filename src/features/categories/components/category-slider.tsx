@@ -15,6 +15,10 @@ import {
 import { MarketplaceSectionHeader } from "@/features/homepage/components/marketplace/marketplace-section-header";
 import { mpSpring, mpTap, mpCardHoverMini } from "@/features/homepage/motion/marketplace-motion";
 import type { CatalogCategory } from "@/types/catalog";
+import {
+  getHorizontalScrollProgress,
+  scrollToHorizontalProgress,
+} from "@/lib/dom/horizontal-scroll";
 
 type CategorySliderProps = {
   categories: CatalogCategory[];
@@ -47,7 +51,7 @@ export function CategorySlider({
 
     const pages = Math.min(Math.ceil(el.scrollWidth / el.clientWidth), 8);
     setPageCount(pages);
-    const progress = maxScroll > 0 ? el.scrollLeft / maxScroll : 0;
+    const progress = getHorizontalScrollProgress(el);
     setDotIndex(Math.min(pages - 1, Math.round(progress * (pages - 1))));
   }, []);
 
@@ -55,10 +59,9 @@ export function CategorySlider({
     (page: number) => {
       const el = scrollRef.current;
       if (!el || pageCount <= 1) return;
-      const maxScroll = el.scrollWidth - el.clientWidth;
-      const target =
-        page >= pageCount - 1 ? maxScroll : (page / (pageCount - 1)) * maxScroll;
-      el.scrollTo({ left: target, behavior: "smooth" });
+      const progress =
+        page >= pageCount - 1 ? 1 : page / Math.max(1, pageCount - 1);
+      scrollToHorizontalProgress(el, progress, "smooth");
     },
     [pageCount],
   );

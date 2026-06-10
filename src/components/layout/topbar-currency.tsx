@@ -11,7 +11,7 @@ export function TopbarCurrency() {
   const label = SUPPORTED_CURRENCIES.find((c) => c.code === currency)?.code ?? currency;
 
   return (
-    <div className="nex-topbar-pill nex-topbar-currency hidden md:inline-flex">
+    <div className="nex-topbar-pill nex-topbar-currency">
       <CircleDollarSign className="nex-topbar-currency-icon" strokeWidth={1.75} />
       <span className="nex-topbar-currency-label">{label}</span>
       <ChevronDown className="nex-topbar-pill-chevron" strokeWidth={1.75} />

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
@@ -23,6 +23,8 @@ import { HERO_SLIDES } from "./hero-slides";
 /** Client hero banner artwork — replace file in public/hero/ to update. */
 const HERO_BACKGROUND_IMAGE = "/hero/hero-marketplace-bg.png";
 
+const SWIPE_THRESHOLD_PX = 50;
+
 type SlideCopy = {
   title: string;
   highlight: string;
@@ -41,6 +43,8 @@ export function HeroSection({
   const tCommon = useTranslations("common");
   const reduceMotion = useReducedMotion();
   const [activeIndex, setActiveIndex] = useState(0);
+  const [interactionPaused, setInteractionPaused] = useState(false);
+  const touchStart = useRef<{ x: number; y: number } | null>(null);
 
   const { slideIntervalMs, presenceMode } = HERO_ANIMATION_DEFAULT;
 
@@ -80,15 +84,73 @@ export function HeroSection({
     [t],
   );
 
+  const goToSlide = useCallback((index: number) => {
+    setActiveIndex(index);
+  }, []);
+
   const advanceSlide = useCallback(() => {
     setActiveIndex((current) => (current + 1) % HERO_SLIDES.length);
   }, []);
 
+  const goPrevSlide = useCallback(() => {
+    setActiveIndex(
+      (current) => (current - 1 + HERO_SLIDES.length) % HERO_SLIDES.length,
+    );
+  }, []);
+
+  const goNextSlide = useCallback(() => {
+    setActiveIndex((current) => (current + 1) % HERO_SLIDES.length);
+  }, []);
+
   useEffect(() => {
+    if (interactionPaused) return;
+
     const ms = reduceMotion ? slideIntervalMs * 1.5 : slideIntervalMs;
     const id = window.setInterval(advanceSlide, ms);
     return () => window.clearInterval(id);
-  }, [advanceSlide, reduceMotion, slideIntervalMs]);
+  }, [advanceSlide, interactionPaused, reduceMotion, slideIntervalMs]);
+
+  const handleTouchStart = useCallback((event: React.TouchEvent) => {
+    const touch = event.touches[0];
+    if (!touch) return;
+    touchStart.current = { x: touch.clientX, y: touch.clientY };
+    setInteractionPaused(true);
+  }, []);
+
+  const handleTouchEnd = useCallback(
+    (event: React.TouchEvent) => {
+      const start = touchStart.current;
+      touchStart.current = null;
+      setInteractionPaused(false);
+
+      if (!start || reduceMotion) return;
+
+      const touch = event.changedTouches[0];
+      if (!touch) return;
+
+      const deltaX = touch.clientX - start.x;
+      const deltaY = touch.clientY - start.y;
+
+      if (
+        Math.abs(deltaX) < SWIPE_THRESHOLD_PX ||
+        Math.abs(deltaX) < Math.abs(deltaY)
+      ) {
+        return;
+      }
+
+      if (deltaX < 0) {
+        goNextSlide();
+      } else {
+        goPrevSlide();
+      }
+    },
+    [goNextSlide, goPrevSlide, reduceMotion],
+  );
+
+  const handleTouchCancel = useCallback(() => {
+    touchStart.current = null;
+    setInteractionPaused(false);
+  }, []);
 
   const activeSlide = HERO_SLIDES[activeIndex];
   const copy = slideCopy[activeIndex];
@@ -100,6 +162,9 @@ export function HeroSection({
         compact && "nex-hero--compact",
       )}
       aria-label="Hero"
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+      onTouchCancel={handleTouchCancel}
     >
       <span className="nex-hero__float-orb nex-hero__float-orb--a" aria-hidden />
       <span className="nex-hero__float-orb nex-hero__float-orb--b" aria-hidden />
@@ -122,7 +187,7 @@ export function HeroSection({
         className={cn(
           "relative z-[10] flex flex-col justify-between",
           compact
-            ? "min-h-[118px] px-3 py-2.5 md:min-h-[152px] md:px-5 md:py-3"
+            ? "min-h-0 px-3 py-2 md:min-h-0 md:px-4 md:py-2.5"
             : "min-h-[380px] px-7 py-6 md:min-h-[392px] md:px-8 md:py-7",
         )}
       >
@@ -170,7 +235,7 @@ export function HeroSection({
                 variants={textItem}
                 className={cn(
                   "flex flex-wrap items-center gap-2.5",
-                  compact ? "mt-3" : "mt-5",
+                  compact ? "mt-2.5" : "mt-5",
                 )}
               >
                 <Link
@@ -222,19 +287,26 @@ export function HeroSection({
           className={cn(
             "nex-hero-slide-dots flex gap-1.5",
             compact
-              ? "mt-2 md:absolute md:bottom-4 md:end-6 md:mt-0"
+              ? "mt-2 md:absolute md:bottom-3 md:end-4 md:mt-0"
               : "mt-4 md:absolute md:bottom-7 md:end-8 md:mt-0",
           )}
-          aria-hidden
+          role="tablist"
+          aria-label={t("heroSlidesLabel")}
         >
           {HERO_SLIDES.map((slide, index) => (
-            <span
+            <button
               key={slide.id}
-              className={`nex-hero-dot h-1 rounded-full transition-all duration-500 ${
+              type="button"
+              role="tab"
+              aria-selected={index === activeIndex}
+              aria-label={t("heroSlideLabel", { number: index + 1 })}
+              className={cn(
+                "nex-hero-dot h-1 rounded-full",
                 index === activeIndex
                   ? "w-6 bg-violet-400"
-                  : "w-2 bg-white/25"
-              }`}
+                  : "w-2 bg-white/25",
+              )}
+              onClick={() => goToSlide(index)}
             />
           ))}
         </div>

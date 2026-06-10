@@ -60,7 +60,7 @@ export function FilteredProductsSection({
   return (
     <MarketplaceSectionReveal
       aria-label={title}
-      delay={0.04}
+      delay={0}
       className={cn(variant === "primary" && "mp-browse-section--primary")}
     >
       <MarketplaceSectionRevealChild>

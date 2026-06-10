@@ -48,9 +48,14 @@
     0 8px 28px rgba(0, 0, 0, 0.55);
 }
 
+.nex-hero--compact.nex-hero--image-bg .nex-hero-bg-image {
+  object-position: center 36%;
+  transform: scale(1);
+}
+
 @media (min-width: 768px) {
   .nex-hero--compact.nex-hero--image-bg .nex-hero-bg-image {
-    object-position: center 42%;
+    object-position: center 40%;
   }
 }
 

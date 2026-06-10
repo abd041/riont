@@ -792,8 +792,8 @@
   display: flex;
   justify-content: center;
   gap: 6px;
-  margin-top: 6px;
-  padding-bottom: 2px;
+  margin-top: 8px;
+  padding-bottom: 0;
 }
 
 .mp-cat-section--primary .mp-dots--slider .mp-dot {
@@ -817,10 +817,11 @@
   }
 
   .mp-cat-section--primary .mp-cat-scroll--slider .mp-cat {
-    flex: 0 0 88px;
-    width: 88px;
-    min-width: 88px;
-    max-width: 88px;
+    flex: 0 0 60px;
+    width: 60px;
+    min-width: 60px;
+    max-width: 60px;
+    min-height: 60px;
   }
 }
 
