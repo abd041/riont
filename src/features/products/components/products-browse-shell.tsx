@@ -1,6 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import {
+  mpStaggerContainer,
+  mpStaggerItem,
+} from "@/features/homepage/motion/marketplace-motion";
 import { SlidersHorizontal } from "lucide-react";
 import { cn } from "@/utils/cn";
 import { useTranslations } from "next-intl";
@@ -63,6 +68,7 @@ export function ProductsBrowseShell({
   const searchParams = useSearchParams();
   const router = useRouter();
   const [filtersOpen, setFiltersOpen] = useState(false);
+  const reduceMotion = useReducedMotion();
 
   const sort = (searchParams.get("sort") as SortOption) || "popular";
   const maxPrice = Number(searchParams.get("maxPrice")) || MAX_PRICE_CENTS;
@@ -83,6 +89,7 @@ export function ProductsBrowseShell({
   }
 
   const heading = showBrowseTitle ? t("browseTitle") : pageTitle;
+  const gridAnimationKey = `${activeCategorySlug ?? "all"}-${sort}-${maxPrice}-${platforms.join(",")}`;
 
   if (error) {
     return (
@@ -128,16 +135,26 @@ export function ProductsBrowseShell({
       </header>
 
       <div className="nex-browse-body">
+        {filtersOpen && (
+          <button
+            type="button"
+            className="nex-browse-filters-backdrop"
+            aria-label={t("hideFilters")}
+            onClick={() => setFiltersOpen(false)}
+          />
+        )}
         <button
           type="button"
           className="nex-browse-filters-toggle"
           aria-expanded={filtersOpen}
+          aria-controls="browse-filters-panel"
           onClick={() => setFiltersOpen((open) => !open)}
         >
           <SlidersHorizontal className="h-4 w-4" aria-hidden />
           {filtersOpen ? t("hideFilters") : t("showFilters")}
         </button>
         <div
+          id="browse-filters-panel"
           className={cn(
             "nex-browse-filters-wrap",
             filtersOpen && "nex-browse-filters-wrap--open",
@@ -146,6 +163,7 @@ export function ProductsBrowseShell({
           <ProductsFilterSidebar
             categories={categories}
             activeCategorySlug={activeCategorySlug}
+            onNavigate={() => setFiltersOpen(false)}
           />
         </div>
 
@@ -162,13 +180,33 @@ export function ProductsBrowseShell({
             />
           ) : (
             <div className="mp-grid mp-browse-section--primary">
-              <div className="mp-grid__inner">
-                {filtered.map((product) => (
-                  <div key={product.slug} className="mp-grid__cell">
-                    <MarketplaceProductCard {...product} />
-                  </div>
-                ))}
-              </div>
+              {reduceMotion ? (
+                <div className="mp-grid__inner">
+                  {filtered.map((product) => (
+                    <div key={product.slug} className="mp-grid__cell">
+                      <MarketplaceProductCard {...product} />
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <motion.div
+                  key={gridAnimationKey}
+                  className="mp-grid__inner"
+                  variants={mpStaggerContainer}
+                  initial="hidden"
+                  animate="visible"
+                >
+                  {filtered.map((product) => (
+                    <motion.div
+                      key={product.slug}
+                      className="mp-grid__cell"
+                      variants={mpStaggerItem}
+                    >
+                      <MarketplaceProductCard {...product} />
+                    </motion.div>
+                  ))}
+                </motion.div>
+              )}
             </div>
           )}
         </div>

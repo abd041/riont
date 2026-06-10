@@ -67,6 +67,43 @@ export type ProductReviewSummaryBrief = {
   count: number;
 };
 
+/** Approved reviews for homepage carousel (mixed ratings when seed/data allows). */
+export async function listFeaturedReviews(
+  locale: string,
+  limit = 6,
+): Promise<ProductReview[]> {
+  if (!isSupabaseConfigured()) return [];
+
+  const supabase = await createClient();
+  const { data, error } = await supabase
+    .from("product_reviews")
+    .select("id, author_name, rating, body, created_at")
+    .eq("is_approved", true)
+    .eq("locale", locale)
+    .order("sort_order", { ascending: true })
+    .order("created_at", { ascending: false })
+    .limit(limit);
+
+  if (error) return [];
+
+  return (data ?? []).map((row) => {
+    const r = row as {
+      id: string;
+      author_name: string;
+      rating: number;
+      body: string;
+      created_at: string;
+    };
+    return {
+      id: r.id,
+      authorName: r.author_name,
+      rating: r.rating,
+      body: r.body,
+      createdAt: r.created_at,
+    };
+  });
+}
+
 export async function getReviewSummariesForProducts(
   productIds: string[],
   locale: string,

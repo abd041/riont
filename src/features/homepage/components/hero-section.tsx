@@ -168,6 +168,11 @@ export function HeroSection({
     >
       <span className="nex-hero__float-orb nex-hero__float-orb--a" aria-hidden />
       <span className="nex-hero__float-orb nex-hero__float-orb--b" aria-hidden />
+      <span className="nex-hero__ambient-mark" aria-hidden>
+        R
+      </span>
+      <span className="nex-hero__ambient-orb nex-hero__ambient-orb--a" aria-hidden />
+      <span className="nex-hero__ambient-orb nex-hero__ambient-orb--b" aria-hidden />
       <div className="nex-hero-media absolute inset-0 z-[0] overflow-hidden">
         <Image
           src={HERO_BACKGROUND_IMAGE}

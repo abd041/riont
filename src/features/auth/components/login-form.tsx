@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useCallback, useEffect, useRef, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -14,6 +14,7 @@ import { isAppleAuthEnabled } from "@/lib/env/public";
 import { Input } from "@/components/ui/input";
 import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "@/i18n/navigation";
+import { useRouter as useAppRouter } from "next/navigation";
 import { cn } from "@/utils/cn";
 import { AuthToastListener, type AuthNotice } from "./auth-toast-listener";
 
@@ -34,7 +35,20 @@ export function LoginForm({
   const t = useTranslations("auth");
   const tToast = useTranslations("auth.toast");
   const router = useRouter();
+  const appRouter = useAppRouter();
   const [mode, setMode] = useState<"signIn" | "signUp">(initialMode);
+
+  const navigateAfterAuth = useCallback(
+    (path: string) => {
+      if (path.startsWith("/admin")) {
+        appRouter.replace(path);
+      } else {
+        router.replace(path);
+      }
+      router.refresh();
+    },
+    [appRouter, router],
+  );
 
   useEffect(() => {
     setMode(initialMode);
@@ -65,9 +79,8 @@ export function LoginForm({
     const key = `signIn-${signInState.intent}`;
     if (handledSuccess.current === key) return;
     handledSuccess.current = key;
-    router.replace(redirectTo);
-    router.refresh();
-  }, [signInState, redirectTo, router]);
+    navigateAfterAuth(redirectTo);
+  }, [signInState, redirectTo, navigateAfterAuth]);
 
   useEffect(() => {
     if (!signUpState?.success) return;
@@ -78,10 +91,9 @@ export function LoginForm({
       toast.success(tToast("registered"));
       router.replace("/login?registered=1");
     } else {
-      router.replace(redirectTo);
+      navigateAfterAuth(redirectTo);
     }
-    router.refresh();
-  }, [signUpState, redirectTo, router, tToast]);
+  }, [signUpState, redirectTo, navigateAfterAuth, router, tToast]);
 
   useEffect(() => {
     if (!oauthLoading) return;

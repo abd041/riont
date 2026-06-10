@@ -65,63 +65,71 @@ export async function ProductDetailView({
         </div>
 
         <div className="nex-pdp-layout">
-          <ProductDetailGallery media={product.media} productName={product.name} />
+          <div className="nex-pdp-purchase-card">
+            <ProductDetailGallery media={product.media} productName={product.name} />
 
-          <div className="nex-pdp-info">
-            <div className="nex-pdp-title-row">
-              <h1 className="nex-pdp-title">{product.name}</h1>
-              {product.badge === "bestSeller" && (
-                <span className="nex-pdp-bestseller">{t("bestSellerBadge")}</span>
-              )}
-            </div>
-
-            {product.categorySlug && (
-              <Link href={backHref} className="nex-pdp-category">
-                {categoryLabel}
-              </Link>
-            )}
-
-            {hasReviews ? (
-              <div className="nex-pdp-rating">
-                <span className="nex-pdp-rating-stars" aria-hidden>
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star key={i} strokeWidth={0} />
-                  ))}
-                </span>
-                <span className="nex-pdp-rating-text">
-                  {t("reviews", { rating: rating.toFixed(1), count: reviews })}
-                </span>
+            <div className="nex-pdp-info">
+              <div className="nex-pdp-title-row">
+                <h1 className="nex-pdp-title">{product.name}</h1>
+                {product.badge === "bestSeller" && (
+                  <span className="nex-pdp-bestseller">{t("bestSellerBadge")}</span>
+                )}
               </div>
-            ) : (
-              <p className="nex-pdp-rating-text nex-pdp-rating-text--empty">{t("noReviewsYet")}</p>
-            )}
 
-            <ul className="nex-pdp-features">
-              <li className="nex-pdp-feature">
-                <Check strokeWidth={2} />
-                {t("featureAccess")}
-              </li>
-              <li className="nex-pdp-feature">
-                <Check strokeWidth={2} />
-                {t("featurePlatform")}
-              </li>
-              <li className="nex-pdp-feature">
-                <Check strokeWidth={2} />
-                {product.badge === "instant" ? t("featureInstant") : t("manualDeliveryHint")}
-              </li>
-            </ul>
+              {product.categorySlug && (
+                <Link href={backHref} className="nex-pdp-category">
+                  {categoryLabel}
+                </Link>
+              )}
 
-            <ProductDetailInteractive
-              productId={productId}
-              slug={slug}
-              name={product.name}
-              imageUrl={product.imageUrl ?? null}
-              basePriceCents={product.priceCents}
-              baseCompareAtCents={product.compareAtCents}
-              isInstant={product.badge === "instant"}
-              inStock={product.inStock !== false}
-              variants={product.variants ?? []}
-            />
+              {hasReviews ? (
+                <div className="nex-pdp-rating">
+                  <span className="nex-pdp-rating-stars" aria-hidden>
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} strokeWidth={0} />
+                    ))}
+                  </span>
+                  <span className="nex-pdp-rating-text">
+                    {t("reviews", { rating: rating.toFixed(1), count: reviews })}
+                  </span>
+                </div>
+              ) : (
+                <p className="nex-pdp-rating-text nex-pdp-rating-text--empty">
+                  {t("noReviewsYet")}
+                </p>
+              )}
+
+              <ProductDetailInteractive
+                productId={productId}
+                slug={slug}
+                name={product.name}
+                imageUrl={product.imageUrl ?? null}
+                basePriceCents={product.priceCents}
+                baseCompareAtCents={product.compareAtCents}
+                isInstant={product.badge === "instant"}
+                inStock={product.inStock !== false}
+                variants={product.variants ?? []}
+              />
+
+              {product.shortDescription?.trim() && (
+                <p className="nex-pdp-excerpt">{product.shortDescription}</p>
+              )}
+
+              <ul className="nex-pdp-features">
+                <li className="nex-pdp-feature">
+                  <Check strokeWidth={2} />
+                  {t("featureAccess")}
+                </li>
+                <li className="nex-pdp-feature">
+                  <Check strokeWidth={2} />
+                  {t("featurePlatform")}
+                </li>
+                <li className="nex-pdp-feature">
+                  <Check strokeWidth={2} />
+                  {product.badge === "instant" ? t("featureInstant") : t("manualDeliveryHint")}
+                </li>
+              </ul>
+            </div>
           </div>
 
           <ProductDetailTabs

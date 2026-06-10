@@ -1,6 +1,8 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
+import { CART_ITEM_ADDED_EVENT } from "@/features/cart/cart-events";
 import { Bell, ChevronDown, Heart, Menu, ShoppingCart } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { ProductSearch } from "@/components/layout/product-search";
@@ -31,7 +33,28 @@ export function Topbar({
   const router = useRouter();
   const { itemCount } = useCart();
   const { count: wishlistCount } = useWishlist();
+  const [cartPulse, setCartPulse] = useState(false);
   const otherLocale = locale === "en" ? "ar" : "en";
+
+  useEffect(() => {
+    function onCartItemAdded() {
+      setCartPulse(true);
+      const id = window.setTimeout(() => setCartPulse(false), 650);
+      return id;
+    }
+
+    let timeoutId: number | undefined;
+    function handleCartItemAdded() {
+      if (timeoutId) window.clearTimeout(timeoutId);
+      timeoutId = onCartItemAdded();
+    }
+
+    window.addEventListener(CART_ITEM_ADDED_EVENT, handleCartItemAdded);
+    return () => {
+      window.removeEventListener(CART_ITEM_ADDED_EVENT, handleCartItemAdded);
+      if (timeoutId) window.clearTimeout(timeoutId);
+    };
+  }, []);
 
   function switchLocale() {
     router.replace(pathname, { locale: otherLocale });
@@ -83,7 +106,9 @@ export function Topbar({
         <Link href="/cart" className="nex-topbar-action nex-topbar-cart relative" aria-label={t("cart")}>
           <ShoppingCart strokeWidth={1.75} />
           {itemCount > 0 && (
-            <span className="nex-topbar-badge">
+            <span
+              className={cn("nex-topbar-badge", cartPulse && "nex-topbar-badge--pulse")}
+            >
               {itemCount > 9 ? "9+" : itemCount}
             </span>
           )}

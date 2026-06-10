@@ -136,6 +136,147 @@
   font-size: 11px;
 }
 
+/* ─── Hero ambient layer (RIYONT-033) ─── */
+.nex-hero__ambient-mark {
+  position: absolute;
+  inset-inline-end: 8%;
+  top: 50%;
+  z-index: 2;
+  transform: translateY(-50%);
+  font-size: clamp(4rem, 18vw, 7rem);
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(139, 92, 246, 0.07);
+  pointer-events: none;
+  user-select: none;
+}
+
+.nex-hero__ambient-orb {
+  position: absolute;
+  z-index: 1;
+  border-radius: 999px;
+  pointer-events: none;
+  filter: blur(28px);
+  opacity: 0.45;
+}
+
+.nex-hero__ambient-orb--a {
+  width: 120px;
+  height: 120px;
+  inset-inline-start: 62%;
+  top: 18%;
+  background: rgba(139, 92, 246, 0.22);
+  animation: nex-hero-ambient-float-a 9s ease-in-out infinite alternate;
+}
+
+.nex-hero__ambient-orb--b {
+  width: 90px;
+  height: 90px;
+  inset-inline-start: 72%;
+  bottom: 12%;
+  background: rgba(59, 130, 246, 0.16);
+  animation: nex-hero-ambient-float-b 11s ease-in-out infinite alternate;
+}
+
+@keyframes nex-hero-ambient-float-a {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-8px, 10px, 0);
+  }
+}
+
+@keyframes nex-hero-ambient-float-b {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(10px, -8px, 0);
+  }
+}
+
+.nex-hero--compact .nex-hero__ambient-mark {
+  font-size: clamp(3rem, 14vw, 5rem);
+  inset-inline-end: 6%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nex-hero__ambient-orb--a,
+  .nex-hero__ambient-orb--b {
+    animation: none;
+  }
+}
+
+/* ─── Promo banner (above hero) ─── */
+.mp-promo-banner {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 56px;
+  padding: 0 16px;
+  overflow: hidden;
+  border-radius: var(--radius-md, 14px);
+  border: 1px solid rgba(139, 92, 246, 0.18);
+  background:
+    linear-gradient(105deg, rgba(22, 12, 38, 0.95) 0%, rgba(8, 8, 12, 0.98) 55%, rgba(12, 8, 22, 0.95) 100%);
+  box-shadow:
+    0 0 0 1px rgba(139, 92, 246, 0.06),
+    0 8px 24px rgba(0, 0, 0, 0.45);
+}
+
+.mp-promo-banner__glow {
+  position: absolute;
+  inset: -40% -10%;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 55% 80% at 50% 50%,
+    rgba(139, 92, 246, 0.22),
+    transparent 70%
+  );
+  animation: mp-promo-glow 6s ease-in-out infinite alternate;
+}
+
+.mp-promo-banner__text {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-align: center;
+  color: rgba(237, 233, 254, 0.92);
+}
+
+@media (min-width: 768px) {
+  .mp-promo-banner {
+    height: 72px;
+    padding-inline: 24px;
+  }
+
+  .mp-promo-banner__text {
+    font-size: 13px;
+  }
+}
+
+@keyframes mp-promo-glow {
+  from {
+    opacity: 0.55;
+    transform: translateX(-2%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(2%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mp-promo-banner__glow {
+    animation: none;
+  }
+}
+
 /* ─── Compact hero ─── */
 .nex-hero--compact {
   min-height: 0 !important;
@@ -277,7 +418,7 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  border-radius: 11px;
+  border-radius: var(--radius-md, 14px);
   border: 1px solid rgba(255, 255, 255, 0.05);
   background: linear-gradient(180deg, rgba(11, 11, 15, 0.98), rgba(5, 5, 7, 1));
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.42);

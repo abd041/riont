@@ -271,7 +271,8 @@
 .mp-row--featured .mp-scroll {
   width: 100%;
   overflow-x: auto;
-  scroll-snap-type: none;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
 }
 
 .mp-row--featured .mp-scroll__track--full {
@@ -299,6 +300,7 @@
   .mp-row--featured .mp-scroll__cell--full {
     flex: 0 0 80px;
     min-width: 80px;
+    scroll-snap-align: start;
   }
 
   .mp-row--featured .mp-scroll__cell--full .mp-card--mini {
@@ -315,6 +317,7 @@
   .mp-row--featured .mp-scroll__cell--full {
     flex: 0 0 116px;
     min-width: 116px;
+    scroll-snap-align: start;
   }
 
   .mp-row--featured .mp-scroll__cell--full .mp-card--mini {

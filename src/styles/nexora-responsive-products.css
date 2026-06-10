@@ -3,12 +3,77 @@
  */
 
 @media (max-width: 1023px) {
+  .nex-browse-filters-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 3;
+    border: none;
+    padding: 0;
+    background: rgba(0, 0, 0, 0.55);
+    cursor: pointer;
+  }
+
+  .nex-browse-filters-wrap--open {
+    position: relative;
+    z-index: 5;
+  }
+
   .nex-browse-filters-wrap--open .nex-browse-filters {
-    max-height: min(68vh, 560px);
+    max-height: 70vh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior: contain;
   }
+
+  .nex-browse-filter-section + .nex-browse-filter-section {
+    padding-top: 14px;
+    margin-top: 2px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .nex-browse-filter-title {
+    font-size: 16px;
+    letter-spacing: 0.04em;
+    text-transform: none;
+    margin-bottom: 10px;
+  }
+}
+
+/* Browse grid cards — ~12% denser (RIYONT-070) */
+.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__media--grid {
+  aspect-ratio: 1.12 / 1;
+}
+
+.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__body {
+  gap: 5px;
+  padding: 8px 9px 9px;
+}
+
+.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__name {
+  font-size: 11px;
+  line-height: 1.3;
+}
+
+.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__cat,
+.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__rating-row {
+  font-size: 8.5px;
+}
+
+.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__price {
+  font-size: 11.5px;
+}
+
+.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__price-old {
+  font-size: 8px;
+}
+
+.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-btn-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__placeholder {
+  min-height: 88px;
 }
 
 @media (max-width: 767px) {

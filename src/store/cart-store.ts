@@ -2,6 +2,7 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import { STORAGE_KEYS } from "@/constants/storage-keys";
 import { cartLineKey } from "@/features/cart/cart-line-key";
+import { notifyCartItemAdded } from "@/features/cart/cart-events";
 import type { CartLine } from "@/features/cart/types";
 
 type CartState = {
@@ -25,7 +26,7 @@ export const useCartStore = create<CartState>()(
       _hasHydrated: false,
       setHasHydrated: (value) => set({ _hasHydrated: value }),
 
-      addItem: (line, quantity = 1) =>
+      addItem: (line, quantity = 1) => {
         set((state) => {
           const key = cartLineKey(line);
           const existing = state.items.find((i) => cartLineKey(i) === key);
@@ -39,7 +40,9 @@ export const useCartStore = create<CartState>()(
             };
           }
           return { items: [...state.items, { ...line, quantity }] };
-        }),
+        });
+        notifyCartItemAdded();
+      },
 
       removeItem: (productId, variantId) =>
         set((state) => {

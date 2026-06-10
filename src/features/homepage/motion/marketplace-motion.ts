@@ -46,7 +46,7 @@ export const mpStaggerContainer = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
-    transition: { staggerChildren: 0.045, delayChildren: 0.04 },
+    transition: { staggerChildren: 0.04, delayChildren: 0.03 },
   },
 };
 

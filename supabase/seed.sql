@@ -284,14 +284,23 @@ INSERT INTO coupons (code, coupon_type, value, min_order_cents, max_discount_cen
   ('WELCOME10', 'percent', 10, 500, 500, 100, true)
 ON CONFLICT (code) DO NOTHING;
 
-INSERT INTO product_reviews (product_id, author_name, rating, body, locale, sort_order) VALUES
-  ('b0000000-0000-4000-8000-000000000001', 'Alex M.', 5, 'Verification delivered within 48 hours. Support answered quickly.', 'en', 0),
-  ('b0000000-0000-4000-8000-000000000001', 'Sara K.', 5, 'Smooth process from checkout to badge activation.', 'en', 1),
-  ('b0000000-0000-4000-8000-000000000001', 'Omar H.', 4, 'Good service; follow the setup guide closely.', 'en', 2),
-  ('b0000000-0000-4000-8000-000000000001', 'نورة أ.', 5, 'تسليم سريع ودعم ممتاز بالعربية.', 'ar', 0),
-  ('b0000000-0000-4000-8000-000000000002', 'Mike T.', 5, 'Steam credentials worked instantly after payment.', 'en', 0),
-  ('b0000000-0000-4000-8000-000000000003', 'Lina P.', 5, 'Spotify code redeemed without issues.', 'en', 0)
+INSERT INTO product_reviews (product_id, author_name, rating, body, locale, sort_order, is_approved) VALUES
+  ('b0000000-0000-4000-8000-000000000001', 'Alex M.', 5, 'Verification delivered within 48 hours. Support answered quickly.', 'en', 0, true),
+  ('b0000000-0000-4000-8000-000000000001', 'Sara K.', 5, 'Smooth process from checkout to badge activation.', 'en', 1, true),
+  ('b0000000-0000-4000-8000-000000000001', 'Omar H.', 4, 'Good service; follow the setup guide closely.', 'en', 2, true),
+  ('b0000000-0000-4000-8000-000000000001', 'نورة أ.', 5, 'تسليم سريع ودعم ممتاز بالعربية.', 'ar', 0, true),
+  ('b0000000-0000-4000-8000-000000000002', 'Mike T.', 5, 'Steam credentials worked instantly after payment.', 'en', 0, true),
+  ('b0000000-0000-4000-8000-000000000003', 'Lina P.', 4, 'Spotify code redeemed without issues.', 'en', 0, true)
 ON CONFLICT DO NOTHING;
+
+-- Migration 20250529000000 sets is_approved default FALSE — keep demo reviews visible
+UPDATE product_reviews
+SET is_approved = true
+WHERE product_id IN (
+  'b0000000-0000-4000-8000-000000000001',
+  'b0000000-0000-4000-8000-000000000002',
+  'b0000000-0000-4000-8000-000000000003'
+);
 
 INSERT INTO exchange_rates (base_currency, target_currency, rate) VALUES
   ('USD', 'EUR', 0.92),

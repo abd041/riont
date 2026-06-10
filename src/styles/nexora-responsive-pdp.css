@@ -7,8 +7,22 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) !important;
   }
 
-  .nex-pdp-layout > :nth-child(3) {
+  .nex-pdp-purchase-card {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
     grid-column: 1 / -1;
+  }
+
+  .nex-pdp-layout > .nex-pdp-tabs,
+  .nex-pdp-layout > .nex-pdp-related {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 1280px) {
+  .nex-pdp-purchase-card {
+    display: contents;
   }
 }
 
@@ -27,7 +41,48 @@
   }
 
   .sf-pdp-wrap .nex-pdp-layout {
-    gap: 16px;
+    gap: 12px;
+  }
+
+  .nex-pdp-purchase-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    overflow: hidden;
+    border-radius: 14px;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(255, 255, 255, 0.02);
+  }
+
+  .sf-pdp-wrap .nex-pdp-purchase-card .nex-pdp-gallery-main {
+    max-height: min(40vh, 320px);
+    aspect-ratio: auto;
+    min-height: 200px;
+    border: none;
+    border-radius: 0;
+    background: linear-gradient(145deg, rgba(20, 14, 32, 0.6), rgba(8, 8, 12, 1));
+  }
+
+  .sf-pdp-wrap .nex-pdp-purchase-card .nex-pdp-info {
+    border: none;
+    border-radius: 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    padding: 12px 14px 14px;
+  }
+
+  .nex-pdp-excerpt {
+    margin: 10px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.62);
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .nex-pdp-features {
+    margin-top: 12px;
   }
 }
 
@@ -75,8 +130,21 @@
   }
 
   .nex-pdp-title {
-    font-size: 1.35rem;
+    font-size: 1.25rem;
     overflow-wrap: anywhere;
+  }
+
+  .nex-pdp-category {
+    margin-top: 4px;
+    font-size: 11px;
+  }
+
+  .nex-pdp-rating {
+    margin-top: 8px;
+  }
+
+  .nex-pdp-meta-row {
+    margin-top: 10px;
   }
 
   .nex-pdp-features {
@@ -90,18 +158,23 @@
   }
 
   .nex-pdp-pricing {
-    margin-top: 16px;
-    gap: 8px;
+    margin-top: 10px;
+    gap: 6px;
   }
 
   .nex-pdp-price {
-    font-size: 1.65rem;
+    font-size: 1.5rem;
   }
 
   .nex-pdp-actions {
-    margin-top: 16px;
-    gap: 10px;
-    padding-bottom: 4px;
+    margin-top: 12px;
+    gap: 8px;
+    padding-bottom: 0;
+  }
+
+  .nex-pdp-variants {
+    margin-top: 8px;
+    margin-bottom: 8px;
   }
 
   .nex-pdp-qty-row {
@@ -128,8 +201,13 @@
     padding: 10px 0;
   }
 
-  .sf-pdp-wrap .nex-pdp-gallery-main {
+  .sf-pdp-wrap .nex-pdp-gallery:not(.nex-pdp-purchase-card .nex-pdp-gallery) .nex-pdp-gallery-main {
     border-radius: 14px;
+  }
+
+  .nex-pdp-purchase-card .nex-pdp-thumbs {
+    margin-top: 8px;
+    padding-inline: 10px 10px;
   }
 
   .nex-pdp-thumb {
@@ -157,15 +235,18 @@
     white-space: nowrap;
   }
 
-  .sf-pdp-wrap .nex-pdp-info,
   .sf-pdp-wrap .nex-pdp-tabs {
     padding: 16px;
   }
 
-  .sf-pdp-wrap .nex-pdp-gallery-main {
-    padding: 0;
-    border: none;
-    background: transparent;
+  .sf-pdp-wrap .nex-pdp-purchase-card + .nex-pdp-tabs {
+    margin-top: 4px;
+  }
+}
+
+@media (min-width: 768px) {
+  .nex-pdp-excerpt {
+    display: none;
   }
 }
 

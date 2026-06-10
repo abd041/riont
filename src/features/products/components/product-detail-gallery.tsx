@@ -18,8 +18,8 @@ export function ProductDetailGallery({
 
   if (!active) {
     return (
-      <div className="nex-pdp-gallery-main relative min-h-[280px]">
-        <ProductImage alt={productName} className="absolute inset-0 min-h-[280px]" priority />
+      <div className="nex-pdp-gallery-main relative">
+        <ProductImage alt={productName} className="absolute inset-0" priority />
       </div>
     );
   }

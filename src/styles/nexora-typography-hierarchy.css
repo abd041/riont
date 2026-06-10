@@ -1,0 +1,43 @@
+/**
+ * RIYONT-103 — Storefront typography hierarchy
+ */
+
+.mp-section__title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.mp-section__meta {
+  font-size: 12px;
+  opacity: 0.62;
+}
+
+@media (min-width: 640px) {
+  .mp-section__meta {
+    font-size: 13px;
+  }
+}
+
+.nex-browse-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.sf-page__title {
+  letter-spacing: 0.02em;
+}
+
+.sf-page__subtitle,
+.sf-page__meta {
+  opacity: 0.62;
+}
+
+.sf-page__meta {
+  font-size: 12px;
+}
+
+@media (min-width: 640px) {
+  .sf-page__meta {
+    font-size: 13px;
+  }
+}

@@ -70,21 +70,32 @@ export function CategorySlider({
     const el = scrollRef.current;
     if (!el) return;
 
+    let scrollTimer: number | null = null;
+
     const measure = () => {
       requestAnimationFrame(updateDots);
+    };
+
+    const onScroll = () => {
+      if (scrollTimer !== null) window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(() => {
+        scrollTimer = null;
+        updateDots();
+      }, 80);
     };
 
     measure();
     const observer = new ResizeObserver(measure);
     observer.observe(el);
 
-    el.addEventListener("scroll", updateDots, { passive: true });
+    el.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", measure);
 
     return () => {
       observer.disconnect();
-      el.removeEventListener("scroll", updateDots);
+      el.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", measure);
+      if (scrollTimer !== null) window.clearTimeout(scrollTimer);
     };
   }, [updateDots, categories.length]);
 

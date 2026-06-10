@@ -40,11 +40,13 @@ const MAX_PRICE_CENTS = 100_000;
 type ProductsFilterSidebarProps = {
   categories: CatalogCategory[];
   activeCategorySlug?: string | null;
+  onNavigate?: () => void;
 };
 
 export function ProductsFilterSidebar({
   categories,
   activeCategorySlug,
+  onNavigate,
 }: ProductsFilterSidebarProps) {
   const t = useTranslations("catalog");
   const router = useRouter();
@@ -80,11 +82,16 @@ export function ProductsFilterSidebar({
     router.push("/products");
   }
 
+  function handleNavigate() {
+    onNavigate?.();
+  }
+
   return (
-    <div className="nex-browse-filters-wrap">
     <aside className="nex-browse-filters">
-      <div>
-        <h3 className="nex-browse-filter-title">{t("categories")}</h3>
+      <section className="nex-browse-filter-section" aria-labelledby="browse-filter-categories">
+        <h3 id="browse-filter-categories" className="nex-browse-filter-title">
+          {t("categories")}
+        </h3>
         <ul className="nex-browse-cat-list">
           <li>
             <Link
@@ -93,6 +100,7 @@ export function ProductsFilterSidebar({
                 "nex-browse-cat-link",
                 !activeCategorySlug && "nex-browse-cat-link--active",
               )}
+              onClick={handleNavigate}
             >
               <LayoutGrid className="nex-browse-cat-icon" strokeWidth={1.5} />
               <span className="nex-browse-cat-label">{t("allCategories")}</span>
@@ -110,6 +118,7 @@ export function ProductsFilterSidebar({
                     "nex-browse-cat-link",
                     activeCategorySlug === cat.slug && "nex-browse-cat-link--active",
                   )}
+                  onClick={handleNavigate}
                 >
                   <Icon className="nex-browse-cat-icon" strokeWidth={1.5} />
                   <span className="nex-browse-cat-label">{cat.name}</span>
@@ -119,10 +128,12 @@ export function ProductsFilterSidebar({
             );
           })}
         </ul>
-      </div>
+      </section>
 
-      <div>
-        <h3 className="nex-browse-filter-title">{t("priceRange")}</h3>
+      <section className="nex-browse-filter-section" aria-labelledby="browse-filter-price">
+        <h3 id="browse-filter-price" className="nex-browse-filter-title">
+          {t("priceRange")}
+        </h3>
         <div className="nex-browse-price-values">
           <span dir="ltr">$0</span>
           <span dir="ltr">${Math.round(maxPriceCents / 100)}</span>
@@ -143,10 +154,12 @@ export function ProductsFilterSidebar({
             });
           }}
         />
-      </div>
+      </section>
 
-      <div>
-        <h3 className="nex-browse-filter-title">{t("platform")}</h3>
+      <section className="nex-browse-filter-section" aria-labelledby="browse-filter-platform">
+        <h3 id="browse-filter-platform" className="nex-browse-filter-title">
+          {t("platform")}
+        </h3>
         <div className="nex-browse-platform-list">
           {PLATFORMS.map(({ id, labelKey }) => (
             <label key={id} className="nex-browse-check">
@@ -159,13 +172,19 @@ export function ProductsFilterSidebar({
             </label>
           ))}
         </div>
-      </div>
+      </section>
 
-      <button type="button" className="nex-browse-clear" onClick={clearFilters}>
+      <button
+        type="button"
+        className="nex-browse-clear"
+        onClick={() => {
+          clearFilters();
+          handleNavigate();
+        }}
+      >
         {t("clearFilters")}
       </button>
     </aside>
-    </div>
   );
 }
 
