@@ -39,7 +39,9 @@ export function ProductDetailTabs({
   hasDbReviews,
 }: ProductDetailTabsProps) {
   const t = useTranslations("product");
-  const [active, setActive] = useState<TabId>("details");
+  const [active, setActive] = useState<TabId>(
+    description?.trim() ? "description" : "details",
+  );
 
   const tabs: { id: TabId; label: string }[] = [
     { id: "details", label: t("tabDetails") },

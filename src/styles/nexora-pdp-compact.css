@@ -1,0 +1,547 @@
+/**
+ * Product detail — compact, scannable layout (desktop-first polish)
+ */
+
+/* ─── Page shell ─── */
+.nex-pdp-page--compact {
+  max-width: 1040px;
+}
+
+.nex-pdp-page--compact .sf-pdp-toolbar {
+  margin-bottom: 12px;
+  gap: 10px;
+}
+
+.nex-pdp-purchase-block {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.nex-pdp-meta-strip {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+  margin-top: 8px;
+}
+
+.nex-pdp-meta-strip .nex-pdp-category {
+  margin-top: 0;
+}
+
+.nex-pdp-meta-strip .nex-pdp-rating--inline {
+  margin-top: 0;
+  gap: 4px;
+  font-size: 12px;
+}
+
+.nex-pdp-meta-strip .nex-pdp-rating-text--empty {
+  margin: 0;
+  font-size: 11px;
+}
+
+.nex-pdp-description-block {
+  margin: 0;
+  padding: 0;
+}
+
+.nex-pdp-excerpt {
+  margin: 10px 0 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.nex-pdp-description-preview {
+  margin: 8px 0 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(255, 255, 255, 0.55);
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 4;
+}
+
+.nex-pdp-actions__primary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  width: 100%;
+}
+
+@media (max-width: 479px) {
+  .nex-pdp-page--compact .nex-pdp-actions__primary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Mobile compact (≤767px) ─── */
+@media (max-width: 767px) {
+  .nex-pdp-page--compact {
+    max-width: 100%;
+  }
+
+  .nex-pdp-page--compact .sf-pdp-toolbar {
+    flex-direction: row;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 8px;
+  }
+
+  .nex-pdp-page--compact .sf-pdp-toolbar .nex-browse-back {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    flex-shrink: 0;
+  }
+
+  .nex-pdp-page--compact .sf-pdp-toolbar .nex-pdp-breadcrumbs {
+    font-size: 10px;
+    gap: 4px;
+    line-height: 1.35;
+    min-width: 0;
+  }
+
+  .nex-pdp-page--compact .sf-pdp-toolbar .nex-pdp-breadcrumbs a:first-of-type,
+  .nex-pdp-page--compact .sf-pdp-toolbar .nex-pdp-breadcrumbs a:nth-of-type(2),
+  .nex-pdp-page--compact .sf-pdp-toolbar .nex-pdp-breadcrumbs span[aria-hidden] {
+    display: none;
+  }
+
+  .nex-pdp-page--compact .sf-pdp-wrap .nex-pdp-layout,
+  .nex-pdp-page--compact .nex-pdp-layout {
+    gap: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-purchase-card {
+    border-radius: 12px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-purchase-card .nex-pdp-gallery-main {
+    max-height: min(32vh, 200px);
+    min-height: 148px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-purchase-card .nex-pdp-thumbs {
+    margin-top: 6px;
+    padding-inline: 10px 10px;
+    gap: 6px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-thumb {
+    width: 48px;
+    height: 48px;
+    min-width: 48px;
+    min-height: 48px;
+    border-radius: 8px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-info {
+    padding: 10px 12px 12px !important;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-title {
+    font-size: 1.1rem;
+    line-height: 1.25;
+    letter-spacing: -0.01em;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-meta-strip {
+    margin-top: 6px;
+    gap: 4px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-category,
+  .nex-pdp-page--compact .nex-pdp-availability,
+  .nex-pdp-page--compact .nex-pdp-bestseller {
+    padding: 2px 7px;
+    font-size: 9px;
+    letter-spacing: 0.03em;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-meta-strip .nex-pdp-rating--inline {
+    font-size: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-meta-strip .nex-pdp-rating-stars svg {
+    width: 11px;
+    height: 11px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-meta-strip .nex-pdp-rating-text--empty {
+    font-size: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-variants {
+    margin: 8px 0 0;
+    gap: 6px;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 2px;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-variants::-webkit-scrollbar {
+    display: none;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-variant {
+    flex-shrink: 0;
+    min-height: 34px;
+    padding: 5px 10px;
+    border-radius: 9px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-variant__name {
+    font-size: 11px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-variant__offer {
+    font-size: 9px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-pricing {
+    margin-top: 8px;
+    gap: 6px;
+    align-items: center;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-price {
+    font-size: 1.35rem;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-compare {
+    font-size: 0.8125rem;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-discount {
+    padding: 2px 6px;
+    font-size: 9px;
+    border-radius: 5px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-description-block {
+    margin-top: 0;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-excerpt {
+    margin: 8px 0 0;
+    font-size: 12px;
+    line-height: 1.5;
+    color: rgba(255, 255, 255, 0.7);
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-description-preview {
+    margin-top: 6px;
+    font-size: 11px;
+    line-height: 1.5;
+    -webkit-line-clamp: 5;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-actions {
+    margin-top: 10px;
+    gap: 8px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty-row {
+    gap: 8px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty-label {
+    font-size: 11px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty {
+    border-radius: 8px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty button {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+    min-height: 36px;
+    font-size: 16px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty span {
+    min-width: 26px;
+    font-size: 13px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-actions__primary {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-add-cart,
+  .nex-pdp-page--compact .nex-pdp-buy-now,
+  .nex-pdp-page--compact .nex-pdp-buy-now--disabled {
+    height: 42px;
+    min-height: 42px;
+    font-size: 12px;
+    border-radius: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-add-cart svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-secondary-actions {
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-share,
+  .nex-pdp-page--compact .nex-pdp-wishlist {
+    min-height: 38px;
+    padding: 6px 8px;
+    font-size: 11px;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-tabs {
+    padding: 12px;
+    border-radius: 12px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-tabs__list {
+    margin-bottom: 8px;
+    padding: 3px;
+    gap: 4px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-tabs__tab {
+    min-height: 36px;
+    padding-inline: 10px;
+    font-size: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-tabs__text {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-related {
+    padding-top: 2px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-related__title {
+    margin-bottom: 6px;
+    font-size: 11px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-related__grid {
+    gap: 8px;
+  }
+}
+
+@media (max-width: 359px) {
+  .nex-pdp-page--compact .nex-pdp-actions__primary {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ─── Desktop compact ─── */
+@media (min-width: 768px) {
+  .nex-pdp-page--compact .nex-pdp-layout {
+    gap: 16px !important;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-purchase-card {
+    display: grid;
+    grid-template-columns: minmax(0, 320px) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+    grid-column: 1 / -1;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-gallery-main {
+    aspect-ratio: 1 / 1;
+    max-height: 300px;
+    min-height: 0;
+    border-radius: 14px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-thumbs {
+    margin-top: 8px;
+    gap: 8px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-thumb {
+    width: 52px;
+    height: 52px;
+    border-radius: 8px;
+  }
+
+  .sf-pdp-wrap.nex-pdp-page--compact .nex-pdp-info {
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-title {
+    font-size: 1.35rem;
+    line-height: 1.2;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-bestseller {
+    padding: 3px 8px;
+    font-size: 9px;
+    border-radius: 5px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-availability {
+    padding: 3px 8px;
+    font-size: 9px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-category {
+    padding: 3px 8px;
+    font-size: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-pricing {
+    margin-top: 12px;
+    gap: 8px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-price {
+    font-size: 1.5rem;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-compare {
+    font-size: 0.875rem;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-discount {
+    padding: 2px 7px;
+    font-size: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-variants {
+    margin: 10px 0 0;
+    gap: 6px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-variant {
+    min-height: 36px;
+    padding: 6px 10px;
+    border-radius: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-variant__name {
+    font-size: 12px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-actions {
+    margin-top: 12px;
+    gap: 8px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty-row {
+    gap: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty-label {
+    font-size: 12px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty button {
+    width: 30px;
+    height: 30px;
+    font-size: 15px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty span {
+    min-width: 28px;
+    font-size: 13px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-qty {
+    border-radius: 8px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-add-cart,
+  .nex-pdp-page--compact .nex-pdp-buy-now,
+  .nex-pdp-page--compact .nex-pdp-buy-now--disabled {
+    height: 40px;
+    min-height: 40px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-secondary-actions {
+    gap: 6px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-share,
+  .nex-pdp-page--compact .nex-pdp-wishlist {
+    min-height: 36px;
+    padding: 6px 10px;
+    font-size: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.03);
+  }
+
+  .nex-pdp-page--compact .nex-pdp-tabs {
+    padding: 14px 16px;
+    border-radius: 14px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-tabs__list {
+    margin-bottom: 10px;
+    padding: 3px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-tabs__tab {
+    min-height: 32px;
+    font-size: 11px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-tabs__text {
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-related {
+    padding-top: 4px;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-related__title {
+    margin-bottom: 8px;
+    font-size: 12px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .nex-pdp-page--compact .nex-pdp-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-purchase-card {
+    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .nex-pdp-layout {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-purchase-card {
+    display: grid !important;
+    grid-template-columns: minmax(0, 340px) minmax(0, 1fr);
+  }
+}

@@ -6,32 +6,28 @@
 export const colors = {
   void: "#000000",
   base: "#040404",
-  elevated: "#07070a",
-  surface: "#0f0f16",
-  surface2: "#14141e",
+  elevated: "#080808",
+  surface: "#0a0a0a",
+  surface2: "#101010",
   text: {
     primary: "#ffffff",
-    secondary: "rgba(226, 232, 240, 0.85)",
-    muted: "rgba(148, 163, 184, 0.55)",
-    faint: "rgba(100, 116, 139, 0.5)",
+    secondary: "rgba(255, 255, 255, 0.72)",
+    muted: "rgba(255, 255, 255, 0.45)",
+    faint: "rgba(255, 255, 255, 0.32)",
   },
   accent: {
-    300: "#c4b5fd",
-    400: "#a78bfa",
-    500: "#8b5cf6",
-    600: "#7c3aed",
-    700: "#6d28d9",
-  },
-  accentBlue: {
-    400: "#93c5fd",
-    500: "rgba(59, 130, 246, 0.12)",
+    300: "#d4bc8c",
+    400: "#c4a574",
+    500: "#a67c52",
+    600: "#8b6340",
+    700: "#6e4f32",
   },
   border: {
     subtle: "rgba(255, 255, 255, 0.06)",
     default: "rgba(255, 255, 255, 0.1)",
     strong: "rgba(255, 255, 255, 0.14)",
-    glow: "rgba(139, 92, 246, 0.35)",
-    active: "rgba(139, 92, 246, 0.45)",
+    glow: "rgba(166, 124, 82, 0.32)",
+    active: "rgba(166, 124, 82, 0.42)",
   },
 } as const;
 
@@ -62,13 +58,13 @@ export const shadows = {
   inset: "inset 0 1px 0 rgba(255, 255, 255, 0.04)",
 } as const;
 
-/** Subtle purple glow — never bright/neon. */
+/** Subtle bronze glow — restrained, never neon. */
 export const glow = {
-  sm: "0 0 12px rgba(139, 92, 246, 0.12)",
-  md: "0 0 20px rgba(139, 92, 246, 0.18)",
-  lg: "0 0 28px rgba(139, 92, 246, 0.22)",
-  active: "0 0 0 1px rgba(139, 92, 246, 0.15), 0 0 18px rgba(139, 92, 246, 0.18)",
-  cardHover: "0 0 24px rgba(139, 92, 246, 0.1)",
+  sm: "0 0 12px rgba(166, 124, 82, 0.12)",
+  md: "0 0 20px rgba(166, 124, 82, 0.16)",
+  lg: "0 0 28px rgba(166, 124, 82, 0.2)",
+  active: "0 0 0 1px rgba(166, 124, 82, 0.14), 0 0 18px rgba(166, 124, 82, 0.16)",
+  cardHover: "0 0 24px rgba(166, 124, 82, 0.08)",
 } as const;
 
 /** Compact typography scale (px). */

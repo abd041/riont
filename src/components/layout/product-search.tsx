@@ -5,7 +5,13 @@ import { Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 
-export function ProductSearch({ className }: { className?: string }) {
+export function ProductSearch({
+  className,
+  autoFocus = false,
+}: {
+  className?: string;
+  autoFocus?: boolean;
+}) {
   const t = useTranslations("common");
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
@@ -19,6 +25,12 @@ export function ProductSearch({ className }: { className?: string }) {
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
+
+  useEffect(() => {
+    if (!autoFocus) return;
+    const id = window.requestAnimationFrame(() => inputRef.current?.focus());
+    return () => window.cancelAnimationFrame(id);
+  }, [autoFocus]);
 
   useEffect(() => {
     function onKeyDown(event: KeyboardEvent) {

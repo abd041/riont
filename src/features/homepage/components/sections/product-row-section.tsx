@@ -61,27 +61,44 @@ export function ProductRowSection({
       </MarketplaceSectionRevealChild>
 
       <div className={cn(variant === "featured" && "mp-row__scroll-full")}>
-        <div className="mp-scroll mp-scroll--fade">
-          <motion.div
-            className={cn(
-              "mp-scroll__track",
-              variant === "featured" && "mp-scroll__track--full",
-            )}
-            variants={mpStaggerContainer}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, amount: 0.15 }}
-          >
-            {products.map((product) => (
-              <motion.div
-                key={`${titleKey}-${product.slug}`}
-                variants={mpStaggerItem}
-                className={variant === "featured" ? "mp-scroll__cell--full" : undefined}
-              >
-                <MarketplaceMiniCard product={product} />
-              </motion.div>
-            ))}
-          </motion.div>
+        <div
+          className={cn(
+            "mp-scroll mp-scroll--fade",
+            variant === "featured" && "mp-scroll--carousel",
+          )}
+        >
+          {variant === "featured" ? (
+            <div className="mp-scroll__track mp-scroll__track--full">
+              {products.map((product) => (
+                <div
+                  key={`${titleKey}-${product.slug}`}
+                  className="mp-scroll__cell--full"
+                >
+                  <MarketplaceMiniCard
+                    product={product}
+                    showcase
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <motion.div
+              className="mp-scroll__track"
+              variants={mpStaggerContainer}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, amount: 0.15 }}
+            >
+              {products.map((product) => (
+                <motion.div
+                  key={`${titleKey}-${product.slug}`}
+                  variants={mpStaggerItem}
+                >
+                  <MarketplaceMiniCard product={product} />
+                </motion.div>
+              ))}
+            </motion.div>
+          )}
         </div>
       </div>
     </MarketplaceSectionReveal>

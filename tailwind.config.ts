@@ -20,6 +20,7 @@ const config: Config = {
           2: "var(--bg-surface-2)",
         },
         accent: {
+          300: "#d4bc8c",
           400: "var(--accent-400)",
           500: "var(--accent-500)",
           600: "var(--accent-600)",
@@ -36,9 +37,9 @@ const config: Config = {
         arabic: ["var(--font-arabic)", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        glow: "0 0 32px rgba(139, 92, 246, 0.25)",
-        "glow-lg": "0 0 48px rgba(139, 92, 246, 0.35)",
-        premium: "0 8px 32px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(139, 92, 246, 0.08)",
+        glow: "0 0 32px rgba(166, 124, 82, 0.22)",
+        "glow-lg": "0 0 48px rgba(166, 124, 82, 0.28)",
+        premium: "0 8px 32px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(166, 124, 82, 0.08)",
       },
       animation: {
         float: "nex-float 6s ease-in-out infinite",

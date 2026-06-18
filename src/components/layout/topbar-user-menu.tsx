@@ -50,7 +50,7 @@ export function TopbarUserMenu() {
           <User className="nex-topbar-login__icon" strokeWidth={1.75} aria-hidden />
           <span className="nex-topbar-login__label">{t("login")}</span>
         </Link>
-        <Link href="/login?mode=signup" className="nex-topbar-signup">
+        <Link href="/login?mode=signup" className="nex-topbar-signup nex-topbar-desktop-only">
           {t("signUp")}
         </Link>
       </div>

@@ -15,7 +15,7 @@
   height: 80%;
   background: radial-gradient(
     ellipse at center,
-    rgba(139, 92, 246, 0.16),
+    rgba(166, 124, 82, 0.16),
     transparent 70%
   );
 }
@@ -64,9 +64,9 @@
   font-weight: 800;
   letter-spacing: 0.06em;
   color: #f5f3ff;
-  background: linear-gradient(135deg, rgba(124, 58, 237, 0.85), rgba(91, 33, 182, 0.9));
-  border: 1px solid rgba(196, 181, 253, 0.25);
-  box-shadow: 0 4px 14px rgba(91, 33, 182, 0.35);
+  background: linear-gradient(135deg, rgba(138, 106, 66, 0.85), rgba(115, 85, 47, 0.9));
+  border: 1px solid rgba(212, 188, 140, 0.25);
+  box-shadow: 0 4px 14px rgba(115, 85, 47, 0.35);
 }
 
 /* ═══ Trust section ═══ */
@@ -117,7 +117,7 @@
   font-size: 8px;
   font-weight: 500;
   line-height: 1.2;
-  color: rgba(148, 163, 184, 0.65);
+  color: rgba(255, 255, 255, 0.65);
 }
 
 .mp-trust__features {
@@ -142,7 +142,7 @@
   min-width: 0;
   padding: 8px 10px;
   border-radius: 11px;
-  border: 1px solid rgba(139, 92, 246, 0.1);
+  border: 1px solid rgba(166, 124, 82, 0.1);
   background: rgba(8, 6, 14, 0.85);
 }
 
@@ -159,8 +159,8 @@
   height: 30px;
   flex-shrink: 0;
   border-radius: 9px;
-  color: #c4b5fd;
-  background: rgba(139, 92, 246, 0.12);
+  color: #d4bc8c;
+  background: rgba(166, 124, 82, 0.12);
 }
 
 .mp-trust__feature-title {
@@ -174,7 +174,7 @@
   margin: 2px 0 0;
   font-size: 8.5px;
   line-height: 1.35;
-  color: rgba(148, 163, 184, 0.62);
+  color: rgba(255, 255, 255, 0.62);
 }
 
 /* ═══ Reviews strip ═══ */
@@ -217,8 +217,8 @@
 }
 
 .mp-review-card__star--filled {
-  fill: rgba(250, 204, 21, 0.9);
-  color: rgba(250, 204, 21, 0.9);
+  fill: rgba(212, 188, 140, 0.9);
+  color: rgba(212, 188, 140, 0.9);
 }
 
 .mp-review-card__star--empty {
@@ -230,14 +230,14 @@
   margin: 0;
   font-size: 9.5px;
   line-height: 1.45;
-  color: rgba(226, 232, 240, 0.82);
+  color: rgba(255, 255, 255, 0.82);
 }
 
 .mp-review-card__author {
   margin: 6px 0 0;
   font-size: 8.5px;
   font-weight: 600;
-  color: rgba(167, 139, 250, 0.85);
+  color: rgba(196, 165, 116, 0.85);
 }
 
 .mp-reviews__footer {
@@ -251,7 +251,7 @@
 .mp-store-review-form {
   padding: 12px 14px;
   border-radius: var(--radius-md, 14px);
-  border: 1px solid rgba(139, 92, 246, 0.14);
+  border: 1px solid rgba(166, 124, 82, 0.14);
   background: rgba(8, 8, 14, 0.72);
 }
 
@@ -261,7 +261,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(237, 233, 254, 0.95);
+  color: rgba(232, 220, 196, 0.95);
 }
 
 .mp-store-review-form__hint {
@@ -301,16 +301,16 @@
   min-height: 40px;
   border: none;
   border-radius: var(--radius-sm, 10px);
-  background: linear-gradient(135deg, #7c3aed, #6d28d9);
+  background: linear-gradient(135deg, #8b6340, #73552f);
   color: #fff;
   font-size: 12px;
   font-weight: 700;
-  box-shadow: 0 0 16px rgba(124, 58, 237, 0.35);
+  box-shadow: 0 0 16px rgba(138, 106, 66, 0.35);
   transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .mp-store-review-form__submit:hover:not(:disabled) {
-  box-shadow: 0 0 22px rgba(124, 58, 237, 0.5);
+  box-shadow: 0 0 22px rgba(138, 106, 66, 0.5);
   transform: translateY(-1px);
 }
 
@@ -334,13 +334,13 @@
 .mp-reviews__cta-link {
   font-size: 12px;
   font-weight: 600;
-  color: #a78bfa;
+  color: #c4a574;
   text-decoration: none;
   transition: color 0.2s ease;
 }
 
 .mp-reviews__cta-link:hover {
-  color: #c4b5fd;
+  color: #d4bc8c;
 }
 
 /* ═══ Rich footer ═══ */
@@ -394,14 +394,14 @@
 .mp-footer__tagline {
   margin: 0;
   font-size: 9px;
-  color: rgba(196, 181, 253, 0.75);
+  color: rgba(212, 188, 140, 0.75);
 }
 
 .mp-footer__about {
   margin: 2px 0 0;
   font-size: 8.5px;
   line-height: 1.45;
-  color: rgba(148, 163, 184, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   max-width: 320px;
 }
 
@@ -417,18 +417,18 @@
   font-weight: 700;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: rgba(148, 163, 184, 0.45);
+  color: rgba(255, 255, 255, 0.45);
 }
 
 .mp-footer__col a {
   font-size: 9.5px;
   font-weight: 500;
-  color: rgba(203, 213, 225, 0.78);
+  color: rgba(255, 255, 255, 0.78);
   transition: color 0.2s ease;
 }
 
 .mp-footer__col a:hover {
-  color: #c4b5fd;
+  color: #d4bc8c;
 }
 
 .mp-footer__payments {
@@ -452,7 +452,7 @@
   font-weight: 700;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  color: rgba(203, 213, 225, 0.55);
+  color: rgba(255, 255, 255, 0.55);
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
@@ -491,7 +491,7 @@
   gap: 10px;
   font-size: 13px;
   line-height: 1.6;
-  color: rgba(203, 213, 225, 0.78);
+  color: rgba(255, 255, 255, 0.78);
 }
 
 .mp-legal-page__body h2 {
@@ -506,11 +506,11 @@
   margin-top: 4px;
   font-size: 13px;
   font-weight: 600;
-  color: #a78bfa;
+  color: #c4a574;
 }
 
 .mp-legal-page__link:hover {
-  color: #c4b5fd;
+  color: #d4bc8c;
 }
 
 .nex-main:has(.mp-legal-page) {

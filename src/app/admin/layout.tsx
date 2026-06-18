@@ -28,7 +28,6 @@ export default async function AdminLayout({
         <div className="admin-app">
           <div className="admin-app__ambient" aria-hidden>
             <span className="nex-orb nex-orb--purple" />
-            <span className="nex-orb nex-orb--blue" />
             <span className="nex-noise" />
           </div>
 

@@ -27,12 +27,12 @@
 .nex-featured-view-all {
   font-size: 12px;
   font-weight: 500;
-  color: #a78bfa;
+  color: #c4a574;
   transition: color 0.35s ease;
 }
 
 .nex-featured-view-all:hover {
-  color: #c4b5fd;
+  color: #d4bc8c;
 }
 
 .nex-featured-grid {
@@ -109,7 +109,7 @@
   z-index: 0;
   background: radial-gradient(
     ellipse 80% 70% at 50% 50%,
-    rgba(139, 92, 246, 0.12),
+    rgba(166, 124, 82, 0.12),
     transparent 70%
   );
   pointer-events: none;
@@ -122,12 +122,12 @@
   z-index: 5;
   padding: 4px 8px;
   border-radius: 999px;
-  background: linear-gradient(135deg, #9333ea, #7c3aed);
+  background: linear-gradient(135deg, #9a7b4f, #8b6340);
   font-size: 10px;
   font-weight: 700;
   line-height: 1;
   color: #fff;
-  box-shadow: 0 0 16px rgba(139, 92, 246, 0.45);
+  box-shadow: 0 0 16px rgba(166, 124, 82, 0.45);
 }
 
 [dir="rtl"] .nex-fp-badge {
@@ -179,7 +179,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(167, 139, 250, 0.35);
+  color: rgba(196, 165, 116, 0.35);
 }
 
 /* Body */
@@ -208,7 +208,7 @@
 }
 
 .nex-fp-card:hover .nex-fp-name {
-  color: #ede9fe;
+  color: #f0ebe0;
 }
 
 .nex-fp-subtitle {
@@ -285,9 +285,9 @@
   justify-content: center;
   border: none;
   border-radius: 10px;
-  background: linear-gradient(145deg, #a855f7, #7c3aed);
+  background: linear-gradient(145deg, #b8946a, #8b6340);
   color: #fff;
-  box-shadow: 0 0 18px rgba(139, 92, 246, 0.35);
+  box-shadow: 0 0 18px rgba(166, 124, 82, 0.35);
   cursor: pointer;
   transition:
     transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
@@ -298,7 +298,7 @@
 .nex-fp-cart:hover {
   transform: scale(1.05);
   filter: brightness(1.08);
-  box-shadow: 0 0 22px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 22px rgba(166, 124, 82, 0.5);
 }
 
 .nex-fp-cart svg {

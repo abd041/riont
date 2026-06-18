@@ -34,8 +34,8 @@ export function ProductDetailGallery({
           src={active.url}
           alt={active.alt ?? productName}
           fill
-          className="object-contain p-4"
-          sizes="(max-width: 1024px) 100vw, 45vw"
+          className="object-contain p-1.5 md:p-2"
+          sizes="(max-width: 767px) 100vw, 360px"
           priority
         />
       </div>

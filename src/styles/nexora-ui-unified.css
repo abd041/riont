@@ -27,10 +27,10 @@ textarea,
 button[class*="primary"],
 .mp-store-review-form__submit,
 .nex-browse-mobile-filters__chip--active {
-  box-shadow: 0 0 14px rgba(139, 92, 246, 0.18);
+  box-shadow: 0 0 14px rgba(166, 124, 82, 0.18);
 }
 
 button[class*="primary"]:hover:not(:disabled),
 .mp-store-review-form__submit:hover:not(:disabled) {
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.32);
+  box-shadow: 0 0 20px rgba(166, 124, 82, 0.32);
 }

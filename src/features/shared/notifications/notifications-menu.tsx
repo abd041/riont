@@ -74,7 +74,7 @@ export function NotificationsMenu({
             <button
               type="button"
               onClick={() => void handleMarkAll()}
-              className="min-h-[36px] px-2 text-xs text-violet-400 hover:text-violet-300"
+              className="min-h-[36px] px-2 text-xs text-accent-400 hover:text-accent-300"
             >
               {t("markAllRead")}
             </button>
@@ -112,7 +112,7 @@ export function NotificationsMenu({
         <div className="border-t border-[var(--border-subtle)] p-2">
           <Link
             href="/account/orders"
-            className="flex min-h-[44px] items-center justify-center rounded-md px-3 py-2 text-center text-xs text-violet-400 hover:bg-white/[0.03]"
+            className="flex min-h-[44px] items-center justify-center rounded-md px-3 py-2 text-center text-xs text-accent-400 hover:bg-white/[0.03]"
             onClick={() => setOpen(false)}
           >
             {t("title")}

@@ -23,7 +23,6 @@ export default async function AuthLayout({
     <div className="sf-auth-page">
       <div className="sf-auth-page__ambient" aria-hidden>
         <span className="nex-orb nex-orb--purple" />
-        <span className="nex-orb nex-orb--blue" />
         <span className="nex-noise" />
       </div>
 

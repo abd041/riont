@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 import { CART_ITEM_ADDED_EVENT } from "@/features/cart/cart-events";
-import { Bell, ChevronDown, Heart, Menu, ShoppingCart } from "lucide-react";
+import { Bell, ChevronDown, Heart, Menu, Search, ShoppingCart, X } from "lucide-react";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { ProductSearch } from "@/components/layout/product-search";
 import { TopbarBrand } from "@/components/layout/topbar-brand";
@@ -14,6 +14,7 @@ import { useStorefrontAuth } from "@/features/auth/components/storefront-auth-pr
 import { NotificationsMenu } from "@/features/shared/notifications/notifications-menu";
 import { useCart } from "@/hooks/use-cart";
 import { useWishlist } from "@/hooks/use-wishlist";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/utils/cn";
 
 export function Topbar({
@@ -34,6 +35,8 @@ export function Topbar({
   const { itemCount } = useCart();
   const { count: wishlistCount } = useWishlist();
   const [cartPulse, setCartPulse] = useState(false);
+  const [mobileSearchOpen, setMobileSearchOpen] = useState(false);
+  const isCompactTopbar = useMediaQuery("(max-width: 1023px)");
   const otherLocale = locale === "en" ? "ar" : "en";
 
   useEffect(() => {
@@ -56,23 +59,52 @@ export function Topbar({
     };
   }, []);
 
+  useEffect(() => {
+    if (!isCompactTopbar) setMobileSearchOpen(false);
+  }, [isCompactTopbar]);
+
   function switchLocale() {
     router.replace(pathname, { locale: otherLocale });
   }
 
   return (
-    <header className="nex-topbar nex-topbar--fullwidth nex-topbar--floating sticky top-0 z-40 shrink-0">
+    <header
+      className={cn(
+        "nex-topbar nex-topbar--fullwidth nex-topbar--floating sticky top-0 z-40 shrink-0",
+        isCompactTopbar && "nex-topbar--compact",
+        mobileSearchOpen && "nex-topbar--search-open",
+      )}
+    >
       <div className="nex-topbar__float">
         <div className="nex-topbar__inner">
         <div className="nex-topbar-start nex-topbar-start--with-brand">
           <TopbarBrand />
         </div>
 
-        <div className="nex-topbar-center">
+        <div className="nex-topbar-center nex-topbar-desktop-only">
           <ProductSearch />
         </div>
 
         <div className="nex-topbar-end">
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className={cn(
+            "nex-topbar-action nex-topbar-search-toggle nex-topbar-mobile-only shrink-0",
+            mobileSearchOpen && "nex-topbar-search-toggle--open",
+          )}
+          onClick={() => setMobileSearchOpen((open) => !open)}
+          aria-label={mobileSearchOpen ? t("close") : t("search")}
+          aria-expanded={mobileSearchOpen}
+        >
+          {mobileSearchOpen ? (
+            <X className="h-5 w-5" strokeWidth={1.75} />
+          ) : (
+            <Search className="h-5 w-5" strokeWidth={1.75} />
+          )}
+        </Button>
+
         <button
           type="button"
           onClick={switchLocale}
@@ -114,15 +146,17 @@ export function Topbar({
           )}
         </Link>
 
-        {user ? (
-          <div className="nex-topbar-notifications">
-            <NotificationsMenu notifications={notifications} />
-          </div>
-        ) : (
-          <Link href="/login" className="nex-topbar-action" aria-label={t("notifications")}>
-            <Bell strokeWidth={1.75} />
-          </Link>
-        )}
+        <div className="nex-topbar-desktop-only">
+          {user ? (
+            <div className="nex-topbar-notifications">
+              <NotificationsMenu notifications={notifications} />
+            </div>
+          ) : (
+            <Link href="/login" className="nex-topbar-action" aria-label={t("notifications")}>
+              <Bell strokeWidth={1.75} />
+            </Link>
+          )}
+        </div>
 
         <TopbarUserMenu />
 
@@ -144,6 +178,12 @@ export function Topbar({
         )}
         </div>
         </div>
+
+        {isCompactTopbar && mobileSearchOpen && (
+          <div className="nex-topbar-mobile-search">
+            <ProductSearch autoFocus />
+          </div>
+        )}
       </div>
     </header>
   );

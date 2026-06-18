@@ -1,9 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type ReactNode } from "react";
 import type { ProductVariant } from "@/types/catalog";
 import { cn } from "@/utils/cn";
-import { ProductDetailPurchase } from "./product-detail-purchase";
+import {
+  ProductDetailPricing,
+  ProductDetailPurchaseActions,
+} from "./product-detail-purchase";
 
 export function ProductDetailInteractive({
   productId,
@@ -12,9 +15,9 @@ export function ProductDetailInteractive({
   imageUrl,
   basePriceCents,
   baseCompareAtCents,
-  isInstant,
   inStock = true,
   variants,
+  betweenPricingAndActions,
 }: {
   productId: string;
   slug: string;
@@ -25,6 +28,7 @@ export function ProductDetailInteractive({
   isInstant?: boolean;
   inStock?: boolean;
   variants: ProductVariant[];
+  betweenPricingAndActions?: ReactNode;
 }) {
   const defaultVariant = useMemo(
     () => variants.find((v) => v.isDefault) ?? variants[0] ?? null,
@@ -41,8 +45,21 @@ export function ProductDetailInteractive({
     ? `/products/${slug}/checkout?variant=${encodeURIComponent(selected.id)}`
     : `/products/${slug}/checkout`;
 
+  const purchaseProps = {
+    productId,
+    slug,
+    name,
+    imageUrl,
+    priceCents,
+    compareAtCents,
+    inStock,
+    checkoutHref,
+    variantId: selected?.id ?? null,
+    variantLabel: selected?.name ?? null,
+  };
+
   return (
-    <>
+    <div className="nex-pdp-purchase-block">
       {variants.length > 0 && (
         <div className="nex-pdp-variants">
           {variants.map((variant) => (
@@ -64,19 +81,14 @@ export function ProductDetailInteractive({
         </div>
       )}
 
-      <ProductDetailPurchase
-        productId={productId}
-        slug={slug}
-        name={name}
-        imageUrl={imageUrl}
+      <ProductDetailPricing
         priceCents={priceCents}
         compareAtCents={compareAtCents}
-        isInstant={isInstant}
-        inStock={inStock}
-        checkoutHref={checkoutHref}
-        variantId={selected?.id ?? null}
-        variantLabel={selected?.name ?? null}
       />
-    </>
+
+      {betweenPricingAndActions}
+
+      <ProductDetailPurchaseActions {...purchaseProps} />
+    </div>
   );
 }

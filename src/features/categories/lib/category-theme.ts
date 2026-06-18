@@ -8,20 +8,24 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+/**
+ * Category theme keys map to CSS modifier classes (e.g. mp-cat--violet).
+ * All themes render bronze/neutral in the bronze theme stylesheet.
+ */
 export type CategoryTheme = "violet" | "blue" | "amber" | "emerald" | "rose";
 
 const THEME_ORDER: CategoryTheme[] = [
-  "violet",
-  "blue",
   "amber",
+  "violet",
   "emerald",
   "rose",
+  "blue",
 ];
 
 const SLUG_THEME: Record<string, CategoryTheme> = {
-  gaming: "violet",
-  games: "violet",
-  software: "blue",
+  gaming: "amber",
+  games: "amber",
+  software: "amber",
   subscriptions: "amber",
   "gift-cards": "emerald",
   gifts: "emerald",

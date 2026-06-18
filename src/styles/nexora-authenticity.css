@@ -4,15 +4,15 @@
  */
 
 :root {
-  /* Moodier, restrained violet (dark magenta undertone) */
-  --nex-violet-muted: rgba(88, 62, 128, 0.14);
-  --nex-violet-soft: rgba(72, 48, 108, 0.22);
-  --nex-magenta-deep: rgba(36, 14, 48, 0.92);
-  --nex-plum-shadow: rgba(28, 12, 38, 0.65);
+  /* Moodier, restrained bronze (warm undertone) */
+  --nex-violet-muted: rgba(92, 66, 40, 0.14);
+  --nex-violet-soft: rgba(115, 85, 47, 0.22);
+  --nex-magenta-deep: rgba(28, 22, 16, 0.92);
+  --nex-plum-shadow: rgba(22, 18, 14, 0.65);
 
-  --glow-edge: 0 0 0 1px rgba(72, 48, 108, 0.05);
-  --glow-focus: 0 0 18px rgba(72, 48, 108, 0.09);
-  --glow-bloom: 0 0 64px rgba(45, 28, 68, 0.05);
+  --glow-edge: 0 0 0 1px rgba(115, 85, 47, 0.05);
+  --glow-focus: 0 0 18px rgba(115, 85, 47, 0.09);
+  --glow-bloom: 0 0 64px rgba(92, 66, 40, 0.05);
   --shadow-card:
     var(--glow-edge),
     var(--glow-focus),
@@ -20,17 +20,17 @@
     0 8px 32px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.025);
   --shadow-card-hover:
-    0 0 0 1px rgba(88, 62, 128, 0.1),
-    0 0 22px rgba(72, 48, 108, 0.12),
-    0 0 48px rgba(45, 28, 68, 0.06),
+    0 0 0 1px rgba(166, 124, 82, 0.1),
+    0 0 22px rgba(115, 85, 47, 0.12),
+    0 0 48px rgba(92, 66, 40, 0.06),
     0 12px 36px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.035);
   --shadow-nav-active:
-    0 0 16px rgba(72, 48, 108, 0.22),
-    0 0 32px rgba(45, 28, 68, 0.08),
+    0 0 16px rgba(115, 85, 47, 0.22),
+    0 0 32px rgba(92, 66, 40, 0.08),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
   --shadow-btn-primary:
-    0 0 22px rgba(72, 48, 108, 0.28),
+    0 0 22px rgba(115, 85, 47, 0.28),
     0 4px 16px rgba(0, 0, 0, 0.4);
 
   --ease-inertial: cubic-bezier(0.16, 1, 0.3, 1);
@@ -38,16 +38,16 @@
   --duration-surface: 0.72s;
   --duration-glow: 0.88s;
 
-  --text-muted: rgba(148, 163, 184, 0.55);
+  --text-muted: rgba(255, 255, 255, 0.55);
 }
 
 /* ─── Background: spatial, uneven light ─── */
 .nex-storefront {
   background-color: #030303;
   background-image:
-    radial-gradient(ellipse 120% 90% at 20% -10%, rgba(72, 48, 108, 0.14), transparent 56%),
-    radial-gradient(ellipse 55% 40% at 78% 12%, rgba(55, 32, 82, 0.08), transparent 52%),
-    radial-gradient(ellipse 45% 35% at 12% 70%, rgba(36, 14, 48, 0.12), transparent 50%),
+    radial-gradient(ellipse 120% 90% at 20% -10%, rgba(115, 85, 47, 0.14), transparent 56%),
+    radial-gradient(ellipse 55% 40% at 78% 12%, rgba(92, 66, 40, 0.08), transparent 52%),
+    radial-gradient(ellipse 45% 35% at 12% 70%, rgba(28, 22, 16, 0.12), transparent 50%),
     radial-gradient(ellipse 38% 30% at 92% 75%, rgba(20, 8, 28, 0.25), transparent 55%),
     radial-gradient(ellipse 30% 25% at 48% 42%, rgba(0, 0, 0, 0.35), transparent 65%),
     linear-gradient(182deg, #020202 0%, #040406 42%, #06060c 100%);
@@ -56,7 +56,7 @@
 .nex-storefront::before {
   opacity: 0.55;
   background:
-    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(72, 48, 108, 0.04), transparent 68%),
+    radial-gradient(ellipse 70% 45% at 50% 0%, rgba(115, 85, 47, 0.04), transparent 68%),
     radial-gradient(ellipse 50% 35% at 0% 50%, rgba(20, 8, 28, 0.08), transparent 60%);
 }
 
@@ -65,7 +65,7 @@
   background:
     var(--nex-noise-svg),
     radial-gradient(ellipse 28% 20% at 8% 88%, rgba(0, 0, 0, 0.45), transparent 72%),
-    radial-gradient(ellipse 32% 24% at 72% 35%, rgba(36, 14, 48, 0.18), transparent 70%),
+    radial-gradient(ellipse 32% 24% at 72% 35%, rgba(28, 22, 16, 0.18), transparent 70%),
     radial-gradient(ellipse 40% 30% at 55% 62%, rgba(12, 8, 18, 0.2), transparent 68%),
     linear-gradient(140deg, rgba(16, 8, 24, 0.2) 0%, transparent 45%, rgba(8, 4, 14, 0.15) 100%);
 }
@@ -78,7 +78,7 @@
   opacity: 0.5;
   background: radial-gradient(
     ellipse 65% 55% at 48% 8%,
-    rgba(72, 48, 108, 0.05),
+    rgba(115, 85, 47, 0.05),
     transparent 72%
   );
 }
@@ -126,7 +126,7 @@
   opacity: 0.45;
   background:
     radial-gradient(ellipse 35% 25% at 2% 2%, rgba(255, 255, 255, 0.03), transparent 58%),
-    radial-gradient(ellipse 30% 22% at 98% 0%, rgba(88, 62, 128, 0.03), transparent 52%);
+    radial-gradient(ellipse 30% 22% at 98% 0%, rgba(166, 124, 82, 0.03), transparent 52%);
 }
 
 .nex-card::after {
@@ -134,16 +134,16 @@
 }
 
 .nex-card-hover:hover {
-  border-color: rgba(88, 62, 128, 0.12);
+  border-color: rgba(166, 124, 82, 0.12);
 }
 
 /* ─── Hero: filmic balance (tone down effect stack) ─── */
 .nex-hero {
-  border-color: rgba(72, 48, 108, 0.1);
+  border-color: rgba(115, 85, 47, 0.1);
   box-shadow:
-    0 0 0 1px rgba(45, 28, 68, 0.04),
-    0 0 32px rgba(72, 48, 108, 0.08),
-    0 0 72px rgba(45, 28, 68, 0.04),
+    0 0 0 1px rgba(92, 66, 40, 0.04),
+    0 0 32px rgba(115, 85, 47, 0.08),
+    0 0 72px rgba(92, 66, 40, 0.04),
     0 16px 48px rgba(0, 0, 0, 0.45);
 }
 
@@ -163,8 +163,8 @@
       90deg,
       rgba(6, 4, 12, 0.55) 0%,
       transparent 38%,
-      rgba(36, 14, 48, 0.18) 72%,
-      rgba(72, 48, 108, 0.04) 100%
+      rgba(28, 22, 16, 0.18) 72%,
+      rgba(115, 85, 47, 0.04) 100%
     );
 }
 
@@ -172,8 +172,8 @@
   opacity: 0.42;
   filter: blur(8px);
   background:
-    radial-gradient(ellipse 50% 70% at 70% 40%, rgba(88, 62, 128, 0.35), transparent 64%),
-    radial-gradient(ellipse 35% 45% at 82% 55%, rgba(55, 32, 82, 0.2), transparent 58%);
+    radial-gradient(ellipse 50% 70% at 70% 40%, rgba(166, 124, 82, 0.35), transparent 64%),
+    radial-gradient(ellipse 35% 45% at 82% 55%, rgba(92, 66, 40, 0.2), transparent 58%);
 }
 
 .nex-hero-light-streaks,
@@ -191,8 +191,8 @@
   opacity: 0.38;
   filter: blur(48px);
   background:
-    radial-gradient(ellipse 48% 60% at 76% 40%, rgba(88, 62, 128, 0.14), transparent 70%),
-    radial-gradient(ellipse 32% 40% at 64% 62%, rgba(55, 32, 82, 0.08), transparent 72%);
+    radial-gradient(ellipse 48% 60% at 76% 40%, rgba(166, 124, 82, 0.14), transparent 70%),
+    radial-gradient(ellipse 32% 40% at 64% 62%, rgba(92, 66, 40, 0.08), transparent 72%);
 }
 
 .nex-hero-rim-diffusion {
@@ -206,8 +206,8 @@
   background:
     linear-gradient(
       0deg,
-      rgba(36, 14, 48, 0.28) 0%,
-      rgba(55, 32, 82, 0.1) 30%,
+      rgba(28, 22, 16, 0.28) 0%,
+      rgba(92, 66, 40, 0.1) 30%,
       transparent 72%
     );
 }
@@ -217,7 +217,7 @@
   mix-blend-mode: soft-light;
   background: linear-gradient(
     0deg,
-    rgba(72, 48, 108, 0.1) 0%,
+    rgba(115, 85, 47, 0.1) 0%,
     transparent 100%
   );
 }
@@ -277,8 +277,8 @@
   opacity: 0.45;
   background: linear-gradient(
     0deg,
-    rgba(36, 14, 48, 0.28) 0%,
-    rgba(55, 32, 82, 0.08) 40%,
+    rgba(28, 22, 16, 0.28) 0%,
+    rgba(92, 66, 40, 0.08) 40%,
     transparent 100%
   );
   filter: blur(16px);
@@ -287,7 +287,7 @@
 .nex-hero-soldier {
   filter: saturate(1.08) contrast(1.06) brightness(0.98)
     drop-shadow(0 8px 32px rgba(20, 8, 28, 0.65))
-    drop-shadow(0 0 40px rgba(72, 48, 108, 0.18));
+    drop-shadow(0 0 40px rgba(115, 85, 47, 0.18));
 }
 
 .nex-hero-lens {
@@ -315,9 +315,9 @@
 }
 
 .nex-hero-badge {
-  border-color: rgba(88, 62, 128, 0.28);
-  background: rgba(36, 14, 48, 0.45);
-  box-shadow: 0 0 12px rgba(72, 48, 108, 0.15);
+  border-color: rgba(166, 124, 82, 0.28);
+  background: rgba(28, 22, 16, 0.45);
+  box-shadow: 0 0 12px rgba(115, 85, 47, 0.15);
 }
 
 .nex-hero-title-accent {
@@ -329,7 +329,7 @@
     #6d5a8a 72%,
     #5a4872 100%
   );
-  filter: drop-shadow(0 0 20px rgba(72, 48, 108, 0.25));
+  filter: drop-shadow(0 0 20px rgba(115, 85, 47, 0.25));
 }
 
 .nex-hero-subtitle {
@@ -346,9 +346,9 @@
 }
 
 .nex-stat-icon {
-  background: rgba(72, 48, 108, 0.18);
-  border-color: rgba(88, 62, 128, 0.22);
-  box-shadow: 0 0 14px rgba(72, 48, 108, 0.2);
+  background: rgba(115, 85, 47, 0.18);
+  border-color: rgba(166, 124, 82, 0.22);
+  box-shadow: 0 0 14px rgba(115, 85, 47, 0.2);
 }
 
 /* ─── Product images: embedded, not pasted ─── */
@@ -357,7 +357,7 @@
   filter: blur(12px);
   background: radial-gradient(
     ellipse 70% 60% at 50% 38%,
-    rgba(72, 48, 108, 0.14),
+    rgba(115, 85, 47, 0.14),
     transparent 70%
   );
 }
@@ -367,7 +367,7 @@
 }
 
 .nex-product-image-wrap {
-  border-color: rgba(72, 48, 108, 0.05);
+  border-color: rgba(115, 85, 47, 0.05);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.02),
     0 4px 16px rgba(0, 0, 0, 0.25);
@@ -375,7 +375,7 @@
 
 .nex-product-image-wrap::before {
   background:
-    radial-gradient(ellipse 80% 70% at 50% 30%, rgba(88, 62, 128, 0.08), transparent 64%),
+    radial-gradient(ellipse 80% 70% at 50% 30%, rgba(166, 124, 82, 0.08), transparent 64%),
     radial-gradient(ellipse 50% 40% at 50% 100%, rgba(20, 8, 28, 0.15), transparent 58%);
 }
 
@@ -417,7 +417,7 @@
 .nex-product-card {
   background: linear-gradient(
     180deg,
-    rgba(72, 48, 108, 0.04) 0%,
+    rgba(115, 85, 47, 0.04) 0%,
     rgba(8, 8, 12, 0.98) 30%,
     rgba(5, 5, 8, 1) 100%
   );
@@ -426,7 +426,7 @@
 .nex-product-card::before {
   background: radial-gradient(
     ellipse 95% 50% at 50% 0%,
-    rgba(72, 48, 108, 0.08),
+    rgba(115, 85, 47, 0.08),
     transparent 62%
   );
 }
@@ -468,7 +468,7 @@
 
 .nex-panel-card .nex-why-icon {
   box-shadow:
-    0 0 12px rgba(72, 48, 108, 0.18),
+    0 0 12px rgba(115, 85, 47, 0.18),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
 }
 
@@ -476,13 +476,13 @@
   padding: 13px 14px !important;
   background: linear-gradient(
     158deg,
-    rgba(55, 32, 82, 0.55) 0%,
-    rgba(36, 14, 48, 0.88) 40%,
+    rgba(92, 66, 40, 0.55) 0%,
+    rgba(28, 22, 16, 0.88) 40%,
     rgba(8, 6, 12, 1) 100%
   );
-  border-color: rgba(88, 62, 128, 0.18);
+  border-color: rgba(166, 124, 82, 0.18);
   box-shadow:
-    0 0 24px rgba(72, 48, 108, 0.12),
+    0 0 24px rgba(115, 85, 47, 0.12),
     0 8px 28px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.04);
 }
@@ -494,7 +494,7 @@
 
 .nex-deals-card .nex-deals-glow {
   animation: none;
-  filter: drop-shadow(0 0 16px rgba(88, 62, 128, 0.35));
+  filter: drop-shadow(0 0 16px rgba(166, 124, 82, 0.35));
 }
 
 .nex-bestseller-row {
@@ -503,7 +503,7 @@
 }
 
 .nex-bestseller-row:hover {
-  background: rgba(72, 48, 108, 0.04);
+  background: rgba(115, 85, 47, 0.04);
   box-shadow: none;
 }
 
@@ -525,7 +525,7 @@
 .nex-section-label {
   font-size: 9.5px;
   letter-spacing: 0.18em;
-  color: rgba(148, 163, 184, 0.5);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 /* ─── Category glow: restrained ─── */
@@ -535,16 +535,16 @@
 }
 
 .nex-glow-violet::before {
-  background: rgba(88, 62, 128, 0.45);
+  background: rgba(166, 124, 82, 0.45);
 }
 
 /* ─── Buttons & nav: less neon clip ─── */
 .nex-nav-link--active {
   background: linear-gradient(
     135deg,
-    rgba(88, 62, 128, 0.55) 0%,
-    rgba(55, 32, 82, 0.42) 55%,
-    rgba(36, 14, 48, 0.32) 100%
+    rgba(166, 124, 82, 0.55) 0%,
+    rgba(92, 66, 40, 0.42) 55%,
+    rgba(28, 22, 16, 0.32) 100%
   );
 }
 
@@ -554,13 +554,13 @@
 }
 
 .nex-search {
-  border-color: rgba(72, 48, 108, 0.12);
+  border-color: rgba(115, 85, 47, 0.12);
   box-shadow:
     inset 0 1px 2px rgba(0, 0, 0, 0.4),
-    0 0 14px rgba(72, 48, 108, 0.05);
+    0 0 14px rgba(115, 85, 47, 0.05);
 }
 
 .nex-search:focus-within {
-  border-color: rgba(88, 62, 128, 0.22);
-  box-shadow: 0 0 18px rgba(72, 48, 108, 0.08);
+  border-color: rgba(166, 124, 82, 0.22);
+  box-shadow: 0 0 18px rgba(115, 85, 47, 0.08);
 }

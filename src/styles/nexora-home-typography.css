@@ -412,7 +412,12 @@
 
 /* ─── Homepage vertical rhythm ─── */
 .mp-sections--storefront-home .mp-section__head {
-  margin-bottom: 10px;
+  margin-bottom: 0;
+}
+
+.mp-sections--storefront-home .mp-trust .mp-section__head,
+.mp-sections--storefront-home .mp-reviews .mp-section__head {
+  margin-bottom: 8px;
 }
 
 .mp-sections--storefront-home .mp-trust,
@@ -426,8 +431,9 @@
 }
 
 @media (min-width: 640px) {
-  .mp-sections--storefront-home .mp-section__head {
-    margin-bottom: 12px;
+  .mp-sections--storefront-home .mp-trust .mp-section__head,
+  .mp-sections--storefront-home .mp-reviews .mp-section__head {
+    margin-bottom: 10px;
   }
 
   .mp-sections--storefront-home .mp-trust,

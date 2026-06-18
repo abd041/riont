@@ -41,7 +41,7 @@
   z-index: 0;
   background: radial-gradient(
     ellipse 55% 70% at 18% 0%,
-    rgba(139, 92, 246, 0.1),
+    rgba(166, 124, 82, 0.1),
     transparent 68%
   );
 }
@@ -80,7 +80,7 @@
   align-items: center;
   justify-content: center;
   border-radius: 11px;
-  background: linear-gradient(145deg, #a855f7 0%, #7c3aed 55%, #6d28d9 100%);
+  background: linear-gradient(145deg, #b8946a 0%, #8b6340 55%, #73552f 100%);
   box-shadow:
     0 8px 20px rgba(0, 0, 0, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.18);
@@ -93,7 +93,7 @@
   transform: translateY(-1px);
   box-shadow:
     0 10px 24px rgba(0, 0, 0, 0.45),
-    0 0 16px rgba(139, 92, 246, 0.15);
+    0 0 16px rgba(166, 124, 82, 0.15);
 }
 
 .nex-sidebar-logo-letter {
@@ -151,7 +151,7 @@
   height: 18px;
   flex-shrink: 0;
   opacity: 0.82;
-  color: rgba(196, 181, 253, 0.75);
+  color: rgba(212, 188, 140, 0.75);
   transition:
     opacity 0.45s cubic-bezier(0.22, 1, 0.36, 1),
     color 0.45s cubic-bezier(0.22, 1, 0.36, 1),
@@ -168,35 +168,35 @@
 
 .nex-nav-link:hover svg {
   opacity: 1;
-  color: rgba(216, 180, 254, 0.95);
+  color: rgba(212, 188, 140, 0.95);
   transform: scale(1.04);
 }
 
 .nex-nav-link--active {
-  border-inline-start-color: #8b5cf6 !important;
+  border-inline-start-color: #a67c52 !important;
   background: linear-gradient(
     90deg,
-    rgba(139, 92, 246, 0.16),
-    rgba(139, 92, 246, 0.04)
+    rgba(166, 124, 82, 0.16),
+    rgba(166, 124, 82, 0.04)
   ) !important;
-  border-color: rgba(139, 92, 246, 0.12);
+  border-color: rgba(166, 124, 82, 0.12);
   color: #ffffff !important;
   font-weight: 600;
-  box-shadow: 0 8px 24px rgba(139, 92, 246, 0.12) !important;
+  box-shadow: 0 8px 24px rgba(166, 124, 82, 0.12) !important;
   transform: none;
 }
 
 .nex-nav-link--active svg {
   opacity: 1;
-  color: #ddd6fe;
+  color: #e8dcc4;
 }
 
 .nex-nav-link--active:hover {
   transform: none;
   background: linear-gradient(
     90deg,
-    rgba(139, 92, 246, 0.18),
-    rgba(139, 92, 246, 0.06)
+    rgba(166, 124, 82, 0.18),
+    rgba(166, 124, 82, 0.06)
   ) !important;
 }
 
@@ -327,7 +327,7 @@
   padding: 8px 14px;
   border-radius: 999px;
   background: rgba(20, 14, 32, 0.95);
-  border: 1px solid rgba(139, 92, 246, 0.2);
+  border: 1px solid rgba(166, 124, 82, 0.2);
   font-size: 12px;
   font-weight: 500;
   color: #fff;
@@ -336,7 +336,7 @@
 .nex-sidebar-theme-active svg {
   width: 14px;
   height: 14px;
-  color: #c4b5fd;
+  color: #d4bc8c;
 }
 
 .nex-sidebar-theme-inactive {
@@ -347,7 +347,7 @@
 
 /* RTL: active border on start side */
 [dir="rtl"] .nex-nav-link--active {
-  border-inline-start-color: #8b5cf6;
+  border-inline-start-color: #a67c52;
 }
 
 [dir="rtl"] .nex-nav-link:hover {

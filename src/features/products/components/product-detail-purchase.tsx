@@ -15,41 +15,62 @@ function discountPercent(price: number, compare?: number | null) {
   return Math.round(((compare - price) / compare) * 100);
 }
 
-export function ProductDetailPurchase({
-  productId,
-  slug,
-  name,
-  imageUrl,
-  priceCents,
-  compareAtCents,
-  isInstant,
-  checkoutHref,
-  variantId,
-  variantLabel,
-  inStock = true,
-}: {
+type PurchaseProps = {
   productId: string;
   slug: string;
   name: string;
   imageUrl: string | null;
   priceCents: number;
   compareAtCents?: number | null;
-  isInstant?: boolean;
   checkoutHref?: string;
   variantId?: string | null;
   variantLabel?: string | null;
   inStock?: boolean;
-}) {
+};
+
+export function ProductDetailPricing({
+  priceCents,
+  compareAtCents,
+}: Pick<PurchaseProps, "priceCents" | "compareAtCents">) {
+  const locale = useLocale();
+  const { formatPrice } = useCurrency();
+  const discount = discountPercent(priceCents, compareAtCents);
+
+  return (
+    <div className="nex-pdp-pricing">
+      <span className="nex-pdp-price" dir="ltr">
+        {formatPrice(priceCents, locale)}
+      </span>
+      {compareAtCents != null && compareAtCents > priceCents && (
+        <span className="nex-pdp-compare" dir="ltr">
+          {formatPrice(compareAtCents, locale)}
+        </span>
+      )}
+      {discount != null && discount > 0 && (
+        <span className="nex-pdp-discount">-{discount}%</span>
+      )}
+    </div>
+  );
+}
+
+export function ProductDetailPurchaseActions({
+  productId,
+  slug,
+  name,
+  imageUrl,
+  priceCents,
+  checkoutHref,
+  variantId,
+  variantLabel,
+  inStock = true,
+}: PurchaseProps) {
   const locale = useLocale();
   const t = useTranslations("product");
-  const { formatPrice } = useCurrency();
   const { addItem } = useCart();
   const { toggleItem, hasItem } = useWishlist();
   const [qty, setQty] = useState(1);
 
-  const discount = discountPercent(priceCents, compareAtCents);
   const wished = hasItem(productId);
-
   const cartDisplayName = variantLabel ? `${name} — ${variantLabel}` : name;
 
   function addToCart() {
@@ -97,67 +118,36 @@ export function ProductDetailPurchase({
   }
 
   return (
-    <>
-      <div className="nex-pdp-meta-row">
-        <span
-          className={cn(
-            "nex-pdp-availability",
-            !inStock && "nex-pdp-availability--soldout",
-            inStock && isInstant && "nex-pdp-availability--instant",
-            inStock && !isInstant && "nex-pdp-availability--manual",
-          )}
-        >
-          {!inStock
-            ? t("soldOut")
-            : isInstant
-              ? t("instantDelivery")
-              : t("manualDelivery")}
-        </span>
-      </div>
-
-      <div className="nex-pdp-pricing">
-        <span className="nex-pdp-price" dir="ltr">
-          {formatPrice(priceCents, locale)}
-        </span>
-        {compareAtCents != null && compareAtCents > priceCents && (
-          <span className="nex-pdp-compare" dir="ltr">
-            {formatPrice(compareAtCents, locale)}
-          </span>
-        )}
-        {discount != null && discount > 0 && (
-          <span className="nex-pdp-discount">-{discount}%</span>
-        )}
-      </div>
-
-      <div className="nex-pdp-actions">
-        <div className="nex-pdp-qty-row">
-          <span className="nex-pdp-qty-label">{t("quantity")}</span>
-          <div className="nex-pdp-qty">
-            <button
-              type="button"
-              aria-label={t("quantity")}
-              onClick={() => setQty((n) => Math.max(1, n - 1))}
-            >
-              −
-            </button>
-            <span>{qty}</span>
-            <button
-              type="button"
-              aria-label={t("quantity")}
-              onClick={() => setQty((n) => Math.min(99, n + 1))}
-            >
-              +
-            </button>
-          </div>
+    <div className="nex-pdp-actions">
+      <div className="nex-pdp-qty-row">
+        <span className="nex-pdp-qty-label">{t("quantity")}</span>
+        <div className="nex-pdp-qty">
+          <button
+            type="button"
+            aria-label={t("quantity")}
+            onClick={() => setQty((n) => Math.max(1, n - 1))}
+          >
+            −
+          </button>
+          <span>{qty}</span>
+          <button
+            type="button"
+            aria-label={t("quantity")}
+            onClick={() => setQty((n) => Math.min(99, n + 1))}
+          >
+            +
+          </button>
         </div>
+      </div>
 
+      <div className="nex-pdp-actions__primary">
         <button
           type="button"
           className="nex-pdp-add-cart"
           onClick={addToCart}
           disabled={!inStock}
         >
-          <ShoppingCart strokeWidth={2} className="h-5 w-5" />
+          <ShoppingCart strokeWidth={2} className="h-4 w-4" />
           {t("addToCart")}
         </button>
 
@@ -170,23 +160,35 @@ export function ProductDetailPurchase({
             {t("soldOut")}
           </span>
         )}
-
-        <div className="nex-pdp-secondary-actions">
-          <button
-            type="button"
-            className={cn("nex-pdp-wishlist", wished && "nex-pdp-wishlist--active")}
-            onClick={toggleWishlist}
-          >
-            <Heart strokeWidth={1.5} className={cn(wished && "fill-current")} />
-            {wished ? t("inWishlist") : t("addToWishlist")}
-          </button>
-
-          <button type="button" className="nex-pdp-share" onClick={shareProduct}>
-            <Share2 strokeWidth={1.5} />
-            {t("shareProduct")}
-          </button>
-        </div>
       </div>
+
+      <div className="nex-pdp-secondary-actions">
+        <button
+          type="button"
+          className={cn("nex-pdp-wishlist", wished && "nex-pdp-wishlist--active")}
+          onClick={toggleWishlist}
+        >
+          <Heart strokeWidth={1.5} className={cn("h-4 w-4", wished && "fill-current")} />
+          {wished ? t("inWishlist") : t("addToWishlist")}
+        </button>
+
+        <button type="button" className="nex-pdp-share" onClick={shareProduct}>
+          <Share2 strokeWidth={1.5} className="h-4 w-4" />
+          {t("shareProduct")}
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export function ProductDetailPurchase(props: PurchaseProps & { isInstant?: boolean }) {
+  return (
+    <>
+      <ProductDetailPricing
+        priceCents={props.priceCents}
+        compareAtCents={props.compareAtCents}
+      />
+      <ProductDetailPurchaseActions {...props} />
     </>
   );
 }

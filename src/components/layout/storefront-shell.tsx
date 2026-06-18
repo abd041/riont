@@ -37,8 +37,8 @@ export function StorefrontShell({
 }) {
   const { isOpen: navOpen, toggle: toggleNav, setOpen: setNavOpen } = useMobileNav();
   const pathname = usePathname();
-  const hideNavSidebar = isFullWidthBrowsePath(pathname);
   const isCheckout = isCheckoutPath(pathname);
+  const hideNavSidebar = isCheckout;
 
   const closeNav = () => setNavOpen(false);
 
@@ -46,6 +46,7 @@ export function StorefrontShell({
     <div
       className={cn(
         "nex-storefront flex min-h-screen flex-col",
+        isFullWidthBrowsePath(pathname) && "nex-storefront--browse",
         hideNavSidebar && "nex-storefront--no-nav",
         isCheckout && "nex-storefront--checkout",
         !hideNavSidebar && "nex-storefront--drawer-nav",
@@ -54,14 +55,13 @@ export function StorefrontShell({
     >
       <div className="nex-storefront-ambient" aria-hidden>
         <span className="nex-orb nex-orb--purple" />
-        <span className="nex-orb nex-orb--blue" />
         <span className="nex-orb nex-orb--violet" />
         <span className="nex-noise" />
         <span className="nex-grid-overlay" />
       </div>
 
       <Topbar
-        showMenuButton={!hideNavSidebar}
+        showMenuButton={!isCheckout}
         menuOpen={navOpen}
         onMenuClick={toggleNav}
       />

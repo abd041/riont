@@ -23,10 +23,16 @@ const MotionArticle = motion.article;
 type MarketplaceMiniCardProps = {
   product: CatalogProduct;
   className?: string;
+  /** Polished carousel card — used on homepage Most Requested. */
+  showcase?: boolean;
 };
 
 /** Compact horizontal-scroll product card. */
-export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardProps) {
+export function MarketplaceMiniCard({
+  product,
+  className,
+  showcase = false,
+}: MarketplaceMiniCardProps) {
   const locale = useLocale();
   const t = useTranslations("home");
   const tCommon = useTranslations("common");
@@ -41,24 +47,35 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
   const category = productCategoryLabel(product, t("lifetimeLicense"));
   const wished = hasItem(id ?? slug);
   const reduceMotion = useReducedMotion();
+  const CardRoot = showcase || reduceMotion ? "article" : MotionArticle;
 
   return (
-    <MotionArticle
-      className={cn("mp-card mp-card--mini mp-card--premium group", className)}
+    <CardRoot
+      className={cn(
+        "mp-card mp-card--mini mp-card--premium group",
+        showcase && "mp-card--showcase",
+        className,
+      )}
       role="listitem"
-      whileHover={reduceMotion ? undefined : mpCardHoverMini}
+      {...(!showcase && !reduceMotion
+        ? { whileHover: mpCardHoverMini as typeof mpCardHoverMini }
+        : {})}
     >
       <span className="mp-card__ambient" aria-hidden />
       <span className="mp-card__surface" aria-hidden />
       <Link href={`/products/${slug}`} className="mp-card__media">
         <span className="mp-card__media-vignette" aria-hidden />
         <span className="mp-card__media-shine" aria-hidden />
-        {discount != null && discount > 0 && (
-          <span className="mp-badge mp-badge--sale">-{discount}%</span>
-        )}
-        {badge === "bestSeller" && (
-          <span className="mp-badge mp-badge--hot">{tProduct("bestSellerBadge")}</span>
-        )}
+        {(discount != null && discount > 0) || badge === "bestSeller" ? (
+          <div className="mp-card__badges">
+            {discount != null && discount > 0 && (
+              <span className="mp-badge mp-badge--sale">-{discount}%</span>
+            )}
+            {badge === "bestSeller" && (
+              <span className="mp-badge mp-badge--hot">{tProduct("bestSellerBadge")}</span>
+            )}
+          </div>
+        ) : null}
         {imageUrl ? (
           <Image
             src={imageUrl}
@@ -66,27 +83,40 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
             width={256}
             height={192}
             className="mp-card__img"
-            sizes="128px"
+            sizes={showcase ? "(max-width: 767px) 46vw, 11vw" : "128px"}
+            draggable={false}
           />
         ) : (
           <div className="mp-card__placeholder">
             <Package className="h-7 w-7" strokeWidth={1.25} />
           </div>
         )}
-        <span className="mp-card__media-vignette" aria-hidden />
-        <span className="mp-card__media-shine" aria-hidden />
       </Link>
 
       <div className="mp-card__body mp-card__body--mini">
         <Link href={`/products/${slug}`} className="mp-card__info">
           <h3 className="mp-card__name">{name}</h3>
-          <p className="mp-card__cat">{category}</p>
-          {rating != null ? (
-            <p className="mp-card__rating">
-              <Star className="mp-card__star" strokeWidth={1.5} />
-              {rating.toFixed(1)}
+          {showcase ? (
+            <p className="mp-card__meta-line">
+              <span className="mp-card__cat">{category}</span>
+              {rating != null ? (
+                <span className="mp-card__meta-rating" dir="ltr">
+                  <Star className="mp-card__star" strokeWidth={1.5} aria-hidden />
+                  {rating.toFixed(1)}
+                </span>
+              ) : null}
             </p>
-          ) : null}
+          ) : (
+            <>
+              <p className="mp-card__cat">{category}</p>
+              {rating != null ? (
+                <p className="mp-card__rating">
+                  <Star className="mp-card__star" strokeWidth={1.5} />
+                  {rating.toFixed(1)}
+                </p>
+              ) : null}
+            </>
+          )}
         </Link>
 
         <div className="mp-card__actions mp-card__actions--mini">
@@ -132,6 +162,6 @@ export function MarketplaceMiniCard({ product, className }: MarketplaceMiniCardP
           </div>
         </div>
       </div>
-    </MotionArticle>
+    </CardRoot>
   );
 }

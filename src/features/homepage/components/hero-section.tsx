@@ -159,7 +159,7 @@ export function HeroSection({
   return (
     <section
       className={cn(
-        "nex-hero nex-hero-slider nex-hero--image-bg nex-hero--premium",
+        "nex-hero nex-hero-slider nex-hero--image-bg nex-hero--premium nex-hero--cinematic",
         compact && "nex-hero--compact",
       )}
       aria-label="Hero"
@@ -169,7 +169,7 @@ export function HeroSection({
     >
       <span className="nex-hero__float-orb nex-hero__float-orb--a" aria-hidden />
       <span className="nex-hero__float-orb nex-hero__float-orb--b" aria-hidden />
-      <MarketplaceAmbientDecor variant="hero" showMark />
+      {!compact ? <MarketplaceAmbientDecor variant="hero" showMark /> : null}
       <span className="nex-hero__ambient-orb nex-hero__ambient-orb--a" aria-hidden />
       <span className="nex-hero__ambient-orb nex-hero__ambient-orb--b" aria-hidden />
       <div className="nex-hero-media absolute inset-0 z-[0] overflow-hidden">
@@ -180,19 +180,25 @@ export function HeroSection({
           priority
           className="nex-hero-bg-image object-cover object-center"
           sizes="(max-width: 768px) 100vw, 1280px"
+          draggable={false}
         />
         <div className="nex-hero-bg-scrim" aria-hidden />
+        <div className="nex-hero-cinematic-bloom" aria-hidden />
+        <div className="nex-hero-cinematic-mist" aria-hidden />
+        <div className="nex-hero-cinematic-vignette" aria-hidden />
+        <div className="nex-hero-cinematic-sparkles" aria-hidden />
       </div>
 
-      <div className="nex-hero-scrim-left z-[1]" aria-hidden />
+      <span className="nex-hero-cinematic-frame" aria-hidden />
+
       <div className="nex-hero-scrim-bottom z-[1]" aria-hidden />
 
       <div
         className={cn(
-          "relative z-[10] flex flex-col justify-between",
+          "nex-hero-cinematic-content relative z-[10] flex flex-col",
           compact
-            ? "min-h-0 px-3 py-2 md:min-h-0 md:px-4 md:py-2.5"
-            : "min-h-[380px] px-7 py-6 md:min-h-[392px] md:px-8 md:py-7",
+            ? "min-h-0 justify-end px-3 py-2 md:min-h-0 md:justify-end md:px-4 md:py-2.5"
+            : "min-h-[380px] justify-between px-7 py-6 md:min-h-[392px] md:px-8 md:py-7",
         )}
       >
         <div className="nex-hero-copy max-w-[420px]" aria-live="polite">
@@ -209,7 +215,7 @@ export function HeroSection({
                 variants={textItem}
                 className="nex-hero-badge nex-hero-badge--promo inline-flex items-center gap-1.5 rounded-full border px-3 py-1 uppercase"
               >
-                <Zap className="h-3 w-3 shrink-0 text-violet-400" strokeWidth={2.5} />
+                <Zap className="h-3 w-3 shrink-0 text-accent-400" strokeWidth={2.5} />
                 {copy.tag}
               </motion.span>
 
@@ -271,7 +277,7 @@ export function HeroSection({
                 )}
                 <div className="nex-stat-cell flex min-w-0 flex-1 items-center gap-2.5 px-3 py-3 sm:gap-3 sm:px-4">
                   <span className="nex-stat-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
-                    <Icon className="h-4 w-4 text-violet-200" strokeWidth={1.75} />
+                    <Icon className="h-4 w-4 text-accent-400" strokeWidth={1.75} />
                   </span>
                   <div className="nex-stat-text min-w-0 leading-none">
                     <p className="nex-stat-value truncate text-[12px] font-bold text-white sm:text-[13px]">
@@ -307,7 +313,7 @@ export function HeroSection({
               className={cn(
                 "nex-hero-dot h-1 rounded-full",
                 index === activeIndex
-                  ? "w-6 bg-violet-400"
+                  ? "w-6 bg-accent-500"
                   : "w-2 bg-white/25",
               )}
               onClick={() => goToSlide(index)}

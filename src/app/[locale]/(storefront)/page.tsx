@@ -44,8 +44,10 @@ export default async function HomePage() {
 
   return (
     <MarketplacePageShell>
-      <HomePromoBanner />
-      <HeroSection content={homeContent.hero} compact />
+      <div className="mp-home-hero-stack">
+        <HomePromoBanner />
+        <HeroSection content={homeContent.hero} compact />
+      </div>
       <HomeMarketplace
         products={products}
         categories={categories}

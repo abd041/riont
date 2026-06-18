@@ -11,7 +11,7 @@
   --co-border: rgba(180, 120, 255, 0.22);
   --co-border-soft: rgba(180, 120, 255, 0.12);
   --co-glow: rgba(120, 60, 255, 0.12);
-  --co-glow-strong: rgba(168, 85, 247, 0.35);
+  --co-glow-strong: rgba(184, 148, 106, 0.35);
   --co-text-muted: rgba(255, 255, 255, 0.5);
   --co-text-secondary: rgba(255, 255, 255, 0.65);
   --co-ease: cubic-bezier(0.22, 1, 0.36, 1);
@@ -62,7 +62,7 @@
   background: radial-gradient(
     circle,
     rgba(120, 60, 255, 0.2) 0%,
-    rgba(76, 29, 149, 0.08) 45%,
+    rgba(92, 66, 40, 0.08) 45%,
     transparent 72%
   );
   animation: nex-co-float 20s ease-in-out infinite alternate;
@@ -75,8 +75,8 @@
   height: 520px;
   background: radial-gradient(
     circle,
-    rgba(168, 85, 247, 0.22) 0%,
-    rgba(124, 58, 237, 0.1) 38%,
+    rgba(184, 148, 106, 0.22) 0%,
+    rgba(138, 106, 66, 0.1) 38%,
     transparent 68%
   );
   animation: nex-co-float 24s ease-in-out infinite alternate-reverse;
@@ -206,11 +206,11 @@
     90deg,
     transparent,
     rgba(255, 255, 255, 0.45),
-    rgba(216, 180, 254, 0.55),
+    rgba(212, 188, 140, 0.55),
     rgba(255, 255, 255, 0.45),
     transparent
   );
-  box-shadow: 0 0 18px rgba(168, 85, 247, 0.35);
+  box-shadow: 0 0 18px rgba(184, 148, 106, 0.35);
 }
 
 .nex-co-card:hover {
@@ -254,7 +254,7 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: rgba(196, 181, 253, 0.72);
+  color: rgba(212, 188, 140, 0.72);
 }
 
 @media (min-width: 768px) {
@@ -288,19 +288,19 @@
   border: 1px solid rgba(180, 120, 255, 0.28);
   background: linear-gradient(
     145deg,
-    rgba(139, 92, 246, 0.22),
-    rgba(76, 29, 149, 0.1)
+    rgba(166, 124, 82, 0.22),
+    rgba(92, 66, 40, 0.1)
   );
   box-shadow:
     0 8px 28px rgba(0, 0, 0, 0.4),
-    0 0 28px rgba(168, 85, 247, 0.2);
+    0 0 28px rgba(184, 148, 106, 0.2);
 }
 
 .nex-co-header-icon {
   width: 24px;
   height: 24px;
-  color: #e9d5ff;
-  filter: drop-shadow(0 0 8px rgba(168, 85, 247, 0.45));
+  color: #efe5cf;
+  filter: drop-shadow(0 0 8px rgba(184, 148, 106, 0.45));
 }
 
 .nex-co-header-title {
@@ -396,7 +396,7 @@
 .nex-co-card-icon {
   width: 20px;
   height: 20px;
-  color: #ddd6fe;
+  color: #e8dcc4;
 }
 
 .nex-co-card-title {
@@ -474,11 +474,11 @@
 .nex-co-textarea:focus,
 .nex-co-coupon-input:focus {
   outline: none;
-  border-color: rgba(168, 85, 247, 0.8);
+  border-color: rgba(184, 148, 106, 0.8);
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
-    0 0 0 4px rgba(168, 85, 247, 0.12),
-    0 0 24px rgba(168, 85, 247, 0.2);
+    0 0 0 4px rgba(184, 148, 106, 0.12),
+    0 0 24px rgba(184, 148, 106, 0.2);
 }
 
 .nex-co-field-hint {
@@ -502,7 +502,7 @@
   width: 14px;
   height: 14px;
   flex-shrink: 0;
-  color: rgba(192, 132, 252, 0.75);
+  color: rgba(196, 165, 116, 0.75);
 }
 
 /* ─── Coupon row ─── */
@@ -547,7 +547,7 @@
   width: 18px;
   height: 18px;
   transform: translateY(-50%);
-  color: rgba(192, 132, 252, 0.7);
+  color: rgba(196, 165, 116, 0.7);
   pointer-events: none;
 }
 
@@ -587,10 +587,10 @@
   border-radius: 14px;
   font-size: 13px;
   white-space: nowrap;
-  background: linear-gradient(180deg, #a855f7 0%, #7c3aed 100%);
+  background: linear-gradient(180deg, #b8946a 0%, #8b6340 100%);
   box-shadow:
-    0 0 24px rgba(168, 85, 247, 0.3),
-    0 8px 24px rgba(124, 58, 237, 0.38),
+    0 0 24px rgba(184, 148, 106, 0.3),
+    0 8px 24px rgba(138, 106, 66, 0.38),
     inset 0 1px 0 rgba(255, 255, 255, 0.22);
 }
 
@@ -610,10 +610,10 @@
 
 .nex-co-coupon-apply:hover:not(:disabled) {
   transform: translateY(-2px);
-  background: linear-gradient(180deg, #b46ef8 0%, #8b5cf6 100%);
+  background: linear-gradient(180deg, #b46ef8 0%, #a67c52 100%);
   box-shadow:
-    0 0 32px rgba(168, 85, 247, 0.42),
-    0 12px 30px rgba(124, 58, 237, 0.48),
+    0 0 32px rgba(184, 148, 106, 0.42),
+    0 12px 30px rgba(138, 106, 66, 0.48),
     inset 0 1px 0 rgba(255, 255, 255, 0.26);
 }
 
@@ -650,7 +650,7 @@
   background: radial-gradient(
     ellipse 85% 65% at 50% 25%,
     rgba(120, 60, 255, 0.32),
-    rgba(76, 29, 149, 0.12) 45%,
+    rgba(92, 66, 40, 0.12) 45%,
     transparent 72%
   );
   filter: blur(40px);
@@ -678,7 +678,7 @@
 .nex-co-summary::before {
   background: radial-gradient(
     ellipse 120% 75% at 50% -8%,
-    rgba(168, 85, 247, 0.28),
+    rgba(184, 148, 106, 0.28),
     rgba(120, 60, 255, 0.08) 42%,
     transparent 62%
   );
@@ -691,11 +691,11 @@
     90deg,
     transparent,
     rgba(255, 255, 255, 0.55),
-    rgba(233, 213, 255, 0.7),
+    rgba(212, 188, 140, 0.7),
     rgba(255, 255, 255, 0.55),
     transparent
   );
-  box-shadow: 0 0 24px rgba(168, 85, 247, 0.55);
+  box-shadow: 0 0 24px rgba(184, 148, 106, 0.55);
 }
 
 .nex-co-summary-title {
@@ -743,11 +743,11 @@
   align-items: center;
   justify-content: center;
   border-radius: 999px;
-  background: linear-gradient(180deg, #c084fc 0%, #7c3aed 100%);
+  background: linear-gradient(180deg, #c084fc 0%, #8b6340 100%);
   color: #fff;
   box-shadow:
-    0 4px 14px rgba(139, 92, 246, 0.5),
-    0 0 16px rgba(168, 85, 247, 0.35);
+    0 4px 14px rgba(166, 124, 82, 0.5),
+    0 0 16px rgba(184, 148, 106, 0.35);
 }
 
 .nex-co-product-check svg {
@@ -765,14 +765,14 @@
   margin-bottom: 7px;
   padding: 4px 9px;
   border-radius: 999px;
-  background: rgba(139, 92, 246, 0.2);
+  background: rgba(166, 124, 82, 0.2);
   border: 1px solid rgba(180, 120, 255, 0.28);
   font-size: 10px;
   font-weight: 700;
-  color: #e9d5ff;
+  color: #efe5cf;
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  box-shadow: 0 0 14px rgba(139, 92, 246, 0.15);
+  box-shadow: 0 0 14px rgba(166, 124, 82, 0.15);
 }
 
 .nex-co-product-name {
@@ -819,7 +819,7 @@
     rgba(180, 120, 255, 0.45) 50%,
     transparent
   );
-  box-shadow: 0 0 16px rgba(168, 85, 247, 0.2);
+  box-shadow: 0 0 16px rgba(184, 148, 106, 0.2);
 }
 
 /* Pricing */
@@ -900,11 +900,11 @@
   font-weight: 800;
   line-height: 1;
   letter-spacing: -0.03em;
-  background: linear-gradient(180deg, #faf5ff 0%, #e9d5ff 30%, #c084fc 55%, #a855f7 100%);
+  background: linear-gradient(180deg, #faf5ff 0%, #efe5cf 30%, #c084fc 55%, #b8946a 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
-  filter: drop-shadow(0 0 12px rgba(168, 85, 247, 0.45));
+  filter: drop-shadow(0 0 12px rgba(184, 148, 106, 0.45));
 }
 
 .nex-co-price-row--total {
@@ -921,8 +921,8 @@
   border: 1px solid rgba(180, 120, 255, 0.22);
   background: linear-gradient(
     180deg,
-    rgba(139, 92, 246, 0.12) 0%,
-    rgba(76, 29, 149, 0.08) 100%
+    rgba(166, 124, 82, 0.12) 0%,
+    rgba(92, 66, 40, 0.08) 100%
   );
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, 0.04),
@@ -934,7 +934,7 @@
   height: 18px;
   flex-shrink: 0;
   margin-top: 1px;
-  color: #c4b5fd;
+  color: #d4bc8c;
 }
 
 .nex-co-notice p {
@@ -981,15 +981,15 @@
 }
 
 .nex-co-checkbox:hover .nex-co-checkbox-box {
-  border-color: rgba(168, 85, 247, 0.5);
-  box-shadow: 0 0 12px rgba(168, 85, 247, 0.15);
+  border-color: rgba(184, 148, 106, 0.5);
+  box-shadow: 0 0 12px rgba(184, 148, 106, 0.15);
 }
 
 .nex-co-checkbox-box--checked {
-  border-color: rgba(168, 85, 247, 0.65);
-  background: linear-gradient(180deg, #a855f7 0%, #7c3aed 100%);
+  border-color: rgba(184, 148, 106, 0.65);
+  background: linear-gradient(180deg, #b8946a 0%, #8b6340 100%);
   box-shadow:
-    0 0 18px rgba(168, 85, 247, 0.45),
+    0 0 18px rgba(184, 148, 106, 0.45),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: scale(1.06);
 }
@@ -1017,10 +1017,10 @@
   margin-top: 20px;
   border-radius: 16px;
   font-size: 15px;
-  background: linear-gradient(180deg, #a855f7 0%, #7c3aed 100%);
+  background: linear-gradient(180deg, #b8946a 0%, #8b6340 100%);
   box-shadow:
-    0 0 30px rgba(168, 85, 247, 0.35),
-    0 10px 30px rgba(124, 58, 237, 0.4),
+    0 0 30px rgba(184, 148, 106, 0.35),
+    0 10px 30px rgba(138, 106, 66, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.24);
 }
 
@@ -1057,10 +1057,10 @@
 
 .nex-co-submit:hover:not(:disabled) {
   transform: translateY(-2px);
-  background: linear-gradient(180deg, #b46ef8 0%, #8b5cf6 100%);
+  background: linear-gradient(180deg, #b46ef8 0%, #a67c52 100%);
   box-shadow:
-    0 0 40px rgba(168, 85, 247, 0.48),
-    0 14px 36px rgba(124, 58, 237, 0.5),
+    0 0 40px rgba(184, 148, 106, 0.48),
+    0 14px 36px rgba(138, 106, 66, 0.5),
     inset 0 1px 0 rgba(255, 255, 255, 0.28);
 }
 
@@ -1136,7 +1136,7 @@
 .nex-co-trust-icon {
   width: 16px;
   height: 16px;
-  color: rgba(192, 132, 252, 0.65);
+  color: rgba(196, 165, 116, 0.65);
 }
 
 .nex-co-back-link {
@@ -1151,7 +1151,7 @@
 }
 
 .nex-co-back-link:hover {
-  color: #e9d5ff;
+  color: #efe5cf;
 }
 
 /* ─── Checkout sidebar premium boost ─── */
@@ -1190,21 +1190,21 @@
 
 .nex-storefront--checkout .nex-nav-link--active {
   border-color: rgba(180, 120, 255, 0.28) !important;
-  border-inline-start-color: #a855f7 !important;
+  border-inline-start-color: #b8946a !important;
   background: linear-gradient(
     90deg,
-    rgba(168, 85, 247, 0.22),
-    rgba(124, 58, 237, 0.08)
+    rgba(184, 148, 106, 0.22),
+    rgba(138, 106, 66, 0.08)
   ) !important;
   box-shadow:
-    0 0 25px rgba(168, 85, 247, 0.35),
+    0 0 25px rgba(184, 148, 106, 0.35),
     0 8px 24px rgba(0, 0, 0, 0.35),
     inset 0 1px 0 rgba(255, 255, 255, 0.06) !important;
 }
 
 .nex-storefront--checkout .nex-nav-link--active svg {
   color: #f3e8ff;
-  filter: drop-shadow(0 0 6px rgba(168, 85, 247, 0.4));
+  filter: drop-shadow(0 0 6px rgba(184, 148, 106, 0.4));
 }
 
 .nex-storefront--checkout .nex-sidebar-divider {

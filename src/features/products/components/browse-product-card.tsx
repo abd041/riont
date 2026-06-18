@@ -15,19 +15,20 @@ import {
 
 export type BrowseCardTheme = "blue" | "orange" | "purple" | "green" | "violet";
 
+/** Visual modifier classes — all render with unified bronze glow in CSS. */
 const SLUG_THEME: Record<string, BrowseCardTheme> = {
-  "windows-11-pro": "blue",
-  "steam-premium-account": "green",
-  "spotify-premium-1year": "green",
-  "instagram-verified-badge": "purple",
+  "windows-11-pro": "violet",
+  "steam-premium-account": "violet",
+  "spotify-premium-1year": "violet",
+  "instagram-verified-badge": "violet",
 };
 
 const CATEGORY_THEME: Record<string, BrowseCardTheme> = {
-  software: "blue",
-  gaming: "green",
-  games: "green",
-  subscriptions: "purple",
-  instagram: "purple",
+  software: "violet",
+  gaming: "violet",
+  games: "violet",
+  subscriptions: "violet",
+  instagram: "violet",
 };
 
 function themeForProduct(slug: string, categorySlug?: string): BrowseCardTheme {

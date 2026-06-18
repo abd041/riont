@@ -63,6 +63,11 @@
     background: linear-gradient(145deg, rgba(20, 14, 32, 0.6), rgba(8, 8, 12, 1));
   }
 
+  .nex-pdp-page--compact .nex-pdp-purchase-card .nex-pdp-gallery-main {
+    max-height: min(32vh, 200px);
+    min-height: 148px;
+  }
+
   .sf-pdp-wrap .nex-pdp-purchase-card .nex-pdp-info {
     border: none;
     border-radius: 0;
@@ -79,6 +84,15 @@
     -webkit-line-clamp: 3;
     -webkit-box-orient: vertical;
     overflow: hidden;
+  }
+
+  .nex-pdp-page--compact .nex-pdp-excerpt {
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    margin: 8px 0 0;
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
   }
 
   .nex-pdp-features {
@@ -101,6 +115,13 @@
     align-items: stretch;
     gap: 10px;
     margin-bottom: 14px;
+  }
+
+  .nex-pdp-page--compact .sf-pdp-toolbar {
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
   }
 
   .sf-pdp-toolbar .nex-browse-back {
@@ -246,7 +267,7 @@
 
 @media (min-width: 768px) {
   .nex-pdp-excerpt {
-    display: none;
+    display: block;
   }
 }
 
@@ -262,6 +283,13 @@
 }
 
 @media (max-width: 639px) {
+  .nex-pdp-page--compact .sf-pdp-toolbar .nex-browse-back {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+
   .nex-pdp-qty button {
     width: 44px;
     height: 44px;

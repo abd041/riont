@@ -111,6 +111,161 @@ html {
   }
 }
 
+/* ─── Compact topbar (phones + tablet portrait, incl. phone landscape) ─── */
+.nex-topbar-mobile-only {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .nex-topbar--floating {
+    padding-top: 8px !important;
+    padding-inline: max(8px, env(safe-area-inset-left, 0px))
+      max(8px, env(safe-area-inset-right, 0px)) !important;
+  }
+
+  .nex-topbar__float {
+    overflow: visible;
+  }
+
+  .nex-topbar-desktop-only {
+    display: none !important;
+  }
+
+  .nex-topbar-mobile-only {
+    display: inline-flex !important;
+  }
+
+  .nex-topbar__inner {
+    flex-wrap: nowrap;
+    gap: 4px;
+    padding: 0 6px;
+    min-height: 48px;
+  }
+
+  .nex-topbar-start--with-brand {
+    flex-shrink: 0;
+    min-width: 0;
+  }
+
+  .nex-brand-logo--topbar {
+    height: 30px;
+  }
+
+  .nex-topbar-end {
+    flex: 1 1 auto;
+    min-width: 0;
+    justify-content: flex-end;
+    gap: 2px;
+    flex-wrap: nowrap;
+  }
+
+  .nex-topbar-pill {
+    height: 36px;
+    min-height: 36px;
+    padding-inline: 7px;
+    gap: 4px;
+    font-size: 10px;
+    flex-shrink: 0;
+  }
+
+  .nex-topbar-pill-flag {
+    font-size: 12px;
+  }
+
+  .nex-topbar-currency-icon,
+  .nex-topbar-pill-chevron {
+    display: none;
+  }
+
+  .nex-topbar-action,
+  .nex-topbar-menu-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    flex-shrink: 0;
+  }
+
+  .nex-topbar-menu-btn {
+    order: 100;
+    margin-inline-start: 2px;
+  }
+
+  .nex-topbar-auth {
+    gap: 0;
+    flex-shrink: 0;
+  }
+
+  .nex-topbar-login {
+    width: 40px;
+    height: 40px;
+    min-height: 40px;
+    padding: 0;
+  }
+
+  .nex-topbar-search-toggle--open {
+    color: #e8dcc4;
+    background: rgba(166, 124, 82, 0.18);
+    border-color: rgba(166, 124, 82, 0.35);
+  }
+
+  .nex-topbar-mobile-search {
+    padding: 6px 8px 8px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .nex-topbar-user-avatar {
+    height: 34px;
+    width: 34px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .nex-topbar-pill-flag {
+    display: none;
+  }
+
+  .nex-topbar-pill {
+    padding-inline: 5px;
+  }
+
+  .nex-topbar__inner {
+    padding-inline: 4px;
+    gap: 2px;
+  }
+
+  .nex-topbar-end {
+    gap: 1px;
+  }
+}
+
+@media (max-width: 767px) {
+  .nex-topbar--compact .nex-topbar__inner {
+    gap: 4px;
+    padding: 0 6px;
+  }
+
+  .nex-topbar--compact .nex-topbar-end {
+    gap: 2px;
+  }
+
+  .nex-topbar--compact .nex-topbar-pill {
+    height: 36px;
+    min-height: 36px;
+    padding-inline: 6px;
+  }
+
+  .nex-topbar--compact .nex-topbar-action,
+  .nex-topbar--compact .nex-topbar-menu-btn,
+  .nex-topbar--compact .nex-topbar-login {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+    min-height: 40px;
+  }
+}
+
 /* ─── Notifications: tap-friendly panel ─── */
 .nex-notifications-menu[data-open="true"] .nex-notifications-panel {
   visibility: visible;
@@ -148,10 +303,10 @@ html {
   padding: 10px 16px;
   border-radius: 10px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(139, 92, 246, 0.12);
+  background: rgba(166, 124, 82, 0.12);
   font-size: 14px;
   font-weight: 600;
-  color: #e9d5ff;
+  color: #efe5cf;
   cursor: pointer;
 }
 

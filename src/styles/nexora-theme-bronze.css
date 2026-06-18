@@ -1,0 +1,213 @@
+/**
+ * Bronze premium theme — single warm accent, dark gray surfaces.
+ * Loaded last to unify buttons, cards, ambient light, and category accents.
+ */
+
+:root {
+  --bg-card: #111111;
+  --bg-card-hover: #161616;
+  --text-muted: rgba(255, 255, 255, 0.42);
+}
+
+/* ─── Ambient orbs: warm bronze only, no blue/violet neon ─── */
+.nex-orb--purple,
+.nex-orb--blue,
+.nex-orb--violet {
+  background: radial-gradient(circle, rgba(166, 124, 82, 0.12), transparent 72%) !important;
+}
+
+.nex-orb--blue {
+  opacity: 0.55;
+}
+
+.nex-orb--violet {
+  opacity: 0.4;
+}
+
+/* ─── Primary actions ─── */
+.nex-btn-primary {
+  background: linear-gradient(135deg, #b8946a 0%, #a67c52 48%, #8b6340 100%) !important;
+  box-shadow:
+    0 0 24px rgba(166, 124, 82, 0.28),
+    0 4px 14px rgba(0, 0, 0, 0.35) !important;
+}
+
+.nex-btn-primary:hover {
+  box-shadow: 0 0 32px rgba(166, 124, 82, 0.38) !important;
+}
+
+/* ─── Browse product cards: one bronze glow for all themes ─── */
+.nex-bp-card--blue,
+.nex-bp-card--green,
+.nex-bp-card--orange,
+.nex-bp-card--purple,
+.nex-bp-card--violet {
+  --bp-aura: rgba(166, 124, 82, 0.2);
+  --bp-aura-soft: rgba(138, 106, 66, 0.12);
+}
+
+.nex-bp-card:hover {
+  border-color: rgba(166, 124, 82, 0.28) !important;
+}
+
+.nex-bp-card--blue .nex-bp-glow-bloom,
+.nex-bp-card--green .nex-bp-glow-bloom,
+.nex-bp-card--orange .nex-bp-glow-bloom,
+.nex-bp-card--violet .nex-bp-glow-bloom,
+.nex-bp-card--purple .nex-bp-glow-bloom {
+  background: radial-gradient(
+    circle at 50% 42%,
+    rgba(196, 165, 116, 0.55) 0%,
+    rgba(138, 106, 66, 0.35) 32%,
+    transparent 72%
+  ) !important;
+}
+
+.nex-bp-card--blue .nex-bp-glow,
+.nex-bp-card--green .nex-bp-glow,
+.nex-bp-card--orange .nex-bp-glow,
+.nex-bp-card--violet .nex-bp-glow,
+.nex-bp-card--purple .nex-bp-glow {
+  background: radial-gradient(
+    ellipse 120% 95% at 50% 38%,
+    rgba(212, 188, 140, 0.35) 0%,
+    rgba(166, 124, 82, 0.55) 22%,
+    rgba(92, 66, 40, 0.35) 42%,
+    rgba(22, 18, 14, 0.88) 62%,
+    #0a0a0a 100%
+  ) !important;
+}
+
+/* ─── Category grid cards: bronze accent, neutral secondary themes ─── */
+.nex-cat-card--violet,
+.nex-cat-card--blue,
+.nex-cat-card--amber {
+  border-color: rgba(166, 124, 82, 0.1);
+}
+
+.nex-cat-card--violet .nex-cat-icon-wrap::before,
+.nex-cat-card--blue .nex-cat-icon-wrap::before,
+.nex-cat-card--amber .nex-cat-icon-wrap::before {
+  background: rgba(166, 124, 82, 0.45);
+}
+
+.nex-cat-card--violet .nex-cat-icon,
+.nex-cat-card--blue .nex-cat-icon,
+.nex-cat-card--amber .nex-cat-icon {
+  color: #d4bc8c;
+  filter: drop-shadow(0 0 8px rgba(166, 124, 82, 0.4));
+}
+
+.nex-cat-card--violet:hover,
+.nex-cat-card--blue:hover,
+.nex-cat-card--amber:hover {
+  border-color: rgba(166, 124, 82, 0.22);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.4),
+    0 0 16px rgba(166, 124, 82, 0.1);
+}
+
+.nex-cat-card--emerald,
+.nex-cat-card--rose {
+  border-color: rgba(255, 255, 255, 0.07);
+}
+
+.nex-cat-card--emerald .nex-cat-icon-wrap::before,
+.nex-cat-card--rose .nex-cat-icon-wrap::before {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.nex-cat-card--emerald .nex-cat-icon,
+.nex-cat-card--rose .nex-cat-icon {
+  color: rgba(255, 255, 255, 0.72);
+  filter: none;
+}
+
+.nex-cat-card--emerald:hover,
+.nex-cat-card--rose:hover {
+  border-color: rgba(166, 124, 82, 0.16);
+  box-shadow:
+    0 10px 28px rgba(0, 0, 0, 0.4),
+    0 0 12px rgba(166, 124, 82, 0.08);
+}
+
+/* ─── Homepage category chips ─── */
+.mp-cat--active {
+  border-color: rgba(166, 124, 82, 0.38) !important;
+  background: linear-gradient(180deg, rgba(28, 22, 16, 0.55), rgba(10, 10, 10, 1)) !important;
+  box-shadow:
+    0 0 0 1px rgba(166, 124, 82, 0.1),
+    0 0 14px rgba(166, 124, 82, 0.12) !important;
+}
+
+.mp-cat__icon {
+  background: rgba(166, 124, 82, 0.1) !important;
+  color: #d4bc8c !important;
+}
+
+.mp-cat--blue .mp-cat__icon,
+.mp-cat--amber .mp-cat__icon,
+.mp-cat--emerald .mp-cat__icon,
+.mp-cat--rose .mp-cat__icon {
+  background: rgba(166, 124, 82, 0.08) !important;
+  color: #c4a574 !important;
+}
+
+/* ─── Categories browse page cards ─── */
+.nex-cg-card--blue .nex-cg-glow-bloom,
+.nex-cg-card--green .nex-cg-glow-bloom,
+.nex-cg-card--orange .nex-cg-glow-bloom,
+.nex-cg-card--violet .nex-cg-glow-bloom,
+.nex-cg-card--purple .nex-cg-glow-bloom {
+  background: radial-gradient(
+    circle at 50% 42%,
+    rgba(196, 165, 116, 0.5) 0%,
+    rgba(138, 106, 66, 0.3) 35%,
+    transparent 70%
+  ) !important;
+}
+
+.nex-cg-card--blue .nex-cg-glow,
+.nex-cg-card--green .nex-cg-glow,
+.nex-cg-card--orange .nex-cg-glow,
+.nex-cg-card--violet .nex-cg-glow,
+.nex-cg-card--purple .nex-cg-glow {
+  background: radial-gradient(
+    ellipse 115% 90% at 50% 40%,
+    rgba(212, 188, 140, 0.3) 0%,
+    rgba(166, 124, 82, 0.5) 24%,
+    rgba(22, 18, 14, 0.88) 62%,
+    #0a0a0a 100%
+  ) !important;
+}
+
+.nex-cg-card--blue .nex-cg-icon {
+  color: #d4bc8c !important;
+}
+
+.nex-cg-card--blue,
+.nex-cg-card--green,
+.nex-cg-card--orange,
+.nex-cg-card--violet,
+.nex-cg-card--purple {
+  --cg-aura: rgba(166, 124, 82, 0.2);
+  --cg-aura-soft: rgba(138, 106, 66, 0.12);
+}
+
+.nex-cg-card:hover {
+  border-color: rgba(166, 124, 82, 0.26) !important;
+}
+
+/* ─── Warm secondary text (no cool slate tint) ─── */
+.nex-storefront,
+.sf-page,
+.sf-auth-page,
+.admin-app {
+  --text-secondary: rgba(255, 255, 255, 0.72);
+  --text-muted: rgba(255, 255, 255, 0.45);
+}
+
+.nex-nav-link--active,
+.nex-sidebar .nex-nav-link[aria-current="page"] {
+  color: #d4bc8c !important;
+}

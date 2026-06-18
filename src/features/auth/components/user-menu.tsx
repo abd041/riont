@@ -9,7 +9,7 @@ import { useStorefrontAuth } from "./storefront-auth-provider";
 function Avatar({ name }: { name: string }) {
   const initial = name.charAt(0).toUpperCase();
   return (
-    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-violet-500 to-violet-800 text-xs font-bold text-white shadow-[0_0_18px_rgba(139,92,246,0.45)] ring-2 ring-violet-500/35">
+    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-accent-500 to-accent-700 text-xs font-bold text-white shadow-[0_0_18px_rgba(166,124,82,0.35)] ring-2 ring-accent-500/35">
       {initial}
     </span>
   );
