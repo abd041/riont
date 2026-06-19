@@ -12,14 +12,14 @@
   .sf-order-card {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: var(--space-stack);
     padding: 14px;
   }
 
   .sf-order-card__meta {
     width: 100%;
     flex-wrap: wrap;
-    gap: 8px;
+    gap: var(--space-inline);
   }
 }
 
@@ -28,7 +28,7 @@
   .sf-ticket-card {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: var(--space-stack);
     padding: 14px;
   }
 
@@ -43,7 +43,7 @@
   }
 
   .sf-thread {
-    gap: 10px;
+    gap: var(--space-stack);
   }
 
   .sf-thread__bubble {
@@ -65,7 +65,7 @@
   .sf-order-hero__top {
     flex-direction: column;
     align-items: flex-start;
-    gap: 8px;
+    gap: var(--space-inline);
   }
 
   .sf-order-hero__title {
@@ -75,7 +75,7 @@
   .sf-checkout-steps,
   .sf-order-hero__steps {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: var(--space-inline);
   }
 
   .sf-order-payment-panel,
@@ -86,7 +86,7 @@
   .sf-order-layout {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-4);
   }
 
   .sf-order-layout > aside {
@@ -105,7 +105,7 @@
     overflow-x: auto;
     flex-wrap: nowrap;
     -webkit-overflow-scrolling: touch;
-    padding-bottom: 4px;
+    padding-bottom: var(--space-1);
     scrollbar-width: thin;
     gap: 6px;
   }

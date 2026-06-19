@@ -3,11 +3,11 @@
  */
 
 .nex-categories-page {
-  padding-bottom: 28px;
+  padding-bottom: var(--space-7);
 }
 
 .nex-categories-subtitle {
-  margin: 0 0 12px;
+  margin: 0 0 var(--space-stack);
   max-width: 52ch;
   font-size: 13px;
   line-height: 1.45;

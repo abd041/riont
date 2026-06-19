@@ -9,7 +9,7 @@ import {
   motion,
   useReducedMotion,
 } from "framer-motion";
-import { ArrowRight, Shield, Clock, Star, Users, Zap } from "lucide-react";
+import { ArrowRight, Headphones, PackageCheck, Shield, Zap } from "lucide-react";
 import type { HeroBlockContent } from "@/server/services/content-block.service";
 import {
   HERO_ANIMATION_DEFAULT,
@@ -23,6 +23,13 @@ import { MarketplaceAmbientDecor } from "./marketplace-ambient-decor";
 
 /** Client hero banner artwork — replace file in public/hero/ to update. */
 const HERO_BACKGROUND_IMAGE = "/hero/hero-marketplace-bg.png";
+
+const HERO_TRUST_ITEMS = [
+  { icon: Shield, titleKey: "whySecureTitle", descKey: "whySecureDesc" },
+  { icon: Zap, titleKey: "whyInstantTitle", descKey: "whyInstantDesc" },
+  { icon: Headphones, titleKey: "whySupportTitle", descKey: "whySupportDesc" },
+  { icon: PackageCheck, titleKey: "whyTrackingTitle", descKey: "whyTrackingDesc" },
+] as const;
 
 const SWIPE_THRESHOLD_PX = 50;
 
@@ -75,13 +82,13 @@ export function HeroSection({
     [content, t],
   );
 
-  const stats = useMemo(
-    () => [
-      { icon: Users, value: t("statCustomersValue"), label: t("statCustomersLabel") },
-      { icon: Star, value: t("statReviewsValue"), label: t("statReviewsLabel") },
-      { icon: Clock, value: t("statSupportValue"), label: t("statSupportLabel") },
-      { icon: Shield, value: t("statPaymentsValue"), label: t("statPaymentsLabel") },
-    ],
+  const trustItems = useMemo(
+    () =>
+      HERO_TRUST_ITEMS.map((item) => ({
+        icon: item.icon,
+        title: t(item.titleKey),
+        description: t(item.descKey),
+      })),
     [t],
   );
 
@@ -268,30 +275,35 @@ export function HeroSection({
           </AnimatePresence>
         </div>
 
-        {!compact && (
-          <div className="nex-hero-stats mt-5 flex items-stretch overflow-hidden rounded-[var(--radius-md)]">
-            {stats.map(({ icon: Icon, value, label }, index) => (
-              <div key={label} className="nex-stat-item flex min-w-0 flex-1 items-center">
-                {index > 0 && (
-                  <div className="nex-stat-divider hidden shrink-0 sm:block" aria-hidden />
-                )}
-                <div className="nex-stat-cell flex min-w-0 flex-1 items-center gap-2.5 px-3 py-3 sm:gap-3 sm:px-4">
-                  <span className="nex-stat-icon flex h-9 w-9 shrink-0 items-center justify-center rounded-full">
-                    <Icon className="h-4 w-4 text-accent-400" strokeWidth={1.75} />
-                  </span>
-                  <div className="nex-stat-text min-w-0 leading-none">
-                    <p className="nex-stat-value truncate text-[12px] font-bold text-white sm:text-[13px]">
-                      {value}
+        <div
+          className={cn(
+            "nex-hero-trust mt-4 flex items-stretch overflow-hidden rounded-[var(--radius-md)]",
+            compact && "nex-hero-trust--compact",
+          )}
+        >
+          {trustItems.map(({ icon: Icon, title, description }, index) => (
+            <div key={title} className="nex-hero-trust__item flex min-w-0 flex-1 items-center">
+              {index > 0 && (
+                <div className="nex-hero-trust__divider hidden shrink-0 sm:block" aria-hidden />
+              )}
+              <div className="nex-hero-trust__cell flex min-w-0 flex-1 items-center gap-2 px-2.5 py-2.5 sm:gap-2.5 sm:px-3 sm:py-3">
+                <span className="nex-hero-trust__icon flex h-8 w-8 shrink-0 items-center justify-center rounded-full sm:h-9 sm:w-9">
+                  <Icon className="h-3.5 w-3.5 text-accent-400 sm:h-4 sm:w-4" strokeWidth={1.75} />
+                </span>
+                <div className="nex-hero-trust__text min-w-0 leading-none">
+                  <p className="nex-hero-trust__title truncate text-[11px] font-bold text-white sm:text-[12px]">
+                    {title}
+                  </p>
+                  {!compact && (
+                    <p className="nex-hero-trust__desc mt-1 line-clamp-2 text-[10px] text-slate-400/90 sm:text-[10.5px]">
+                      {description}
                     </p>
-                    <p className="nex-stat-label mt-1 truncate text-[10px] text-slate-400/90 sm:text-[10.5px]">
-                      {label}
-                    </p>
-                  </div>
+                  )}
                 </div>
               </div>
-            ))}
-          </div>
-        )}
+            </div>
+          ))}
+        </div>
 
         <div
           className={cn(

@@ -59,6 +59,15 @@ export function MarketplaceProductCard({
   const wished = hasItem(id ?? slug);
   const reduceMotion = useReducedMotion();
 
+  const showDiscount = discount != null && discount > 0;
+  const startBadges =
+    showDiscount ||
+    soldOut ||
+    (badge === "instant" && !soldOut) ||
+    badge === "limited" ||
+    badge === "offer";
+  const endBadges = badge === "bestSeller" || badge === "hot" || badge === "trending";
+
   return (
     <MotionArticle
       className={cn("mp-card mp-card--grid mp-card--premium group", className)}
@@ -69,27 +78,43 @@ export function MarketplaceProductCard({
       <Link href={`/products/${slug}`} className="mp-card__media mp-card__media--grid">
         <span className="mp-card__media-vignette" aria-hidden />
         <span className="mp-card__media-shine" aria-hidden />
-        {discount != null && discount > 0 && (
-          <span className="mp-badge mp-badge--sale">-{discount}%</span>
-        )}
-        {badge === "bestSeller" && (
-          <span className="mp-badge mp-badge--hot">{tProduct("bestSellerBadge")}</span>
-        )}
-        {soldOut && (
-          <span className="mp-badge mp-badge--sale">{tProduct("soldOut")}</span>
-        )}
-        {badge === "instant" && !soldOut && (
-          <span className="mp-badge mp-badge--instant">{tProduct("instantDelivery")}</span>
-        )}
-        {badge === "hot" && <span className="mp-badge mp-badge--hot">{tProduct("badgeHot")}</span>}
-        {badge === "trending" && (
-          <span className="mp-badge mp-badge--hot">{tProduct("badgeTrending")}</span>
-        )}
-        {badge === "limited" && (
-          <span className="mp-badge mp-badge--sale">{tProduct("badgeLimited")}</span>
-        )}
-        {badge === "offer" && (
-          <span className="mp-badge mp-badge--sale">{tProduct("badgeOffer")}</span>
+        {(startBadges || endBadges) && (
+          <div className="mp-card__badges">
+            {startBadges ? (
+              <div className="mp-card__badges-start">
+                {showDiscount && (
+                  <span className="mp-badge mp-badge--sale">-{discount}%</span>
+                )}
+                {soldOut && (
+                  <span className="mp-badge mp-badge--sale">{tProduct("soldOut")}</span>
+                )}
+                {badge === "instant" && !soldOut && (
+                  <span className="mp-badge mp-badge--instant">
+                    {tProduct("instantDeliveryBadge")}
+                  </span>
+                )}
+                {badge === "limited" && (
+                  <span className="mp-badge mp-badge--sale">{tProduct("badgeLimited")}</span>
+                )}
+                {badge === "offer" && (
+                  <span className="mp-badge mp-badge--sale">{tProduct("badgeOffer")}</span>
+                )}
+              </div>
+            ) : null}
+            {endBadges ? (
+              <div className="mp-card__badges-end">
+                {badge === "bestSeller" && (
+                  <span className="mp-badge mp-badge--hot">{tProduct("bestSellerBadge")}</span>
+                )}
+                {badge === "hot" && (
+                  <span className="mp-badge mp-badge--hot">{tProduct("badgeHot")}</span>
+                )}
+                {badge === "trending" && (
+                  <span className="mp-badge mp-badge--hot">{tProduct("badgeTrending")}</span>
+                )}
+              </div>
+            ) : null}
+          </div>
         )}
         <div className="mp-card__img-wrap">
           {imageUrl ? (

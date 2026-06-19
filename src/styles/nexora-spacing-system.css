@@ -1,0 +1,343 @@
+/**
+ * Vertical rhythm — semantic spacing tokens
+ *
+ * Layer 1: --space-section     between major page blocks (hero, grid, trust, footer)
+ * Layer 2: --space-stack       within a block (toolbar → content, form fields)
+ * Layer 3: --space-head        section title → content
+ * Layer 4: --space-inline      horizontal / tight vertical (icon rows, price row)
+ * Micro (4–6px): keep local inside cards/buttons — do not tokenize everywhere
+ */
+
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+
+  /* Storefront semantic */
+  --space-head: var(--mp-section-head-gap, var(--space-2));
+  --space-inline: var(--space-2);
+  --space-stack: var(--space-3);
+  --space-section: var(--mp-section-gap);
+  --space-page-y: var(--mp-page-y);
+
+  /* Admin — slightly roomier, independent of storefront density */
+  --admin-section-gap: var(--space-5);
+  --admin-stack: var(--space-3);
+  --admin-head: var(--space-4);
+}
+
+@media (max-width: 767px) {
+  :root {
+    --admin-section-gap: var(--space-4);
+  }
+}
+
+/* ─── Storefront page shells ─── */
+.sf-page {
+  padding: var(--space-page-y) 0 calc(var(--space-section) + var(--space-inline));
+}
+
+.sf-page__inner {
+  gap: var(--space-section);
+}
+
+.sf-browse-wrap,
+.sf-pdp-wrap,
+.sf-page,
+.sf-account-wrap,
+.sf-cart-wrap,
+.sf-checkout-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-section);
+}
+
+.sf-pdp-wrap {
+  width: 100%;
+}
+
+.sf-pdp-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-inline);
+  margin-bottom: 0;
+}
+
+.sf-page__header {
+  gap: var(--space-stack);
+  margin-bottom: 0;
+}
+
+/* Browse */
+.nex-browse-page-header {
+  margin-bottom: 0;
+}
+
+.nex-browse-top {
+  margin-bottom: 0;
+  gap: var(--space-stack);
+}
+
+.nex-browse-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-section);
+  padding-bottom: var(--space-7);
+}
+
+.nex-browse-body {
+  gap: var(--space-stack);
+}
+
+.nex-browse-toolbar {
+  gap: var(--space-stack);
+}
+
+.nex-browse-mobile-filters {
+  gap: var(--space-stack);
+  margin-bottom: 0;
+  padding: var(--space-stack) var(--space-4);
+}
+
+@media (min-width: 1024px) {
+  .nex-browse-body {
+    gap: var(--space-4);
+  }
+}
+
+/* Categories */
+.nex-categories-page {
+  gap: var(--space-section);
+  padding-bottom: var(--space-7);
+}
+
+.nex-categories-subtitle {
+  margin: 0 0 var(--space-stack);
+}
+
+.nex-categories-toolbar {
+  margin-bottom: var(--space-1);
+}
+
+/* Cart & checkout */
+.sf-cart-layout {
+  gap: var(--space-section);
+}
+
+.sf-cart-list {
+  gap: var(--space-stack);
+}
+
+.sf-trust-strip--cart {
+  margin-top: var(--space-stack);
+}
+
+.nex-co-columns {
+  gap: var(--space-section);
+}
+
+/* PDP */
+.sf-pdp-wrap .nex-pdp-layout {
+  gap: var(--space-stack);
+}
+
+.nex-pdp-purchase-card {
+  gap: var(--space-section);
+}
+
+.nex-pdp-pricing {
+  gap: var(--space-inline);
+  margin-top: var(--space-stack);
+}
+
+.nex-pdp-actions {
+  margin-top: var(--space-4);
+  gap: var(--space-stack);
+}
+
+.nex-pdp-variants {
+  margin-top: var(--space-head);
+  margin-bottom: var(--space-head);
+}
+
+.nex-pdp-secondary-actions {
+  gap: var(--space-head);
+}
+
+/* Section title → content */
+.mp-section__head {
+  margin-bottom: var(--space-head);
+}
+
+.mp-sections--storefront-home > .mp-browse-section--primary .mp-section__head,
+.mp-sections--storefront-home > .mp-trust .mp-section__head,
+.mp-sections--storefront-home > .mp-reviews .mp-section__head {
+  margin-bottom: var(--space-head);
+}
+
+/* Forms */
+.nex-pdp-review-form,
+.mp-store-review-form {
+  gap: var(--space-stack);
+}
+
+.nex-pdp-review-form__label,
+.mp-store-review-form__label {
+  margin-bottom: calc(var(--space-1) * -1);
+}
+
+/* Footer */
+.nex-main .mp-footer--premium {
+  margin-top: var(--space-section);
+}
+
+/* Admin */
+.admin-page {
+  gap: var(--admin-section-gap);
+}
+
+.admin-page__header {
+  gap: var(--admin-head);
+}
+
+.admin-page__actions {
+  gap: var(--space-stack);
+}
+
+/* ─── Account & orders ─── */
+.sf-account-nav {
+  gap: var(--space-inline);
+}
+
+.sf-order-list,
+.sf-ticket-list {
+  gap: var(--space-stack);
+}
+
+.sf-order-card,
+.sf-ticket-card {
+  gap: var(--space-stack);
+}
+
+.sf-order-card__end {
+  gap: var(--space-stack);
+}
+
+.sf-order-layout {
+  gap: var(--space-section);
+}
+
+.sf-order-hero {
+  gap: var(--space-4) var(--space-section);
+}
+
+.sf-order-hero__top {
+  gap: var(--space-stack);
+}
+
+.sf-order-hero__desc {
+  margin-top: var(--space-head);
+}
+
+.sf-order-hero__steps {
+  margin-top: var(--space-stack);
+}
+
+.sf-thread {
+  gap: var(--space-stack);
+}
+
+.sf-delivery-box__content {
+  margin-top: var(--space-head);
+}
+
+/* ─── Auth ─── */
+.sf-auth-page {
+  padding: var(--space-6);
+}
+
+.sf-auth-card__subtitle {
+  margin-top: var(--space-head);
+}
+
+.sf-auth-divider {
+  gap: var(--space-stack);
+  margin: var(--space-6) 0;
+}
+
+.sf-auth-tabs {
+  margin-top: var(--space-section);
+}
+
+.sf-auth-footer-hint {
+  margin-top: var(--space-4);
+}
+
+/* ─── Legal & support content ─── */
+.sf-legal-page,
+.mp-legal-page {
+  padding: var(--space-head) 0 var(--space-6);
+}
+
+.sf-legal-page__title,
+.mp-legal-page__title {
+  margin-bottom: var(--space-head);
+}
+
+.sf-legal-page__updated {
+  margin-bottom: var(--space-6);
+}
+
+.sf-legal-page__body {
+  gap: var(--space-4);
+  padding: var(--space-6) calc(var(--space-6) + var(--space-1));
+}
+
+.sf-legal-page__body h2,
+.mp-legal-page__body h2 {
+  margin-top: var(--space-head);
+}
+
+.sf-legal-page__link {
+  margin-top: var(--space-head);
+}
+
+.mp-legal-page__body {
+  gap: var(--space-stack);
+}
+
+.mp-legal-page__link {
+  margin-top: var(--space-1);
+}
+
+/* ─── PDP tabs & services ─── */
+.nex-pdp-tabs__list {
+  margin-bottom: var(--space-stack);
+}
+
+.nex-pdp-tabs__reviews {
+  gap: var(--space-stack);
+}
+
+.nex-pdp-review-list {
+  margin-top: var(--space-4);
+  gap: var(--space-stack);
+}
+
+.nex-pdp-services,
+.nex-pdp-service-card {
+  gap: var(--space-stack);
+}
+
+.sf-pdp-wrap .nex-pdp-services {
+  padding: var(--space-section) calc(var(--space-section) + var(--space-1));
+}
+
+.nex-pdp-page .nex-pdp-description {
+  margin-top: var(--space-4);
+}

@@ -107,14 +107,14 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  gap: var(--space-7);
 }
 
 .nex-co-columns {
   position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  gap: 26px;
+  gap: var(--space-section);
   align-items: start;
 }
 

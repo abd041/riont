@@ -4,18 +4,13 @@
  */
 
 /* Inner pages: footer sits below main content in .nex-main */
-.nex-main .mp-footer--premium {
-  margin-top: 20px;
-}
-
 @media (max-width: 767px) {
   .nex-main .mp-footer--premium {
-    margin-top: 16px;
-    padding-bottom: max(16px, env(safe-area-inset-bottom, 0px));
+    padding-bottom: max(var(--space-4), env(safe-area-inset-bottom, 0px));
   }
 
   .nex-storefront--checkout .nex-main {
-    padding-bottom: max(12px, env(safe-area-inset-bottom, 0px));
+    padding-bottom: max(var(--space-stack), env(safe-area-inset-bottom, 0px));
   }
 }
 

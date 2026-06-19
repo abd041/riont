@@ -256,7 +256,7 @@
 }
 
 .mp-row--featured .mp-section__head {
-  margin-bottom: var(--mp-section-head-gap, 8px);
+  margin-bottom: var(--space-head);
 }
 
 .mp-sections--storefront-home > .mp-row--featured,

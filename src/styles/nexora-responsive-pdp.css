@@ -10,7 +10,7 @@
   .nex-pdp-purchase-card {
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
-    gap: 20px;
+    gap: var(--space-section);
     grid-column: 1 / -1;
   }
 
@@ -32,16 +32,16 @@
   }
 
   .sf-page:has(.sf-pdp-wrap) {
-    padding-top: 12px;
-    padding-bottom: max(28px, env(safe-area-inset-bottom, 0px));
+    padding-top: var(--space-stack);
+    padding-bottom: max(var(--space-7), env(safe-area-inset-bottom, 0px));
   }
 
   .nex-pdp-page {
-    padding-bottom: max(32px, env(safe-area-inset-bottom, 0px));
+    padding-bottom: max(var(--space-7), env(safe-area-inset-bottom, 0px));
   }
 
   .sf-pdp-wrap .nex-pdp-layout {
-    gap: 12px;
+    gap: var(--space-stack);
   }
 
   .nex-pdp-purchase-card {
@@ -179,8 +179,8 @@
   }
 
   .nex-pdp-pricing {
-    margin-top: 10px;
-    gap: 6px;
+    margin-top: var(--space-stack);
+    gap: var(--space-inline);
   }
 
   .nex-pdp-price {
@@ -188,19 +188,19 @@
   }
 
   .nex-pdp-actions {
-    margin-top: 12px;
-    gap: 8px;
+    margin-top: var(--space-stack);
+    gap: var(--space-head);
     padding-bottom: 0;
   }
 
   .nex-pdp-variants {
-    margin-top: 8px;
-    margin-bottom: 8px;
+    margin-top: var(--space-head);
+    margin-bottom: var(--space-head);
   }
 
   .nex-pdp-qty-row {
     flex-wrap: wrap;
-    gap: 10px;
+    gap: var(--space-stack);
     min-width: 0;
   }
 
@@ -211,7 +211,7 @@
 
   .nex-pdp-secondary-actions {
     grid-template-columns: 1fr;
-    gap: 8px;
+    gap: var(--space-head);
   }
 
   .nex-pdp-share,
@@ -257,11 +257,11 @@
   }
 
   .sf-pdp-wrap .nex-pdp-tabs {
-    padding: 16px;
+    padding: var(--space-4);
   }
 
   .sf-pdp-wrap .nex-pdp-purchase-card + .nex-pdp-tabs {
-    margin-top: 4px;
+    margin-top: var(--space-1);
   }
 }
 
@@ -273,12 +273,12 @@
 
 @media (min-width: 640px) and (max-width: 1023px) {
   .sf-pdp-wrap .nex-pdp-layout {
-    gap: 20px;
+    gap: var(--space-section);
   }
 
   .sf-pdp-wrap .nex-pdp-info,
   .sf-pdp-wrap .nex-pdp-tabs {
-    padding: 20px;
+    padding: var(--space-section);
   }
 }
 

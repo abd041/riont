@@ -340,32 +340,39 @@
 }
 
 .mp-card--grid .mp-card__name {
-  font-size: 12px;
+  font-size: 13px;
+  font-weight: 600;
   line-height: 1.35;
   -webkit-line-clamp: 2;
 }
 
 .mp-card--grid .mp-card__cat {
-  font-size: 9.5px;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .mp-card--grid .mp-card__rating,
 .mp-card--grid .mp-card__rating-row {
-  font-size: 9.5px;
+  font-size: 11px;
+  font-weight: 600;
   margin-top: 3px;
 }
 
 .mp-card--grid .mp-card__star {
-  width: 10px;
-  height: 10px;
+  width: 11px;
+  height: 11px;
 }
 
 .mp-card--grid .mp-card__price {
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .mp-card--grid .mp-card__price-old {
-  font-size: 9px;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.52);
 }
 
 .mp-card--grid .mp-btn-icon {
@@ -400,12 +407,14 @@
 }
 
 .mp-card--grid .mp-badge {
-  font-size: 9px;
-  padding: 3px 6px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 7px;
+  letter-spacing: 0.02em;
 }
 
 .mp-card--grid .mp-badge--hot {
-  font-size: 8px;
+  font-size: 9px;
 }
 
 /* ═══ Featured Products — compact density (4–5 per row) ═══ */
@@ -446,50 +455,59 @@
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-card__body {
-  gap: 4px;
-  padding: 7px 8px 8px;
+  gap: 5px;
+  padding: 9px 10px 10px;
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-card__name {
-  font-size: 10px;
-  line-height: 1.3;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.35;
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-card__cat {
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.72);
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-card__rating-row {
-  font-size: 8px;
-  margin-top: 1px;
+  font-size: 11px;
+  font-weight: 600;
+  margin-top: 2px;
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-card__star {
-  width: 8px;
-  height: 8px;
+  width: 11px;
+  height: 11px;
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-card__price {
-  font-size: 11px;
+  font-size: 14px;
+  font-weight: 700;
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-card__price-old {
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.52);
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-btn-icon {
-  width: 26px;
-  height: 26px;
+  width: 30px;
+  height: 30px;
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-card__wish {
-  width: 26px;
-  height: 26px;
+  width: 28px;
+  height: 28px;
 }
 
 .mp-browse-section--primary .mp-card--grid .mp-badge {
-  font-size: 7.5px;
-  padding: 2px 5px;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 7px;
+  letter-spacing: 0.02em;
 }
 
 .mp-browse-section--primary .mp-card--grid:hover {

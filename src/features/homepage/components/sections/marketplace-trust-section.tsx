@@ -1,7 +1,7 @@
 "use client";
 
 import { useTranslations } from "next-intl";
-import { Headphones, Shield, Zap } from "lucide-react";
+import { Headphones, PackageCheck, Shield, Zap } from "lucide-react";
 import {
   MarketplaceSectionReveal,
   MarketplaceSectionRevealChild,
@@ -9,20 +9,14 @@ import {
 import { MarketplaceSectionHeader } from "../marketplace/marketplace-section-header";
 
 const features = [
-  { icon: Zap, titleKey: "whyInstantTitle", descKey: "whyInstantDesc" },
   { icon: Shield, titleKey: "whySecureTitle", descKey: "whySecureDesc" },
+  { icon: Zap, titleKey: "whyInstantTitle", descKey: "whyInstantDesc" },
   { icon: Headphones, titleKey: "whySupportTitle", descKey: "whySupportDesc" },
+  { icon: PackageCheck, titleKey: "whyTrackingTitle", descKey: "whyTrackingDesc" },
 ] as const;
 
 export function MarketplaceTrustSection() {
   const t = useTranslations("home");
-
-  const stats = [
-    { value: t("trustStatCustomersValue"), label: t("trustStatCustomersLabel") },
-    { value: t("trustStatOrdersValue"), label: t("trustStatOrdersLabel") },
-    { value: t("trustStatSupportValue"), label: t("trustStatSupportLabel") },
-    { value: t("trustStatRatingValue"), label: t("trustStatRatingLabel") },
-  ];
 
   return (
     <MarketplaceSectionReveal
@@ -32,16 +26,8 @@ export function MarketplaceTrustSection() {
     >
       <MarketplaceSectionRevealChild>
         <MarketplaceSectionHeader title={t("trustSectionTitle")} />
+        <p className="mp-trust__subtitle">{t("trustSectionSubtitle")}</p>
       </MarketplaceSectionRevealChild>
-
-      <div className="mp-trust__stats">
-        {stats.map((stat) => (
-          <div key={stat.label} className="mp-trust__stat">
-            <span className="mp-trust__stat-value">{stat.value}</span>
-            <span className="mp-trust__stat-label">{stat.label}</span>
-          </div>
-        ))}
-      </div>
 
       <div className="mp-trust__features">
         {features.map(({ icon: Icon, titleKey, descKey }) => (

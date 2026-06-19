@@ -7,7 +7,7 @@
   .sf-page__header {
     flex-direction: column;
     align-items: stretch;
-    gap: 12px;
+    gap: var(--space-stack);
   }
 
   .sf-page__header-start {

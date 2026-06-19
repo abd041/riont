@@ -9,11 +9,11 @@
   }
 
   .sf-page--narrow .sf-page__inner {
-    gap: 20px;
+    gap: var(--space-section);
   }
 
   .sf-legal-page {
-    padding: 4px 0 24px;
+    padding: var(--space-1) 0 var(--space-6);
   }
 
   .sf-legal-page__title {

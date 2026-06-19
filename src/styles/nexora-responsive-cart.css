@@ -9,17 +9,14 @@
 }
 
 .sf-trust-strip--cart {
-  margin-top: 12px;
+  margin-top: var(--space-stack);
 }
 
 @media (max-width: 959px) {
   .sf-cart-layout {
-    gap: 20px;
-  }
-  .sf-cart-layout {
     display: flex;
     flex-direction: column;
-    gap: 16px;
+    gap: var(--space-4);
   }
 
   .sf-cart-layout > aside {

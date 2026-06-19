@@ -6,6 +6,7 @@ import {
   submitStoreReviewAction,
   type SubmitReviewActionResult,
 } from "@/server/actions/review.actions";
+import { ReviewRatingField } from "@/features/products/components/review-rating-field";
 
 type StoreReviewFormProps = {
   locale: string;
@@ -66,23 +67,13 @@ export function StoreReviewForm({
         <input type="hidden" name="authorName" value={userDisplayName} />
       ) : null}
 
-      <label className="mp-store-review-form__label" htmlFor="storeReviewRating">
-        {t("storeReviewRating")}
-      </label>
-      <select
+      <ReviewRatingField
         id="storeReviewRating"
         name="rating"
-        required
+        label={t("storeReviewRating")}
         defaultValue={5}
-        className="mp-store-review-form__input"
         disabled={pending}
-      >
-        {[5, 4, 3, 2, 1].map((value) => (
-          <option key={value} value={value}>
-            {value} / 5
-          </option>
-        ))}
-      </select>
+      />
 
       <label className="mp-store-review-form__label" htmlFor="storeReviewBody">
         {t("storeReviewBody")}

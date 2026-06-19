@@ -6,9 +6,9 @@
 .nex-browse-mobile-filters {
   display: none;
   flex-direction: column;
-  gap: 10px;
-  margin-bottom: 10px;
-  padding: 12px 14px;
+  gap: var(--space-stack);
+  margin-bottom: 0;
+  padding: var(--space-stack) var(--space-4);
   border-radius: var(--radius-md, 14px);
   border: 1px solid rgba(255, 255, 255, 0.06);
   background: rgba(8, 8, 14, 0.92);
@@ -153,37 +153,38 @@
   }
 }
 
-/* Browse grid cards — ~12% denser (RIYONT-070) */
+/* Browse grid cards — readable type on dense grid */
 .nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__media--grid {
   aspect-ratio: 1.12 / 1;
 }
 
 .nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__body {
   gap: 5px;
-  padding: 8px 9px 9px;
+  padding: 9px 10px 10px;
 }
 
-.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__name {
-  font-size: 11px;
-  line-height: 1.3;
-}
+@media (max-width: 639px) {
+  .nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__name {
+    font-size: 12px;
+  }
 
-.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__cat,
-.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__rating-row {
-  font-size: 8.5px;
-}
+  .nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__cat,
+  .nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__rating-row {
+    font-size: 10px;
+  }
 
-.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__price {
-  font-size: 11.5px;
-}
+  .nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__price {
+    font-size: 13px;
+  }
 
-.nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__price-old {
-  font-size: 8px;
+  .nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__price-old {
+    font-size: 10px;
+  }
 }
 
 .nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-btn-icon {
-  width: 28px;
-  height: 28px;
+  width: 30px;
+  height: 30px;
 }
 
 .nex-browse-page .mp-browse-section--primary .mp-card--grid .mp-card__placeholder {
@@ -201,15 +202,15 @@
   }
 
   .nex-browse-page {
-    padding-bottom: 32px;
+    padding-bottom: var(--space-7);
   }
 
   .nex-browse-page-header {
-    margin-bottom: 12px;
+    margin-bottom: 0;
   }
 
   .nex-browse-toolbar {
-    gap: 12px;
+    gap: var(--space-stack);
   }
 
   .nex-browse-toolbar .nex-search {
@@ -220,7 +221,7 @@
   .nex-browse-sort {
     width: 100%;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: var(--space-stack);
   }
 
   .nex-browse-sort-select {

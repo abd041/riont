@@ -4,11 +4,11 @@
 
 @media (max-width: 767px) {
   .nex-categories-page {
-    padding-bottom: 32px;
+    padding-bottom: var(--space-7);
   }
 
   .nex-categories-page .nex-browse-top {
-    gap: 8px;
+    gap: var(--space-head);
     min-width: 0;
   }
 

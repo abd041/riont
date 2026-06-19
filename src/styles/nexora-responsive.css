@@ -323,13 +323,13 @@ html {
 
   .nex-browse-filters-wrap--open {
     display: block;
-    margin-bottom: 12px;
+    margin-bottom: var(--space-stack);
   }
 
   .nex-browse-toolbar {
     flex-direction: column;
     align-items: stretch;
-    gap: 10px;
+    gap: var(--space-stack);
   }
 
   .nex-browse-sort {

@@ -285,10 +285,11 @@
   .nex-pdp-page--compact .nex-pdp-add-cart,
   .nex-pdp-page--compact .nex-pdp-buy-now,
   .nex-pdp-page--compact .nex-pdp-buy-now--disabled {
-    height: 42px;
-    min-height: 42px;
-    font-size: 12px;
-    border-radius: 10px;
+    height: 44px;
+    min-height: 44px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 11px;
   }
 
   .nex-pdp-page--compact .nex-pdp-add-cart svg {
@@ -303,9 +304,10 @@
 
   .nex-pdp-page--compact .nex-pdp-share,
   .nex-pdp-page--compact .nex-pdp-wishlist {
-    min-height: 38px;
-    padding: 6px 8px;
-    font-size: 11px;
+    min-height: 42px;
+    padding: 8px 10px;
+    font-size: 12px;
+    font-weight: 600;
     justify-content: center;
     width: 100%;
   }
@@ -486,12 +488,11 @@
 
   .nex-pdp-page--compact .nex-pdp-share,
   .nex-pdp-page--compact .nex-pdp-wishlist {
-    min-height: 36px;
-    padding: 6px 10px;
+    min-height: 42px;
+    padding: 8px 12px;
     font-size: 12px;
-    border-radius: 10px;
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    background: rgba(255, 255, 255, 0.03);
+    font-weight: 600;
+    border-radius: 11px;
   }
 
   .nex-pdp-page--compact .nex-pdp-tabs {

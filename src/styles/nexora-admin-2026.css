@@ -258,7 +258,7 @@
 .admin-page {
   display: flex;
   flex-direction: column;
-  gap: 22px;
+  gap: var(--admin-section-gap);
 }
 
 .admin-page__header {
@@ -266,7 +266,7 @@
   flex-wrap: wrap;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--admin-head);
 }
 
 .admin-page__title {
@@ -290,7 +290,7 @@
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  gap: 10px;
+  gap: var(--admin-stack);
 }
 
 .admin-back {
@@ -785,11 +785,11 @@
 .admin-customer-section {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--admin-stack);
 }
 
 .admin-customer-section + .admin-customer-section {
-  margin-top: 28px;
+  margin-top: var(--admin-section-gap);
 }
 
 @media (max-width: 768px) {

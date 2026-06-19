@@ -6,6 +6,7 @@ import {
   submitProductReviewAction,
   type SubmitReviewActionResult,
 } from "@/server/actions/review.actions";
+import { ReviewRatingField } from "./review-rating-field";
 
 export function ProductReviewForm({
   productId,
@@ -70,23 +71,13 @@ export function ProductReviewForm({
         <input type="hidden" name="authorName" value={userDisplayName} />
       ) : null}
 
-      <label className="nex-pdp-review-form__label" htmlFor="reviewRating">
-        {t("reviewRating")}
-      </label>
-      <select
+      <ReviewRatingField
         id="reviewRating"
         name="rating"
-        required
+        label={t("reviewRating")}
         defaultValue={5}
-        className="nex-pdp-review-form__input"
         disabled={pending}
-      >
-        {[5, 4, 3, 2, 1].map((value) => (
-          <option key={value} value={value}>
-            {value} / 5
-          </option>
-        ))}
-      </select>
+      />
 
       <label className="nex-pdp-review-form__label" htmlFor="reviewBody">
         {t("reviewBody")}

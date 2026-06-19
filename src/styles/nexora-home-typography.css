@@ -175,14 +175,14 @@
 
 /* ─── Featured Products grid ─── */
 .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__name {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 600;
   line-height: 1.35;
 }
 
 .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__cat,
 .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__rating-row {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 500;
 }
 
@@ -191,40 +191,41 @@
 }
 
 .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__price {
-  font-size: 12px;
+  font-size: 14px;
   font-weight: 700;
 }
 
 .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__price-old {
-  font-size: 9px;
+  font-size: 11px;
   font-weight: 500;
+  color: rgba(255, 255, 255, 0.52);
 }
 
 .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-badge {
-  font-size: 8px;
+  font-size: 10px;
   font-weight: 700;
 }
 
 @media (min-width: 640px) {
   .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__name {
-    font-size: 12px;
+    font-size: 13px;
   }
 
   .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__cat,
   .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__rating-row {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__price {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-card__price-old {
-    font-size: 10px;
+    font-size: 11px;
   }
 
   .mp-sections--storefront-home .mp-browse-section--primary .mp-card--grid .mp-badge {
-    font-size: 9px;
+    font-size: 10px;
   }
 }
 

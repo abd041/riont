@@ -12,8 +12,6 @@ import {
 import { MarketplaceSectionHeader } from "../marketplace/marketplace-section-header";
 import { StoreReviewForm } from "../store-review-form";
 
-const fallbackReviewKeys = ["review1", "review2", "review3"] as const;
-
 function ReviewStars({ rating }: { rating: number }) {
   const filled = Math.max(0, Math.min(5, Math.round(rating)));
 
@@ -52,7 +50,9 @@ export function MarketplaceReviewsSection({
 }: MarketplaceReviewsSectionProps) {
   const t = useTranslations("home");
 
-  const useDatabaseReviews = reviews.length > 0;
+  if (reviews.length === 0) {
+    return null;
+  }
 
   return (
     <MarketplaceSectionReveal
@@ -65,21 +65,13 @@ export function MarketplaceReviewsSection({
       </MarketplaceSectionRevealChild>
 
       <div className="mp-reviews__track">
-        {useDatabaseReviews
-          ? reviews.map((review) => (
-              <article key={review.id} className="mp-review-card">
-                <ReviewStars rating={review.rating} />
-                <p className="mp-review-card__quote">{review.body}</p>
-                <p className="mp-review-card__author">{review.authorName}</p>
-              </article>
-            ))
-          : fallbackReviewKeys.map((key) => (
-              <article key={key} className="mp-review-card">
-                <ReviewStars rating={5} />
-                <p className="mp-review-card__quote">{t(`${key}Quote`)}</p>
-                <p className="mp-review-card__author">{t(`${key}Author`)}</p>
-              </article>
-            ))}
+        {reviews.map((review) => (
+          <article key={review.id} className="mp-review-card">
+            <ReviewStars rating={review.rating} />
+            <p className="mp-review-card__quote">{review.body}</p>
+            <p className="mp-review-card__author">{review.authorName}</p>
+          </article>
+        ))}
       </div>
 
       <div className="mp-reviews__footer">
