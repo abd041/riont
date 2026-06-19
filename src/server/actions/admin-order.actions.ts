@@ -71,7 +71,21 @@ export async function transitionOrderAction(
 
     revalidatePath(`/admin/orders/${parsed.data.orderId}`);
     revalidatePath("/admin/orders");
-    return { success: true };
+
+    const actionMessages: Partial<Record<OrderStatus, string>> = {
+      [OrderStatus.AWAITING_PAYMENT]: "Payment instructions sent — waiting for customer payment.",
+      [OrderStatus.PAYMENT_RECEIVED]: "Payment marked as received.",
+      [OrderStatus.PROCESSING]: "Order is now processing.",
+      [OrderStatus.DELIVERED]: "Order marked as delivered.",
+      [OrderStatus.COMPLETED]: "Order completed.",
+      [OrderStatus.CANCELLED]: "Order cancelled.",
+      [OrderStatus.ON_HOLD]: "Order placed on hold.",
+    };
+
+    return {
+      success: true,
+      message: actionMessages[parsed.data.toStatus],
+    };
   } catch (error) {
     if (isRedirectError(error)) throw error;
     if (error instanceof ServiceError) {
@@ -176,6 +190,7 @@ export async function addInventoryAction(
       metadata: { count },
     });
     revalidatePath("/admin/orders");
+    revalidatePath(`/admin/products/${parsed.data.productId}`);
     return {
       success: true,
       message: `Added ${count} inventory line(s)`,

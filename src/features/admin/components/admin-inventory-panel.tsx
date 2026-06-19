@@ -14,9 +14,13 @@ export function AdminInventoryPanel({
 }) {
   return (
     <div className="admin-panel admin-panel--flat">
-      <h2 className="font-semibold">Inventory — {productName}</h2>
+      <h2 className="font-semibold">Stock &amp; codes — {productName}</h2>
       <p className="mt-1 text-sm text-[var(--text-muted)]">
-        Available stock: <span className="text-accent-400">{availableStock}</span>
+        Automatic delivery pulls from this pool. Available:{" "}
+        <span className="text-accent-400">{availableStock}</span>
+      </p>
+      <p className="mt-1 text-xs text-[var(--text-muted)]">
+        Paste one license key, code, or credential per line. Empty lines are ignored.
       </p>
       <AdminActionForm
         action={addInventoryAction}

@@ -8,6 +8,7 @@ import { writeAuditLog } from "@/server/services/audit.service";
 import {
   derivePaymentStatus,
 } from "@/lib/order/payment-status";
+import type { OrderQueueFilter } from "@/lib/admin/labels";
 import type { AdminOrderDetail, AdminOrderListItem } from "@/types/admin";
 import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
 
@@ -147,7 +148,7 @@ export async function transitionOrderStatus(params: {
 
 export async function listAdminOrders(
   status?: OrderStatusType,
-  options?: { limit?: number; search?: string },
+  options?: { limit?: number; search?: string; queue?: OrderQueueFilter },
 ): Promise<AdminOrderListItem[]> {
   const limit = options?.limit ?? 50;
   const search = options?.search?.trim();
@@ -162,6 +163,7 @@ export async function listAdminOrders(
       total_cents,
       currency,
       submitted_at,
+      payment_received_at,
       guest_email,
       user_id,
       profiles (display_name),
@@ -171,12 +173,24 @@ export async function listAdminOrders(
     .order("submitted_at", { ascending: false })
     .limit(limit);
 
-  if (status) {
+  if (options?.queue === "unpaid") {
+    query = query.in("status", [
+      OrderStatus.PENDING_REVIEW,
+      OrderStatus.AWAITING_PAYMENT,
+    ]);
+  } else if (options?.queue === "fulfill") {
+    query = query.in("status", [
+      OrderStatus.PAYMENT_RECEIVED,
+      OrderStatus.PROCESSING,
+    ]);
+  } else if (status) {
     query = query.eq("status", status);
   }
 
   if (search) {
-    query = query.ilike("order_number", `%${search}%`);
+    query = query.or(
+      `order_number.ilike.%${search}%,guest_email.ilike.%${search}%`,
+    );
   }
 
   const { data, error } = await query;
@@ -190,6 +204,7 @@ export async function listAdminOrders(
       total_cents: number;
       currency: string;
       submitted_at: string;
+      payment_received_at: string | null;
       guest_email: string | null;
       user_id: string | null;
       profiles:
@@ -207,6 +222,7 @@ export async function listAdminOrders(
       id: r.id,
       orderNumber: r.order_number,
       status: r.status,
+      paymentStatus: derivePaymentStatus(r.status, r.payment_received_at),
       totalCents: r.total_cents,
       currency: r.currency,
       submittedAt: r.submitted_at,

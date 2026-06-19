@@ -321,6 +321,7 @@ export type AdminCategoryRow = {
   id: string;
   sortOrder: number;
   iconUrl: string | null;
+  isActive: boolean;
   enName: string;
   enSlug: string;
   enDescription: string;
@@ -338,6 +339,7 @@ export async function listAdminCategories(): Promise<AdminCategoryRow[]> {
       id,
       sort_order,
       icon_url,
+      is_active,
       category_translations (locale, name, slug, description)
     `,
     )
@@ -350,6 +352,7 @@ export async function listAdminCategories(): Promise<AdminCategoryRow[]> {
       id: string;
       sort_order: number;
       icon_url: string | null;
+      is_active: boolean;
       category_translations: Array<{
         locale: string;
         name: string;
@@ -363,6 +366,7 @@ export async function listAdminCategories(): Promise<AdminCategoryRow[]> {
       id: r.id,
       sortOrder: r.sort_order,
       iconUrl: r.icon_url,
+      isActive: r.is_active,
       enName: en?.name ?? "",
       enSlug: en?.slug ?? "",
       enDescription: en?.description ?? "",
@@ -431,6 +435,7 @@ export async function saveCategory(
       .update({
         sort_order: input.sortOrder,
         icon_url: input.iconUrl?.trim() || null,
+        is_active: true,
       })
       .eq("id", categoryId);
     if (error) throw error;
@@ -440,6 +445,7 @@ export async function saveCategory(
       .insert({
         sort_order: input.sortOrder,
         icon_url: input.iconUrl?.trim() || null,
+        is_active: true,
       })
       .select("id")
       .single();
@@ -467,6 +473,31 @@ export async function saveCategory(
   }
 
   return { categoryId: categoryId! };
+}
+
+export async function archiveCategory(categoryId: string): Promise<void> {
+  const admin = createAdminClient();
+
+  const { count, error: countError } = await admin
+    .from("products")
+    .select("id", { count: "exact", head: true })
+    .eq("category_id", categoryId)
+    .neq("status", "archived");
+
+  if (countError) throw countError;
+  if ((count ?? 0) > 0) {
+    throw new ServiceError(
+      "VALIDATION",
+      "Cannot hide this category while live products are assigned to it. Archive or move those products first.",
+    );
+  }
+
+  const { error } = await admin
+    .from("categories")
+    .update({ is_active: false })
+    .eq("id", categoryId);
+
+  if (error) throw error;
 }
 
 export type AdminCouponRow = {

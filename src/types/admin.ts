@@ -5,6 +5,7 @@ export type AdminOrderListItem = {
   id: string;
   orderNumber: string;
   status: OrderStatus;
+  paymentStatus: PaymentStatus;
   totalCents: number;
   currency: string;
   submittedAt: string;

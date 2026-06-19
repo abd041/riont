@@ -1,48 +1,15 @@
 "use client";
 
-import { OrderStatus } from "@/lib/domain/enums";
-import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
-import { getOrderStatusLabel, getDeliveryModeLabel } from "@/lib/admin/labels";
+import { getDeliveryModeLabel } from "@/lib/admin/labels";
 import { AdminActionForm } from "./admin-action-form";
 import {
   fulfillAutoItemAction,
   manualDeliverAction,
-  transitionOrderAction,
   updateAdminNoteAction,
 } from "@/server/actions/admin-order.actions";
 import type { AdminOrderDetail, AdminOrderItem } from "@/types/admin";
 
-export function AdminStatusActions({
-  order,
-  allowedNext,
-}: {
-  order: AdminOrderDetail;
-  allowedNext: OrderStatusType[];
-}) {
-  if (allowedNext.length === 0) return null;
-
-  return (
-    <div className="admin-panel admin-panel--flat">
-      <h2 className="font-semibold">Update status</h2>
-      <div className="mt-4 flex flex-wrap gap-2">
-        {allowedNext.map((status) => (
-          <AdminActionForm
-            key={status}
-            action={transitionOrderAction}
-            submitLabel={getOrderStatusLabel(status)}
-            variant={status === OrderStatus.CANCELLED ? "outline" : "primary"}
-          >
-            <input type="hidden" name="orderId" value={order.id} />
-            <input type="hidden" name="toStatus" value={status} />
-          </AdminActionForm>
-        ))}
-      </div>
-      <p className="mt-3 text-xs text-[var(--text-muted)]">
-        Moving to Processing will attempt auto-delivery for in-stock auto items.
-      </p>
-    </div>
-  );
-}
+export { AdminOrderWorkflowCallout, AdminStatusActions } from "./admin-order-workflow";
 
 export function AdminNoteForm({ order }: { order: AdminOrderDetail }) {
   return (

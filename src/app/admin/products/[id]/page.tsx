@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { AdminInventoryPanel } from "@/features/admin/components/admin-inventory-panel";
 import { AdminProductCreatedBanner } from "@/features/admin/components/admin-product-created-banner";
 import {
   getAdminProductEdit,
@@ -13,6 +14,7 @@ import { AdminProductForm } from "@/features/admin/components/admin-product-form
 import { AdminProductExtras } from "@/features/admin/components/admin-product-extras";
 import { AdminProductReviews } from "@/features/admin/components/admin-product-reviews";
 import { listAdminProductReviews } from "@/server/services/admin-review.service";
+import { getAvailableStock } from "@/server/services/inventory.service";
 import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
 import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
 
@@ -38,6 +40,11 @@ export default async function AdminEditProductPage({
 
   if (!product) notFound();
 
+  const availableStock =
+    product.deliveryMode === "auto"
+      ? await getAvailableStock(product.id)
+      : 0;
+
   return (
     <AdminPageShell>
       <Link href="/admin/products" className="admin-back">
@@ -62,6 +69,15 @@ export default async function AdminEditProductPage({
       )}
 
       <AdminProductForm product={product} categories={categories} />
+
+      {product.deliveryMode === "auto" && (
+        <AdminInventoryPanel
+          productId={product.id}
+          productName={product.en.name}
+          availableStock={availableStock}
+        />
+      )}
+
       <AdminProductExtras
         productId={product.id}
         initialVariants={variants}

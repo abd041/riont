@@ -1,5 +1,8 @@
 import Link from "next/link";
-import { listAdminCustomers } from "@/server/services/admin-customer.service";
+import {
+  listAdminCustomers,
+  listAdminGuestCustomers,
+} from "@/server/services/admin-customer.service";
 import {
   AdminDataTable,
   AdminTableEmpty,
@@ -18,13 +21,16 @@ export default async function AdminCustomersPage({
   searchParams: Promise<{ q?: string }>;
 }) {
   const { q } = await searchParams;
-  const customers = await listAdminCustomers(200, q);
+  const [customers, guests] = await Promise.all([
+    listAdminCustomers(200, q),
+    listAdminGuestCustomers(100, q),
+  ]);
 
   return (
     <AdminPageShell>
       <AdminPageHeader
         title="Customers"
-        description="Registered accounts with order activity and lifetime value."
+        description="Registered accounts and guest buyers who checked out without signing in."
       />
 
       <AdminPageActions>
@@ -36,31 +42,78 @@ export default async function AdminCustomersPage({
         <AdminExportCustomersLink />
       </AdminPageActions>
 
-      <AdminDataTable
-        columns={["Email", "Name", "Locale", "Orders", "Spent", "Joined"]}
-        scrollable
-      >
-        {customers.length === 0 ? (
-          <AdminTableEmpty colSpan={6} message="No customers found." />
-        ) : (
-          customers.map((customer) => (
-            <tr key={customer.id}>
-              <td dir="ltr">
-                <Link href={`/admin/customers/${customer.id}`} className="admin-table__link">
-                  {customer.email}
-                </Link>
-              </td>
-              <td>{customer.displayName ?? "—"}</td>
-              <td className="uppercase">{customer.locale}</td>
-              <td>{customer.orderCount}</td>
-              <td dir="ltr">{(customer.totalSpentCents / 100).toFixed(2)} USD</td>
-              <td className="text-[var(--text-muted)]">
-                {new Date(customer.createdAt).toLocaleDateString("en")}
-              </td>
-            </tr>
-          ))
-        )}
-      </AdminDataTable>
+      <section className="admin-customer-section">
+        <h2 className="admin-dashboard-section__title">Registered accounts</h2>
+        <AdminDataTable
+          columns={["Email", "Name", "Locale", "Orders", "Spent", "Joined"]}
+          scrollable
+        >
+          {customers.length === 0 ? (
+            <AdminTableEmpty colSpan={6} message="No registered customers found." />
+          ) : (
+            customers.map((customer) => (
+              <tr key={customer.id}>
+                <td dir="ltr">
+                  <Link
+                    href={`/admin/customers/${customer.id}`}
+                    className="admin-table__link"
+                  >
+                    {customer.email}
+                  </Link>
+                </td>
+                <td>{customer.displayName ?? "—"}</td>
+                <td className="uppercase">{customer.locale}</td>
+                <td>{customer.orderCount}</td>
+                <td dir="ltr">{(customer.totalSpentCents / 100).toFixed(2)} USD</td>
+                <td className="text-[var(--text-muted)]">
+                  {new Date(customer.createdAt).toLocaleDateString("en")}
+                </td>
+              </tr>
+            ))
+          )}
+        </AdminDataTable>
+      </section>
+
+      <section className="admin-customer-section">
+        <h2 className="admin-dashboard-section__title">Guest buyers</h2>
+        <p className="mb-3 text-sm text-[var(--text-muted)]">
+          Checkout without an account — view order history by email.
+        </p>
+        <AdminDataTable
+          columns={["Email", "Orders", "Spent", "Last order", ""]}
+          scrollable
+        >
+          {guests.length === 0 ? (
+            <AdminTableEmpty colSpan={5} message="No guest buyers found." />
+          ) : (
+            guests.map((guest) => (
+              <tr key={guest.email}>
+                <td dir="ltr">
+                  <Link
+                    href={`/admin/customers/guest?email=${encodeURIComponent(guest.email)}`}
+                    className="admin-table__link"
+                  >
+                    {guest.email}
+                  </Link>
+                </td>
+                <td>{guest.orderCount}</td>
+                <td dir="ltr">{(guest.totalSpentCents / 100).toFixed(2)} USD</td>
+                <td className="text-[var(--text-muted)]">
+                  {new Date(guest.lastOrderAt).toLocaleDateString("en")}
+                </td>
+                <td className="text-end">
+                  <Link
+                    href={`/admin/orders/${guest.latestOrderId}`}
+                    className="admin-table__action"
+                  >
+                    Latest order
+                  </Link>
+                </td>
+              </tr>
+            ))
+          )}
+        </AdminDataTable>
+      </section>
     </AdminPageShell>
   );
 }

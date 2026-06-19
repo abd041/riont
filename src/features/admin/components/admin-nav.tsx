@@ -57,11 +57,18 @@ function isLinkActive(pathname: string, link: NavLink): boolean {
   return pathname === link.href || pathname.startsWith(`${link.href}/`);
 }
 
-export function AdminNav() {
+type AdminNavProps = {
+  variant?: "sidebar" | "horizontal";
+};
+
+export function AdminNav({ variant = "sidebar" }: AdminNavProps) {
   const pathname = usePathname();
 
   return (
-    <nav className="admin-nav" aria-label="Admin navigation">
+    <nav
+      className={cn("admin-nav", variant === "sidebar" && "admin-nav--sidebar")}
+      aria-label="Admin navigation"
+    >
       {ADMIN_NAV_GROUPS.map((group) => (
         <div key={group.label ?? "overview"} className="admin-nav__group">
           {group.label && (

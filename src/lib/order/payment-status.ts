@@ -20,7 +20,7 @@ export function derivePaymentStatus(
 }
 
 export const PAYMENT_STATUS_LABELS: Record<PaymentStatus, string> = {
-  unpaid: "Unpaid",
-  paid: "Paid",
-  failed: "Failed / cancelled",
+  unpaid: "Awaiting confirmation",
+  paid: "Payment confirmed",
+  failed: "Cancelled / refunded",
 };

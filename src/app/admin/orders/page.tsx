@@ -3,8 +3,11 @@ import { OrderStatus } from "@/lib/domain/enums";
 import type { OrderStatus as OrderStatusType } from "@/lib/domain/enums";
 import {
   getOrderStatusLabel,
+  ORDER_QUEUE_FILTER_LABELS,
   ORDER_STATUS_FILTER_LABELS,
+  type OrderQueueFilter,
 } from "@/lib/admin/labels";
+import { PAYMENT_STATUS_LABELS } from "@/lib/order/payment-status";
 import { listAdminOrders } from "@/server/services/admin-order.service";
 import { OrderStatusBadge } from "@/features/orders/components/order-status-badge";
 import {
@@ -20,7 +23,12 @@ import {
   AdminSearchForm,
 } from "@/features/admin/components/admin-page-actions";
 
-const FILTERS: Array<{ label: string; value?: OrderStatusType }> = [
+const QUEUE_FILTERS: Array<{ label: string; value?: OrderQueueFilter }> = [
+  { label: ORDER_QUEUE_FILTER_LABELS.unpaid, value: "unpaid" },
+  { label: ORDER_QUEUE_FILTER_LABELS.fulfill, value: "fulfill" },
+];
+
+const STATUS_FILTERS: Array<{ label: string; value?: OrderStatusType }> = [
   { label: "All" },
   { label: ORDER_STATUS_FILTER_LABELS[OrderStatus.PENDING_REVIEW], value: OrderStatus.PENDING_REVIEW },
   { label: ORDER_STATUS_FILTER_LABELS[OrderStatus.AWAITING_PAYMENT], value: OrderStatus.AWAITING_PAYMENT },
@@ -32,17 +40,24 @@ const FILTERS: Array<{ label: string; value?: OrderStatusType }> = [
 export default async function AdminOrdersPage({
   searchParams,
 }: {
-  searchParams: Promise<{ status?: string; q?: string }>;
+  searchParams: Promise<{ status?: string; q?: string; queue?: string }>;
 }) {
-  const { status: statusParam, q } = await searchParams;
-  const statusFilter = FILTERS.find((f) => f.value === statusParam)?.value;
-  const orders = await listAdminOrders(statusFilter, { search: q, limit: 100 });
+  const { status: statusParam, q, queue: queueParam } = await searchParams;
+  const queueFilter = QUEUE_FILTERS.find((f) => f.value === queueParam)?.value;
+  const statusFilter = queueFilter
+    ? undefined
+    : STATUS_FILTERS.find((f) => f.value === statusParam)?.value;
+  const orders = await listAdminOrders(statusFilter, {
+    search: q,
+    limit: 100,
+    queue: queueFilter,
+  });
 
   return (
     <AdminPageShell>
       <AdminPageHeader
         title="Orders"
-        description="External payment model: new rows are order requests (unpaid). Mark Payment received only after you verify the transfer."
+        description="Manual payment workflow: review new orders, confirm payment after you verify the transfer, then deliver items."
       />
 
       <AdminPageActions>
@@ -50,22 +65,36 @@ export default async function AdminOrdersPage({
           basePath="/admin/orders"
           placeholder="Search order number…"
           defaultValue={q}
-          hiddenParams={{ status: statusFilter }}
+          hiddenParams={{ status: statusFilter, queue: queueFilter }}
         />
         <AdminExportOrdersLink status={statusFilter} />
       </AdminPageActions>
 
-      <AdminFilterPills
-        filters={FILTERS}
-        activeValue={statusFilter}
-        basePath="/admin/orders"
-      />
+      <div className="admin-filter-section">
+        <p className="admin-filter-section__label">Queues</p>
+        <AdminFilterPills
+          filters={QUEUE_FILTERS}
+          activeValue={queueFilter}
+          basePath="/admin/orders"
+          paramName="queue"
+        />
+      </div>
+
+      <div className="admin-filter-section">
+        <p className="admin-filter-section__label">Status</p>
+        <AdminFilterPills
+          filters={STATUS_FILTERS}
+          activeValue={statusFilter}
+          basePath="/admin/orders"
+          paramName="status"
+        />
+      </div>
 
       <AdminDataTable
-        columns={["Order", "Customer", "Product", "Status", "Total", "Submitted"]}
+        columns={["Order", "Customer", "Product", "Payment", "Status", "Total", "Submitted"]}
       >
         {orders.length === 0 ? (
-          <AdminTableEmpty colSpan={6} message="No orders found." />
+          <AdminTableEmpty colSpan={7} message="No orders found." />
         ) : (
           orders.map((order) => (
             <tr key={order.id}>
@@ -80,6 +109,13 @@ export default async function AdminOrdersPage({
               </td>
               <td>{order.customerLabel}</td>
               <td>{order.productSummary}</td>
+              <td>
+                <span
+                  className={`admin-payment-badge admin-payment-badge--${order.paymentStatus}`}
+                >
+                  {PAYMENT_STATUS_LABELS[order.paymentStatus]}
+                </span>
+              </td>
               <td>
                 <OrderStatusBadge
                   status={order.status}

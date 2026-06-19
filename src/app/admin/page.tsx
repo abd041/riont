@@ -41,15 +41,15 @@ export default async function AdminDashboardPage() {
         <h2 className="admin-dashboard-section__title">Needs your attention</h2>
         <div className="admin-stats admin-stats--dashboard">
           <Link
-            href="/admin/orders?status=pending_review"
+            href="/admin/orders?queue=unpaid"
             className="admin-stat admin-stat--action"
           >
-            <p className="admin-stat__label">New orders & awaiting payment</p>
+            <p className="admin-stat__label">Unpaid — needs confirmation</p>
             <p className="admin-stat__value">{stats.ordersNewOrAwaitingPayment}</p>
-            <p className="admin-stat__hint">Review and confirm payment</p>
+            <p className="admin-stat__hint">Review and confirm payment manually</p>
           </Link>
           <Link
-            href="/admin/orders?status=payment_received"
+            href="/admin/orders?queue=fulfill"
             className="admin-stat admin-stat--action"
           >
             <p className="admin-stat__label">Paid — ready to deliver</p>

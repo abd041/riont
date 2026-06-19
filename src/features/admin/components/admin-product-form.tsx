@@ -161,6 +161,7 @@ export function AdminProductForm({
     <form
       action={saveAction}
       onSubmit={handleSubmit}
+      encType="multipart/form-data"
       className="admin-panel admin-panel--flat space-y-8"
     >
       {product && <input type="hidden" name="productId" value={product.id} />}

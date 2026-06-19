@@ -7,6 +7,7 @@ import { requireAdmin } from "@/lib/auth/require-admin";
 import { writeAuditLog } from "@/server/services/audit.service";
 import {
   archiveProduct,
+  archiveCategory,
   saveCategory,
   saveCoupon,
   saveProduct,
@@ -223,6 +224,37 @@ export async function saveCategoryAction(
       };
     }
     return { success: false, error: "Could not save category. Please try again." };
+  }
+}
+
+export async function archiveCategoryAction(
+  _prev: CatalogActionResult | null,
+  formData: FormData,
+): Promise<CatalogActionResult> {
+  const categoryId = formData.get("categoryId");
+  if (typeof categoryId !== "string" || !categoryId) {
+    return { success: false, error: "Invalid category" };
+  }
+
+  try {
+    const { user } = await requireAdmin();
+    await archiveCategory(categoryId);
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "category.archived",
+      entityType: "category",
+      entityId: categoryId,
+    });
+    revalidatePath("/admin/categories");
+    revalidatePath("/en/categories");
+    revalidatePath("/ar/categories");
+    return { success: true, message: "Category hidden from storefront" };
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    if (error instanceof ServiceError) {
+      return { success: false, error: error.message };
+    }
+    return { success: false, error: "Could not archive category" };
   }
 }
 

@@ -10,6 +10,7 @@ import { OrderStatusBadge } from "@/features/orders/components/order-status-badg
 import {
   AdminNoteForm,
   AdminOrderItemsPanel,
+  AdminOrderWorkflowCallout,
   AdminStatusActions,
 } from "@/features/admin/components/admin-order-actions";
 import { AdminInventoryPanel } from "@/features/admin/components/admin-inventory-panel";
@@ -76,6 +77,8 @@ export default async function AdminOrderDetailPage({
         }
       />
 
+      <AdminOrderWorkflowCallout status={order.status} />
+
       <div className="admin-layout-grid">
         <div className="space-y-5">
           <AdminOrderItemsPanel order={order} />
@@ -120,7 +123,45 @@ export default async function AdminOrderDetailPage({
         </div>
 
         <aside className="space-y-5">
-          <AdminPanel title="Summary">
+          <AdminStatusActions order={order} allowedNext={allowedNext} />
+
+          <AdminPanel title="Customer">
+            <div className="admin-summary-row">
+              <span className="admin-summary-row__label">Contact</span>
+              <span className="text-sm" dir="ltr">
+                {order.guestEmail ?? "Registered account"}
+              </span>
+            </div>
+            {order.userId && (
+              <div className="admin-summary-row">
+                <span className="admin-summary-row__label">Profile</span>
+                <Link
+                  href={`/admin/customers/${order.userId}`}
+                  className="text-sm text-accent-400 hover:text-accent-300"
+                >
+                  View customer →
+                </Link>
+              </div>
+            )}
+            {order.guestEmail && (
+              <div className="admin-summary-row">
+                <span className="admin-summary-row__label">Guest profile</span>
+                <Link
+                  href={`/admin/customers/guest?email=${encodeURIComponent(order.guestEmail)}`}
+                  className="text-sm text-accent-400 hover:text-accent-300"
+                >
+                  View guest history →
+                </Link>
+              </div>
+            )}
+            {order.guestEmail && (
+              <p className="mt-2 text-xs text-[var(--text-muted)]">
+                Guest checkout — orders grouped by email in Customers → Guest buyers.
+              </p>
+            )}
+          </AdminPanel>
+
+          <AdminPanel title="Payment summary">
             <div className="admin-summary-row">
               <span className="admin-summary-row__label">Payment</span>
               <span
@@ -171,7 +212,6 @@ export default async function AdminOrderDetailPage({
             </AdminPanel>
           )}
 
-          <AdminStatusActions order={order} allowedNext={allowedNext} />
           <AdminNoteForm order={order} />
 
           {stockByProduct.map((p) => (

@@ -78,12 +78,13 @@ export async function notifyOrderSubmitted(orderId: string): Promise<void> {
 
   await sendEmail({ to: recipient.email, subject, html });
 
-  await notifyAdminsNewOrder(recipient.orderNumber, recipient.locale);
+  await notifyAdminsNewOrder(orderId, recipient.orderNumber, recipient.locale);
 }
 
 async function notifyAdminsNewOrder(
+  orderId: string,
   orderNumber: string,
-  locale: string,
+  _locale: string,
 ): Promise<void> {
   const admin = createAdminClient();
   const { data: admins } = await admin
@@ -92,9 +93,13 @@ async function notifyAdminsNewOrder(
     .eq("role", "admin");
 
   const base = appUrl();
-  const adminUrl = `${base}/admin/orders`;
-  const subject = `New order request ${orderNumber}`;
-  const html = `<p>A new <strong>order request</strong> <strong>${orderNumber}</strong> is pending review (payment not confirmed yet).</p><p><a href="${adminUrl}">Open admin queue</a></p>`;
+  const adminUrl = `${base}/admin/orders/${orderId}`;
+  const subject = `New order ${orderNumber} — confirm payment manually`;
+  const html = `
+    <p>A customer placed order <strong>${orderNumber}</strong>.</p>
+    <p>Payment is <strong>not</strong> automatic — review the order and confirm payment only after you verify the transfer.</p>
+    <p><a href="${adminUrl}">Open order in admin</a> · <a href="${base}/admin/orders?queue=unpaid">Unpaid queue</a></p>
+  `;
 
   for (const row of admins ?? []) {
     const email = await getUserEmail((row as { id: string }).id);
@@ -102,8 +107,6 @@ async function notifyAdminsNewOrder(
       await sendEmail({ to: email, subject, html });
     }
   }
-
-  void locale;
 }
 
 export async function notifyOrderStatusChanged(

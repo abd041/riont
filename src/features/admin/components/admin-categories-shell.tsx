@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { cn } from "@/utils/cn";
 import type { AdminCategoryRow } from "@/server/services/admin-catalog.service";
 import { AdminCategoryForm } from "./admin-category-form";
+import { AdminCategoryArchiveButton } from "./admin-category-archive-button";
 import { AdminDataTable, AdminTableEmpty } from "./admin-data-table";
 import { AdminPanel } from "./admin-panel";
 
@@ -38,7 +39,7 @@ export function AdminCategoriesShell({
         {editing && (
           <p className="mb-4 text-sm text-[var(--text-muted)]">
             Update names, link names, or order below.{" "}
-            <Link href="/admin/categories" className="text-[#a78bfa] underline">
+            <Link href="/admin/categories" className="text-accent-400 underline">
               Add a different category
             </Link>
           </p>
@@ -51,6 +52,18 @@ export function AdminCategoriesShell({
             router.refresh();
           }}
         />
+        {editing?.isActive && (
+          <AdminCategoryArchiveButton
+            categoryId={editing.id}
+            categoryName={editing.enName}
+          />
+        )}
+        {editing && !editing.isActive && (
+          <p className="mt-4 text-sm text-amber-400/90">
+            This category is hidden from the storefront. Save changes to restore it
+            to live.
+          </p>
+        )}
       </AdminPanel>
 
       <div>
@@ -58,10 +71,10 @@ export function AdminCategoriesShell({
         <p className="mb-3 text-sm text-[var(--text-muted)]">
           Click a row or Edit to change an existing category.
         </p>
-        <AdminDataTable columns={["English", "Arabic", "Order", ""]}>
+        <AdminDataTable columns={["English", "Arabic", "Order", "Status", ""]}>
           {categories.length === 0 ? (
             <AdminTableEmpty
-              colSpan={4}
+              colSpan={5}
               message="No categories yet. Use the form above to add your first one."
             />
           ) : (
@@ -90,6 +103,16 @@ export function AdminCategoriesShell({
                     </span>
                   </td>
                   <td className="text-center">{c.sortOrder}</td>
+                  <td>
+                    <span
+                      className={cn(
+                        "admin-badge",
+                        c.isActive ? "admin-badge--live" : "admin-badge--muted",
+                      )}
+                    >
+                      {c.isActive ? "Live" : "Hidden"}
+                    </span>
+                  </td>
                   <td className="text-end">
                     <Link
                       href={`/admin/categories?edit=${c.id}`}

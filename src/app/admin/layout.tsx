@@ -39,7 +39,6 @@ export default async function AdminLayout({
                 </Link>
                 <p className="admin-header__title">Admin</p>
               </div>
-              <AdminNav />
               <div className="admin-header__meta">
                 <span>{profile.display_name ?? profile.id.slice(0, 8)}</span>
                 <Link href="/en" className="admin-header__store-link">
@@ -50,9 +49,14 @@ export default async function AdminLayout({
             </div>
           </header>
 
-          <main className="admin-main">
-            <div className="admin-container">{children}</div>
-          </main>
+          <div className="admin-shell">
+            <aside className="admin-sidebar">
+              <AdminNav variant="sidebar" />
+            </aside>
+            <main className="admin-main">
+              <div className="admin-container">{children}</div>
+            </main>
+          </div>
         </div>
         <Toaster theme="dark" richColors position="top-center" />
       </body>

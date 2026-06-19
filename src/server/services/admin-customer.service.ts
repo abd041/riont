@@ -185,6 +185,151 @@ export async function getAdminCustomerDetail(
   };
 }
 
+export type AdminGuestCustomerListItem = {
+  email: string;
+  orderCount: number;
+  totalSpentCents: number;
+  lastOrderAt: string;
+  latestOrderId: string;
+  latestOrderNumber: string;
+};
+
+export type AdminGuestCustomerDetail = {
+  email: string;
+  orderCount: number;
+  totalSpentCents: number;
+  orders: AdminCustomerOrderRow[];
+};
+
+export async function listAdminGuestCustomers(
+  limit = 100,
+  search?: string,
+): Promise<AdminGuestCustomerListItem[]> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("orders")
+    .select("id, order_number, guest_email, total_cents, submitted_at")
+    .not("guest_email", "is", null)
+    .order("submitted_at", { ascending: false })
+    .limit(500);
+
+  if (error) throw error;
+
+  const byEmail = new Map<
+    string,
+    {
+      orderCount: number;
+      totalSpentCents: number;
+      lastOrderAt: string;
+      latestOrderId: string;
+      latestOrderNumber: string;
+    }
+  >();
+
+  for (const raw of data ?? []) {
+    const row = raw as {
+      id: string;
+      order_number: string;
+      guest_email: string | null;
+      total_cents: number;
+      submitted_at: string;
+    };
+    const email = row.guest_email?.trim().toLowerCase();
+    if (!email) continue;
+
+    const existing = byEmail.get(email);
+    if (!existing) {
+      byEmail.set(email, {
+        orderCount: 1,
+        totalSpentCents: row.total_cents,
+        lastOrderAt: row.submitted_at,
+        latestOrderId: row.id,
+        latestOrderNumber: row.order_number,
+      });
+    } else {
+      existing.orderCount += 1;
+      existing.totalSpentCents += row.total_cents;
+      if (row.submitted_at > existing.lastOrderAt) {
+        existing.lastOrderAt = row.submitted_at;
+        existing.latestOrderId = row.id;
+        existing.latestOrderNumber = row.order_number;
+      }
+    }
+  }
+
+  const needle = search?.trim().toLowerCase();
+
+  return [...byEmail.entries()]
+    .map(([email, stats]) => ({
+      email,
+      ...stats,
+    }))
+    .filter((g) => !needle || g.email.includes(needle))
+    .sort((a, b) => b.lastOrderAt.localeCompare(a.lastOrderAt))
+    .slice(0, limit);
+}
+
+export async function getAdminGuestCustomerDetail(
+  email: string,
+): Promise<AdminGuestCustomerDetail | null> {
+  const normalized = email.trim().toLowerCase();
+  if (!normalized) return null;
+
+  const admin = createAdminClient();
+  const { data: orders, error } = await admin
+    .from("orders")
+    .select(
+      `
+      id,
+      order_number,
+      status,
+      total_cents,
+      currency,
+      submitted_at,
+      order_items (product_name_snapshot)
+    `,
+    )
+    .ilike("guest_email", normalized)
+    .order("submitted_at", { ascending: false })
+    .limit(50);
+
+  if (error) throw error;
+  if (!orders?.length) return null;
+
+  const orderRows: AdminCustomerOrderRow[] = orders.map((raw) => {
+    const row = raw as {
+      id: string;
+      order_number: string;
+      status: OrderStatus;
+      total_cents: number;
+      currency: string;
+      submitted_at: string;
+      order_items: Array<{ product_name_snapshot: Record<string, string> }>;
+    };
+    const first = row.order_items?.[0]?.product_name_snapshot;
+    const productName = first?.en ?? first?.ar ?? "Product";
+    return {
+      id: row.id,
+      orderNumber: row.order_number,
+      status: row.status,
+      totalCents: row.total_cents,
+      currency: row.currency,
+      submittedAt: row.submitted_at,
+      productSummary:
+        row.order_items.length > 1
+          ? `${productName} +${row.order_items.length - 1}`
+          : productName,
+    };
+  });
+
+  return {
+    email: normalized,
+    orderCount: orderRows.length,
+    totalSpentCents: orderRows.reduce((sum, o) => sum + o.totalCents, 0),
+    orders: orderRows,
+  };
+}
+
 export type AdminCustomerExportRow = {
   email: string;
   displayName: string;

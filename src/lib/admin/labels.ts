@@ -12,7 +12,7 @@ import type { SupportTicketStatus, SupportTicketType } from "@/types/support";
 export const ORDER_STATUS_LABELS: Record<OrderStatusType, string> = {
   [OrderStatus.PENDING_REVIEW]: "New — needs review",
   [OrderStatus.AWAITING_PAYMENT]: "Waiting for payment",
-  [OrderStatus.PAYMENT_RECEIVED]: "Paid — ready to process",
+  [OrderStatus.PAYMENT_RECEIVED]: "Payment confirmed",
   [OrderStatus.PROCESSING]: "Being prepared",
   [OrderStatus.DELIVERED]: "Delivered",
   [OrderStatus.COMPLETED]: "Completed",
@@ -22,11 +22,25 @@ export const ORDER_STATUS_LABELS: Record<OrderStatusType, string> = {
   [OrderStatus.ON_HOLD]: "On hold",
 };
 
+/** Action button labels — what the admin is doing when they click */
+export const ORDER_STATUS_ACTION_LABELS: Record<OrderStatusType, string> = {
+  [OrderStatus.PENDING_REVIEW]: "Mark as new",
+  [OrderStatus.AWAITING_PAYMENT]: "Send payment instructions",
+  [OrderStatus.PAYMENT_RECEIVED]: "Confirm payment received",
+  [OrderStatus.PROCESSING]: "Start processing",
+  [OrderStatus.DELIVERED]: "Mark all delivered",
+  [OrderStatus.COMPLETED]: "Mark complete",
+  [OrderStatus.REFUNDED]: "Mark refunded",
+  [OrderStatus.CANCELLED]: "Cancel order",
+  [OrderStatus.NEEDS_CUSTOMER_RESPONSE]: "Request customer reply",
+  [OrderStatus.ON_HOLD]: "Put on hold",
+};
+
 /** Shorter labels for filter pills */
 export const ORDER_STATUS_FILTER_LABELS: Record<OrderStatusType, string> = {
   [OrderStatus.PENDING_REVIEW]: "Needs review",
   [OrderStatus.AWAITING_PAYMENT]: "Awaiting payment",
-  [OrderStatus.PAYMENT_RECEIVED]: "Payment received",
+  [OrderStatus.PAYMENT_RECEIVED]: "Payment confirmed",
   [OrderStatus.PROCESSING]: "Processing",
   [OrderStatus.DELIVERED]: "Delivered",
   [OrderStatus.COMPLETED]: "Completed",
@@ -36,8 +50,117 @@ export const ORDER_STATUS_FILTER_LABELS: Record<OrderStatusType, string> = {
   [OrderStatus.ON_HOLD]: "On hold",
 };
 
+export const ORDER_QUEUE_FILTER_LABELS = {
+  unpaid: "Unpaid queue",
+  fulfill: "Ready to fulfill",
+} as const;
+
+export type OrderQueueFilter = keyof typeof ORDER_QUEUE_FILTER_LABELS;
+
 export function getOrderStatusLabel(status: OrderStatusType): string {
   return ORDER_STATUS_LABELS[status] ?? status;
+}
+
+export function getOrderStatusActionLabel(status: OrderStatusType): string {
+  return ORDER_STATUS_ACTION_LABELS[status] ?? getOrderStatusLabel(status);
+}
+
+/** Next-step guidance for manual payment workflow */
+export function getOrderWorkflowHint(status: OrderStatusType): {
+  title: string;
+  body: string;
+  tone: "info" | "warning" | "success" | "neutral";
+} {
+  switch (status) {
+    case OrderStatus.PENDING_REVIEW:
+      return {
+        title: "Step 1 — Review order",
+        body: "Check items and customer details. Send payment instructions when ready, or cancel if invalid.",
+        tone: "info",
+      };
+    case OrderStatus.AWAITING_PAYMENT:
+      return {
+        title: "Step 2 — Wait for payment",
+        body: "Customer should pay via bank transfer, WhatsApp, or your method in Settings. Only confirm payment after you verify the transfer.",
+        tone: "warning",
+      };
+    case OrderStatus.PAYMENT_RECEIVED:
+      return {
+        title: "Step 3 — Payment confirmed",
+        body: "Start processing to deliver codes or paste manual delivery for each line item.",
+        tone: "success",
+      };
+    case OrderStatus.PROCESSING:
+      return {
+        title: "Step 4 — Deliver items",
+        body: "Fulfill each line below (auto stock or manual paste), then mark the order delivered.",
+        tone: "info",
+      };
+    case OrderStatus.DELIVERED:
+      return {
+        title: "Step 5 — Wrap up",
+        body: "Mark complete when the customer has everything. Refund only if needed.",
+        tone: "neutral",
+      };
+    case OrderStatus.ON_HOLD:
+      return {
+        title: "On hold",
+        body: "Resume when ready — return to awaiting payment, start processing, or cancel.",
+        tone: "warning",
+      };
+    case OrderStatus.NEEDS_CUSTOMER_RESPONSE:
+      return {
+        title: "Waiting on customer",
+        body: "Resume processing when the customer replies, or cancel the order.",
+        tone: "warning",
+      };
+    default:
+      return {
+        title: "Order closed",
+        body: "No further action required unless you need to refund.",
+        tone: "neutral",
+      };
+  }
+}
+
+export function isPrimaryOrderAction(
+  fromStatus: OrderStatusType,
+  toStatus: OrderStatusType,
+): boolean {
+  if (toStatus === OrderStatus.CANCELLED || toStatus === OrderStatus.REFUNDED) {
+    return false;
+  }
+  if (
+    fromStatus === OrderStatus.AWAITING_PAYMENT &&
+    toStatus === OrderStatus.PAYMENT_RECEIVED
+  ) {
+    return true;
+  }
+  if (
+    fromStatus === OrderStatus.PAYMENT_RECEIVED &&
+    toStatus === OrderStatus.PROCESSING
+  ) {
+    return true;
+  }
+  if (
+    fromStatus === OrderStatus.PENDING_REVIEW &&
+    toStatus === OrderStatus.AWAITING_PAYMENT
+  ) {
+    return true;
+  }
+  if (
+    fromStatus === OrderStatus.PROCESSING &&
+    toStatus === OrderStatus.DELIVERED
+  ) {
+    return true;
+  }
+  if (
+    fromStatus === OrderStatus.DELIVERED &&
+    toStatus === OrderStatus.COMPLETED
+  ) {
+    return true;
+  }
+  return false;
 }
 
 export const TICKET_STATUS_LABELS: Record<SupportTicketStatus, string> = {
@@ -83,7 +206,7 @@ export function getDeliveryModeLabel(mode: DeliveryModeType | string): string {
 
 export const DELIVERY_MODE_HINTS: Record<DeliveryModeType, string> = {
   [DeliveryMode.AUTO]:
-    "The site sends codes or keys automatically when you mark the order as processing (you upload stock on the product edit page after saving).",
+    "The site sends codes or keys automatically when you start processing an order. Upload stock on this product page (one code or key per line).",
   [DeliveryMode.MANUAL]:
     "You paste delivery details yourself on each order after payment is confirmed.",
 };
