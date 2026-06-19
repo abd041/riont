@@ -31,7 +31,11 @@ export function SidebarIconRail({ onOpenMenu, menuOpen }: SidebarIconRailProps) 
     <aside className="nex-icon-rail" aria-label={t("browse")}>
       <div className="nex-icon-rail__ambient" aria-hidden />
       <Link href="/" className="nex-icon-rail__brand" aria-label={tCommon("brand")}>
-        <BrandLogo className="nex-brand-logo nex-brand-logo--rail" height={30} />
+        <BrandLogo
+          className="nex-brand-logo nex-brand-logo--rail nex-brand-logo--mark"
+          variant="mark"
+          height={38}
+        />
       </Link>
 
       <nav className="nex-icon-rail__nav" aria-label={t("browse")}>

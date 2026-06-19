@@ -14,7 +14,12 @@ export function TopbarBrand({ onNavigate }: { onNavigate?: () => void }) {
       className="nex-topbar-brand"
       aria-label={t("brand")}
     >
-      <BrandLogo className="nex-brand-logo nex-brand-logo--topbar" priority />
+      <BrandLogo
+        className="nex-brand-logo nex-brand-logo--topbar nex-brand-logo--mark"
+        variant="mark"
+        height={46}
+        priority
+      />
     </Link>
   );
 }

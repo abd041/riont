@@ -43,19 +43,35 @@
   width: auto;
   height: auto;
   object-fit: contain;
-  mix-blend-mode: screen;
   transition:
     transform 0.45s cubic-bezier(0.22, 1, 0.36, 1),
     filter 0.45s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.nex-brand-logo:not(.nex-brand-logo--mark) {
+  mix-blend-mode: screen;
+}
+
+.nex-brand-logo--mark {
+  mix-blend-mode: normal;
+  image-rendering: -webkit-optimize-contrast;
+  filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.35));
+}
+
 .nex-brand-logo--topbar {
-  height: 38px;
+  height: 46px;
   width: auto;
 }
 
 .nex-topbar-brand:hover .nex-brand-logo {
   transform: translateY(-1px);
+}
+
+.nex-topbar-brand:hover .nex-brand-logo--mark {
+  filter: drop-shadow(0 0 14px rgba(96, 165, 250, 0.5)) brightness(1.06);
+}
+
+.nex-topbar-brand:hover .nex-brand-logo:not(.nex-brand-logo--mark) {
   filter: brightness(1.08);
 }
 
@@ -80,7 +96,7 @@
 }
 
 .nex-brand-logo--rail {
-  height: 30px;
+  height: 38px;
   width: auto;
 }
 
