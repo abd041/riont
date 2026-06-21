@@ -1,5 +1,6 @@
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
+import { resolveFallbackLabel } from "@/lib/i18n/fallback-labels";
 import { isSupabaseConfigured } from "@/lib/env/public";
 import type {
   SubmitProductReviewInput,
@@ -195,7 +196,7 @@ export async function submitCustomerProductReview(
   const authorName =
     input.authorName?.trim() ||
     profileName?.trim() ||
-    (userId ? "Customer" : "");
+    (userId ? resolveFallbackLabel(input.locale, "anonymousCustomer") : "");
 
   if (!authorName) {
     return { success: false, code: "NAME_REQUIRED" };
@@ -263,7 +264,7 @@ export async function submitCustomerStoreReview(
   const authorName =
     input.authorName?.trim() ||
     profileName?.trim() ||
-    (userId ? "Customer" : "");
+    (userId ? resolveFallbackLabel(input.locale, "anonymousCustomer") : "");
 
   if (!authorName) {
     return { success: false, code: "NAME_REQUIRED" };

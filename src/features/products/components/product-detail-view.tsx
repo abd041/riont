@@ -59,11 +59,11 @@ export async function ProductDetailView({
           <Link
             href={backHref}
             className="nex-browse-back"
-            aria-label={tCatalog("breadcrumbHome")}
+            aria-label={tCatalog("backToBrowse")}
           >
             <ArrowLeft strokeWidth={1.5} />
           </Link>
-          <nav className="nex-pdp-breadcrumbs" aria-label="Breadcrumb">
+          <nav className="nex-pdp-breadcrumbs" aria-label={tCatalog("breadcrumbNav")}>
             <Link href="/">{tCatalog("breadcrumbHome")}</Link>
             <span aria-hidden>›</span>
             <Link href={backHref}>{categoryLabel}</Link>

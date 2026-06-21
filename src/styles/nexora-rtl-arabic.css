@@ -1,0 +1,35 @@
+/**
+ * RTL + Arabic typography overrides
+ */
+
+/* Back / forward directional icons */
+[dir="rtl"] .sf-page__back svg,
+[dir="rtl"] .nex-browse-back svg,
+[dir="rtl"] .nex-co-back svg,
+[dir="rtl"] .nex-hero-cta-primary svg {
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .sf-page__back:hover svg,
+[dir="rtl"] .nex-browse-back:hover svg,
+[dir="rtl"] .nex-co-back:hover svg {
+  transform: scaleX(-1);
+}
+
+/* Arabic: disable Latin-style uppercase + tracking */
+[lang="ar"] .nex-hero-title,
+[lang="ar"] .nex-hero-badge,
+[lang="ar"] .mp-sections--storefront-home .mp-section__title,
+[lang="ar"] .mp-sections--storefront-home .mp-row .mp-section__title,
+[lang="ar"] .nex-browse-section-label,
+[lang="ar"] .nex-pdp-related__title,
+[lang="ar"] .sf-legal-page__updated,
+[lang="ar"] .sf-auth-divider__label,
+[lang="ar"] .sf-checkout-step__label,
+[lang="ar"] .nex-pdp-bestseller,
+[lang="ar"] .sf-delivery-box__label,
+[lang="ar"] .sf-alert,
+[lang="ar"] .mp-badge {
+  text-transform: none;
+  letter-spacing: normal;
+}

@@ -2,6 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { ServiceError } from "@/lib/domain/errors";
 import { generateTicketNumber } from "@/lib/crypto/tokens";
 import { resolveSupportAttachmentUrl } from "@/lib/storage/media-url";
+import { resolveSupportSenderLabel } from "@/lib/i18n/support-labels";
 import {
   linkAttachmentToMessage,
   uploadSupportAttachment,
@@ -348,6 +349,7 @@ export async function getTicketByNumber(params: {
   ticketNumber: string;
   userId: string;
   asAdmin?: boolean;
+  locale?: string;
 }): Promise<SupportTicketDetail | null> {
   const admin = createAdminClient();
   const query = admin
@@ -393,7 +395,7 @@ export async function getTicketByNumber(params: {
     return null;
   }
 
-  return mapTicketDetail(row);
+  return mapTicketDetail(row, params.locale ?? "en");
 }
 
 export async function getTicketById(
@@ -434,10 +436,14 @@ export async function getTicketById(
     .maybeSingle();
 
   if (error || !data) return null;
-  return mapTicketDetail(data as unknown as Parameters<typeof mapTicketDetail>[0]);
+  return mapTicketDetail(
+    data as unknown as Parameters<typeof mapTicketDetail>[0],
+    "en",
+  );
 }
 
-function mapTicketDetail(row: {
+function mapTicketDetail(
+  row: {
   id: string;
   ticket_number: string;
   subject: string;
@@ -461,7 +467,7 @@ function mapTicketDetail(row: {
       mime_type: string | null;
     }>;
   }>;
-}): SupportTicketDetail {
+}, locale: string): SupportTicketDetail {
   const messages: SupportMessage[] = [...row.support_messages]
     .sort(
       (a, b) =>
@@ -473,10 +479,10 @@ function mapTicketDetail(row: {
         : msg.profiles;
       const senderLabel =
         msg.sender_type === "system"
-          ? "System"
+          ? resolveSupportSenderLabel(locale, "system")
           : msg.sender_type === "admin"
-            ? profile?.display_name ?? "Support"
-            : profile?.display_name ?? "You";
+            ? profile?.display_name ?? resolveSupportSenderLabel(locale, "support")
+            : profile?.display_name ?? resolveSupportSenderLabel(locale, "you");
 
       const attachments = (msg.support_message_attachments ?? []).map((a) => ({
         id: a.id,

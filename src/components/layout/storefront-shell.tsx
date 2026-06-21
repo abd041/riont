@@ -1,6 +1,7 @@
 "use client";
 
 import { X } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { MarketplaceFooter } from "@/features/homepage/components/marketplace/marketplace-footer";
 import { usePathname } from "@/i18n/navigation";
 import { useMobileNav } from "@/hooks/use-ui-store";
@@ -37,6 +38,7 @@ export function StorefrontShell({
 }) {
   const { isOpen: navOpen, toggle: toggleNav, setOpen: setNavOpen } = useMobileNav();
   const pathname = usePathname();
+  const tNav = useTranslations("nav");
   const isCheckout = isCheckoutPath(pathname);
   const hideNavSidebar = isCheckout;
 
@@ -105,7 +107,7 @@ export function StorefrontShell({
           size="icon"
           className="nex-nav-close fixed end-4 top-4 z-[60] flex h-11 w-11 items-center justify-center lg:hidden"
           onClick={closeNav}
-          aria-label="Close menu"
+          aria-label={tNav("closeMenu")}
         >
           <X className="h-5 w-5" />
         </Button>

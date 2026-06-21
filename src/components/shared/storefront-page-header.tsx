@@ -1,5 +1,8 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { ArrowLeft } from "lucide-react";
+import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import { cn } from "@/utils/cn";
 
@@ -23,6 +26,8 @@ export function StorefrontPageHeader({
   actions,
   className,
 }: StorefrontPageHeaderProps) {
+  const tCommon = useTranslations("common");
+
   return (
     <header className={cn("sf-page__header", className)}>
       <div className="sf-page__header-start">
@@ -30,7 +35,7 @@ export function StorefrontPageHeader({
           <Link
             href={backHref}
             className="sf-page__back"
-            aria-label={backLabel ?? "Back"}
+            aria-label={backLabel ?? tCommon("back")}
           >
             <ArrowLeft strokeWidth={1.5} aria-hidden />
           </Link>

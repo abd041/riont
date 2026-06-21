@@ -4,6 +4,8 @@ import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { requireAdmin } from "@/lib/auth/require-admin";
+import type { SupportErrorCode } from "@/lib/i18n/support-labels";
+import type { AdminActionResult } from "@/server/actions/admin-order.actions";
 import { getSession } from "@/server/services/auth.service";
 import { notifyTicketReplyToCustomer } from "@/server/services/notification.service";
 import {
@@ -19,9 +21,13 @@ import {
   updateTicketStatusSchema,
 } from "@/validations/support.schema";
 
+export type { SupportErrorCode };
+
 export type SupportActionResult =
   | { success: true; ticketNumber?: string }
-  | { success: false; error: string };
+  | { success: false; code: SupportErrorCode };
+
+export type AdminSupportActionResult = AdminActionResult;
 
 function getOptionalAttachment(formData: FormData): File | undefined {
   const raw = formData.get("attachment");
@@ -35,7 +41,7 @@ export async function createTicketAction(
 ): Promise<SupportActionResult> {
   const user = await getSession();
   if (!user) {
-    return { success: false, error: "Sign in required" };
+    return { success: false, code: "SIGN_IN_REQUIRED" };
   }
 
   const parsed = createTicketSchema.safeParse({
@@ -47,7 +53,7 @@ export async function createTicketAction(
   });
 
   if (!parsed.success) {
-    return { success: false, error: "Invalid form" };
+    return { success: false, code: "VALIDATION" };
   }
 
   try {
@@ -66,7 +72,7 @@ export async function createTicketAction(
     );
   } catch (error) {
     if (isRedirectError(error)) throw error;
-    return { success: false, error: "Could not create ticket" };
+    return { success: false, code: "CREATE_FAILED" };
   }
 }
 
@@ -76,7 +82,7 @@ export async function replyTicketAction(
 ): Promise<SupportActionResult> {
   const user = await getSession();
   if (!user) {
-    return { success: false, error: "Sign in required" };
+    return { success: false, code: "SIGN_IN_REQUIRED" };
   }
 
   const parsed = replyTicketByNumberSchema.safeParse({
@@ -85,7 +91,7 @@ export async function replyTicketAction(
   });
 
   if (!parsed.success) {
-    return { success: false, error: "Invalid message" };
+    return { success: false, code: "VALIDATION" };
   }
 
   const locale = String(formData.get("locale") ?? "en");
@@ -97,10 +103,11 @@ export async function replyTicketAction(
     const ticket = await getTicketByNumber({
       ticketNumber: parsed.data.ticketNumber,
       userId: user.id,
+      locale,
     });
 
     if (!ticket) {
-      return { success: false, error: "Ticket not found" };
+      return { success: false, code: "NOT_FOUND" };
     }
 
     await replyToTicket({
@@ -114,14 +121,14 @@ export async function replyTicketAction(
     revalidatePath(`/${locale}/support/tickets/${parsed.data.ticketNumber}`);
     return { success: true };
   } catch {
-    return { success: false, error: "Could not send message" };
+    return { success: false, code: "SEND_FAILED" };
   }
 }
 
 export async function adminReplyTicketAction(
-  _prev: SupportActionResult | null,
+  _prev: AdminSupportActionResult | null,
   formData: FormData,
-): Promise<SupportActionResult> {
+): Promise<AdminSupportActionResult> {
   const parsed = replyTicketSchema.safeParse({
     ticketId: formData.get("ticketId"),
     body: formData.get("body"),
@@ -175,9 +182,9 @@ export async function adminReplyTicketAction(
 }
 
 export async function adminUpdateTicketStatusAction(
-  _prev: SupportActionResult | null,
+  _prev: AdminSupportActionResult | null,
   formData: FormData,
-): Promise<SupportActionResult> {
+): Promise<AdminSupportActionResult> {
   const parsed = updateTicketStatusSchema.safeParse({
     ticketId: formData.get("ticketId"),
     status: formData.get("status"),

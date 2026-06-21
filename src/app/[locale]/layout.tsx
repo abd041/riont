@@ -36,10 +36,7 @@ export async function generateMetadata({
       icon: BRAND_LOGO.src,
       apple: BRAND_LOGO.src,
     },
-    description:
-      locale === "ar"
-        ? "سوق رقمي مميز للمنتجات الرقمية مع تسليم سريع ودعم موثوق."
-        : "Premium digital marketplace with fast delivery and trusted support.",
+    description: t("siteDescription"),
   };
 }
 

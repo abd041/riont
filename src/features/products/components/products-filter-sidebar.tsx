@@ -10,10 +10,11 @@ import {
   ChevronRight,
   type LucideIcon,
 } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link, useRouter } from "@/i18n/navigation";
 import { useSearchParams } from "next/navigation";
 import { cn } from "@/lib/utils/cn";
+import { useCurrency } from "@/features/shared/currency/currency-provider";
 import type { CatalogCategory } from "@/types/catalog";
 
 const SLUG_ICON: Record<string, LucideIcon> = {
@@ -49,6 +50,8 @@ export function ProductsFilterSidebar({
   onNavigate,
 }: ProductsFilterSidebarProps) {
   const t = useTranslations("catalog");
+  const locale = useLocale();
+  const { formatPrice } = useCurrency();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -135,8 +138,8 @@ export function ProductsFilterSidebar({
           {t("priceRange")}
         </h3>
         <div className="nex-browse-price-values">
-          <span dir="ltr">$0</span>
-          <span dir="ltr">${Math.round(maxPriceCents / 100)}</span>
+          <span dir="ltr">{formatPrice(0, locale)}</span>
+          <span dir="ltr">{formatPrice(maxPriceCents, locale)}</span>
         </div>
         <input
           type="range"

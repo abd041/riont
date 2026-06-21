@@ -22,7 +22,9 @@
     "signingOut": "Signing out…",
     "comingSoon": "Coming soon",
     "retry": "Try again",
-    "notifications": "Notifications"
+    "notifications": "Notifications",
+    "siteDescription": "Premium digital marketplace with fast delivery and trusted support.",
+    "back": "Back"
   },
   "nav": {
     "home": "Home",
@@ -41,7 +43,8 @@
     "coupons": "Coupons",
     "themeDark": "Dark",
     "themeLight": "Light",
-    "openMenu": "Open menu"
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "promo": {
     "titleLine1": "GET 5% OFF",
@@ -63,6 +66,7 @@
     "heroSlide3Highlight": "TOOLS & SUBSCRIPTIONS",
     "heroSlide3Subtitle": "Secure delivery with unbeatable support and pricing.",
     "heroFeatures": "Verified payment · Fast delivery · Real support",
+    "heroAriaLabel": "Featured promotions",
     "browseCategories": "BROWSE CATEGORIES",
     "promoBannerPlaceholder": "Limited offers — premium digital deals updated weekly",
     "featuredProducts": "FEATURED PRODUCTS",
@@ -104,6 +108,9 @@
     "footerPrivacy": "Privacy Policy",
     "footerRefund": "Refund Policy",
     "footerContact": "Contact Us",
+    "footerSocialX": "X (Twitter)",
+    "footerSocialDiscord": "Discord",
+    "footerSocialEmail": "Email",
     "footerPaymentsTitle": "Accepted payments",
     "footerRights": "All rights reserved",
     "footerNewsletterTitle": "Stay in the loop",
@@ -204,6 +211,8 @@
     "manualDeliveryHint": "Personal service — we process your order manually",
     "relatedProducts": "You may also like",
     "selectOption": "Choose an option",
+    "defaultOption": "Option",
+    "anonymousCustomer": "Customer",
     "badgeHot": "HOT",
     "badgeTrending": "TRENDING",
     "badgeLimited": "LIMITED",
@@ -232,6 +241,7 @@
     "welcomeBack": "Welcome Back",
     "createAccountTitle": "Create Account",
     "subtitle": "Sign in to manage orders and digital deliveries",
+    "metaDescription": "Sign in or create an account to manage orders and deliveries.",
     "continueGoogle": "Continue with Google",
     "continueApple": "Continue with Apple",
     "orEmail": "or continue with email",
@@ -265,6 +275,7 @@
   },
   "cart": {
     "title": "Your Cart",
+    "metaDescription": "Review items in your cart before checkout.",
     "empty": "Your cart is empty. Browse products to get started.",
     "browse": "Browse Products",
     "remove": "Remove",
@@ -326,6 +337,9 @@
     "platformNintendo": "Nintendo",
     "breadcrumbHome": "Home",
     "breadcrumbGames": "Games",
+    "backToBrowse": "Back to browse",
+    "breadcrumbNav": "Breadcrumb",
+    "backLabel": "Back",
     "emptyTitle": "No products available",
     "emptyDescription": "Check back soon — new products are added regularly.",
     "loadErrorTitle": "Could not load products",
@@ -345,8 +359,10 @@
     "submitTicket": "Create ticket",
     "subjectPlaceholder": "Brief summary of your issue",
     "messagePlaceholder": "Describe your question or issue…",
-    "backToSupport": "← Support",
+    "backToSupport": "Back to support",
     "linkedOrder": "Order",
+    "orderSubjectTemplate": "Order {orderNumber}",
+    "sending": "Sending…",
     "reply": "Reply",
     "replyPlaceholder": "Write your message…",
     "sendReply": "Send message",
@@ -359,7 +375,21 @@
       "waiting_admin": "Awaiting support",
       "resolved": "Resolved",
       "closed": "Closed"
-    }
+    },
+    "toast": {
+      "ticketCreated": "Ticket created",
+      "messageSent": "Message sent"
+    },
+    "errors": {
+      "SIGN_IN_REQUIRED": "Sign in to continue.",
+      "VALIDATION": "Please check the form and try again.",
+      "NOT_FOUND": "Ticket not found.",
+      "CREATE_FAILED": "Could not create ticket. Please try again.",
+      "SEND_FAILED": "Could not send message. Please try again."
+    },
+    "senderSystem": "System",
+    "senderSupport": "Support",
+    "senderYou": "You"
   },
   "checkout": {
     "title": "Checkout",
@@ -508,6 +538,7 @@
   },
   "wishlist": {
     "title": "Your wishlist",
+    "metaDescription": "Your saved products, ready when you need them.",
     "subtitle": "Saved products ready when you are.",
     "empty": "Your wishlist is empty. Heart items while browsing to save them here.",
     "browse": "Browse products",

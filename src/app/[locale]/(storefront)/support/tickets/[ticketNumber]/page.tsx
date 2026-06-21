@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { getSession } from "@/server/services/auth.service";
@@ -10,6 +11,25 @@ import {
   StorefrontPageHeader,
   StorefrontPageShell,
 } from "@/components/shared";
+
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string; ticketNumber: string }>;
+}): Promise<Metadata> {
+  const { locale, ticketNumber } = await params;
+  const t = await getTranslations({ locale, namespace: "support" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
+
+  return buildPageMetadata({
+    locale,
+    path: `/support/tickets/${ticketNumber}`,
+    title: `${ticketNumber} | ${tCommon("brand")}`,
+    description: t("description"),
+  });
+}
 
 export default async function TicketDetailPage({
   params,
@@ -25,6 +45,7 @@ export default async function TicketDetailPage({
   const ticket = await getTicketByNumber({
     ticketNumber,
     userId: user.id,
+    locale,
   });
 
   if (!ticket) notFound();

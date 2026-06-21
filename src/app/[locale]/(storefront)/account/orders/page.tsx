@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { Package } from "lucide-react";
@@ -8,6 +9,24 @@ import { OrderAmount } from "@/features/orders/components/order-amount";
 import { PremiumPanel } from "@/components/shared/premium-panel";
 import { EmptyState } from "@/components/ui/empty-state";
 import type { OrderStatus } from "@/lib/domain/enums";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "orders" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
+
+  return buildPageMetadata({
+    locale,
+    path: "/account/orders",
+    title: `${t("myOrders")} | ${tCommon("brand")}`,
+    description: t("myOrdersSubtitle"),
+  });
+}
 
 export default async function AccountOrdersPage() {
   const t = await getTranslations("orders");

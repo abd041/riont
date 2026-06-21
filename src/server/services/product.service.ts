@@ -10,6 +10,7 @@ import type {
 } from "@/types/catalog";
 import type { CartCheckoutLine, CheckoutField, CheckoutProduct } from "@/types/order";
 import { resolveLocalizedLabel, type LocalizedLabel } from "@/lib/i18n/json-label";
+import { resolveFallbackLabel } from "@/lib/i18n/fallback-labels";
 import { isSupabaseConfigured } from "@/lib/env/public";
 import { resolveMediaUrl } from "@/lib/storage/media-url";
 import { ServiceError } from "@/lib/domain/errors";
@@ -150,7 +151,7 @@ type VariantRow = {
 function mapVariant(row: VariantRow, locale: string): ProductVariant {
   return {
     id: row.id,
-    name: resolveLocalizedLabel(row.name, locale, "Option"),
+    name: resolveLocalizedLabel(row.name, locale, resolveFallbackLabel(locale, "defaultOption")),
     priceCents: row.price_cents,
     compareAtCents: row.compare_at_cents,
     offerLabel: row.offer_label

@@ -22,7 +22,9 @@
     "signingOut": "جاري تسجيل الخروج…",
     "comingSoon": "قريباً",
     "retry": "إعادة المحاولة",
-    "notifications": "الإشعارات"
+    "notifications": "الإشعارات",
+    "siteDescription": "سوق رقمي مميز للمنتجات الرقمية مع تسليم سريع ودعم موثوق.",
+    "back": "رجوع"
   },
   "nav": {
     "home": "الرئيسية",
@@ -41,7 +43,8 @@
     "coupons": "كوبونات",
     "themeDark": "داكن",
     "themeLight": "فاتح",
-    "openMenu": "فتح القائمة"
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة"
   },
   "promo": {
     "titleLine1": "خصم 5%",
@@ -63,6 +66,7 @@
     "heroSlide3Highlight": "أدوات واشتراكات",
     "heroSlide3Subtitle": "تسليم آمن مع دعم وأسعار لا تُنافس.",
     "heroFeatures": "دفع موثّق · تسليم سريع · دعم حقيقي",
+    "heroAriaLabel": "العروض المميزة",
     "browseCategories": "تصفح التصنيفات",
     "promoBannerPlaceholder": "عروض محدودة — صفقات رقمية مميزة تُحدَّث أسبوعياً",
     "featuredProducts": "منتجات مميزة",
@@ -104,6 +108,9 @@
     "footerPrivacy": "سياسة الخصوصية",
     "footerRefund": "سياسة الاسترداد",
     "footerContact": "تواصل معنا",
+    "footerSocialX": "X (تويتر)",
+    "footerSocialDiscord": "ديسكورد",
+    "footerSocialEmail": "البريد الإلكتروني",
     "footerPaymentsTitle": "طرق الدفع المقبولة",
     "footerRights": "جميع الحقوق محفوظة",
     "footerNewsletterTitle": "ابق على اطلاع",
@@ -204,6 +211,8 @@
     "manualDeliveryHint": "خدمة شخصية — نعالج طلبك يدوياً",
     "relatedProducts": "قد يعجبك أيضاً",
     "selectOption": "اختر خياراً",
+    "defaultOption": "خيار",
+    "anonymousCustomer": "عميل",
     "badgeHot": "رائج",
     "badgeTrending": "ترند",
     "badgeLimited": "محدود",
@@ -232,6 +241,7 @@
     "welcomeBack": "مرحباً بعودتك",
     "createAccountTitle": "إنشاء حساب",
     "subtitle": "سجّل الدخول لإدارة الطلبات والتسليم الرقمي",
+    "metaDescription": "سجّل الدخول أو أنشئ حساباً لإدارة الطلبات والتسليم.",
     "continueGoogle": "المتابعة مع Google",
     "continueApple": "المتابعة مع Apple",
     "orEmail": "أو المتابعة بالبريد",
@@ -265,6 +275,7 @@
   },
   "cart": {
     "title": "سلة التسوق",
+    "metaDescription": "راجع عناصر سلتك قبل إتمام الطلب.",
     "empty": "سلتك فارغة. تصفّح المنتجات للبدء.",
     "browse": "تصفّح المنتجات",
     "remove": "إزالة",
@@ -326,6 +337,9 @@
     "platformNintendo": "نينتندو",
     "breadcrumbHome": "الرئيسية",
     "breadcrumbGames": "ألعاب",
+    "backToBrowse": "العودة للتصفح",
+    "breadcrumbNav": "مسار التنقل",
+    "backLabel": "رجوع",
     "emptyTitle": "لا توجد منتجات",
     "emptyDescription": "عد لاحقاً — نضيف منتجات جديدة باستمرار.",
     "loadErrorTitle": "تعذّر تحميل المنتجات",
@@ -345,8 +359,10 @@
     "submitTicket": "إنشاء تذكرة",
     "subjectPlaceholder": "ملخص مختصر للمشكلة",
     "messagePlaceholder": "صف سؤالك أو مشكلتك…",
-    "backToSupport": "← الدعم",
+    "backToSupport": "العودة للدعم",
     "linkedOrder": "الطلب",
+    "orderSubjectTemplate": "طلب {orderNumber}",
+    "sending": "جارٍ الإرسال…",
     "reply": "رد",
     "replyPlaceholder": "اكتب رسالتك…",
     "sendReply": "إرسال",
@@ -359,7 +375,21 @@
       "waiting_admin": "بانتظار الدعم",
       "resolved": "تم الحل",
       "closed": "مغلقة"
-    }
+    },
+    "toast": {
+      "ticketCreated": "تم إنشاء التذكرة",
+      "messageSent": "تم إرسال الرسالة"
+    },
+    "errors": {
+      "SIGN_IN_REQUIRED": "يرجى تسجيل الدخول للمتابعة.",
+      "VALIDATION": "يرجى التحقق من النموذج والمحاولة مرة أخرى.",
+      "NOT_FOUND": "التذكرة غير موجودة.",
+      "CREATE_FAILED": "تعذّر إنشاء التذكرة. حاول مرة أخرى.",
+      "SEND_FAILED": "تعذّر إرسال الرسالة. حاول مرة أخرى."
+    },
+    "senderSystem": "النظام",
+    "senderSupport": "الدعم",
+    "senderYou": "أنت"
   },
   "checkout": {
     "title": "إتمام الطلب",
@@ -508,6 +538,7 @@
   },
   "wishlist": {
     "title": "قائمة الأمنيات",
+    "metaDescription": "منتجاتك المحفوظة جاهزة عندما تحتاجها.",
     "subtitle": "منتجاتك المحفوظة جاهزة عندما تحتاجها.",
     "empty": "قائمة الأمنيات فارغة. اضغط على القلب أثناء التصفّح لحفظ المنتجات هنا.",
     "browse": "تصفّح المنتجات",

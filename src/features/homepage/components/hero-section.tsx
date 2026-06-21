@@ -169,7 +169,7 @@ export function HeroSection({
         "nex-hero nex-hero-slider nex-hero--image-bg nex-hero--premium nex-hero--cinematic",
         compact && "nex-hero--compact",
       )}
-      aria-label="Hero"
+      aria-label={t("heroAriaLabel")}
       onTouchStart={handleTouchStart}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchCancel}
@@ -260,7 +260,7 @@ export function HeroSection({
                   className="nex-btn-primary nex-hero-cta-primary inline-flex items-center gap-2"
                 >
                   {primaryLabel}
-                  <ArrowRight className="h-3.5 w-3.5" strokeWidth={2.5} />
+                  <ArrowRight className="nex-hero-cta-arrow h-3.5 w-3.5" strokeWidth={2.5} />
                 </Link>
                 {!compact && (
                   <Link

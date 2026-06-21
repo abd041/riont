@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
 import { OrderStatus } from "@/lib/domain/enums";
@@ -7,6 +8,24 @@ import {
 } from "@/features/orders/components/order-status-hero";
 import { PremiumPanel, StorefrontPageShell } from "@/components/shared";
 import { ClearCartOnConfirmation } from "@/features/cart/components/clear-cart-on-confirmation";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "orders.confirmation" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
+
+  return buildPageMetadata({
+    locale,
+    path: "/orders/confirmation",
+    title: `${t("title")} | ${tCommon("brand")}`,
+    description: t("subtitle"),
+  });
+}
 
 export default async function OrderConfirmationPage({
   params,

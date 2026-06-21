@@ -10,9 +10,9 @@ import { MarketplaceSection } from "./marketplace-section";
 const PAYMENT_METHODS = ["Visa", "Mastercard", "Apple Pay", "Mada"] as const;
 
 const SOCIAL_LINKS = [
-  { icon: Globe, href: "https://twitter.com", label: "X" },
-  { icon: Share2, href: "https://discord.com", label: "Discord" },
-  { icon: Mail, href: "mailto:support@riont.com", label: "Email" },
+  { icon: Globe, href: "https://twitter.com", labelKey: "footerSocialX" as const },
+  { icon: Share2, href: "https://discord.com", labelKey: "footerSocialDiscord" as const },
+  { icon: Mail, href: "mailto:support@riont.com", labelKey: "footerSocialEmail" as const },
 ] as const;
 
 export function MarketplaceFooter() {
@@ -55,14 +55,14 @@ export function MarketplaceFooter() {
           </div>
 
           <div className="mp-footer__social" aria-label={t("footerSocialTitle")}>
-            {SOCIAL_LINKS.map(({ icon: Icon, href, label }) => (
+            {SOCIAL_LINKS.map(({ icon: Icon, href, labelKey }) => (
               <a
-                key={label}
+                key={labelKey}
                 href={href}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mp-footer__social-link"
-                aria-label={label}
+                aria-label={t(labelKey)}
               >
                 <Icon className="h-4 w-4" strokeWidth={1.75} />
               </a>

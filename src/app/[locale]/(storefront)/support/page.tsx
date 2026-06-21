@@ -1,5 +1,5 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
 import { Headphones } from "lucide-react";
 import { getSession } from "@/server/services/auth.service";
 import { listCustomerTickets } from "@/server/services/support.service";
@@ -10,6 +10,25 @@ import {
   StorefrontPageHeader,
   StorefrontPageShell,
 } from "@/components/shared";
+import { Link } from "@/i18n/navigation";
+import { buildPageMetadata } from "@/lib/seo/metadata";
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}): Promise<Metadata> {
+  const { locale } = await params;
+  const t = await getTranslations({ locale, namespace: "support" });
+  const tCommon = await getTranslations({ locale, namespace: "common" });
+
+  return buildPageMetadata({
+    locale,
+    path: "/support",
+    title: `${t("title")} | ${tCommon("brand")}`,
+    description: t("description"),
+  });
+}
 
 export default async function SupportPage({
   params,
@@ -68,7 +87,9 @@ export default async function SupportPage({
               locale={locale}
               orderId={linkedOrderId}
               defaultSubject={
-                orderNumberQuery ? `Order ${orderNumberQuery}` : undefined
+                orderNumberQuery
+                  ? t("orderSubjectTemplate", { orderNumber: orderNumberQuery })
+                  : undefined
               }
               labels={{
                 subject: t("subject"),
