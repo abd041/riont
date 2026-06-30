@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useSiteBranding } from "@/components/providers/site-branding-provider";
 
 export const BRAND_LOGO = {
   src: "/brand/riyont-logo.png",
@@ -26,12 +29,16 @@ export function BrandLogo({
   priority = false,
   variant = "full",
 }: BrandLogoProps) {
+  const { logoUrl } = useSiteBranding();
   const asset = variant === "mark" ? BRAND_LOGO_MARK : BRAND_LOGO;
-  const width = Math.round((height * asset.width) / asset.height);
+  const src = logoUrl ?? asset.src;
+  const width = logoUrl
+    ? Math.round(height * 2.8)
+    : Math.round((height * asset.width) / asset.height);
 
   return (
     <Image
-      src={asset.src}
+      src={src}
       alt=""
       width={width}
       height={height}
@@ -40,6 +47,7 @@ export function BrandLogo({
       quality={100}
       sizes={`${Math.max(width, height)}px`}
       aria-hidden
+      unoptimized={src.startsWith("http")}
     />
   );
 }

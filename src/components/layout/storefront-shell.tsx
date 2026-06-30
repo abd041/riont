@@ -7,6 +7,8 @@ import { usePathname } from "@/i18n/navigation";
 import { useMobileNav } from "@/hooks/use-ui-store";
 import { Sidebar } from "./sidebar";
 import { Topbar } from "./topbar";
+import { MaintenanceBanner } from "@/components/layout/maintenance-banner";
+import { FloatingContactButton } from "@/components/layout/floating-contact-button";
 import { Container } from "@/components/shared/container";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/utils/cn";
@@ -62,6 +64,7 @@ export function StorefrontShell({
         <span className="nex-grid-overlay" />
       </div>
 
+      <MaintenanceBanner />
       <Topbar
         showMenuButton={!isCheckout}
         menuOpen={navOpen}
@@ -112,6 +115,8 @@ export function StorefrontShell({
           <X className="h-5 w-5" />
         </Button>
       )}
+
+      <FloatingContactButton />
     </div>
   );
 }

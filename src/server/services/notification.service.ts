@@ -78,13 +78,12 @@ export async function notifyOrderSubmitted(orderId: string): Promise<void> {
 
   await sendEmail({ to: recipient.email, subject, html });
 
-  await notifyAdminsNewOrder(orderId, recipient.orderNumber, recipient.locale);
+  await notifyAdminsNewOrder(orderId, recipient.orderNumber);
 }
 
 async function notifyAdminsNewOrder(
   orderId: string,
   orderNumber: string,
-  _locale: string,
 ): Promise<void> {
   const admin = createAdminClient();
   const { data: admins } = await admin

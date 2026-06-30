@@ -35,6 +35,8 @@ In **Supabase Dashboard → SQL Editor**, run each file under `supabase/migratio
 | 9 | `20250528000000_product_reviews_rls.sql` |
 | 10 | `20250529000000_reviews_customer_ops.sql` |
 | 11 | `20250530000000_store_reviews.sql` |
+| 12 | `20250601000000_theme_settings.sql` |
+| 13 | `20250602000000_store_features.sql` |
 
 Alternatively, with the [Supabase CLI](https://supabase.com/docs/guides/cli) linked to the project:
 

@@ -9,13 +9,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-[image:var(--gradient-primary)] text-white hover:glow-md shadow-[0_0_12px_var(--accent-glow-sm)]",
+          "border border-white/10 bg-accent-500 text-white hover:bg-accent-600",
         secondary:
-          "border border-[var(--border-default)] bg-surface text-[var(--text-primary)] hover:border-[var(--border-glow)]",
+          "border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-surface-2)]",
         ghost:
-          "text-[var(--text-secondary)] hover:bg-surface hover:text-[var(--text-primary)]",
+          "text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)]",
         outline:
-          "border border-[var(--border-default)] bg-transparent text-[var(--text-primary)] hover:border-accent-500",
+          "border border-[var(--border-default)] bg-transparent text-[var(--text-primary)] hover:border-[var(--border-strong)] hover:bg-white/[0.04]",
       },
       size: {
         default: "h-10 px-5",

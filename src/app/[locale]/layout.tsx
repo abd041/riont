@@ -5,7 +5,12 @@ import { notFound } from "next/navigation";
 import { Inter, Inter_Tight, IBM_Plex_Sans_Arabic } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { AppProviders } from "@/components/providers/app-providers";
+import { SiteBrandingProvider } from "@/components/providers/site-branding-provider";
+import { SiteThemeStyle } from "@/components/theme/site-theme-style";
 import { BRAND_LOGO } from "@/components/shared/brand-logo";
+import { getSiteAppearance } from "@/server/services/theme.service";
+import { getStoreRuntimeConfig } from "@/server/services/store-config.service";
+import { SiteStoreProvider } from "@/components/providers/site-store-provider";
 import "@/styles/globals.css";
 
 const inter = Inter({
@@ -61,6 +66,8 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
   const dir = locale === "ar" ? "rtl" : "ltr";
+  const appearance = await getSiteAppearance();
+  const storeConfig = await getStoreRuntimeConfig();
 
   return (
     <html lang={locale} dir={dir} className="dark">
@@ -69,9 +76,14 @@ export default async function LocaleLayout({
           locale === "ar" ? "font-arabic" : "font-sans"
         } antialiased`}
       >
+        <SiteThemeStyle />
         <NextIntlClientProvider messages={messages}>
-          <AppProviders dir={dir} />
-          {children}
+          <SiteBrandingProvider logoUrl={appearance.logoUrl}>
+            <SiteStoreProvider config={storeConfig}>
+              <AppProviders dir={dir} />
+              {children}
+            </SiteStoreProvider>
+          </SiteBrandingProvider>
         </NextIntlClientProvider>
       </body>
     </html>

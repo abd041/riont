@@ -41,6 +41,7 @@
 @import "./nexora-typography-hierarchy.css";
 @import "./nexora-ui-unified.css";
 @import "./nexora-theme-bronze.css";
+@import "./nexora-geist-dark.css";
 
 @tailwind base;
 @tailwind components;

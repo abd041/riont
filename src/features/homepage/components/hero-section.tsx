@@ -18,11 +18,11 @@ import {
   textStagger,
 } from "./hero-animation.default";
 import { cn } from "@/lib/utils/cn";
+import { useSiteStoreOptional } from "@/components/providers/site-store-provider";
 import { HERO_SLIDES } from "./hero-slides";
-import { MarketplaceAmbientDecor } from "./marketplace-ambient-decor";
 
-/** Client hero banner artwork — replace file in public/hero/ to update. */
-const HERO_BACKGROUND_IMAGE = "/hero/hero-marketplace-bg.png";
+/** Client hero banner — admin can override via Appearance panel. */
+const HERO_BACKGROUND_FALLBACK = "/hero/hero-marketplace-bg.png";
 
 const HERO_TRUST_ITEMS = [
   { icon: Shield, titleKey: "whySecureTitle", descKey: "whySecureDesc" },
@@ -43,13 +43,17 @@ type SlideCopy = {
 export function HeroSection({
   content,
   compact = false,
+  backgroundImageUrl,
 }: {
   content?: HeroBlockContent | null;
   compact?: boolean;
+  backgroundImageUrl?: string | null;
 }) {
   const t = useTranslations("home");
   const tCommon = useTranslations("common");
   const reduceMotion = useReducedMotion();
+  const store = useSiteStoreOptional();
+  const heroAutoplay = store?.features.heroAutoplay ?? true;
   const [activeIndex, setActiveIndex] = useState(0);
   const [interactionPaused, setInteractionPaused] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
@@ -111,12 +115,12 @@ export function HeroSection({
   }, []);
 
   useEffect(() => {
-    if (interactionPaused) return;
+    if (!heroAutoplay || interactionPaused) return;
 
     const ms = reduceMotion ? slideIntervalMs * 1.5 : slideIntervalMs;
     const id = window.setInterval(advanceSlide, ms);
     return () => window.clearInterval(id);
-  }, [advanceSlide, interactionPaused, reduceMotion, slideIntervalMs]);
+  }, [advanceSlide, heroAutoplay, interactionPaused, reduceMotion, slideIntervalMs]);
 
   const handleTouchStart = useCallback((event: React.TouchEvent) => {
     const touch = event.touches[0];
@@ -162,11 +166,12 @@ export function HeroSection({
 
   const activeSlide = HERO_SLIDES[activeIndex];
   const copy = slideCopy[activeIndex];
+  const heroImage = backgroundImageUrl ?? HERO_BACKGROUND_FALLBACK;
 
   return (
     <section
       className={cn(
-        "nex-hero nex-hero-slider nex-hero--image-bg nex-hero--premium nex-hero--cinematic",
+        "nex-hero nex-hero-slider nex-hero--image-bg",
         compact && "nex-hero--compact",
       )}
       aria-label={t("heroAriaLabel")}
@@ -174,29 +179,19 @@ export function HeroSection({
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchCancel}
     >
-      <span className="nex-hero__float-orb nex-hero__float-orb--a" aria-hidden />
-      <span className="nex-hero__float-orb nex-hero__float-orb--b" aria-hidden />
-      {!compact ? <MarketplaceAmbientDecor variant="hero" showMark /> : null}
-      <span className="nex-hero__ambient-orb nex-hero__ambient-orb--a" aria-hidden />
-      <span className="nex-hero__ambient-orb nex-hero__ambient-orb--b" aria-hidden />
       <div className="nex-hero-media absolute inset-0 z-[0] overflow-hidden">
         <Image
-          src={HERO_BACKGROUND_IMAGE}
+          src={heroImage}
           alt=""
           fill
           priority
           className="nex-hero-bg-image object-cover object-center"
           sizes="(max-width: 768px) 100vw, 1280px"
           draggable={false}
+          unoptimized={heroImage.startsWith("http")}
         />
         <div className="nex-hero-bg-scrim" aria-hidden />
-        <div className="nex-hero-cinematic-bloom" aria-hidden />
-        <div className="nex-hero-cinematic-mist" aria-hidden />
-        <div className="nex-hero-cinematic-vignette" aria-hidden />
-        <div className="nex-hero-cinematic-sparkles" aria-hidden />
       </div>
-
-      <span className="nex-hero-cinematic-frame" aria-hidden />
 
       <div className="nex-hero-scrim-bottom z-[1]" aria-hidden />
 

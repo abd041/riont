@@ -40,6 +40,7 @@ export const ADMIN_NAV_GROUPS: NavGroup[] = [
     label: "Site",
     links: [
       { href: "/admin/homepage", label: "Homepage" },
+      { href: "/admin/appearance", label: "Appearance" },
       { href: "/admin/reviews", label: "Store reviews" },
     ],
   },
