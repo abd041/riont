@@ -21,6 +21,21 @@ export const saveStoreFeaturesSchema = z
     maintenanceMessageAr: z.string().max(500).optional(),
     showFooterSocial: z.coerce.boolean(),
     showFooterNewsletter: z.coerce.boolean(),
+    promoBannerEnabled: z.coerce.boolean(),
+    promoBannerTextEn: z.string().max(200).optional(),
+    promoBannerTextAr: z.string().max(200).optional(),
+    promoBannerHref: z
+      .string()
+      .max(500)
+      .refine(
+        (v) =>
+          !v.trim() ||
+          v.startsWith("http://") ||
+          v.startsWith("https://") ||
+          v.startsWith("/"),
+        "Use a full URL or a path starting with /",
+      )
+      .optional(),
     twitter: urlOrMailto.optional(),
     discord: urlOrMailto.optional(),
     instagram: urlOrMailto.optional(),

@@ -14,8 +14,11 @@ import {
   uploadHeroBackground,
   uploadHeroSlideImage,
   uploadSiteLogo,
+  updateHeroSlideContent,
 } from "@/server/services/theme.service";
 import { saveThemeSettingsSchema } from "@/validations/theme.schema";
+import { saveHeroSlideContentSchema } from "@/validations/hero-slide-content.schema";
+import type { HeroSlideContentMap } from "@/lib/site/hero-slide-content";
 
 export type ThemeActionResult =
   | { success: true; message?: string }
@@ -236,5 +239,83 @@ export async function clearHeroSlideImageAction(
   } catch (error) {
     if (isRedirectError(error)) throw error;
     return { success: false, error: "Could not clear slide image" };
+  }
+}
+
+function parseHeroSlideContentForm(formData: FormData): HeroSlideContentMap {
+  const slides: HeroSlideContentMap = {};
+  const slideIds = ["promo-deals", "promo-gaming", "promo-instant"] as const;
+  const locales = ["en", "ar"] as const;
+  const fields = ["title", "highlight", "subtitle", "tag"] as const;
+
+  for (const slideId of slideIds) {
+    const en: Record<string, string> = {};
+    const ar: Record<string, string> = {};
+
+    for (const locale of locales) {
+      const target = locale === "en" ? en : ar;
+      for (const field of fields) {
+        const key = `${slideId}_${locale}_${field}`;
+        const raw = formData.get(key);
+        if (typeof raw === "string" && raw.trim()) {
+          target[field] = raw.trim();
+        }
+      }
+    }
+
+    const entry: HeroSlideContentMap[typeof slideId] = {};
+    if (Object.keys(en).length > 0) {
+      entry.en = {
+        title: en.title ?? "",
+        highlight: en.highlight ?? "",
+        subtitle: en.subtitle ?? "",
+        tag: en.tag ?? "",
+      };
+    }
+    if (Object.keys(ar).length > 0) {
+      entry.ar = {
+        title: ar.title ?? "",
+        highlight: ar.highlight ?? "",
+        subtitle: ar.subtitle ?? "",
+        tag: ar.tag ?? "",
+      };
+    }
+    if (entry.en || entry.ar) {
+      slides[slideId] = entry;
+    }
+  }
+
+  return slides;
+}
+
+export async function saveHeroSlideContentAction(
+  _prev: ThemeActionResult | null,
+  formData: FormData,
+): Promise<ThemeActionResult> {
+  const content = parseHeroSlideContentForm(formData);
+  const parsed = saveHeroSlideContentSchema.safeParse({ slides: content });
+
+  if (!parsed.success) {
+    const first = parsed.error.issues[0];
+    return {
+      success: false,
+      error: first?.message ?? "Invalid hero slide content",
+    };
+  }
+
+  try {
+    const { user } = await requireAdmin();
+    await updateHeroSlideContent(parsed.data.slides as Record<string, unknown>);
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "theme.hero_slide_content_updated",
+      entityType: "site_settings",
+      entityId: "default",
+    });
+    revalidateThemePaths();
+    return { success: true, message: "Hero slide text saved." };
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    return { success: false, error: "Could not save hero slide text" };
   }
 }

@@ -206,6 +206,21 @@ export async function clearHeroSlideImage(slideId: HeroSlideId): Promise<void> {
   await writeHeroSlidesMap(slides);
 }
 
+export async function updateHeroSlideContent(
+  content: Record<string, unknown>,
+): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from("site_settings")
+    .update({
+      hero_slide_content: content,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", "default");
+
+  if (error) throw error;
+}
+
 export function getDefaultHeroBackground(): string {
   return DEFAULT_HERO;
 }

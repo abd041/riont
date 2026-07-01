@@ -53,6 +53,7 @@ export default async function HomePage() {
           compact
           backgroundImageUrl={runtime.heroBackgroundUrl}
           slideImages={runtime.heroSlideImages}
+          heroSlideContent={runtime.heroSlideContent}
         />
       </div>
       <HomeMarketplace

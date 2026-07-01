@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useActionState, useEffect, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -34,6 +35,7 @@ export function AdminBrandingForm({
   heroSlideImages: HeroSlideImages;
   logoUrl: string | null;
 }) {
+  const router = useRouter();
   const [heroState, heroAction, heroPending] = useActionState<
     ThemeActionResult | null,
     FormData
@@ -52,7 +54,7 @@ export function AdminBrandingForm({
     if (!heroState) return;
     if (heroState.success) {
       toast.success(heroState.message);
-      window.location.reload();
+      router.refresh();
     } else toast.error(heroState.error);
   }, [heroState]);
 
@@ -60,7 +62,7 @@ export function AdminBrandingForm({
     if (!logoState) return;
     if (logoState.success) {
       toast.success(logoState.message);
-      window.location.reload();
+      router.refresh();
     } else toast.error(logoState.error);
   }, [logoState]);
 
@@ -68,7 +70,7 @@ export function AdminBrandingForm({
     if (!slideState) return;
     if (slideState.success) {
       toast.success(slideState.message);
-      window.location.reload();
+      router.refresh();
     } else toast.error(slideState.error);
   }, [slideState]);
 
@@ -80,7 +82,7 @@ export function AdminBrandingForm({
       const result = await action();
       if (result.success) {
         toast.success(result.message);
-        window.location.reload();
+        router.refresh();
       } else {
         toast.error(result.error);
       }

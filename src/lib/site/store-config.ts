@@ -6,6 +6,10 @@ export type StoreFeatures = {
   maintenanceMessageAr: string;
   showFooterSocial: boolean;
   showFooterNewsletter: boolean;
+  promoBannerEnabled: boolean;
+  promoBannerTextEn: string;
+  promoBannerTextAr: string;
+  promoBannerHref: string;
 };
 
 export type SocialLinks = {
@@ -23,6 +27,10 @@ export const DEFAULT_STORE_FEATURES: StoreFeatures = {
   maintenanceMessageAr: "",
   showFooterSocial: true,
   showFooterNewsletter: true,
+  promoBannerEnabled: true,
+  promoBannerTextEn: "",
+  promoBannerTextAr: "",
+  promoBannerHref: "",
 };
 
 export const DEFAULT_SOCIAL_LINKS: SocialLinks = {
@@ -53,6 +61,13 @@ export function parseStoreFeatures(raw: unknown): StoreFeatures {
       typeof o.maintenanceMessageAr === "string" ? o.maintenanceMessageAr : "",
     showFooterSocial: o.showFooterSocial !== false,
     showFooterNewsletter: o.showFooterNewsletter !== false,
+    promoBannerEnabled: o.promoBannerEnabled !== false,
+    promoBannerTextEn:
+      typeof o.promoBannerTextEn === "string" ? o.promoBannerTextEn : "",
+    promoBannerTextAr:
+      typeof o.promoBannerTextAr === "string" ? o.promoBannerTextAr : "",
+    promoBannerHref:
+      typeof o.promoBannerHref === "string" ? o.promoBannerHref.trim() : "",
   };
 }
 

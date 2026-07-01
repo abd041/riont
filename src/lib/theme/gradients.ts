@@ -19,6 +19,9 @@ export const GRADIENT_SLOT_IDS = [
   "cardMedia",
   "accentButton",
   "saleBadge",
+  "sectionMostRequested",
+  "sectionBrowse",
+  "promoBanner",
 ] as const;
 
 export type GradientSlotId = (typeof GRADIENT_SLOT_IDS)[number];
@@ -53,6 +56,18 @@ export const GRADIENT_SLOT_META: Record<
     label: "Sale badges",
     description: "Discount tags such as -14% on product cards",
   },
+  sectionMostRequested: {
+    label: "Most Requested row",
+    description: "Background band behind the top product carousel",
+  },
+  sectionBrowse: {
+    label: "Browse / grid section",
+    description: "Background behind the main product grid",
+  },
+  promoBanner: {
+    label: "Promo strip",
+    description: "Thin banner above the homepage hero",
+  },
 };
 
 export function createDefaultGradient(
@@ -85,6 +100,21 @@ export function getDefaultGradients(tokens: ThemeTokens): ThemeGradients {
       135,
     ),
     saleBadge: createDefaultGradient(tokens.accent600, tokens.accent700, 135),
+    sectionMostRequested: createDefaultGradient(
+      tokens.bgElevated,
+      tokens.bgBase,
+      180,
+    ),
+    sectionBrowse: createDefaultGradient(
+      tokens.bgSurface,
+      tokens.bgBase,
+      180,
+    ),
+    promoBanner: createDefaultGradient(
+      tokens.accent700,
+      tokens.accent500,
+      90,
+    ),
   };
 }
 

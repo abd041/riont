@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useLocale } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import {
   AnimatePresence,
@@ -20,6 +20,10 @@ import {
 import { cn } from "@/lib/utils/cn";
 import { useSiteStoreOptional } from "@/components/providers/site-store-provider";
 import { HERO_SLIDES } from "./hero-slides";
+import {
+  resolveHeroSlideCopy,
+  type HeroSlideContentMap,
+} from "@/lib/site/hero-slide-content";
 
 /** Client hero banner — admin can override via Appearance panel. */
 const HERO_BACKGROUND_FALLBACK = "/hero/hero-marketplace-bg.png";
@@ -45,14 +49,17 @@ export function HeroSection({
   compact = false,
   backgroundImageUrl,
   slideImages,
+  heroSlideContent,
 }: {
   content?: HeroBlockContent | null;
   compact?: boolean;
   backgroundImageUrl?: string | null;
   slideImages?: Record<string, string>;
+  heroSlideContent?: HeroSlideContentMap;
 }) {
   const t = useTranslations("home");
   const tCommon = useTranslations("common");
+  const locale = useLocale();
   const reduceMotion = useReducedMotion();
   const store = useSiteStoreOptional();
   const heroAutoplay = store?.features.heroAutoplay ?? true;
@@ -70,6 +77,19 @@ export function HeroSection({
   const slideCopy: SlideCopy[] = useMemo(
     () =>
       HERO_SLIDES.map((slide, index) => {
+        const dbCopy = heroSlideContent
+          ? resolveHeroSlideCopy(slide.id, locale, heroSlideContent)
+          : null;
+
+        if (dbCopy) {
+          return {
+            title: dbCopy.title,
+            highlight: dbCopy.highlight,
+            subtitle: dbCopy.subtitle || t(slide.subtitleKey),
+            tag: dbCopy.tag || t(slide.tagKey),
+          };
+        }
+
         if (index === 0 && content) {
           return {
             title: content.title ?? t(slide.titleKey),
@@ -85,7 +105,7 @@ export function HeroSection({
           tag: t(slide.tagKey),
         };
       }),
-    [content, t],
+    [content, heroSlideContent, locale, t],
   );
 
   const trustItems = useMemo(

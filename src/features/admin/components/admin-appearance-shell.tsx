@@ -2,13 +2,16 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ExternalLink, ImageIcon, Palette, Store } from "lucide-react";
+import { ExternalLink, Home, ImageIcon, Palette, Store } from "lucide-react";
 import type { SiteRuntimeSettings } from "@/server/services/site-runtime.service";
 import { AdminBrandingForm } from "./admin-branding-form";
 import { AdminThemeForm } from "./admin-theme-form";
 import { AdminStoreControlsForm } from "./admin-store-controls-form";
+import { AdminHeroSlideContentForm } from "./admin-hero-slide-content-form";
+import { AdminPromoBannerForm } from "./admin-promo-banner-form";
+import { AdminStorefrontPreview } from "./admin-storefront-preview";
 
-type AppearanceTab = "branding" | "colors" | "storefront";
+type AppearanceTab = "branding" | "homepage" | "colors" | "storefront";
 
 const TABS: Array<{
   id: AppearanceTab;
@@ -23,6 +26,12 @@ const TABS: Array<{
     icon: ImageIcon,
   },
   {
+    id: "homepage",
+    label: "Homepage",
+    description: "Promo strip & hero slide text",
+    icon: Home,
+  },
+  {
     id: "colors",
     label: "Colors",
     description: "Solid colors, gradients & accent",
@@ -31,7 +40,7 @@ const TABS: Array<{
   {
     id: "storefront",
     label: "Storefront",
-    description: "Banners, footer & social",
+    description: "Footer, social & maintenance",
     icon: Store,
   },
 ];
@@ -50,6 +59,7 @@ export function AdminAppearanceShell({
   const slideCount = Object.keys(runtime.heroSlideImages).length;
   const hasCustomLogo = Boolean(runtime.logoUrl);
   const hasCustomHero = Boolean(runtime.heroBackgroundUrl);
+  const customHeroCopy = Object.keys(runtime.heroSlideContent).length;
 
   return (
     <div className="admin-appearance">
@@ -76,6 +86,12 @@ export function AdminAppearanceShell({
               <span>Hero slides</span>
               <strong>
                 {slideCount > 0 ? `${slideCount} custom` : "Default"}
+              </strong>
+            </li>
+            <li>
+              <span>Hero copy</span>
+              <strong>
+                {customHeroCopy > 0 ? `${customHeroCopy} slides` : "Default"}
               </strong>
             </li>
             <li>
@@ -131,30 +147,47 @@ export function AdminAppearanceShell({
         ))}
       </nav>
 
-      <div className="admin-appearance-panel">
-        {tab === "branding" && (
-          <AdminBrandingForm
-            heroBackgroundUrl={runtime.heroBackgroundUrl}
-            heroSlideImages={runtime.heroSlideImages}
-            logoUrl={runtime.logoUrl}
-          />
-        )}
-        {tab === "colors" && (
-          <AdminThemeForm
-            preset={runtime.preset}
-            tokens={runtime.tokens}
-            gradients={runtime.gradients}
-          />
-        )}
-        {tab === "storefront" && (
-          <AdminStoreControlsForm
-            config={{
-              features: runtime.features,
-              socialLinks: runtime.socialLinks,
-              supportWhatsapp: runtime.supportWhatsapp,
-            }}
-          />
-        )}
+      <div className="admin-appearance-workspace">
+        <div className="admin-appearance-panel">
+          {tab === "branding" && (
+            <AdminBrandingForm
+              heroBackgroundUrl={runtime.heroBackgroundUrl}
+              heroSlideImages={runtime.heroSlideImages}
+              logoUrl={runtime.logoUrl}
+            />
+          )}
+          {tab === "homepage" && (
+            <>
+              <AdminPromoBannerForm
+                config={{
+                  features: runtime.features,
+                  socialLinks: runtime.socialLinks,
+                  supportWhatsapp: runtime.supportWhatsapp,
+                }}
+              />
+              <AdminHeroSlideContentForm
+                heroSlideContent={runtime.heroSlideContent}
+              />
+            </>
+          )}
+          {tab === "colors" && (
+            <AdminThemeForm
+              preset={runtime.preset}
+              tokens={runtime.tokens}
+              gradients={runtime.gradients}
+            />
+          )}
+          {tab === "storefront" && (
+            <AdminStoreControlsForm
+              config={{
+                features: runtime.features,
+                socialLinks: runtime.socialLinks,
+                supportWhatsapp: runtime.supportWhatsapp,
+              }}
+            />
+          )}
+        </div>
+        <AdminStorefrontPreview />
       </div>
     </div>
   );

@@ -73,6 +73,20 @@ export function themeTokensToCssBlock(
   lines.push(`  --gradient-badge: ${badgeBg};`);
   lines.push(`  --gradient-primary: ${accentBg};`);
 
+  const sectionMostRequested = g
+    ? resolveGradientBackground(g.sectionMostRequested, "transparent")
+    : "transparent";
+  const sectionBrowse = g
+    ? resolveGradientBackground(g.sectionBrowse, "transparent")
+    : "transparent";
+  const promoBannerBg = g
+    ? resolveGradientBackground(g.promoBanner, tokens.accent600)
+    : tokens.accent600;
+
+  lines.push(`  --gradient-section-most-requested: ${sectionMostRequested};`);
+  lines.push(`  --gradient-section-browse: ${sectionBrowse};`);
+  lines.push(`  --gradient-promo-banner: ${promoBannerBg};`);
+
   if (g) {
     for (const [slot, gradient] of Object.entries(g) as Array<
       [keyof ThemeGradients, (typeof g)[keyof ThemeGradients]]

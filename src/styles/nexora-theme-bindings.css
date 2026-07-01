@@ -198,8 +198,54 @@ body,
   color: var(--accent-400) !important;
 }
 
-/* Section rows (Most Requested, Trending, etc.) follow page background */
-.mp-sections--storefront-home .mp-row,
+/* Section row backgrounds — admin gradient slots */
+.mp-sections--storefront-home > .mp-row--featured {
+  background: var(--gradient-section-most-requested, transparent) !important;
+  border-radius: var(--radius-md, 14px);
+}
+
+.mp-sections--storefront-home > .mp-browse-section--primary {
+  background: var(--gradient-section-browse, transparent) !important;
+  border-radius: var(--radius-md, 14px);
+}
+
+.mp-promo-banner {
+  background: var(--gradient-promo-banner, var(--accent-600)) !important;
+  background-image: none !important;
+  border-color: color-mix(in srgb, var(--accent-500) 18%, transparent) !important;
+  box-shadow:
+    0 0 0 1px color-mix(in srgb, var(--accent-500) 6%, transparent),
+    0 8px 24px rgba(0, 0, 0, 0.45) !important;
+}
+
+.mp-promo-banner__glow {
+  background: radial-gradient(
+    ellipse 55% 80% at 50% 50%,
+    color-mix(in srgb, var(--accent-500) 22%, transparent),
+    transparent 70%
+  ) !important;
+}
+
+.mp-promo-banner__sheen {
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    color-mix(in srgb, var(--accent-400) 8%, transparent) 45%,
+    transparent 70%
+  ) !important;
+}
+
+.mp-promo-banner__text {
+  color: color-mix(in srgb, var(--text-primary) 92%, transparent) !important;
+}
+
+.mp-promo-banner__spark {
+  color: var(--accent-400) !important;
+  filter: drop-shadow(0 0 6px color-mix(in srgb, var(--accent-500) 55%, transparent)) !important;
+}
+
+/* Other section rows follow page background */
+.mp-sections--storefront-home .mp-row:not(.mp-row--featured),
 .mp-sections--storefront-home .mp-section--reveal {
   background: transparent !important;
 }

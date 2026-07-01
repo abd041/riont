@@ -19,6 +19,10 @@ import {
   parseStoreFeatures,
 } from "@/lib/site/store-config";
 import { HERO_SLIDE_IDS } from "@/lib/site/hero-slides";
+import {
+  parseHeroSlideContent,
+  type HeroSlideContentMap,
+} from "@/lib/site/hero-slide-content";
 
 const DEFAULT_HERO = "/hero/hero-marketplace-bg.png";
 
@@ -31,6 +35,7 @@ export type SiteRuntimeSettings = {
   themeCss: string;
   heroBackgroundUrl: string | null;
   heroSlideImages: HeroSlideImages;
+  heroSlideContent: HeroSlideContentMap;
   logoUrl: string | null;
   features: StoreFeatures;
   socialLinks: SocialLinks;
@@ -42,6 +47,7 @@ type SiteSettingsRow = {
   theme_config: unknown;
   hero_background_path: string | null;
   hero_slides: unknown;
+  hero_slide_content: unknown;
   logo_path: string | null;
   store_features: unknown;
   social_links: unknown;
@@ -49,7 +55,7 @@ type SiteSettingsRow = {
 };
 
 const SITE_SETTINGS_SELECT =
-  "theme_preset, theme_config, hero_background_path, hero_slides, logo_path, store_features, social_links, support_whatsapp";
+  "theme_preset, theme_config, hero_background_path, hero_slides, hero_slide_content, logo_path, store_features, social_links, support_whatsapp";
 
 function normalizePreset(raw: string | null | undefined): ThemePresetId {
   if (raw === "bronze" || raw === "geist-dark") return raw;
@@ -85,6 +91,7 @@ function buildSettings(row: SiteSettingsRow | null): SiteRuntimeSettings {
       ? resolveMediaUrl(row.hero_background_path)
       : null,
     heroSlideImages: parseHeroSlideImages(row?.hero_slides),
+    heroSlideContent: parseHeroSlideContent(row?.hero_slide_content),
     logoUrl: row?.logo_path ? resolveMediaUrl(row.logo_path) : null,
     features: parseStoreFeatures(row?.store_features),
     socialLinks: parseSocialLinks(row?.social_links),

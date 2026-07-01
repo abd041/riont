@@ -152,6 +152,11 @@ export function AdminThemeForm({
         from: scale.accent600,
         to: scale.accent700,
       },
+      promoBanner: {
+        ...prev.promoBanner,
+        from: scale.accent700,
+        to: scale.accent500,
+      },
     }));
   }
 
