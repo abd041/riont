@@ -9,17 +9,29 @@ import {
   clearHeroBackgroundAction,
   uploadSiteLogoAction,
   clearSiteLogoAction,
+  uploadHeroSlideImageAction,
+  clearHeroSlideImageAction,
   type ThemeActionResult,
 } from "@/server/actions/admin-theme.actions";
 import { BRAND_LOGO } from "@/components/shared/brand-logo";
+import { HERO_SLIDES } from "@/features/homepage/components/hero-slides";
+import type { HeroSlideImages } from "@/server/services/site-runtime.service";
 
 const DEFAULT_HERO = "/hero/hero-marketplace-bg.png";
 
+const SLIDE_LABELS: Record<string, string> = {
+  "promo-deals": "Slide 1 — Deals",
+  "promo-gaming": "Slide 2 — Gaming",
+  "promo-instant": "Slide 3 — Instant delivery",
+};
+
 export function AdminBrandingForm({
   heroBackgroundUrl,
+  heroSlideImages,
   logoUrl,
 }: {
   heroBackgroundUrl: string | null;
+  heroSlideImages: HeroSlideImages;
   logoUrl: string | null;
 }) {
   const [heroState, heroAction, heroPending] = useActionState<
@@ -30,6 +42,10 @@ export function AdminBrandingForm({
     ThemeActionResult | null,
     FormData
   >(uploadSiteLogoAction, null);
+  const [slideState, slideAction, slidePending] = useActionState<
+    ThemeActionResult | null,
+    FormData
+  >(uploadHeroSlideImageAction, null);
   const [clearPending, startClear] = useTransition();
 
   useEffect(() => {
@@ -48,6 +64,14 @@ export function AdminBrandingForm({
     } else toast.error(logoState.error);
   }, [logoState]);
 
+  useEffect(() => {
+    if (!slideState) return;
+    if (slideState.success) {
+      toast.success(slideState.message);
+      window.location.reload();
+    } else toast.error(slideState.error);
+  }, [slideState]);
+
   const heroSrc = heroBackgroundUrl ?? DEFAULT_HERO;
   const logoSrc = logoUrl ?? BRAND_LOGO.src;
 
@@ -64,52 +88,15 @@ export function AdminBrandingForm({
   }
 
   return (
-    <div className="admin-branding-grid">
+    <div className="admin-branding-page">
       <section className="admin-panel admin-panel--flat">
-        <h3 className="font-semibold">Hero cover image</h3>
-        <p className="mt-1 text-sm text-[var(--text-muted)]">
-          Homepage banner background. Recommended: wide image, 1600×900 or larger.
-        </p>
-        <div className="admin-branding-preview admin-branding-preview--hero">
-          <Image
-            src={heroSrc}
-            alt="Hero preview"
-            fill
-            className="object-cover"
-            sizes="400px"
-            unoptimized={heroSrc.startsWith("http")}
-          />
+        <div className="admin-section-intro">
+          <h3 className="font-semibold">Store logo</h3>
+          <p className="admin-section-intro__desc">
+            Appears in the header, footer, and browser tab (favicon). PNG with a
+            transparent background works best. Max 5 MB — JPG, PNG, or WebP.
+          </p>
         </div>
-        <form action={heroAction} className="mt-4 space-y-3">
-          <input
-            type="file"
-            name="file"
-            accept="image/jpeg,image/png,image/webp"
-            className="block w-full text-sm text-[var(--text-muted)] file:me-3 file:rounded-md file:border-0 file:bg-accent-500/15 file:px-3 file:py-2 file:text-sm file:font-medium"
-          />
-          <div className="flex flex-wrap gap-2">
-            <Button type="submit" disabled={heroPending || clearPending}>
-              {heroPending ? "Uploading…" : "Upload hero image"}
-            </Button>
-            {heroBackgroundUrl && (
-              <Button
-                type="button"
-                variant="outline"
-                disabled={heroPending || clearPending}
-                onClick={() => runClear(clearHeroBackgroundAction)}
-              >
-                Reset to default
-              </Button>
-            )}
-          </div>
-        </form>
-      </section>
-
-      <section className="admin-panel admin-panel--flat">
-        <h3 className="font-semibold">Store logo</h3>
-        <p className="mt-1 text-sm text-[var(--text-muted)]">
-          Shown in navigation and footer. PNG with transparent background works best.
-        </p>
         <div className="admin-branding-preview admin-branding-preview--logo">
           <Image
             src={logoSrc}
@@ -125,7 +112,7 @@ export function AdminBrandingForm({
             type="file"
             name="file"
             accept="image/jpeg,image/png,image/webp"
-            className="block w-full text-sm text-[var(--text-muted)] file:me-3 file:rounded-md file:border-0 file:bg-accent-500/15 file:px-3 file:py-2 file:text-sm file:font-medium"
+            className="admin-file-input"
           />
           <div className="flex flex-wrap gap-2">
             <Button type="submit" disabled={logoPending || clearPending}>
@@ -143,6 +130,122 @@ export function AdminBrandingForm({
             )}
           </div>
         </form>
+      </section>
+
+      <section className="admin-panel admin-panel--flat">
+        <div className="admin-section-intro">
+          <h3 className="font-semibold">Homepage hero cover</h3>
+          <p className="admin-section-intro__desc">
+            The main banner behind your homepage hero. Used when a carousel slide
+            has no custom image. Recommended: 1600×900 or wider.
+          </p>
+        </div>
+        <div className="admin-branding-preview admin-branding-preview--hero">
+          <Image
+            src={heroSrc}
+            alt="Hero preview"
+            fill
+            className="object-cover"
+            sizes="400px"
+            unoptimized={heroSrc.startsWith("http")}
+          />
+        </div>
+        <form action={heroAction} className="mt-4 space-y-3">
+          <input
+            type="file"
+            name="file"
+            accept="image/jpeg,image/png,image/webp"
+            className="admin-file-input"
+          />
+          <div className="flex flex-wrap gap-2">
+            <Button type="submit" disabled={heroPending || clearPending}>
+              {heroPending ? "Uploading…" : "Upload cover image"}
+            </Button>
+            {heroBackgroundUrl && (
+              <Button
+                type="button"
+                variant="outline"
+                disabled={heroPending || clearPending}
+                onClick={() => runClear(clearHeroBackgroundAction)}
+              >
+                Reset to default
+              </Button>
+            )}
+          </div>
+        </form>
+      </section>
+
+      <section className="admin-panel admin-panel--flat">
+        <div className="admin-section-intro">
+          <h3 className="font-semibold">Hero carousel slides</h3>
+          <p className="admin-section-intro__desc">
+            The homepage rotates through 3 promo slides. Upload a unique background
+            per slide, or leave empty to use the cover image above.
+          </p>
+        </div>
+        <div className="admin-hero-slides-grid">
+          {HERO_SLIDES.map((slide) => {
+            const slideSrc =
+              heroSlideImages[slide.id] ?? heroBackgroundUrl ?? DEFAULT_HERO;
+            const hasCustom = Boolean(heroSlideImages[slide.id]);
+
+            return (
+              <div key={slide.id} className="admin-hero-slide-card">
+                <p className="admin-hero-slide-card__title">
+                  {SLIDE_LABELS[slide.id] ?? slide.id}
+                </p>
+                {hasCustom ? (
+                  <span className="admin-hero-slide-card__badge">Custom image</span>
+                ) : (
+                  <span className="admin-hero-slide-card__badge admin-hero-slide-card__badge--muted">
+                    Using cover
+                  </span>
+                )}
+                <div className="admin-branding-preview admin-branding-preview--hero admin-branding-preview--slide">
+                  <Image
+                    src={slideSrc}
+                    alt={`${SLIDE_LABELS[slide.id] ?? slide.id} preview`}
+                    fill
+                    className="object-cover"
+                    sizes="280px"
+                    unoptimized={slideSrc.startsWith("http")}
+                  />
+                </div>
+                <form action={slideAction} className="mt-3 space-y-2">
+                  <input type="hidden" name="slideId" value={slide.id} />
+                  <input
+                    type="file"
+                    name="file"
+                    accept="image/jpeg,image/png,image/webp"
+                    className="admin-file-input admin-file-input--sm"
+                  />
+                  <div className="flex flex-wrap gap-2">
+                    <Button
+                      type="submit"
+                      size="sm"
+                      disabled={slidePending || clearPending}
+                    >
+                      {slidePending ? "Uploading…" : "Upload"}
+                    </Button>
+                    {hasCustom && (
+                      <Button
+                        type="button"
+                        size="sm"
+                        variant="outline"
+                        disabled={slidePending || clearPending}
+                        onClick={() =>
+                          runClear(() => clearHeroSlideImageAction(slide.id))
+                        }
+                      >
+                        Reset
+                      </Button>
+                    )}
+                  </div>
+                </form>
+              </div>
+            );
+          })}
+        </div>
       </section>
     </div>
   );

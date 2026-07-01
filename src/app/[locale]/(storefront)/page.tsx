@@ -7,7 +7,7 @@ import { listHomepageProducts } from "@/server/services/product.service";
 import { listCategories } from "@/server/services/category.service";
 import { listFeaturedReviews } from "@/server/services/review.service";
 import { getHomePageContent } from "@/server/services/content-block.service";
-import { getSiteAppearance } from "@/server/services/theme.service";
+import { getSiteRuntimeSettings } from "@/server/services/site-runtime.service";
 import { getSession, getProfile } from "@/server/services/auth.service";
 import { buildPageMetadata } from "@/lib/seo/metadata";
 
@@ -32,14 +32,14 @@ export async function generateMetadata({
 
 export default async function HomePage() {
   const locale = await getLocale();
-  const [products, categories, homeContent, featuredReviews, user, appearance] =
+  const [products, categories, homeContent, featuredReviews, user, runtime] =
     await Promise.all([
       listHomepageProducts(locale),
       listCategories(locale),
       getHomePageContent(locale),
       listFeaturedReviews(locale, 6),
       getSession(),
-      getSiteAppearance(),
+      getSiteRuntimeSettings(),
     ]);
 
   const profile = user ? await getProfile(user.id) : null;
@@ -51,7 +51,8 @@ export default async function HomePage() {
         <HeroSection
           content={homeContent.hero}
           compact
-          backgroundImageUrl={appearance.heroBackgroundUrl}
+          backgroundImageUrl={runtime.heroBackgroundUrl}
+          slideImages={runtime.heroSlideImages}
         />
       </div>
       <HomeMarketplace

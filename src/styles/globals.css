@@ -42,6 +42,7 @@
 @import "./nexora-ui-unified.css";
 @import "./nexora-theme-bronze.css";
 @import "./nexora-geist-dark.css";
+@import "./nexora-theme-bindings.css";
 
 @tailwind base;
 @tailwind components;

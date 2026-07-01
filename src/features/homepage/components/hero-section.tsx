@@ -44,10 +44,12 @@ export function HeroSection({
   content,
   compact = false,
   backgroundImageUrl,
+  slideImages,
 }: {
   content?: HeroBlockContent | null;
   compact?: boolean;
   backgroundImageUrl?: string | null;
+  slideImages?: Record<string, string>;
 }) {
   const t = useTranslations("home");
   const tCommon = useTranslations("common");
@@ -166,7 +168,10 @@ export function HeroSection({
 
   const activeSlide = HERO_SLIDES[activeIndex];
   const copy = slideCopy[activeIndex];
-  const heroImage = backgroundImageUrl ?? HERO_BACKGROUND_FALLBACK;
+  const heroImage =
+    slideImages?.[activeSlide.id] ??
+    backgroundImageUrl ??
+    HERO_BACKGROUND_FALLBACK;
 
   return (
     <section
@@ -181,6 +186,7 @@ export function HeroSection({
     >
       <div className="nex-hero-media absolute inset-0 z-[0] overflow-hidden">
         <Image
+          key={heroImage}
           src={heroImage}
           alt=""
           fill

@@ -4,6 +4,12 @@ import {
   type ThemePresetId,
   type ThemeTokens,
 } from "./tokens";
+import {
+  getDefaultGradients,
+  resolveThemeGradients,
+  type ThemeGradients,
+} from "./gradients";
+import { parseThemeConfig } from "./parse-theme-config";
 
 const PRESETS: Record<ThemePresetId, ThemeTokens> = {
   "geist-dark": GEIST_DARK_PRESET,
@@ -22,19 +28,26 @@ export function resolveThemeTokens(
   return { ...base, ...overrides };
 }
 
-export function parseThemeOverrides(
-  raw: unknown,
-): Partial<ThemeTokens> {
-  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
-    return {};
-  }
-  const keys = Object.keys(GEIST_DARK_PRESET) as (keyof ThemeTokens)[];
-  const result: Partial<ThemeTokens> = {};
-  for (const key of keys) {
-    const value = (raw as Record<string, unknown>)[key];
-    if (typeof value === "string" && value.trim()) {
-      result[key] = value.trim();
-    }
-  }
-  return result;
+export type ResolvedTheme = {
+  preset: ThemePresetId;
+  tokens: ThemeTokens;
+  gradients: ThemeGradients;
+};
+
+export function resolveTheme(
+  presetId: ThemePresetId,
+  rawConfig: unknown,
+): ResolvedTheme {
+  const { tokenOverrides, gradientOverrides } = parseThemeConfig(rawConfig);
+  const tokens = resolveThemeTokens(presetId, tokenOverrides);
+  const gradients = resolveThemeGradients(tokens, gradientOverrides);
+
+  return { preset: presetId, tokens, gradients };
 }
+
+/** @deprecated Use parseThemeConfig */
+export function parseThemeOverrides(raw: unknown): Partial<ThemeTokens> {
+  return parseThemeConfig(raw).tokenOverrides;
+}
+
+export { getDefaultGradients };

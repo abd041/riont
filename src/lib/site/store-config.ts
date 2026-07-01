@@ -66,7 +66,7 @@ export function parseSocialLinks(raw: unknown): SocialLinks {
     discord: typeof o.discord === "string" ? o.discord.trim() : "",
     instagram: typeof o.instagram === "string" ? o.instagram.trim() : "",
     email:
-      typeof o.email === "string" && o.email.trim()
+      "email" in o && typeof o.email === "string"
         ? o.email.trim()
         : DEFAULT_SOCIAL_LINKS.email,
   };

@@ -3,14 +3,16 @@
 import { revalidatePath } from "next/cache";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { requireAdmin } from "@/lib/auth/require-admin";
-import { deriveAccentScale } from "@/lib/theme/derive-tokens";
+import type { HeroSlideId } from "@/lib/site/hero-slides";
 import { writeAuditLog } from "@/server/services/audit.service";
 import {
   clearHeroBackground,
+  clearHeroSlideImage,
   clearSiteLogo,
   resetThemeSettings,
   updateThemeSettings,
   uploadHeroBackground,
+  uploadHeroSlideImage,
   uploadSiteLogo,
 } from "@/server/services/theme.service";
 import { saveThemeSettingsSchema } from "@/validations/theme.schema";
@@ -53,19 +55,9 @@ export async function saveThemeSettingsAction(
     const { user } = await requireAdmin();
     const { preset, themeConfig } = parsed.data;
 
-    let overrides = { ...themeConfig };
-
-  const accentOnly = formData.get("accentOnly");
-  if (accentOnly === "true" && themeConfig.accent500) {
-    overrides = {
-      ...overrides,
-      ...deriveAccentScale(themeConfig.accent500),
-    };
-  }
-
     await updateThemeSettings({
       preset,
-      themeConfig: overrides,
+      themeConfig: parsed.data.themeConfig as Record<string, unknown>,
     });
 
     await writeAuditLog({
@@ -189,5 +181,60 @@ export async function clearSiteLogoAction(): Promise<ThemeActionResult> {
   } catch (error) {
     if (isRedirectError(error)) throw error;
     return { success: false, error: "Could not clear logo" };
+  }
+}
+
+export async function uploadHeroSlideImageAction(
+  _prev: ThemeActionResult | null,
+  formData: FormData,
+): Promise<ThemeActionResult> {
+  const slideId = formData.get("slideId");
+  const file = formData.get("file");
+  if (typeof slideId !== "string" || !slideId.trim()) {
+    return { success: false, error: "Invalid slide" };
+  }
+  if (!(file instanceof File) || file.size === 0) {
+    return { success: false, error: "Choose an image file" };
+  }
+
+  try {
+    const { user } = await requireAdmin();
+    await uploadHeroSlideImage(slideId as HeroSlideId, file);
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "theme.hero_slide_updated",
+      entityType: "site_settings",
+      entityId: slideId,
+    });
+    revalidateThemePaths();
+    return { success: true, message: "Slide image updated." };
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    const msg = error instanceof Error ? error.message : "Upload failed";
+    return { success: false, error: msg };
+  }
+}
+
+export async function clearHeroSlideImageAction(
+  slideId: string,
+): Promise<ThemeActionResult> {
+  if (!slideId.trim()) {
+    return { success: false, error: "Invalid slide" };
+  }
+
+  try {
+    const { user } = await requireAdmin();
+    await clearHeroSlideImage(slideId as HeroSlideId);
+    await writeAuditLog({
+      actorUserId: user.id,
+      action: "theme.hero_slide_cleared",
+      entityType: "site_settings",
+      entityId: slideId,
+    });
+    revalidateThemePaths();
+    return { success: true, message: "Slide image reset." };
+  } catch (error) {
+    if (isRedirectError(error)) throw error;
+    return { success: false, error: "Could not clear slide image" };
   }
 }

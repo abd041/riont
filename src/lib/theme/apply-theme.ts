@@ -1,5 +1,10 @@
 import type { ThemeTokens } from "./tokens";
 import { deriveGlowFromAccent } from "./derive-tokens";
+import {
+  gradientToCss,
+  resolveGradientBackground,
+  type ThemeGradients,
+} from "./gradients";
 
 const CSS_VAR_MAP: Record<keyof ThemeTokens, string> = {
   bgVoid: "--bg-void",
@@ -23,7 +28,10 @@ const CSS_VAR_MAP: Record<keyof ThemeTokens, string> = {
   error: "--error",
 };
 
-export function themeTokensToCssBlock(tokens: ThemeTokens): string {
+export function themeTokensToCssBlock(
+  tokens: ThemeTokens,
+  gradients?: ThemeGradients,
+): string {
   const glow = deriveGlowFromAccent(tokens.accent500);
   const lines = Object.entries(CSS_VAR_MAP).map(([key, cssVar]) => {
     const value = tokens[key as keyof ThemeTokens];
@@ -33,30 +41,87 @@ export function themeTokensToCssBlock(tokens: ThemeTokens): string {
   lines.push(`  --accent-glow: ${glow.accentGlow};`);
   lines.push(`  --accent-glow-sm: ${glow.accentGlowSm};`);
   lines.push(`  --border-glow: ${glow.borderGlow};`);
-  lines.push(`  --gradient-primary: ${tokens.accent500};`);
   lines.push(`  --bg-card: ${tokens.bgSurface};`);
   lines.push(`  --bg-card-hover: ${tokens.bgSurface2};`);
   lines.push(`  --text-accent: ${tokens.textAccent};`);
+
+  const g = gradients;
+  const pageBg = g
+    ? resolveGradientBackground(g.pageBackground, tokens.bgBase)
+    : tokens.bgBase;
+  const cardBg = g
+    ? resolveGradientBackground(g.cardBackground, tokens.bgSurface)
+    : tokens.bgSurface;
+  const cardHoverBg = g
+    ? resolveGradientBackground(g.cardHover, tokens.bgSurface2)
+    : tokens.bgSurface2;
+  const cardMediaBg = g
+    ? resolveGradientBackground(g.cardMedia, tokens.bgElevated)
+    : tokens.bgElevated;
+  const accentBg = g
+    ? resolveGradientBackground(g.accentButton, tokens.accent500)
+    : tokens.accent500;
+  const badgeBg = g
+    ? resolveGradientBackground(g.saleBadge, tokens.accent600)
+    : tokens.accent600;
+
+  lines.push(`  --gradient-page: ${pageBg};`);
+  lines.push(`  --gradient-card: ${cardBg};`);
+  lines.push(`  --gradient-card-hover: ${cardHoverBg};`);
+  lines.push(`  --gradient-card-media: ${cardMediaBg};`);
+  lines.push(`  --gradient-accent: ${accentBg};`);
+  lines.push(`  --gradient-badge: ${badgeBg};`);
+  lines.push(`  --gradient-primary: ${accentBg};`);
+
+  if (g) {
+    for (const [slot, gradient] of Object.entries(g) as Array<
+      [keyof ThemeGradients, (typeof g)[keyof ThemeGradients]]
+    >) {
+      const varName = `--gradient-slot-${slot.replace(/[A-Z]/g, (m) => `-${m.toLowerCase()}`)}`;
+      lines.push(
+        `  ${varName}: ${gradient.enabled ? gradientToCss(gradient) : "none"};`,
+      );
+    }
+  }
+
+  lines.push(`  --co-bg-top: ${tokens.bgElevated};`);
+  lines.push(`  --co-bg-bottom: ${tokens.bgBase};`);
+  lines.push(`  --co-glass-top: ${tokens.bgSurface};`);
+  lines.push(`  --co-glass-bottom: ${tokens.bgElevated};`);
+  lines.push(`  --co-border: ${glow.borderGlow};`);
+  lines.push(`  --co-border-soft: ${tokens.borderSubtle};`);
+  lines.push(`  --co-glow: ${glow.accentGlowSm};`);
+  lines.push(`  --co-glow-strong: ${glow.accentGlow};`);
+  lines.push(`  --co-text-muted: ${tokens.textMuted};`);
+  lines.push(`  --co-text-secondary: ${tokens.textSecondary};`);
+  lines.push(`  --success-muted: rgba(34, 197, 94, 0.15);`);
+  lines.push(`  --error-muted: rgba(239, 68, 68, 0.15);`);
+  lines.push(`  --warning-muted: rgba(245, 158, 11, 0.15);`);
+
+  lines.push(`  --card-bg: ${cardBg};`);
+  lines.push(`  --card-bg-hover: ${cardHoverBg};`);
+  lines.push(`  --card-border: ${tokens.borderSubtle};`);
+  lines.push(`  --card-border-hover: ${glow.borderGlow};`);
+  lines.push(`  --card-media-bg: ${cardMediaBg};`);
+  lines.push(`  --card-badge-bg: ${badgeBg};`);
+  lines.push(`  --card-badge-text: #ffffff;`);
+  lines.push(`  --card-glow: ${glow.accentGlowSm};`);
 
   return `:root {\n${lines.join("\n")}\n}`;
 }
 
 export function themeTokensToInlineStyle(
   tokens: ThemeTokens,
+  gradients?: ThemeGradients,
 ): Record<string, string> {
-  const glow = deriveGlowFromAccent(tokens.accent500);
+  const block = themeTokensToCssBlock(tokens, gradients);
   const style: Record<string, string> = {};
-
-  for (const [key, cssVar] of Object.entries(CSS_VAR_MAP)) {
-    style[cssVar] = tokens[key as keyof ThemeTokens];
+  const inner = block.replace(/^:root\s*\{\n?/, "").replace(/\n?\}$/, "");
+  for (const line of inner.split("\n")) {
+    const match = line.match(/^\s*(--[^:]+):\s*(.+);\s*$/);
+    if (match) {
+      style[match[1]!] = match[2]!;
+    }
   }
-
-  style["--accent-glow"] = glow.accentGlow;
-  style["--accent-glow-sm"] = glow.accentGlowSm;
-  style["--border-glow"] = glow.borderGlow;
-  style["--gradient-primary"] = tokens.accent500;
-  style["--bg-card"] = tokens.bgSurface;
-  style["--bg-card-hover"] = tokens.bgSurface2;
-
   return style;
 }

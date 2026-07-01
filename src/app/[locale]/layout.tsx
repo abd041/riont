@@ -7,9 +7,8 @@ import { routing } from "@/i18n/routing";
 import { AppProviders } from "@/components/providers/app-providers";
 import { SiteBrandingProvider } from "@/components/providers/site-branding-provider";
 import { SiteThemeStyle } from "@/components/theme/site-theme-style";
+import { getSiteRuntimeSettings } from "@/server/services/site-runtime.service";
 import { BRAND_LOGO } from "@/components/shared/brand-logo";
-import { getSiteAppearance } from "@/server/services/theme.service";
-import { getStoreRuntimeConfig } from "@/server/services/store-config.service";
 import { SiteStoreProvider } from "@/components/providers/site-store-provider";
 import "@/styles/globals.css";
 
@@ -31,6 +30,8 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { locale } = await params;
   const t = await getTranslations({ locale, namespace: "common" });
+  const runtime = await getSiteRuntimeSettings();
+  const favicon = runtime.logoUrl ?? BRAND_LOGO.src;
 
   return {
     title: {
@@ -38,8 +39,8 @@ export async function generateMetadata({
       template: `%s | ${t("brand")}`,
     },
     icons: {
-      icon: BRAND_LOGO.src,
-      apple: BRAND_LOGO.src,
+      icon: favicon,
+      apple: favicon,
     },
     description: t("siteDescription"),
   };
@@ -66,8 +67,7 @@ export default async function LocaleLayout({
 
   const messages = await getMessages();
   const dir = locale === "ar" ? "rtl" : "ltr";
-  const appearance = await getSiteAppearance();
-  const storeConfig = await getStoreRuntimeConfig();
+  const runtime = await getSiteRuntimeSettings();
 
   return (
     <html lang={locale} dir={dir} className="dark">
@@ -76,10 +76,16 @@ export default async function LocaleLayout({
           locale === "ar" ? "font-arabic" : "font-sans"
         } antialiased`}
       >
-        <SiteThemeStyle />
+        <SiteThemeStyle themeCss={runtime.themeCss} />
         <NextIntlClientProvider messages={messages}>
-          <SiteBrandingProvider logoUrl={appearance.logoUrl}>
-            <SiteStoreProvider config={storeConfig}>
+          <SiteBrandingProvider logoUrl={runtime.logoUrl}>
+            <SiteStoreProvider
+              config={{
+                features: runtime.features,
+                socialLinks: runtime.socialLinks,
+                supportWhatsapp: runtime.supportWhatsapp,
+              }}
+            >
               <AppProviders dir={dir} />
               {children}
             </SiteStoreProvider>

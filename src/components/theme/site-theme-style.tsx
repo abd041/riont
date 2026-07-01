@@ -1,8 +1,4 @@
-import { getSiteAppearance } from "@/server/services/theme.service";
-
-export async function SiteThemeStyle() {
-  const { themeCss } = await getSiteAppearance();
-
+export function SiteThemeStyle({ themeCss }: { themeCss: string }) {
   return (
     <style
       id="riyont-theme-variables"

@@ -1,18 +1,15 @@
 import { createAdminClient } from "@/lib/supabase/admin";
-import { createClient } from "@/lib/supabase/server";
-import { isSupabaseConfigured } from "@/lib/env/public";
-import { themeTokensToCssBlock } from "@/lib/theme/apply-theme";
-import {
-  parseThemeOverrides,
-  resolveThemeTokens,
-} from "@/lib/theme/resolve-theme";
 import {
   DEFAULT_THEME_PRESET,
   type ThemePresetId,
   type ThemeTokens,
 } from "@/lib/theme/tokens";
-import { resolveMediaUrl } from "@/lib/storage/media-url";
 import { ServiceError } from "@/lib/domain/errors";
+import type { HeroSlideId } from "@/lib/site/hero-slides";
+import {
+  getAdminSiteRuntimeSettings,
+  getSiteRuntimeSettings,
+} from "@/server/services/site-runtime.service";
 
 export type SiteAppearance = {
   preset: ThemePresetId;
@@ -24,80 +21,31 @@ export type SiteAppearance = {
 
 const DEFAULT_HERO = "/hero/hero-marketplace-bg.png";
 
-type SiteSettingsThemeRow = {
-  theme_preset: string | null;
-  theme_config: unknown;
-  hero_background_path: string | null;
-  logo_path: string | null;
-};
-
-function normalizePreset(raw: string | null | undefined): ThemePresetId {
-  if (raw === "bronze" || raw === "geist-dark") return raw;
-  return DEFAULT_THEME_PRESET;
-}
-
-function buildAppearance(row: SiteSettingsThemeRow | null): SiteAppearance {
-  const preset = normalizePreset(row?.theme_preset);
-  const overrides = parseThemeOverrides(row?.theme_config);
-  const tokens = resolveThemeTokens(preset, overrides);
-
+export async function getSiteAppearance(): Promise<SiteAppearance> {
+  const s = await getSiteRuntimeSettings();
   return {
-    preset,
-    tokens,
-    themeCss: themeTokensToCssBlock(tokens),
-    heroBackgroundUrl: row?.hero_background_path
-      ? resolveMediaUrl(row.hero_background_path)
-      : null,
-    logoUrl: row?.logo_path ? resolveMediaUrl(row.logo_path) : null,
+    preset: s.preset,
+    tokens: s.tokens,
+    themeCss: s.themeCss,
+    heroBackgroundUrl: s.heroBackgroundUrl,
+    logoUrl: s.logoUrl,
   };
 }
 
-const THEME_SELECT =
-  "theme_preset, theme_config, hero_background_path, logo_path";
-
-export async function getSiteAppearance(): Promise<SiteAppearance> {
-  if (!isSupabaseConfigured()) {
-    return buildAppearance(null);
-  }
-
-  try {
-    const supabase = await createClient();
-    const { data, error } = await supabase
-      .from("site_settings")
-      .select(THEME_SELECT)
-      .eq("id", "default")
-      .maybeSingle();
-
-    if (error) throw error;
-    return buildAppearance(data as SiteSettingsThemeRow | null);
-  } catch {
-    return buildAppearance(null);
-  }
-}
-
 export async function getAdminSiteAppearance(): Promise<SiteAppearance> {
-  if (!isSupabaseConfigured()) {
-    return buildAppearance(null);
-  }
-
-  try {
-    const admin = createAdminClient();
-    const { data, error } = await admin
-      .from("site_settings")
-      .select(THEME_SELECT)
-      .eq("id", "default")
-      .maybeSingle();
-
-    if (error) throw error;
-    return buildAppearance(data as SiteSettingsThemeRow | null);
-  } catch {
-    return buildAppearance(null);
-  }
+  const s = await getAdminSiteRuntimeSettings();
+  return {
+    preset: s.preset,
+    tokens: s.tokens,
+    themeCss: s.themeCss,
+    heroBackgroundUrl: s.heroBackgroundUrl,
+    logoUrl: s.logoUrl,
+  };
 }
 
 export async function updateThemeSettings(input: {
   preset: ThemePresetId;
-  themeConfig: Partial<ThemeTokens>;
+  themeConfig: Record<string, unknown>;
 }): Promise<void> {
   const admin = createAdminClient();
   const { error } = await admin
@@ -210,6 +158,52 @@ export async function clearSiteLogo(): Promise<void> {
     .eq("id", "default");
 
   if (error) throw error;
+}
+
+async function readHeroSlidesMap(): Promise<Record<string, string>> {
+  const admin = createAdminClient();
+  const { data, error } = await admin
+    .from("site_settings")
+    .select("hero_slides")
+    .eq("id", "default")
+    .maybeSingle();
+
+  if (error) throw error;
+  const raw = data?.hero_slides;
+  if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
+    return {};
+  }
+  return { ...(raw as Record<string, string>) };
+}
+
+async function writeHeroSlidesMap(slides: Record<string, string>): Promise<void> {
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from("site_settings")
+    .update({
+      hero_slides: slides,
+      updated_at: new Date().toISOString(),
+    })
+    .eq("id", "default");
+
+  if (error) throw error;
+}
+
+export async function uploadHeroSlideImage(
+  slideId: HeroSlideId,
+  file: File,
+): Promise<string> {
+  const path = await uploadSiteImage(file, "theme/hero");
+  const slides = await readHeroSlidesMap();
+  slides[slideId] = path;
+  await writeHeroSlidesMap(slides);
+  return path;
+}
+
+export async function clearHeroSlideImage(slideId: HeroSlideId): Promise<void> {
+  const slides = await readHeroSlidesMap();
+  delete slides[slideId];
+  await writeHeroSlidesMap(slides);
 }
 
 export function getDefaultHeroBackground(): string {

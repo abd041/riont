@@ -1,5 +1,6 @@
 import { z } from "zod";
 import { THEME_PRESET_IDS } from "@/lib/theme/tokens";
+import { GRADIENT_SLOT_IDS } from "@/lib/theme/gradients";
 
 export const themeColorSchema = z
   .string()
@@ -11,6 +12,21 @@ export const themeColorSchema = z
       /^rgba?\([\d\s%,.]+\)$/.test(v),
     "Invalid color value",
   );
+
+export const themeGradientSchema = z.object({
+  enabled: z.boolean(),
+  type: z.enum(["linear", "radial"]),
+  angle: z.number().min(0).max(360),
+  from: themeColorSchema,
+  to: themeColorSchema,
+  via: themeColorSchema.optional(),
+});
+
+const gradientsShape = Object.fromEntries(
+  GRADIENT_SLOT_IDS.map((id) => [id, themeGradientSchema.optional()]),
+) as Record<(typeof GRADIENT_SLOT_IDS)[number], z.ZodOptional<typeof themeGradientSchema>>;
+
+export const themeGradientsPartialSchema = z.object(gradientsShape).partial();
 
 export const themeTokensPartialSchema = z.object({
   bgVoid: themeColorSchema.optional(),
@@ -32,6 +48,7 @@ export const themeTokensPartialSchema = z.object({
   success: themeColorSchema.optional(),
   warning: themeColorSchema.optional(),
   error: themeColorSchema.optional(),
+  gradients: themeGradientsPartialSchema.optional(),
 });
 
 export const saveThemeSettingsSchema = z.object({

@@ -37,7 +37,11 @@ export async function saveStoreConfigAction(
   });
 
   if (!parsed.success) {
-    return { success: false, error: "Invalid store settings" };
+    const first = parsed.error.issues[0];
+    return {
+      success: false,
+      error: first?.message ?? "Invalid store settings",
+    };
   }
 
   const d = parsed.data;

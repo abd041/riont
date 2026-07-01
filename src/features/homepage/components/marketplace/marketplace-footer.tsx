@@ -48,7 +48,7 @@ function DiscordIcon({ className }: { className?: string }) {
 type SocialItem = {
   key: string;
   href: string;
-  labelKey: "footerSocialX" | "footerSocialDiscord" | "footerSocialEmail";
+  labelKey: "footerSocialX" | "footerSocialDiscord" | "footerSocialInstagram" | "footerSocialEmail";
   icon: LucideIcon | typeof XIcon;
 };
 
@@ -84,7 +84,7 @@ export function MarketplaceFooter() {
     socialItems.push({
       key: "instagram",
       href: socialLinks.instagram,
-      labelKey: "footerSocialEmail",
+      labelKey: "footerSocialInstagram",
       icon: InstagramIcon,
     });
   }

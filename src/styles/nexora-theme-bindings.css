@@ -1,0 +1,261 @@
+/**
+ * Theme bindings — maps legacy hardcoded surfaces to CSS variables.
+ * Loaded last so admin theme colors reach checkout, browse, PDP, etc.
+ */
+
+/* ─── Checkout: neutral theme-driven (override purple/bronze legacy) ─── */
+.nex-checkout-page {
+  background: var(--gradient-page, var(--bg-base)) !important;
+  min-height: auto;
+}
+
+.nex-checkout-page::before,
+.nex-co-ambient,
+.nex-co-noise {
+  display: none !important;
+}
+
+.nex-co-card,
+.nex-co-summary,
+.nex-co-panel,
+.sf-checkout-card {
+  background: var(--bg-surface) !important;
+  border-color: var(--border-subtle) !important;
+  box-shadow: none !important;
+}
+
+.nex-co-card__title,
+.nex-co-summary__title,
+.sf-checkout-card h2 {
+  color: var(--text-primary) !important;
+}
+
+.nex-co-card__label,
+.nex-co-summary__row span,
+.sf-checkout-card label {
+  color: var(--text-muted) !important;
+}
+
+.nex-co-summary__total,
+.nex-co-price,
+.sf-checkout-total {
+  color: var(--text-primary) !important;
+}
+
+.nex-co-btn-primary,
+.nex-co-submit,
+.sf-checkout-card button[type="submit"] {
+  background: var(--gradient-accent, var(--accent-500)) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  box-shadow: none !important;
+  color: #fff !important;
+}
+
+.nex-co-btn-primary:hover,
+.nex-co-submit:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+/* ─── Page & storefront backgrounds ─── */
+html,
+body,
+.nex-storefront-main,
+.mp-page,
+.mp-page__inner,
+.sf-cart-page,
+.sf-account-page,
+.sf-auth-page,
+.nex-checkout-page,
+.nex-browse-page {
+  background: var(--gradient-page, var(--bg-base)) !important;
+  background-attachment: fixed;
+}
+
+/* ─── Browse / product cards ─── */
+.mp-card,
+.mp-card--premium,
+.mp-card--showcase,
+.mp-card--mini,
+.mp-card--grid,
+.nex-bp-card,
+.nex-product-card {
+  background: var(--gradient-card, var(--card-bg)) !important;
+  background-image: none !important;
+  border-color: var(--card-border) !important;
+  box-shadow: none !important;
+}
+
+.mp-card:hover,
+.mp-card--premium:hover,
+.mp-card--showcase:hover,
+.mp-card--grid:hover,
+.nex-bp-card:hover,
+.nex-product-card:hover {
+  background: var(--gradient-card-hover, var(--card-bg-hover)) !important;
+  background-image: none !important;
+  border-color: var(--card-border-hover) !important;
+  box-shadow: 0 0 24px var(--card-glow) !important;
+}
+
+.mp-card--premium::before,
+.mp-card__ambient,
+.mp-card__surface {
+  display: none !important;
+}
+
+.mp-card__media,
+.mp-card__media--grid,
+.nex-bp-card .nex-bp-image-wrap,
+.nex-product-image-wrap {
+  background: var(--gradient-card-media, var(--card-media-bg)) !important;
+  background-image: none !important;
+  border-color: var(--card-border) !important;
+}
+
+.mp-card__placeholder {
+  background: var(--card-media-bg) !important;
+  color: var(--accent-400) !important;
+}
+
+.mp-card__name,
+.nex-bp-card .nex-bp-name,
+.nex-product-card .nex-product-name {
+  color: var(--text-primary) !important;
+}
+
+.mp-card__cat,
+.mp-card__rating,
+.mp-card__rating-row,
+.mp-card__reviews,
+.mp-card__meta-line,
+.nex-bp-card .nex-bp-cat {
+  color: var(--text-muted) !important;
+}
+
+.mp-card__star,
+.mp-card__meta-rating {
+  color: var(--accent-400) !important;
+}
+
+.nex-bp-card__price,
+.mp-card__price,
+.mp-card--grid .mp-card__price {
+  color: var(--text-primary) !important;
+}
+
+.mp-card__price-old {
+  color: var(--text-muted) !important;
+}
+
+.mp-badge--sale,
+.mp-badge--instant,
+.mp-badge--discount {
+  background: var(--gradient-badge, var(--card-badge-bg)) !important;
+  background-image: none !important;
+  border: 1px solid var(--card-border-hover) !important;
+  color: var(--card-badge-text) !important;
+  box-shadow: none !important;
+}
+
+.nex-bp-card__badge--discount,
+.mp-badge--hot,
+.mp-badge--discount {
+  background: color-mix(in srgb, var(--accent-500) 22%, transparent) !important;
+  border-color: color-mix(in srgb, var(--accent-500) 35%, transparent) !important;
+  color: var(--accent-400) !important;
+}
+
+.mp-btn-icon--cart,
+.mp-card .mp-btn-icon--cart:hover,
+.nex-btn-primary,
+.nex-co-btn-primary,
+.nex-co-submit,
+.sf-checkout-card button[type="submit"],
+.mp-store-review-form__submit {
+  background: var(--gradient-accent, var(--accent-500)) !important;
+  background-image: none !important;
+  border-color: var(--card-border-hover) !important;
+  color: #fff !important;
+  box-shadow: none !important;
+}
+
+.nex-co-btn-primary:hover,
+.nex-co-submit:hover:not(:disabled),
+.nex-btn-primary:hover {
+  filter: brightness(1.08);
+}
+
+.mp-card__wish,
+.mp-btn-icon:not(.mp-btn-icon--cart) {
+  border-color: var(--card-border) !important;
+  background: var(--card-bg) !important;
+  color: var(--text-secondary) !important;
+}
+
+.mp-card__wish--active,
+.mp-card:hover .mp-card__wish {
+  border-color: var(--card-border-hover) !important;
+  color: var(--accent-400) !important;
+}
+
+/* Section rows (Most Requested, Trending, etc.) follow page background */
+.mp-sections--storefront-home .mp-row,
+.mp-sections--storefront-home .mp-section--reveal {
+  background: transparent !important;
+}
+
+/* ─── Premium / bronze legacy gradients → accent ─── */
+.nex-btn-primary,
+[class*="nex-co-"] [class*="gradient"],
+.mp-store-review-form__submit {
+  background-image: none !important;
+}
+
+/* ─── Status colors from theme tokens ─── */
+.text-green-400,
+.nex-co-status--success {
+  color: var(--success) !important;
+}
+
+.text-red-400,
+.nex-co-status--error {
+  color: var(--error) !important;
+}
+
+/* ─── Category neon themes → accent family ─── */
+.mp-cat--violet,
+.mp-cat--blue,
+.mp-cat--amber,
+.mp-cat--emerald,
+.mp-cat--rose,
+.nex-bp-card--blue,
+.nex-bp-card--green,
+.nex-bp-card--orange,
+.nex-bp-card--purple,
+.nex-bp-card--violet {
+  --cat-glow: var(--accent-glow-sm);
+  --cat-border: var(--border-glow);
+}
+
+/* ─── Auth / account / cart pages ─── */
+.sf-cart-page,
+.sf-account-page,
+.sf-auth-page {
+  background: var(--gradient-page, var(--bg-base)) !important;
+}
+
+/* ─── PDP ─── */
+.nex-pdp-price,
+.product-purchase-actions .text-accent-400 {
+  color: var(--accent-400) !important;
+}
+
+.nex-pdp-tab--active {
+  border-color: var(--accent-500) !important;
+  color: var(--text-primary) !important;
+}
+
+/* ─── Admin appearance preview uses storefront tokens ─── */
+.admin-theme-preview {
+  color: var(--text-secondary);
+}
