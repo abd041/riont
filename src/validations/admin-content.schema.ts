@@ -17,4 +17,5 @@ export const saveTrustBlockSchema = z.object({
   item2: z.string().min(1).max(120),
   item3: z.string().min(1).max(120),
   item4: z.string().min(1).max(120),
+  item5: z.string().max(120).optional(),
 });

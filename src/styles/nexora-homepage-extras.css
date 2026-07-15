@@ -1,0 +1,326 @@
+/* Compact homepage strips — Dark Tech, no glow */
+
+.mp-live-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 4px 2px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+.mp-live-status__sep {
+  margin-inline: 6px;
+  color: var(--text-muted);
+}
+
+.mp-live-status__label {
+  color: var(--text-muted);
+}
+
+.mp-live-status__value {
+  color: var(--text-primary);
+  font-weight: 500;
+}
+
+.mp-trust-strip {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mp-trust-strip__item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.mp-trust-strip__item:hover {
+  border-color: var(--border-default);
+}
+
+.mp-trust-strip__icon {
+  width: 14px;
+  height: 14px;
+  color: var(--accent-500);
+  opacity: 0.85;
+}
+
+.mp-stats-strip {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.mp-stats-strip__item {
+  padding: 10px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  text-align: center;
+}
+
+.mp-stats-strip__value {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  color: var(--text-primary);
+}
+
+.mp-stats-strip__label {
+  margin: 2px 0 0;
+  font-size: 11px;
+  color: var(--text-muted);
+}
+
+.mp-path {
+  display: grid;
+  gap: 12px;
+}
+
+.mp-path__title,
+.mp-riyont-picks__title {
+  margin: 0;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-primary);
+}
+
+.mp-path__subtitle,
+.mp-riyont-picks__subtitle {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.mp-path__grid {
+  display: grid;
+  gap: 8px;
+}
+
+@media (min-width: 768px) {
+  .mp-path__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.mp-path__card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  text-decoration: none;
+  color: inherit;
+  transition: border-color 0.18s ease, transform 0.18s ease;
+}
+
+.mp-path__card:hover {
+  border-color: var(--border-default);
+  transform: translateY(-1px);
+}
+
+.mp-path__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.mp-path__icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.mp-path__card-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  flex: 1;
+}
+
+.mp-path__card-title {
+  font-size: 13px;
+  font-weight: 560;
+  color: var(--text-primary);
+}
+
+.mp-path__card-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.mp-path__arrow {
+  width: 16px;
+  height: 16px;
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+.mp-riyont-picks {
+  display: grid;
+  gap: 12px;
+}
+
+.mp-riyont-picks__grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+}
+
+@media (max-width: 640px) {
+  .mp-riyont-picks__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 6px;
+  }
+}
+
+.mp-riyont-picks__reason {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.mp-support-cue {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-elevated);
+}
+
+.mp-support-cue__title {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.mp-support-cue__text {
+  margin: 2px 0 0;
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.mp-support-cue__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 12px;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background 0.18s ease, border-color 0.18s ease;
+}
+
+.mp-support-cue__btn:hover {
+  background: rgba(255, 255, 255, 0.04);
+  border-color: var(--border-strong);
+}
+
+.mp-support-cue__btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mp-instant-filter {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.mp-instant-filter__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--bg-surface);
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color 0.18s ease, background 0.18s ease, transform 0.15s ease;
+}
+
+.mp-instant-filter__chip:hover {
+  border-color: var(--border-default);
+}
+
+.mp-instant-filter__chip:active {
+  transform: scale(0.98);
+}
+
+.mp-instant-filter__chip--active {
+  border-color: var(--border-strong);
+  background: rgba(255, 255, 255, 0.06);
+  color: var(--text-primary);
+}
+
+.mp-hero-phrases {
+  display: inline-flex;
+  align-items: center;
+  min-height: 1.25em;
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-muted);
+  letter-spacing: 0.02em;
+}
+
+.mp-hero-phrases__dot {
+  width: 6px;
+  height: 6px;
+  margin-inline-end: 8px;
+  border-radius: 999px;
+  background: var(--accent-500);
+  opacity: 0.7;
+}
+
+/* Soft product hover — 1–2px lift, clearer border */
+html[data-theme="geist-dark"] .mp-card--mini,
+html[data-theme="geist-dark"] .nex-bp-card,
+html[data-theme="geist-dark"] .mp-card--grid .mp-card__surface {
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+html[data-theme="geist-dark"] .mp-card--mini:hover,
+html[data-theme="geist-dark"] .nex-bp-card:hover,
+html[data-theme="geist-dark"] .mp-card--grid:hover .mp-card__surface {
+  transform: translateY(-2px);
+  border-color: var(--border-default) !important;
+}

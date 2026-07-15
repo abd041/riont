@@ -1,3 +1,9 @@
+import {
+  DEFAULT_HOMEPAGE_EXTRAS,
+  parseHomepageExtras,
+  type HomepageExtras,
+} from "@/lib/site/homepage-extras";
+
 export type StoreFeatures = {
   heroAutoplay: boolean;
   floatingWhatsappEnabled: boolean;
@@ -10,6 +16,7 @@ export type StoreFeatures = {
   promoBannerTextEn: string;
   promoBannerTextAr: string;
   promoBannerHref: string;
+  homepageExtras: HomepageExtras;
 };
 
 export type SocialLinks = {
@@ -31,6 +38,7 @@ export const DEFAULT_STORE_FEATURES: StoreFeatures = {
   promoBannerTextEn: "",
   promoBannerTextAr: "",
   promoBannerHref: "",
+  homepageExtras: { ...DEFAULT_HOMEPAGE_EXTRAS },
 };
 
 export const DEFAULT_SOCIAL_LINKS: SocialLinks = {
@@ -48,7 +56,7 @@ export type StoreRuntimeConfig = {
 
 export function parseStoreFeatures(raw: unknown): StoreFeatures {
   if (!raw || typeof raw !== "object" || Array.isArray(raw)) {
-    return { ...DEFAULT_STORE_FEATURES };
+    return { ...DEFAULT_STORE_FEATURES, homepageExtras: { ...DEFAULT_HOMEPAGE_EXTRAS } };
   }
   const o = raw as Record<string, unknown>;
   return {
@@ -68,6 +76,7 @@ export function parseStoreFeatures(raw: unknown): StoreFeatures {
       typeof o.promoBannerTextAr === "string" ? o.promoBannerTextAr : "",
     promoBannerHref:
       typeof o.promoBannerHref === "string" ? o.promoBannerHref.trim() : "",
+    homepageExtras: parseHomepageExtras(o.homepageExtras),
   };
 }
 

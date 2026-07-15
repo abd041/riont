@@ -60,6 +60,7 @@ const primaryNav = [
     match: "products-category" as const,
     categorySlug: "subscriptions",
   },
+  { href: "/support", icon: Headphones, key: "support" as const, match: "path-prefix" as const },
   { href: "/products", icon: Tag, key: "deals" as const, match: "never" as const },
 ] as const;
 
@@ -67,7 +68,6 @@ const secondaryNav = [
   { href: "/account/orders", icon: ClipboardList, key: "orders" as const, match: "path-prefix" as const },
   { href: "/wishlist", icon: Heart, key: "wishlist" as const, match: "path" as const },
   { href: "/products", icon: Ticket, key: "coupons" as const, match: "never" as const },
-  { href: "/support", icon: Headphones, key: "support" as const, match: "path-prefix" as const },
 ] as const;
 
 const iconStroke = 1.5;

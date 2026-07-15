@@ -6,6 +6,7 @@ import { requireAdmin } from "@/lib/auth/require-admin";
 import { writeAuditLog } from "@/server/services/audit.service";
 import { updateStoreConfig } from "@/server/services/store-config.service";
 import { saveStoreFeaturesSchema } from "@/validations/store-config.schema";
+import { getAdminStoreRuntimeConfig } from "@/server/services/store-config.service";
 
 export type StoreConfigActionResult =
   | { success: true; message?: string }
@@ -52,8 +53,10 @@ export async function saveStoreConfigAction(
 
   try {
     const { user } = await requireAdmin();
+    const current = await getAdminStoreRuntimeConfig();
     await updateStoreConfig({
       features: {
+        ...current.features,
         heroAutoplay: d.heroAutoplay,
         floatingWhatsappEnabled: d.floatingWhatsappEnabled,
         maintenanceMode: d.maintenanceMode,

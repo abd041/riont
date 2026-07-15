@@ -40,8 +40,29 @@ function sortBySales(products: CatalogProduct[]): CatalogProduct[] {
   );
 }
 
+function pickByIds(
+  products: CatalogProduct[],
+  ids: string[],
+  limit: number,
+): CatalogProduct[] {
+  if (!ids.length) return [];
+  const byId = new Map(
+    products.filter((p) => p.id).map((p) => [p.id as string, p]),
+  );
+  const out: CatalogProduct[] = [];
+  for (const id of ids) {
+    const product = byId.get(id);
+    if (product) out.push(product);
+    if (out.length >= limit) break;
+  }
+  return out;
+}
+
 /** Build compact homepage rows from one product pool — no duplicate architecture. */
-export function buildHomeProductRows(products: CatalogProduct[]) {
+export function buildHomeProductRows(
+  products: CatalogProduct[],
+  options?: { mostRequestedIds?: string[] },
+) {
   const pool = products.length > 0 ? products : [];
   const bySales = sortBySales(pool);
 
@@ -55,12 +76,16 @@ export function buildHomeProductRows(products: CatalogProduct[]) {
     p.categorySlug ? SERVICE_SLUGS.has(p.categorySlug) : false,
   );
 
-  const mostRequestedPool = uniqueBySlug([
-    ...featured,
-    ...bestSellers,
-    ...bySales,
-    ...pool,
-  ]);
+  const curated = pickByIds(
+    pool,
+    options?.mostRequestedIds ?? [],
+    MOST_REQUESTED_LIMIT,
+  );
+
+  const mostRequestedPool =
+    curated.length > 0
+      ? curated
+      : uniqueBySlug([...featured, ...bestSellers, ...bySales, ...pool]);
 
   return {
     mostRequested: mostRequestedPool.slice(0, MOST_REQUESTED_LIMIT),
@@ -80,3 +105,29 @@ export function buildHomeProductRows(products: CatalogProduct[]) {
 }
 
 export type HomeProductRows = ReturnType<typeof buildHomeProductRows>;
+
+export function isInstantDeliveryProduct(product: CatalogProduct): boolean {
+  return product.deliveryMode === "auto" || product.badge === "instant";
+}
+
+export function resolveRiyontPicks(
+  products: CatalogProduct[],
+  picks: Array<{ productId: string; reasonEn: string; reasonAr: string }>,
+  locale: string,
+): Array<{ product: CatalogProduct; reason: string }> {
+  const byId = new Map(
+    products.filter((p) => p.id).map((p) => [p.id as string, p]),
+  );
+  const ar = locale === "ar";
+  return picks
+    .map((pick) => {
+      const product = byId.get(pick.productId);
+      if (!product) return null;
+      return {
+        product,
+        reason: ar ? pick.reasonAr || pick.reasonEn : pick.reasonEn,
+      };
+    })
+    .filter((x): x is { product: CatalogProduct; reason: string } => x !== null)
+    .slice(0, 3);
+}

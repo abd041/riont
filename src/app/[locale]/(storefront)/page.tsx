@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { getTranslations, getLocale } from "next-intl/server";
 import { HeroSection, HomeMarketplace } from "@/features/homepage";
 import { HomePromoBanner } from "@/features/homepage/components/home-promo-banner";
@@ -54,17 +55,27 @@ export default async function HomePage() {
           backgroundImageUrl={runtime.heroBackgroundUrl}
           slideImages={runtime.heroSlideImages}
           heroSlideContent={runtime.heroSlideContent}
+          heroCoverMode={runtime.features.homepageExtras.heroCoverMode}
+          heroPhrases={
+            locale === "ar"
+              ? runtime.features.homepageExtras.heroPhrasesAr
+              : runtime.features.homepageExtras.heroPhrasesEn
+          }
         />
       </div>
-      <HomeMarketplace
-        products={products}
-        categories={categories}
-        featuredReviews={featuredReviews}
-        locale={locale}
-        isLoggedIn={!!user}
-        userEmail={user?.email}
-        userDisplayName={profile?.display_name}
-      />
+      <Suspense fallback={null}>
+        <HomeMarketplace
+          products={products}
+          categories={categories}
+          featuredReviews={featuredReviews}
+          locale={locale}
+          isLoggedIn={!!user}
+          userEmail={user?.email}
+          userDisplayName={profile?.display_name}
+          trustContent={homeContent.trust}
+          homepageExtras={runtime.features.homepageExtras}
+        />
+      </Suspense>
     </MarketplacePageShell>
   );
 }

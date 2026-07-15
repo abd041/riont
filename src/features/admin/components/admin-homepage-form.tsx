@@ -87,14 +87,17 @@ function TrustForm({
     <form action={action} className="admin-panel admin-panel--flat">
       <h3 className="font-semibold">Trust bar ({locale.toUpperCase()})</h3>
       <input type="hidden" name="locale" value={locale} />
-      {[1, 2, 3, 4].map((n) => (
+      {[1, 2, 3, 4, 5].map((n) => (
         <div key={n}>
           <label className="text-sm text-[var(--text-muted)]">Item {n}</label>
           <Input
             name={`item${n}`}
-            required
+            required={n <= 4}
             defaultValue={items[n - 1]?.label}
             className="mt-1"
+            placeholder={
+              n === 5 ? "e.g. Fast Processing" : undefined
+            }
           />
         </div>
       ))}

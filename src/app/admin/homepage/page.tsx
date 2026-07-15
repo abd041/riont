@@ -1,8 +1,14 @@
 import { listAdminHomepageBlocks } from "@/server/services/content-block.service";
 import { AdminHomepageForm } from "@/features/admin/components/admin-homepage-form";
+import { AdminHomepageExtrasForm } from "@/features/admin/components/admin-homepage-extras-form";
 import { AdminPageHeader } from "@/features/admin/components/admin-page-header";
 import { AdminPageShell } from "@/features/admin/components/admin-page-shell";
-import type { HeroBlockContent, TrustBlockContent } from "@/server/services/content-block.service";
+import type {
+  HeroBlockContent,
+  TrustBlockContent,
+} from "@/server/services/content-block.service";
+import { getAdminStoreRuntimeConfig } from "@/server/services/store-config.service";
+import { listAdminProducts } from "@/server/services/admin-catalog.service";
 
 function pickBlock<T>(
   blocks: Awaited<ReturnType<typeof listAdminHomepageBlocks>>,
@@ -50,22 +56,37 @@ function parseTrust(content: Record<string, unknown>): TrustBlockContent | null 
 }
 
 export default async function AdminHomepagePage() {
-  const blocks = await listAdminHomepageBlocks();
+  const [blocks, config, adminProducts] = await Promise.all([
+    listAdminHomepageBlocks(),
+    getAdminStoreRuntimeConfig(),
+    listAdminProducts(),
+  ]);
+
+  const products = adminProducts.map((p) => ({
+    id: p.id,
+    name: p.name,
+  }));
 
   return (
     <AdminPageShell>
       <AdminPageHeader
         title="Homepage content"
-        description="Edit hero and trust bar copy per language. Empty fields fall back to default translations until you save."
+        description="Edit Cover / trust copy, live status, stats, Pick Your Path, curated Most Requested, and RIYONT Picks."
       />
-      <AdminHomepageForm
-        blocks={{
-          enHero: pickBlock(blocks, "home_hero", "en", parseHero),
-          arHero: pickBlock(blocks, "home_hero", "ar", parseHero),
-          enTrust: pickBlock(blocks, "home_trust", "en", parseTrust),
-          arTrust: pickBlock(blocks, "home_trust", "ar", parseTrust),
-        }}
-      />
+      <div className="space-y-8">
+        <AdminHomepageForm
+          blocks={{
+            enHero: pickBlock(blocks, "home_hero", "en", parseHero),
+            arHero: pickBlock(blocks, "home_hero", "ar", parseHero),
+            enTrust: pickBlock(blocks, "home_trust", "en", parseTrust),
+            arTrust: pickBlock(blocks, "home_trust", "ar", parseTrust),
+          }}
+        />
+        <AdminHomepageExtrasForm
+          extras={config.features.homepageExtras}
+          products={products}
+        />
+      </div>
     </AdminPageShell>
   );
 }

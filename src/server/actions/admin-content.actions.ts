@@ -71,6 +71,7 @@ export async function saveTrustBlockAction(
     item2: formData.get("item2"),
     item3: formData.get("item3"),
     item4: formData.get("item4"),
+    item5: formData.get("item5") || undefined,
   });
 
   if (!parsed.success) {
@@ -78,17 +79,20 @@ export async function saveTrustBlockAction(
   }
 
   const d = parsed.data;
+  const items = [
+    { label: d.item1 },
+    { label: d.item2 },
+    { label: d.item3 },
+    { label: d.item4 },
+  ];
+  if (d.item5?.trim()) {
+    items.push({ label: d.item5.trim() });
+  }
+
   await saveHomepageBlock({
     blockKey: TRUST_KEY,
     locale: d.locale,
-    content: {
-      items: [
-        { label: d.item1 },
-        { label: d.item2 },
-        { label: d.item3 },
-        { label: d.item4 },
-      ],
-    },
+    content: { items },
   });
 
   revalidatePath("/");

@@ -84,17 +84,15 @@ export const mpFilterTransition = {
   exit: { opacity: 0, y: -4, filter: "blur(2px)" },
 };
 
-export const mpTap = { scale: 0.97 };
-export const mpHoverLift = { y: -2 };
+export const mpTap = { scale: 0.98 };
+export const mpHoverLift = { y: -2, transition: { duration: 0.2, ease: mpEase } };
 
 export const mpCardHover = {
-  y: -6,
-  scale: 1.02,
-  transition: { type: "spring" as const, stiffness: 420, damping: 28 },
+  y: -2,
+  transition: { duration: 0.2, ease: mpEase },
 };
 
 export const mpCardHoverMini = {
-  y: -4,
-  scale: 1.03,
-  transition: { type: "spring" as const, stiffness: 450, damping: 30 },
+  y: -2,
+  transition: { duration: 0.18, ease: mpEase },
 };

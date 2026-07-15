@@ -50,20 +50,26 @@ export function HeroSection({
   backgroundImageUrl,
   slideImages,
   heroSlideContent,
+  heroCoverMode = "animated",
+  heroPhrases = [],
 }: {
   content?: HeroBlockContent | null;
   compact?: boolean;
   backgroundImageUrl?: string | null;
   slideImages?: Record<string, string>;
   heroSlideContent?: HeroSlideContentMap;
+  heroCoverMode?: "static" | "animated";
+  heroPhrases?: string[];
 }) {
   const t = useTranslations("home");
   const tCommon = useTranslations("common");
   const locale = useLocale();
   const reduceMotion = useReducedMotion();
   const store = useSiteStoreOptional();
-  const heroAutoplay = store?.features.heroAutoplay ?? true;
+  const heroAutoplay =
+    heroCoverMode === "animated" && (store?.features.heroAutoplay ?? true);
   const [activeIndex, setActiveIndex] = useState(0);
+  const [phraseIndex, setPhraseIndex] = useState(0);
   const [interactionPaused, setInteractionPaused] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
 
@@ -142,7 +148,27 @@ export function HeroSection({
     const ms = reduceMotion ? slideIntervalMs * 1.5 : slideIntervalMs;
     const id = window.setInterval(advanceSlide, ms);
     return () => window.clearInterval(id);
-  }, [advanceSlide, heroAutoplay, interactionPaused, reduceMotion, slideIntervalMs]);
+  }, [
+    advanceSlide,
+    heroAutoplay,
+    interactionPaused,
+    reduceMotion,
+    slideIntervalMs,
+  ]);
+
+  useEffect(() => {
+    if (heroCoverMode === "static" || reduceMotion || heroPhrases.length < 2) {
+      return;
+    }
+    const id = window.setInterval(() => {
+      setPhraseIndex((i) => (i + 1) % heroPhrases.length);
+    }, 3200);
+    return () => window.clearInterval(id);
+  }, [heroCoverMode, heroPhrases, reduceMotion]);
+
+  useEffect(() => {
+    if (heroCoverMode === "static") setActiveIndex(0);
+  }, [heroCoverMode]);
 
   const handleTouchStart = useCallback((event: React.TouchEvent) => {
     const touch = event.touches[0];
@@ -268,6 +294,23 @@ export function HeroSection({
               >
                 {copy.subtitle}
               </motion.p>
+
+              {heroPhrases.length > 0 ? (
+                <motion.div variants={textItem} className="mp-hero-phrases">
+                  <span className="mp-hero-phrases__dot" aria-hidden />
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                      key={heroPhrases[phraseIndex] ?? heroPhrases[0]}
+                      initial={reduceMotion ? false : { opacity: 0, y: 4 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      exit={reduceMotion ? undefined : { opacity: 0, y: -4 }}
+                      transition={{ duration: 0.22 }}
+                    >
+                      {heroPhrases[phraseIndex] ?? heroPhrases[0]}
+                    </motion.span>
+                  </AnimatePresence>
+                </motion.div>
+              ) : null}
 
               <motion.div
                 variants={textItem}
