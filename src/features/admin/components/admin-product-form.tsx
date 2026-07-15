@@ -518,7 +518,7 @@ export function AdminProductForm({
       <AdminFormSection
         step={5}
         title="Product photo"
-        description="Square or landscape image works best. JPG, PNG, or WebP — max 5 MB."
+        description="Use product key-art, logos, or category-style graphics for digital services — avoid unrelated stock photos. JPG, PNG, SVG, or WebP — max 5 MB."
       >
         {(existingImageUrl || imagePreviewUrl) && (
           <div className="relative mb-4 h-40 w-40 overflow-hidden rounded-xl border border-[var(--border-subtle)]">

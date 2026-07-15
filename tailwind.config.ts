@@ -32,14 +32,14 @@ const config: Config = {
         lg: "var(--radius-lg)",
       },
       fontFamily: {
-        sans: ["var(--font-inter)", "system-ui", "sans-serif"],
-        display: ["var(--font-display)", "var(--font-inter)", "system-ui", "sans-serif"],
+        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        display: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
         arabic: ["var(--font-arabic)", "system-ui", "sans-serif"],
       },
       boxShadow: {
-        glow: "0 0 32px rgba(166, 124, 82, 0.22)",
-        "glow-lg": "0 0 48px rgba(166, 124, 82, 0.28)",
-        premium: "0 8px 32px rgba(0, 0, 0, 0.45), 0 0 0 1px rgba(166, 124, 82, 0.08)",
+        glow: "0 0 0 1px rgba(255, 255, 255, 0.06)",
+        "glow-lg": "0 0 0 1px rgba(255, 255, 255, 0.1)",
+        premium: "0 0 0 1px rgba(255, 255, 255, 0.06)",
       },
       animation: {
         float: "nex-float 6s ease-in-out infinite",

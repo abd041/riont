@@ -44,7 +44,13 @@ export async function signUpWithEmailAction(
   });
 
   if (!parsed.success) {
-    return { success: false, code: "VALIDATION" };
+    const passwordIssue = parsed.error.issues.some(
+      (issue) => issue.path[0] === "password",
+    );
+    return {
+      success: false,
+      code: passwordIssue ? "WEAK_PASSWORD" : "VALIDATION",
+    };
   }
 
   const supabase = await createClient();

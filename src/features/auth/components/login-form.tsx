@@ -9,16 +9,11 @@ import {
   signUpWithEmailAction,
 } from "@/server/actions/auth.actions";
 import type { AuthErrorCode } from "@/lib/auth/map-auth-error";
-import { mapSupabaseAuthError } from "@/lib/auth/map-auth-error";
-import { isAppleAuthEnabled } from "@/lib/env/public";
 import { Input } from "@/components/ui/input";
-import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "@/i18n/navigation";
 import { useRouter as useAppRouter } from "next/navigation";
 import { cn } from "@/utils/cn";
 import { AuthToastListener, type AuthNotice } from "./auth-toast-listener";
-
-const OAUTH_LOADING_TIMEOUT_MS = 15_000;
 
 export function LoginForm({
   locale,
@@ -53,9 +48,6 @@ export function LoginForm({
   useEffect(() => {
     setMode(initialMode);
   }, [initialMode]);
-  const [oauthLoading, setOauthLoading] = useState<"google" | "apple" | null>(
-    null,
-  );
 
   const [signInState, signInAction, signInPending] = useActionState(
     signInWithEmailAction,
@@ -95,35 +87,6 @@ export function LoginForm({
     }
   }, [signUpState, redirectTo, navigateAfterAuth, router, tToast]);
 
-  useEffect(() => {
-    if (!oauthLoading) return;
-    const id = window.setTimeout(() => setOauthLoading(null), OAUTH_LOADING_TIMEOUT_MS);
-    return () => window.clearTimeout(id);
-  }, [oauthLoading]);
-
-  async function signInWithOAuth(provider: "google" | "apple") {
-    setOauthLoading(provider);
-    try {
-      const supabase = createClient();
-      const next = encodeURIComponent(redirectTo);
-      const redirectToUrl = `${window.location.origin}/auth/callback?next=${next}`;
-
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider,
-        options: { redirectTo: redirectToUrl },
-      });
-
-      if (error) {
-        const code = mapSupabaseAuthError(error);
-        toast.error(t(`errors.${code}`));
-        setOauthLoading(null);
-      }
-    } catch {
-      toast.error(t("errors.OAUTH_FAILED"));
-      setOauthLoading(null);
-    }
-  }
-
   const submitLabel =
     mode === "signIn"
       ? pending
@@ -151,7 +114,7 @@ export function LoginForm({
               "sf-auth-tab",
               mode === "signIn" && "sf-auth-tab--active",
             )}
-            disabled={pending || oauthLoading !== null}
+            disabled={pending}
             onClick={() => setMode("signIn")}
           >
             {t("tabSignIn")}
@@ -164,50 +127,17 @@ export function LoginForm({
               "sf-auth-tab",
               mode === "signUp" && "sf-auth-tab--active",
             )}
-            disabled={pending || oauthLoading !== null}
+            disabled={pending}
             onClick={() => setMode("signUp")}
           >
             {t("tabSignUp")}
           </button>
         </div>
 
-        <div className="mt-6 flex flex-col gap-3">
-          <button
-            type="button"
-            className="sf-auth-oauth-btn"
-            disabled={oauthLoading !== null || pending}
-            onClick={() => signInWithOAuth("google")}
-          >
-            {oauthLoading === "google" ? (
-              <Loader2 className="h-4 w-4 animate-spin" />
-            ) : null}
-            {t("continueGoogle")}
-          </button>
-          {isAppleAuthEnabled() && (
-            <button
-              type="button"
-              className="sf-auth-oauth-btn"
-              disabled={oauthLoading !== null || pending}
-              onClick={() => signInWithOAuth("apple")}
-            >
-              {oauthLoading === "apple" ? (
-                <Loader2 className="h-4 w-4 animate-spin" />
-              ) : null}
-              {t("continueApple")}
-            </button>
-          )}
-        </div>
-
-        <div className="sf-auth-divider">
-          <div className="sf-auth-divider__line" />
-          <span className="sf-auth-divider__label">{t("orEmail")}</span>
-          <div className="sf-auth-divider__line" />
-        </div>
-
         {errorMessage && (
           <p
             role="alert"
-            className="mb-4 rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-400"
+            className="mb-4 mt-6 rounded-md border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-400"
           >
             {errorMessage}
           </p>
@@ -215,7 +145,7 @@ export function LoginForm({
 
         <form
           action={mode === "signIn" ? signInAction : signUpAction}
-          className="space-y-4"
+          className={cn("space-y-4", !errorMessage && "mt-6")}
         >
           <input type="hidden" name="locale" value={locale} />
           {mode === "signUp" && (
@@ -263,17 +193,22 @@ export function LoginForm({
               name="password"
               type="password"
               required
-              minLength={8}
+              minLength={mode === "signUp" ? 12 : 1}
               autoComplete={
                 mode === "signIn" ? "current-password" : "new-password"
               }
               disabled={pending}
             />
+            {mode === "signUp" && (
+              <p className="mt-1.5 text-xs text-[var(--text-muted)]">
+                {t("passwordHint")}
+              </p>
+            )}
           </div>
           <button
             type="submit"
             className="sf-btn-primary w-full"
-            disabled={pending || oauthLoading !== null}
+            disabled={pending}
           >
             {pending && <Loader2 className="h-4 w-4 animate-spin" />}
             {submitLabel}

@@ -5,9 +5,16 @@
 
 const THUMB_BY_SLUG: Record<string, string> = {
   "steam-premium-account": "/catalog/thumbs/gaming.svg",
+  "steam-shared-account": "/catalog/thumbs/gaming.svg",
+  "steam-rust-account": "/catalog/thumbs/gaming.svg",
+  "steam-cs2-prime": "/catalog/thumbs/gaming.svg",
+  "steam-shared-monthly": "/catalog/thumbs/gaming.svg",
+  "steam-shared-student": "/catalog/thumbs/gaming.svg",
+  "steam-shared-lite": "/catalog/thumbs/gaming.svg",
   "steam-wallet-50": "/catalog/thumbs/gaming.svg",
   "epic-games-voucher": "/catalog/thumbs/gaming.svg",
   "ps-plus-12-months": "/catalog/thumbs/gaming.svg",
+  "playstation-store-50": "/catalog/thumbs/gift-cards.svg",
   "xbox-game-pass-ultimate": "/catalog/thumbs/gaming.svg",
   "valorant-points-5350": "/catalog/thumbs/gaming.svg",
   "discord-nitro-annual": "/catalog/thumbs/subscriptions.svg",
@@ -18,10 +25,21 @@ const THUMB_BY_SLUG: Record<string, string> = {
   "youtube-premium-family": "/catalog/thumbs/subscriptions.svg",
   "telegram-premium-1year": "/catalog/thumbs/subscriptions.svg",
   "instagram-verified-badge": "/catalog/thumbs/social.svg",
+  "instagram-growth-package": "/catalog/thumbs/social.svg",
+  "instagram-followers-10k": "/catalog/thumbs/social.svg",
+  "instagram-likes-boost": "/catalog/thumbs/social.svg",
+  "instagram-reels-promo": "/catalog/thumbs/social.svg",
+  "instagram-blue-badge-express": "/catalog/thumbs/social.svg",
+  "instagram-meta-badge": "/catalog/thumbs/social.svg",
+  "instagram-verification-3month": "/catalog/thumbs/social.svg",
   "windows-11-pro": "/catalog/thumbs/software.svg",
   "microsoft-office-365": "/catalog/thumbs/software.svg",
   "adobe-creative-cloud": "/catalog/thumbs/software.svg",
   "capcut-pro-1year": "/catalog/thumbs/tools.svg",
+  "python-instagram-bot": "/catalog/thumbs/tools.svg",
+  "python-telegram-bot": "/catalog/thumbs/tools.svg",
+  "python-web-scraper": "/catalog/thumbs/tools.svg",
+  "python-discord-bot": "/catalog/thumbs/tools.svg",
   "amazon-gift-card-25": "/catalog/thumbs/gift-cards.svg",
   "apple-gift-card-50": "/catalog/thumbs/gift-cards.svg",
   "google-play-25": "/catalog/thumbs/gift-cards.svg",
@@ -54,9 +72,9 @@ export function productThumbnailUrl(
   );
 }
 
-export function withProductThumbnail<T extends { slug: string; categorySlug?: string; imageUrl?: string | null }>(
-  product: T,
-): T {
+export function withProductThumbnail<
+  T extends { slug: string; categorySlug?: string; imageUrl?: string | null },
+>(product: T): T {
   return {
     ...product,
     imageUrl: productThumbnailUrl(product.slug, product.categorySlug),

@@ -56,7 +56,7 @@ export async function saveThemeSettingsAction(
 
   try {
     const { user } = await requireAdmin();
-    const { preset, themeConfig } = parsed.data;
+    const { preset } = parsed.data;
 
     await updateThemeSettings({
       preset,

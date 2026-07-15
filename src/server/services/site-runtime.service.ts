@@ -10,6 +10,7 @@ import {
   type ThemePresetId,
   type ThemeTokens,
 } from "@/lib/theme/tokens";
+import { shouldForceGeistDarkPreset } from "@/lib/theme/force-staging-preset";
 import { resolveMediaUrl } from "@/lib/storage/media-url";
 import {
   type SocialLinks,
@@ -79,8 +80,15 @@ export function parseHeroSlideImages(raw: unknown): HeroSlideImages {
 }
 
 function buildSettings(row: SiteSettingsRow | null): SiteRuntimeSettings {
-  const preset = normalizePreset(row?.theme_preset);
-  const resolved = resolveTheme(preset, row?.theme_config);
+  const forceGeist = shouldForceGeistDarkPreset();
+  const preset = forceGeist
+    ? ("geist-dark" as const)
+    : normalizePreset(row?.theme_preset);
+  // Staging ignores saved overrides so the review always matches the preset.
+  const resolved = resolveTheme(
+    preset,
+    forceGeist ? null : row?.theme_config,
+  );
 
   return {
     preset: resolved.preset,

@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
 import { Toaster } from "sonner";
 import { requireAdmin } from "@/lib/auth/require-admin";
 import Link from "next/link";
 import { AdminNav } from "@/features/admin/components/admin-nav";
 import { AdminSignOutButton } from "@/features/admin/components/admin-sign-out-button";
 import { BrandLogo } from "@/components/shared/brand-logo";
+import { SiteThemeStyle } from "@/components/theme/site-theme-style";
+import { getSiteRuntimeSettings } from "@/server/services/site-runtime.service";
 import "@/styles/globals.css";
-
-const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
 
 export const metadata: Metadata = {
   title: "Admin | riyont",
@@ -21,10 +21,17 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }) {
   const { profile } = await requireAdmin();
+  const runtime = await getSiteRuntimeSettings();
 
   return (
-    <html lang="en" dir="ltr" className="dark">
-      <body className={`${inter.variable} font-sans antialiased`}>
+    <html
+      lang="en"
+      dir="ltr"
+      className={`dark ${GeistSans.variable}`}
+      data-theme={runtime.preset}
+    >
+      <body className="font-sans antialiased">
+        <SiteThemeStyle themeCss={runtime.themeCss} />
         <div className="admin-app">
           <div className="admin-app__ambient" aria-hidden>
             <span className="nex-orb nex-orb--purple" />
@@ -34,7 +41,11 @@ export default async function AdminLayout({
           <header className="admin-header">
             <div className="admin-header__inner">
               <div className="admin-header__start">
-                <Link href="/admin" className="admin-header__brand-link" aria-label="Riyont admin">
+                <Link
+                  href="/admin"
+                  className="admin-header__brand-link"
+                  aria-label="Riyont admin"
+                >
                   <BrandLogo className="nex-brand-logo" height={32} />
                 </Link>
                 <p className="admin-header__title">Admin</p>

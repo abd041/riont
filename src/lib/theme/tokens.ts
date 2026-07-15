@@ -25,6 +25,7 @@ export type ThemeTokens = {
   error: string;
 };
 
+/** Modern Dark Tech — gold is accent-only, not the visual weight of the UI. */
 export const GEIST_DARK_PRESET: ThemeTokens = {
   bgVoid: "#000000",
   bgBase: "#000000",
@@ -34,14 +35,14 @@ export const GEIST_DARK_PRESET: ThemeTokens = {
   borderSubtle: "rgba(255, 255, 255, 0.06)",
   borderDefault: "rgba(255, 255, 255, 0.1)",
   borderStrong: "rgba(255, 255, 255, 0.14)",
-  accent400: "#d4bc8c",
-  accent500: "#c4a574",
-  accent600: "#a68b5b",
-  accent700: "#8a7048",
+  accent400: "#c9b896",
+  accent500: "#b59a6a",
+  accent600: "#9a8158",
+  accent700: "#7d6847",
   textPrimary: "#ededed",
-  textSecondary: "rgba(237, 237, 237, 0.72)",
-  textMuted: "rgba(237, 237, 237, 0.45)",
-  textAccent: "#d4bc8c",
+  textSecondary: "rgba(237, 237, 237, 0.65)",
+  textMuted: "rgba(237, 237, 237, 0.42)",
+  textAccent: "#c9b896",
   success: "#22c55e",
   warning: "#f59e0b",
   error: "#ef4444",

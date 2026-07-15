@@ -9,13 +9,13 @@ const buttonVariants = cva(
     variants: {
       variant: {
         primary:
-          "border border-white/10 bg-accent-500 text-white hover:bg-accent-600",
+          "nex-btn-primary border border-white/10 bg-accent-500 text-white hover:bg-accent-600",
         secondary:
-          "border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-surface-2)]",
+          "nex-btn-outline border border-[var(--border-default)] bg-[var(--bg-surface)] text-[var(--text-primary)] hover:border-[var(--border-strong)] hover:bg-[var(--bg-surface-2)]",
         ghost:
           "text-[var(--text-secondary)] hover:bg-[var(--bg-surface)] hover:text-[var(--text-primary)]",
         outline:
-          "border border-[var(--border-default)] bg-transparent text-[var(--text-primary)] hover:border-[var(--border-strong)] hover:bg-white/[0.04]",
+          "nex-btn-outline border border-[var(--border-default)] bg-transparent text-[var(--text-primary)] hover:border-[var(--border-strong)] hover:bg-white/[0.04]",
       },
       size: {
         default: "h-10 px-5",

@@ -248,6 +248,7 @@
     "orEmail": "or continue with email",
     "email": "Email",
     "password": "Password",
+    "passwordHint": "At least 12 characters, with uppercase, lowercase, a number, and a symbol.",
     "displayName": "Display name",
     "signIn": "Sign In",
     "signUp": "Create Account",
@@ -262,7 +263,7 @@
       "INVALID_CREDENTIALS": "Incorrect email or password.",
       "EMAIL_NOT_CONFIRMED": "Please confirm your email before signing in.",
       "USER_ALREADY_REGISTERED": "An account with this email already exists.",
-      "WEAK_PASSWORD": "Password does not meet security requirements.",
+      "WEAK_PASSWORD": "Password must be at least 12 characters and include uppercase, lowercase, a number, and a symbol.",
       "RATE_LIMIT": "Too many attempts. Please wait and try again.",
       "OAUTH_FAILED": "Could not start social sign-in. Please try again.",
       "UNKNOWN": "Something went wrong. Please try again."

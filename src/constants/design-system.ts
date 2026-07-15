@@ -5,29 +5,29 @@
 
 export const colors = {
   void: "#000000",
-  base: "#040404",
-  elevated: "#080808",
-  surface: "#0a0a0a",
-  surface2: "#101010",
+  base: "#000000",
+  elevated: "#0a0a0a",
+  surface: "#111111",
+  surface2: "#171717",
   text: {
-    primary: "#ffffff",
-    secondary: "rgba(255, 255, 255, 0.72)",
-    muted: "rgba(255, 255, 255, 0.45)",
-    faint: "rgba(255, 255, 255, 0.32)",
+    primary: "#ededed",
+    secondary: "rgba(237, 237, 237, 0.65)",
+    muted: "rgba(237, 237, 237, 0.42)",
+    faint: "rgba(237, 237, 237, 0.28)",
   },
   accent: {
     300: "#d4bc8c",
-    400: "#c4a574",
-    500: "#a67c52",
-    600: "#8b6340",
-    700: "#6e4f32",
+    400: "#c9b896",
+    500: "#b59a6a",
+    600: "#9a8158",
+    700: "#7d6847",
   },
   border: {
     subtle: "rgba(255, 255, 255, 0.06)",
     default: "rgba(255, 255, 255, 0.1)",
     strong: "rgba(255, 255, 255, 0.14)",
-    glow: "rgba(166, 124, 82, 0.32)",
-    active: "rgba(166, 124, 82, 0.42)",
+    glow: "rgba(181, 154, 106, 0.22)",
+    active: "rgba(181, 154, 106, 0.32)",
   },
 } as const;
 
@@ -58,13 +58,13 @@ export const shadows = {
   inset: "inset 0 1px 0 rgba(255, 255, 255, 0.04)",
 } as const;
 
-/** Subtle bronze glow — restrained, never neon. */
+/** Accent glow — hairline / minimal; prefer borders over bloom. */
 export const glow = {
-  sm: "0 0 12px rgba(166, 124, 82, 0.12)",
-  md: "0 0 20px rgba(166, 124, 82, 0.16)",
-  lg: "0 0 28px rgba(166, 124, 82, 0.2)",
-  active: "0 0 0 1px rgba(166, 124, 82, 0.14), 0 0 18px rgba(166, 124, 82, 0.16)",
-  cardHover: "0 0 24px rgba(166, 124, 82, 0.08)",
+  sm: "0 0 0 1px rgba(255, 255, 255, 0.06)",
+  md: "0 0 0 1px rgba(255, 255, 255, 0.1)",
+  lg: "0 0 0 1px rgba(255, 255, 255, 0.12)",
+  active: "0 0 0 1px rgba(181, 154, 106, 0.28)",
+  cardHover: "0 0 0 1px rgba(255, 255, 255, 0.1)",
 } as const;
 
 /** Compact typography scale (px). */

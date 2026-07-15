@@ -2,7 +2,8 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
-import { Inter, Inter_Tight, IBM_Plex_Sans_Arabic } from "next/font/google";
+import { GeistSans } from "geist/font/sans";
+import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import { routing } from "@/i18n/routing";
 import { AppProviders } from "@/components/providers/app-providers";
 import { SiteBrandingProvider } from "@/components/providers/site-branding-provider";
@@ -12,15 +13,10 @@ import { BRAND_LOGO } from "@/components/shared/brand-logo";
 import { SiteStoreProvider } from "@/components/providers/site-store-provider";
 import "@/styles/globals.css";
 
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-});
-
-const interTight = Inter_Tight({
-  subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["600", "700", "800"],
+const arabic = IBM_Plex_Sans_Arabic({
+  subsets: ["arabic"],
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-arabic",
 });
 
 export async function generateMetadata({
@@ -46,12 +42,6 @@ export async function generateMetadata({
   };
 }
 
-const arabic = IBM_Plex_Sans_Arabic({
-  subsets: ["arabic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-arabic",
-});
-
 export default async function LocaleLayout({
   children,
   params,
@@ -70,9 +60,14 @@ export default async function LocaleLayout({
   const runtime = await getSiteRuntimeSettings();
 
   return (
-    <html lang={locale} dir={dir} className="dark">
+    <html
+      lang={locale}
+      dir={dir}
+      className={`dark ${GeistSans.variable} ${arabic.variable}`}
+      data-theme={runtime.preset}
+    >
       <body
-        className={`${inter.variable} ${interTight.variable} ${arabic.variable} ${
+        className={`${
           locale === "ar" ? "font-arabic" : "font-sans"
         } antialiased`}
       >

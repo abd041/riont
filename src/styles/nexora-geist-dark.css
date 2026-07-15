@@ -1,9 +1,9 @@
 /**
- * Geist / Linear — Modern Dark Tech visual direction (Phase 0)
- * Loaded last. Flat monochrome surfaces, hairline borders, minimal glow.
+ * Geist / Linear — Modern Dark Tech visual direction
+ * Scoped to html[data-theme="geist-dark"] so Bronze can fully roll back.
  */
 
-:root {
+html[data-theme="geist-dark"] {
   --bg-void: #000000;
   --bg-base: #000000;
   --bg-elevated: #0a0a0a;
@@ -16,21 +16,22 @@
   --border-strong: rgba(255, 255, 255, 0.14);
   --border-glow: rgba(196, 165, 116, 0.28);
 
-  /* Subtle warm gold accent — adjustable later via theme engine */
-  --accent-400: #d4bc8c;
-  --accent-500: #c4a574;
-  --accent-600: #a68b5b;
-  --accent-700: #8a7048;
-  --accent-glow: rgba(196, 165, 116, 0.2);
-  --accent-glow-sm: rgba(196, 165, 116, 0.1);
+  /* Soft gold accent only — never dominant */
+  --accent-400: #c9b896;
+  --accent-500: #b59a6a;
+  --accent-600: #9a8158;
+  --accent-700: #7d6847;
+  --accent-glow: rgba(181, 154, 106, 0.16);
+  --accent-glow-sm: rgba(181, 154, 106, 0.08);
+  --border-glow: rgba(181, 154, 106, 0.22);
 
   --gradient-primary: var(--accent-500);
   --gradient-hero: none;
   --gradient-glass: none;
 
   --text-primary: #ededed;
-  --text-secondary: rgba(237, 237, 237, 0.72);
-  --text-muted: rgba(237, 237, 237, 0.45);
+  --text-secondary: rgba(237, 237, 237, 0.65);
+  --text-muted: rgba(237, 237, 237, 0.42);
   --text-accent: var(--accent-400);
 
   --bg-card: #111111;
@@ -41,74 +42,64 @@
   --radius-lg: 10px;
   --radius-xl: 12px;
 }
-
 /* ─── Kill heavy ambient / luxury effects ─── */
-.nex-storefront-ambient,
-.nex-orb,
-.nex-noise,
-.nex-hero__float-orb,
-.nex-hero__ambient-orb,
-.nex-hero-cinematic-bloom,
-.nex-hero-cinematic-mist,
-.nex-hero-cinematic-sparkles,
-.nex-hero-cinematic-frame,
-.nex-co-ambient,
-.sf-auth-page__ambient {
+html[data-theme="geist-dark"] .nex-storefront-ambient,
+html[data-theme="geist-dark"] .nex-orb,
+html[data-theme="geist-dark"] .nex-noise,
+html[data-theme="geist-dark"] .nex-hero__float-orb,
+html[data-theme="geist-dark"] .nex-hero__ambient-orb,
+html[data-theme="geist-dark"] .nex-hero-cinematic-bloom,
+html[data-theme="geist-dark"] .nex-hero-cinematic-mist,
+html[data-theme="geist-dark"] .nex-hero-cinematic-sparkles,
+html[data-theme="geist-dark"] .nex-hero-cinematic-frame,
+html[data-theme="geist-dark"] .nex-co-ambient,
+html[data-theme="geist-dark"] .sf-auth-page__ambient {
   display: none !important;
 }
-
-.nex-storefront {
+html[data-theme="geist-dark"] .nex-storefront {
   background: var(--bg-base);
 }
-
 /* ─── Typography ─── */
-.nex-hero-title,
-.nex-hero-badge,
-.mp-section__title,
-.sf-page-header__title {
+html[data-theme="geist-dark"] .nex-hero-title,
+html[data-theme="geist-dark"] .nex-hero-badge,
+html[data-theme="geist-dark"] .mp-section__title,
+html[data-theme="geist-dark"] .sf-page-header__title {
   text-transform: none;
   letter-spacing: -0.02em;
 }
-
-.nex-hero-title {
+html[data-theme="geist-dark"] .nex-hero-title {
   font-weight: 600;
   font-size: clamp(1.75rem, 4vw, 2.25rem);
   line-height: 1.15;
 }
-
-.nex-hero-title-accent {
+html[data-theme="geist-dark"] .nex-hero-title-accent {
   color: var(--text-primary);
   font-weight: 600;
 }
-
-.nex-hero-subtitle {
+html[data-theme="geist-dark"] .nex-hero-subtitle {
   color: var(--text-muted);
   font-size: 0.9375rem;
   line-height: 1.5;
 }
-
 /* ─── Hero ─── */
-.nex-hero--premium,
-.nex-hero--cinematic {
+html[data-theme="geist-dark"] .nex-hero--premium,
+html[data-theme="geist-dark"] .nex-hero--cinematic {
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-lg);
   background: var(--bg-surface);
   overflow: hidden;
 }
-
-.nex-hero-bg-scrim {
+html[data-theme="geist-dark"] .nex-hero-bg-scrim {
   background: linear-gradient(
     180deg,
     rgba(0, 0, 0, 0.55) 0%,
     rgba(0, 0, 0, 0.75) 100%
   ) !important;
 }
-
-.nex-hero-cinematic-vignette {
+html[data-theme="geist-dark"] .nex-hero-cinematic-vignette {
   background: none !important;
 }
-
-.nex-hero-badge--promo {
+html[data-theme="geist-dark"] .nex-hero-badge--promo {
   text-transform: none;
   letter-spacing: 0;
   font-size: 0.75rem;
@@ -117,238 +108,199 @@
   background: rgba(255, 255, 255, 0.04);
   color: var(--text-secondary);
 }
-
-/* ─── Buttons (storefront) ─── */
-.sf-btn-primary,
-.nex-btn-primary {
+/* ─── Buttons (storefront) — solid / ghost, no glow ─── */
+html[data-theme="geist-dark"] .sf-btn-primary,
+html[data-theme="geist-dark"] .nex-btn-primary {
   border-radius: var(--radius-md) !important;
-  background: var(--accent-500) !important;
+  background: var(--text-primary) !important;
+  color: var(--bg-base) !important;
   box-shadow: none !important;
-  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid transparent !important;
   font-weight: 500;
-  transition: background 0.15s ease, border-color 0.15s ease;
+  transition: background 0.15s ease, opacity 0.15s ease;
 }
-
-.sf-btn-primary:hover,
-.nex-btn-primary:hover {
+html[data-theme="geist-dark"] .sf-btn-primary:hover,
+html[data-theme="geist-dark"] .nex-btn-primary:hover {
   transform: none !important;
-  background: var(--accent-600) !important;
+  background: #fff !important;
   box-shadow: none !important;
 }
-
-.sf-btn-outline,
-.nex-btn-outline {
+html[data-theme="geist-dark"] .sf-btn-outline,
+html[data-theme="geist-dark"] .nex-btn-outline {
   border-radius: var(--radius-md) !important;
   border: 1px solid var(--border-default) !important;
   background: transparent !important;
   box-shadow: none !important;
   font-weight: 500;
 }
-
-.sf-btn-outline:hover,
-.nex-btn-outline:hover {
+html[data-theme="geist-dark"] .sf-btn-outline:hover,
+html[data-theme="geist-dark"] .nex-btn-outline:hover {
   transform: none !important;
   border-color: var(--border-strong) !important;
   background: rgba(255, 255, 255, 0.04) !important;
 }
-
-button[class*="primary"],
-.mp-store-review-form__submit {
+html[data-theme="geist-dark"] button[class*="primary"],
+html[data-theme="geist-dark"] .mp-store-review-form__submit {
   box-shadow: none !important;
 }
-
-button[class*="primary"]:hover:not(:disabled),
-.mp-store-review-form__submit:hover:not(:disabled) {
+html[data-theme="geist-dark"] button[class*="primary"]:hover:not(:disabled),
+html[data-theme="geist-dark"] .mp-store-review-form__submit:hover:not(:disabled) {
   box-shadow: none !important;
 }
-
 /* ─── Cards & panels ─── */
-.glass-card,
-.mp-card__surface,
-.mp-card--grid .mp-card__surface,
-.nex-bp-card,
-.sf-auth-card,
-.sf-checkout-card,
-.admin-panel {
+html[data-theme="geist-dark"] .glass-card,
+html[data-theme="geist-dark"] .mp-card__surface,
+html[data-theme="geist-dark"] .mp-card--grid .mp-card__surface,
+html[data-theme="geist-dark"] .nex-bp-card,
+html[data-theme="geist-dark"] .sf-auth-card,
+html[data-theme="geist-dark"] .sf-checkout-card,
+html[data-theme="geist-dark"] .admin-panel {
   background: var(--bg-surface) !important;
   border: 1px solid var(--border-subtle) !important;
   box-shadow: none !important;
   backdrop-filter: none !important;
 }
-
-.mp-card--grid:hover,
-.mp-card--grid:hover .mp-card__surface,
-.nex-bp-card:hover {
+html[data-theme="geist-dark"] .mp-card--grid:hover,
+html[data-theme="geist-dark"] .mp-card--grid:hover .mp-card__surface,
+html[data-theme="geist-dark"] .nex-bp-card:hover {
   border-color: var(--border-default) !important;
   box-shadow: none !important;
   transform: none !important;
 }
-
-.mp-card--grid .mp-card__ambient,
-.nex-bp-glow-bloom,
-.nex-bp-glow-ring {
+html[data-theme="geist-dark"] .mp-card--grid .mp-card__ambient,
+html[data-theme="geist-dark"] .nex-bp-glow,
+html[data-theme="geist-dark"] .nex-bp-glow-bloom,
+html[data-theme="geist-dark"] .nex-bp-glow-ring {
   display: none !important;
 }
-
 /* ─── Browse product cards — unified accent, no per-color neon ─── */
-.nex-bp-card--blue,
-.nex-bp-card--green,
-.nex-bp-card--orange,
-.nex-bp-card--purple,
-.nex-bp-card--violet {
+html[data-theme="geist-dark"] .nex-bp-card--blue,
+html[data-theme="geist-dark"] .nex-bp-card--green,
+html[data-theme="geist-dark"] .nex-bp-card--orange,
+html[data-theme="geist-dark"] .nex-bp-card--purple,
+html[data-theme="geist-dark"] .nex-bp-card--violet {
   --bp-aura: transparent;
   --bp-aura-soft: transparent;
 }
-
 /* ─── Category cards ─── */
-.mp-cat {
+html[data-theme="geist-dark"] .mp-cat {
   border: 1px solid var(--border-subtle) !important;
   box-shadow: none !important;
 }
-
-.mp-cat:hover {
+html[data-theme="geist-dark"] .mp-cat:hover {
   border-color: var(--border-default) !important;
   box-shadow: none !important;
 }
-
 /* ─── Sidebar & topbar ─── */
-.nex-sidebar {
+html[data-theme="geist-dark"] .nex-sidebar {
   background: var(--bg-base) !important;
   border-inline-end-color: var(--border-subtle) !important;
   box-shadow: none !important;
 }
-
-.nex-topbar,
-.nex-topbar--floating {
+html[data-theme="geist-dark"] .nex-topbar,
+html[data-theme="geist-dark"] .nex-topbar--floating {
   background: rgba(0, 0, 0, 0.85) !important;
   border-bottom: 1px solid var(--border-subtle) !important;
   box-shadow: none !important;
   backdrop-filter: blur(12px) !important;
 }
-
-.nex-sidebar-nav-item--active {
+html[data-theme="geist-dark"] .nex-sidebar-nav-item--active {
   background: rgba(255, 255, 255, 0.06) !important;
   box-shadow: none !important;
 }
-
-.nex-sidebar-logo-icon {
+html[data-theme="geist-dark"] .nex-sidebar-logo-icon {
   background: var(--accent-500) !important;
   box-shadow: none !important;
 }
-
 /* ─── Auth (Geist-style login) ─── */
-.sf-auth-page {
+html[data-theme="geist-dark"] .sf-auth-page {
   background: var(--bg-base);
 }
-
-.sf-auth-card {
+html[data-theme="geist-dark"] .sf-auth-card {
   border-radius: var(--radius-lg) !important;
   padding: 28px 24px !important;
 }
-
-.sf-auth-card__title {
+html[data-theme="geist-dark"] .sf-auth-card__title {
   font-size: 1.25rem;
   font-weight: 600;
   letter-spacing: -0.02em;
 }
-
-.sf-auth-tabs {
+html[data-theme="geist-dark"] .sf-auth-tabs {
   border-radius: var(--radius-md);
   border: 1px solid var(--border-subtle);
   background: var(--bg-elevated);
   padding: 3px;
 }
-
-.sf-auth-tab {
+html[data-theme="geist-dark"] .sf-auth-tab {
   border-radius: calc(var(--radius-md) - 2px);
 }
-
-.sf-auth-tab--active {
+html[data-theme="geist-dark"] .sf-auth-tab--active {
   background: var(--bg-surface);
   border: 1px solid var(--border-subtle);
   box-shadow: none;
 }
-
-.sf-auth-oauth-btn {
-  border-radius: var(--radius-md) !important;
-  border: 1px solid var(--border-default) !important;
-  background: var(--bg-elevated) !important;
-  box-shadow: none !important;
-  font-weight: 500;
+/* OAuth hidden in v1 email-only login UI */
+html[data-theme="geist-dark"] .sf-auth-oauth-btn,
+html[data-theme="geist-dark"] .sf-auth-divider {
+  display: none !important;
 }
-
-.sf-auth-oauth-btn:hover:not(:disabled) {
-  background: var(--bg-surface) !important;
-  border-color: var(--border-strong) !important;
-}
-
 /* ─── Checkout ─── */
-.nex-checkout-page {
+html[data-theme="geist-dark"] .nex-checkout-page {
   background: var(--bg-base) !important;
   min-height: auto;
 }
-
-.nex-checkout-page::before {
+html[data-theme="geist-dark"] .nex-checkout-page::before {
   display: none;
 }
-
-.nex-co-card,
-.nex-co-summary {
+html[data-theme="geist-dark"] .nex-co-card,
+html[data-theme="geist-dark"] .nex-co-summary {
   border: 1px solid var(--border-subtle) !important;
   background: var(--bg-surface) !important;
   box-shadow: none !important;
 }
-
 /* ─── PDP ─── */
-.nex-pdp-panel,
-.nex-pdp-gallery {
+html[data-theme="geist-dark"] .nex-pdp-panel,
+html[data-theme="geist-dark"] .nex-pdp-gallery {
   border: 1px solid var(--border-subtle);
   background: var(--bg-surface);
   box-shadow: none;
 }
-
 /* ─── Inputs ─── */
-input:not([type="checkbox"]):not([type="radio"]),
-select,
-textarea {
+html[data-theme="geist-dark"] input:not([type="checkbox"]):not([type="radio"]),
+html[data-theme="geist-dark"] select,
+html[data-theme="geist-dark"] textarea {
   border: 1px solid var(--border-default) !important;
   background: var(--bg-elevated) !important;
   box-shadow: none !important;
 }
-
-input:focus-visible,
-select:focus-visible,
-textarea:focus-visible {
+html[data-theme="geist-dark"] input:focus-visible,
+html[data-theme="geist-dark"] select:focus-visible,
+html[data-theme="geist-dark"] textarea:focus-visible {
   outline: none;
   border-color: var(--border-strong) !important;
   box-shadow: 0 0 0 1px var(--border-strong) !important;
 }
-
 /* ─── Glow utilities off ─── */
-.glow-sm,
-.glow-md {
+html[data-theme="geist-dark"] .glow-sm,
+html[data-theme="geist-dark"] .glow-md {
   box-shadow: none !important;
 }
-
 /* ─── Footer ─── */
-.mp-footer {
+html[data-theme="geist-dark"] .mp-footer {
   border-top: 1px solid var(--border-subtle);
   background: var(--bg-base);
 }
-
-.mp-footer__social-link {
+html[data-theme="geist-dark"] .mp-footer__social-link {
   border: 1px solid var(--border-subtle);
   background: transparent;
   box-shadow: none;
 }
-
-.mp-footer__social-link:hover {
+html[data-theme="geist-dark"] .mp-footer__social-link:hover {
   border-color: var(--border-default);
   background: rgba(255, 255, 255, 0.04);
 }
-
 /* ─── Store controls (maintenance + floating contact) ─── */
-.sf-maintenance-banner {
+html[data-theme="geist-dark"] .sf-maintenance-banner {
   position: relative;
   z-index: 45;
   padding: 10px 16px;
@@ -359,8 +311,7 @@ textarea:focus-visible {
   background: rgba(245, 158, 11, 0.12);
   border-bottom: 1px solid rgba(245, 158, 11, 0.25);
 }
-
-.sf-floating-contact {
+html[data-theme="geist-dark"] .sf-floating-contact {
   position: fixed;
   bottom: 24px;
   inset-inline-end: 24px;
@@ -376,14 +327,13 @@ textarea:focus-visible {
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
-
-.sf-floating-contact:hover {
+html[data-theme="geist-dark"] .sf-floating-contact:hover {
   transform: translateY(-2px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
 }
 
 @media (max-width: 640px) {
-  .sf-floating-contact {
+  html[data-theme="geist-dark"] .sf-floating-contact {
     bottom: 16px;
     inset-inline-end: 16px;
     width: 48px;

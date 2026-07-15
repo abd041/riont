@@ -33,12 +33,12 @@ const PRESET_INFO: Record<
 > = {
   "geist-dark": {
     label: "Geist Dark",
-    description: "Flat black surfaces, minimal glow — modern & clean",
-    swatch: ["#000000", "#111111", "#c4a574"],
+    description: "Modern dark tech — flat surfaces, hairline borders, soft gold accent",
+    swatch: ["#000000", "#111111", "#b59a6a"],
   },
   bronze: {
     label: "Bronze",
-    description: "Warmer bronze accent on deep black — premium feel",
+    description: "Previous luxury / premium feel — warmer bronze (rollback)",
     swatch: ["#000000", "#0a0a0a", "#a67c52"],
   },
 };
