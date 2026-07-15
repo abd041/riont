@@ -12,7 +12,6 @@ import {
   MarketplaceSectionRevealChild,
 } from "@/features/homepage/components/marketplace/marketplace-section-reveal";
 import { MarketplaceSectionHeader } from "@/features/homepage/components/marketplace/marketplace-section-header";
-import { mpSpring, mpTap, mpCardHoverMini } from "@/features/homepage/motion/marketplace-motion";
 import type { CatalogCategory } from "@/types/catalog";
 
 type CategorySliderProps = {
@@ -51,9 +50,8 @@ export function CategorySlider({
           <motion.button
             type="button"
             layout={false}
-            whileTap={mpTap}
-            whileHover={mpCardHoverMini}
-            transition={mpSpring.soft}
+            whileTap={{ scale: 0.98 }}
+            transition={{ duration: 0.15 }}
             className={cn("mp-cat mp-cat--premium", activeSlug === null && "mp-cat--active")}
             onClick={() => onSelect(null)}
             role="listitem"
@@ -74,9 +72,8 @@ export function CategorySlider({
                 key={category.id}
                 type="button"
                 layout={false}
-                whileTap={mpTap}
-                whileHover={mpCardHoverMini}
-                transition={mpSpring.soft}
+                whileTap={{ scale: 0.98 }}
+                transition={{ duration: 0.15 }}
                 className={cn(
                   "mp-cat mp-cat--premium",
                   `mp-cat--${theme}`,

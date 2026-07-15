@@ -242,6 +242,10 @@ export function AdminHomepageExtrasForm({
 
       <section className="space-y-3">
         <h4 className="font-medium text-[var(--text-primary)]">RIYONT Picks (max 3)</h4>
+        <p className="text-sm text-[var(--text-muted)]">
+          Products already shown in Most Requested are skipped automatically so
+          this section stays distinct.
+        </p>
         {[0, 1, 2].map((index) => {
           const n = index + 1;
           const pick = extras.riyontPicks[index];

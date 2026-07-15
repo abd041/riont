@@ -30,7 +30,18 @@ export const saveProductSchema = z
     isFeatured: z.coerce.boolean().optional(),
     sortOrder: z.coerce.number().int().optional(),
     badge: z
-      .enum(["none", "bestSeller", "instant", "hot", "trending", "limited", "offer"])
+      .enum([
+        "none",
+        "bestSeller",
+        "instant",
+        "hot",
+        "trending",
+        "limited",
+        "offer",
+        "recommended",
+        "bestValue",
+        "fastDelivery",
+      ])
       .optional()
       .default("none"),
     en: translationSchema,

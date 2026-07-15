@@ -6,7 +6,10 @@ export type ProductBadge =
   | "hot"
   | "trending"
   | "limited"
-  | "offer";
+  | "offer"
+  | "recommended"
+  | "bestValue"
+  | "fastDelivery";
 
 export type ProductMediaItem = {
   type: "image" | "video";

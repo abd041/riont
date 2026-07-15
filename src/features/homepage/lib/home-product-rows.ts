@@ -114,13 +114,16 @@ export function resolveRiyontPicks(
   products: CatalogProduct[],
   picks: Array<{ productId: string; reasonEn: string; reasonAr: string }>,
   locale: string,
+  excludeIds: string[] = [],
 ): Array<{ product: CatalogProduct; reason: string }> {
+  const excluded = new Set(excludeIds.filter(Boolean));
   const byId = new Map(
     products.filter((p) => p.id).map((p) => [p.id as string, p]),
   );
   const ar = locale === "ar";
   return picks
     .map((pick) => {
+      if (excluded.has(pick.productId)) return null;
       const product = byId.get(pick.productId);
       if (!product) return null;
       return {

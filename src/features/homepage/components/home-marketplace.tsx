@@ -76,9 +76,23 @@ export function HomeMarketplace({
     [products, homepageExtras.mostRequestedIds],
   );
 
+  const mostRequestedIds = useMemo(
+    () =>
+      rows.mostRequested
+        .map((p) => p.id)
+        .filter((id): id is string => Boolean(id)),
+    [rows.mostRequested],
+  );
+
   const riyontPicks = useMemo(
-    () => resolveRiyontPicks(products, homepageExtras.riyontPicks, locale),
-    [products, homepageExtras.riyontPicks, locale],
+    () =>
+      resolveRiyontPicks(
+        products,
+        homepageExtras.riyontPicks,
+        locale,
+        mostRequestedIds,
+      ),
+    [products, homepageExtras.riyontPicks, locale, mostRequestedIds],
   );
 
   const filteredProducts = useMemo(() => {
@@ -145,6 +159,7 @@ export function HomeMarketplace({
       ) : null}
 
       <PickYourPath cards={pathCards} />
+      <HomeSupportCue />
 
       <ProductRowSection
         products={rows.mostRequested}

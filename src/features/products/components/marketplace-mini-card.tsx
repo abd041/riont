@@ -14,6 +14,10 @@ import {
   productCategoryLabel,
   productRating,
 } from "@/features/products/utils/product-display";
+import {
+  homepageBadgeClass,
+  homepageBadgeLabelKey,
+} from "@/features/products/lib/homepage-badges";
 import type { CatalogProduct } from "@/types/catalog";
 import { cn } from "@/utils/cn";
 import { mpCardHoverMini } from "@/features/homepage/motion/marketplace-motion";
@@ -66,14 +70,18 @@ export function MarketplaceMiniCard({
       <Link href={`/products/${slug}`} className="mp-card__media">
         <span className="mp-card__media-vignette" aria-hidden />
         <span className="mp-card__media-shine" aria-hidden />
-        {(discount != null && discount > 0) || badge === "bestSeller" ? (
+        {(discount != null && discount > 0) || homepageBadgeLabelKey(badge) ? (
           <div className="mp-card__badges">
             {discount != null && discount > 0 && (
               <span className="mp-badge mp-badge--sale">-{discount}%</span>
             )}
-            {badge === "bestSeller" && (
-              <span className="mp-badge mp-badge--hot">{tProduct("bestSellerBadge")}</span>
-            )}
+            {(() => {
+              const key = homepageBadgeLabelKey(badge);
+              if (!key) return null;
+              return (
+                <span className={homepageBadgeClass(badge)}>{tProduct(key)}</span>
+              );
+            })()}
           </div>
         ) : null}
         {imageUrl ? (

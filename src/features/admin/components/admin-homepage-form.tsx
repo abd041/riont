@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -8,7 +8,54 @@ import {
   saveTrustBlockAction,
   type ContentActionResult,
 } from "@/server/actions/admin-content.actions";
-import type { HeroBlockContent, TrustBlockContent } from "@/server/services/content-block.service";
+import type {
+  HeroBlockContent,
+  TrustBlockContent,
+} from "@/server/services/content-block.service";
+
+function HeroLivePreview({
+  title,
+  highlight,
+  subtitle,
+  primaryLabel,
+  secondaryLabel,
+}: {
+  title: string;
+  highlight: string;
+  subtitle: string;
+  primaryLabel: string;
+  secondaryLabel: string;
+}) {
+  return (
+    <div className="admin-hero-preview" aria-live="polite">
+      <p className="admin-hero-preview__label">Preview (before save)</p>
+      <div className="admin-hero-preview__card">
+        <p className="admin-hero-preview__title">
+          {title || "Cover title"}
+          {highlight ? (
+            <>
+              <br />
+              <span className="admin-hero-preview__highlight">{highlight}</span>
+            </>
+          ) : null}
+        </p>
+        <p className="admin-hero-preview__subtitle">
+          {subtitle || "Cover subtitle appears here"}
+        </p>
+        <div className="admin-hero-preview__actions">
+          <span className="admin-hero-preview__btn admin-hero-preview__btn--primary">
+            {primaryLabel || "Primary"}
+          </span>
+          {secondaryLabel ? (
+            <span className="admin-hero-preview__btn">
+              {secondaryLabel}
+            </span>
+          ) : null}
+        </div>
+      </div>
+    </div>
+  );
+}
 
 function HeroForm({
   locale,
@@ -22,38 +69,105 @@ function HeroForm({
     FormData
   >(saveHeroBlockAction, null);
 
+  const [draft, setDraft] = useState({
+    title: initial?.title ?? "",
+    highlight: initial?.highlight ?? "",
+    subtitle: initial?.subtitle ?? "",
+    primaryLabel: initial?.primaryLabel ?? "",
+    primaryHref: initial?.primaryHref ?? "/products",
+    secondaryLabel: initial?.secondaryLabel ?? "",
+    secondaryHref: initial?.secondaryHref ?? "/categories",
+  });
+
+  const preview = useMemo(() => draft, [draft]);
+
   return (
     <form action={action} className="admin-panel admin-panel--flat">
       <h3 className="font-semibold">Hero ({locale.toUpperCase()})</h3>
       <input type="hidden" name="locale" value={locale} />
+      <HeroLivePreview
+        title={preview.title}
+        highlight={preview.highlight}
+        subtitle={preview.subtitle}
+        primaryLabel={preview.primaryLabel}
+        secondaryLabel={preview.secondaryLabel}
+      />
       <div>
         <label className="text-sm text-[var(--text-muted)]">Title</label>
-        <Input name="title" required defaultValue={initial?.title} className="mt-1" />
+        <Input
+          name="title"
+          required
+          value={draft.title}
+          onChange={(e) => setDraft((d) => ({ ...d, title: e.target.value }))}
+          className="mt-1"
+        />
       </div>
       <div>
         <label className="text-sm text-[var(--text-muted)]">Highlight</label>
-        <Input name="highlight" defaultValue={initial?.highlight} className="mt-1" />
+        <Input
+          name="highlight"
+          value={draft.highlight}
+          onChange={(e) =>
+            setDraft((d) => ({ ...d, highlight: e.target.value }))
+          }
+          className="mt-1"
+        />
       </div>
       <div>
         <label className="text-sm text-[var(--text-muted)]">Subtitle</label>
-        <Input name="subtitle" defaultValue={initial?.subtitle} className="mt-1" />
+        <Input
+          name="subtitle"
+          value={draft.subtitle}
+          onChange={(e) =>
+            setDraft((d) => ({ ...d, subtitle: e.target.value }))
+          }
+          className="mt-1"
+        />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
           <label className="text-sm text-[var(--text-muted)]">Primary CTA label</label>
-          <Input name="primaryLabel" defaultValue={initial?.primaryLabel} className="mt-1" />
+          <Input
+            name="primaryLabel"
+            value={draft.primaryLabel}
+            onChange={(e) =>
+              setDraft((d) => ({ ...d, primaryLabel: e.target.value }))
+            }
+            className="mt-1"
+          />
         </div>
         <div>
           <label className="text-sm text-[var(--text-muted)]">Primary CTA link</label>
-          <Input name="primaryHref" defaultValue={initial?.primaryHref} className="mt-1" />
+          <Input
+            name="primaryHref"
+            value={draft.primaryHref}
+            onChange={(e) =>
+              setDraft((d) => ({ ...d, primaryHref: e.target.value }))
+            }
+            className="mt-1"
+          />
         </div>
         <div>
           <label className="text-sm text-[var(--text-muted)]">Secondary CTA label</label>
-          <Input name="secondaryLabel" defaultValue={initial?.secondaryLabel} className="mt-1" />
+          <Input
+            name="secondaryLabel"
+            value={draft.secondaryLabel}
+            onChange={(e) =>
+              setDraft((d) => ({ ...d, secondaryLabel: e.target.value }))
+            }
+            className="mt-1"
+          />
         </div>
         <div>
           <label className="text-sm text-[var(--text-muted)]">Secondary CTA link</label>
-          <Input name="secondaryHref" defaultValue={initial?.secondaryHref} className="mt-1" />
+          <Input
+            name="secondaryHref"
+            value={draft.secondaryHref}
+            onChange={(e) =>
+              setDraft((d) => ({ ...d, secondaryHref: e.target.value }))
+            }
+            className="mt-1"
+          />
         </div>
       </div>
       {state && !state.success && (
@@ -95,9 +209,7 @@ function TrustForm({
             required={n <= 4}
             defaultValue={items[n - 1]?.label}
             className="mt-1"
-            placeholder={
-              n === 5 ? "e.g. Fast Processing" : undefined
-            }
+            placeholder={n === 5 ? "e.g. Fast Processing" : undefined}
           />
         </div>
       ))}

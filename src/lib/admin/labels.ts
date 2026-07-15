@@ -212,7 +212,16 @@ export const DELIVERY_MODE_HINTS: Record<DeliveryModeType, string> = {
 };
 
 export const PRODUCT_BADGE_LABELS: Record<
-  "none" | "bestSeller" | "instant" | "hot" | "trending" | "limited" | "offer",
+  | "none"
+  | "bestSeller"
+  | "instant"
+  | "hot"
+  | "trending"
+  | "limited"
+  | "offer"
+  | "recommended"
+  | "bestValue"
+  | "fastDelivery",
   string
 > = {
   none: "None",
@@ -222,6 +231,9 @@ export const PRODUCT_BADGE_LABELS: Record<
   trending: "Trending",
   limited: "Limited",
   offer: "Special offer",
+  recommended: "Recommended",
+  bestValue: "Best Value",
+  fastDelivery: "Fast Delivery",
 };
 
 export const PRODUCT_STATUS_OPTIONS: Array<{

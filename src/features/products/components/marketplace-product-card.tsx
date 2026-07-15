@@ -18,6 +18,10 @@ import { toast } from "sonner";
 import type { CatalogProduct } from "@/types/catalog";
 import { cn } from "@/utils/cn";
 import { mpCardHover } from "@/features/homepage/motion/marketplace-motion";
+import {
+  homepageBadgeClass,
+  homepageBadgeLabelKey,
+} from "@/features/products/lib/homepage-badges";
 
 const MotionArticle = motion.article;
 
@@ -66,7 +70,12 @@ export function MarketplaceProductCard({
     (badge === "instant" && !soldOut) ||
     badge === "limited" ||
     badge === "offer";
-  const endBadges = badge === "bestSeller" || badge === "hot" || badge === "trending";
+  const homepageBadge = homepageBadgeLabelKey(badge);
+  const endBadges =
+    Boolean(homepageBadge) ||
+    badge === "bestSeller" ||
+    badge === "hot" ||
+    badge === "trending";
 
   return (
     <MotionArticle
@@ -103,13 +112,15 @@ export function MarketplaceProductCard({
             ) : null}
             {endBadges ? (
               <div className="mp-card__badges-end">
-                {badge === "bestSeller" && (
-                  <span className="mp-badge mp-badge--hot">{tProduct("bestSellerBadge")}</span>
-                )}
-                {badge === "hot" && (
+                {homepageBadge ? (
+                  <span className={homepageBadgeClass(badge)}>
+                    {tProduct(homepageBadge)}
+                  </span>
+                ) : null}
+                {!homepageBadge && badge === "hot" && (
                   <span className="mp-badge mp-badge--hot">{tProduct("badgeHot")}</span>
                 )}
-                {badge === "trending" && (
+                {!homepageBadge && badge === "trending" && (
                   <span className="mp-badge mp-badge--hot">{tProduct("badgeTrending")}</span>
                 )}
               </div>

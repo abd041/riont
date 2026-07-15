@@ -52,8 +52,9 @@ export function AdminStorefrontPreview() {
         />
       </div>
       <p className="admin-storefront-preview__hint">
-        Save your changes, then click Refresh to see updates. Opens the public
-        homepage in a sandboxed frame.
+        Cover text also has a live draft preview on Admin → Homepage before you
+        save. After saving theme/image/extras, click Refresh here to see the
+        public homepage.
       </p>
     </aside>
   );
