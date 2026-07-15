@@ -71,7 +71,7 @@ export function ProductDetailPurchaseActions({
   const [qty, setQty] = useState(1);
 
   const wished = hasItem(productId);
-  const cartDisplayName = variantLabel ? `${name} — ${variantLabel}` : name;
+  const cartDisplayName = name;
 
   function addToCart() {
     addItem(

@@ -3,6 +3,11 @@ import { Link } from "@/i18n/navigation";
 import { ArrowLeft, Star } from "lucide-react";
 import { StorefrontPageShell } from "@/components/shared/storefront-page-shell";
 import type { CatalogProductDetail } from "@/types/catalog";
+import {
+  availabilityStatusLabelKey,
+  deliveryModeLabelKey,
+  trustBadgeLabelKey,
+} from "@/features/products/lib/product-commerce-labels";
 import { ProductDetailGallery } from "./product-detail-gallery";
 import { ProductDetailInteractive } from "./product-detail-interactive";
 import { ProductDetailRelated } from "./product-detail-related";
@@ -45,7 +50,13 @@ export async function ProductDetailView({
   const rating = hasReviews ? reviewSummary!.averageRating : 0;
   const reviews = hasReviews ? reviewSummary!.count : 0;
   const inStock = product.inStock !== false;
-  const isInstant = product.badge === "instant";
+  const deliveryKey = deliveryModeLabelKey(product.deliveryMode);
+  const availabilityKey = availabilityStatusLabelKey(product.availabilityStatus);
+  const isInstant =
+    product.deliveryMode === "auto" || product.badge === "instant";
+  const slotsLeft = product.manualSlotsRemaining;
+  const showSlots =
+    product.manualDailySlotLimit != null && slotsLeft != null;
 
   const shortText = product.shortDescription?.trim() ?? "";
   const fullText = product.description?.trim() ?? "";
@@ -97,11 +108,27 @@ export async function ProductDetailView({
                   )}
                 >
                   {!inStock
-                    ? t("soldOut")
-                    : isInstant
-                      ? t("instantDelivery")
-                      : t("manualDelivery")}
+                    ? availabilityKey
+                      ? t(availabilityKey)
+                      : t("soldOut")
+                    : deliveryKey
+                      ? t(deliveryKey)
+                      : isInstant
+                        ? t("instantDelivery")
+                        : t("manualDelivery")}
                 </span>
+                {availabilityKey && inStock ? (
+                  <span className="nex-pdp-availability nex-pdp-availability--manual">
+                    {t(availabilityKey)}
+                  </span>
+                ) : null}
+                {showSlots ? (
+                  <span className="nex-pdp-availability nex-pdp-availability--manual">
+                    {slotsLeft! > 0
+                      ? t("manualSlotsLeft", { count: slotsLeft! })
+                      : t("limitedAvailabilityToday")}
+                  </span>
+                ) : null}
                 {hasReviews ? (
                   <div className="nex-pdp-rating nex-pdp-rating--inline">
                     <span className="nex-pdp-rating-stars" aria-hidden>
@@ -119,6 +146,14 @@ export async function ProductDetailView({
                   </span>
                 )}
               </div>
+
+              {(product.trustBadges?.length ?? 0) > 0 ? (
+                <ul className="nex-pdp-trust-badges">
+                  {product.trustBadges!.map((badge) => (
+                    <li key={badge}>{t(trustBadgeLabelKey(badge))}</li>
+                  ))}
+                </ul>
+              ) : null}
 
               <ProductDetailInteractive
                 productId={productId}

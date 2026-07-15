@@ -104,6 +104,11 @@ export function AdminOrderItemsPanel({
             <div className="flex flex-wrap items-start justify-between gap-2">
               <div>
                 <p className="font-medium">{item.productName}</p>
+                {item.variantName ? (
+                  <p className="text-sm text-[var(--text-muted)]">
+                    Option: {item.variantName}
+                  </p>
+                ) : null}
                 <p className="text-xs text-[var(--text-muted)]">
                   {getDeliveryModeLabel(item.deliveryMode)} · {item.fulfillmentStatus} · qty{" "}
                   {item.quantity}

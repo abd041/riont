@@ -107,7 +107,11 @@ export function buildHomeProductRows(
 export type HomeProductRows = ReturnType<typeof buildHomeProductRows>;
 
 export function isInstantDeliveryProduct(product: CatalogProduct): boolean {
-  return product.deliveryMode === "auto" || product.badge === "instant";
+  return (
+    product.deliveryMode === "auto" ||
+    product.deliveryMode === "hybrid" ||
+    product.badge === "instant"
+  );
 }
 
 export function resolveRiyontPicks(

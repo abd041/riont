@@ -16,12 +16,44 @@ const translationSchema = z.object({
   description: z.string().max(10000).optional(),
 });
 
+const trustBadgeSchema = z.enum([
+  "instantDelivery",
+  "warranty",
+  "verifiedService",
+  "manualSupport",
+  "securePayment",
+]);
+
 export const saveProductSchema = z
   .object({
     productId: z.string().uuid().optional(),
     categoryId: z.string().uuid("Choose a category"),
     status: z.enum(["draft", "active", "archived"]),
-    deliveryMode: z.enum(["auto", "manual"]),
+    deliveryMode: z.enum(["auto", "manual", "hybrid"]),
+    availabilityStatus: z
+      .enum([
+        "available_now",
+        "out_of_stock",
+        "available_soon",
+        "service_paused",
+        "after_manual_review",
+        "coming_soon",
+        "manual_busy",
+        "limited_availability",
+      ])
+      .optional()
+      .default("available_now"),
+    extraFeeType: z.enum(["none", "percent", "fixed"]).optional().default("none"),
+    extraFeeValue: z.coerce.number().int().min(0).optional().default(0),
+    trustBadges: z.array(trustBadgeSchema).optional().default([]),
+    manualDailySlotLimit: z
+      .union([z.coerce.number().int().min(0), z.literal(""), z.null()])
+      .optional()
+      .transform((v) => (v === "" || v === undefined || v === null ? null : v)),
+    manualSlotsRemaining: z
+      .union([z.coerce.number().int().min(0), z.literal(""), z.null()])
+      .optional()
+      .transform((v) => (v === "" || v === undefined || v === null ? null : v)),
     priceCents: z.coerce.number().int().min(1, "Sale price must be greater than zero"),
     compareAtCents: z
       .union([z.coerce.number().int().min(0), z.literal("")])

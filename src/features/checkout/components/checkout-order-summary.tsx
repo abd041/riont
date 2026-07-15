@@ -13,6 +13,7 @@ import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
 import type { CheckoutProduct } from "@/types/order";
+import { computeLineExtraFeeCents } from "@/lib/catalog/product-commerce";
 import { useCurrency } from "@/features/shared/currency/currency-provider";
 import { CheckoutMotionItem } from "./checkout-motion";
 import { CheckoutPremiumCheckbox } from "./checkout-premium-checkbox";
@@ -39,25 +40,34 @@ export function CheckoutOrderSummary({
   const { formatPrice, currency } = useCurrency();
   const [termsAccepted, setTermsAccepted] = useState(false);
 
-  const { subtotal, serviceFee, estimatedTax, savings, total } = useMemo(() => {
+  const { subtotal, serviceFee, savings, total } = useMemo(() => {
     const sub = product.priceCents;
-    const fee = Math.round(sub * 0.029);
-    const tax = Math.round(sub * 0.06);
+    const fee = computeLineExtraFeeCents({
+      feeType: product.extraFeeType,
+      feeValue: product.extraFeeValue,
+      lineSubtotalCents: sub,
+      quantity: 1,
+    });
     const save =
       product.compareAtCents && product.compareAtCents > sub
         ? product.compareAtCents - sub
         : 0;
-    const beforeDiscount = sub + fee + tax;
     return {
       subtotal: sub,
       serviceFee: fee,
-      estimatedTax: tax,
       savings: save,
-      total: Math.max(0, beforeDiscount - discountCents),
+      total: Math.max(0, sub - discountCents + fee),
     };
-  }, [product.compareAtCents, product.priceCents, discountCents]);
+  }, [
+    product.compareAtCents,
+    product.extraFeeType,
+    product.extraFeeValue,
+    product.priceCents,
+    discountCents,
+  ]);
 
   const isInstant = product.deliveryMode === "auto";
+  const isHybrid = product.deliveryMode === "hybrid";
 
   return (
     <CheckoutMotionItem className="nex-co-summary-wrap">
@@ -86,15 +96,23 @@ export function CheckoutOrderSummary({
               <span className="nex-co-product-category">{product.categoryName}</span>
             ) : null}
             <h3 className="nex-co-product-name">{product.name}</h3>
-            {product.shortDescription ? (
+            {product.variantName ? (
+              <p className="nex-co-product-desc">
+                {t("selectedOption")}: {product.variantName}
+              </p>
+            ) : product.shortDescription ? (
               <p className="nex-co-product-desc">{product.shortDescription}</p>
             ) : null}
-            {isInstant ? (
+            {isInstant || isHybrid ? (
               <span className="nex-co-instant-badge">
                 <Zap className="nex-co-instant-icon" strokeWidth={2} aria-hidden />
-                {t("instantDelivery")}
+                {isHybrid ? t("hybridDelivery") : t("instantDelivery")}
               </span>
-            ) : null}
+            ) : (
+              <span className="nex-co-instant-badge">
+                {t("manualDelivery")}
+              </span>
+            )}
           </div>
         </div>
 
@@ -105,14 +123,12 @@ export function CheckoutOrderSummary({
             <dt>{t("subtotal")}</dt>
             <dd dir="ltr">{formatPrice(subtotal, locale)}</dd>
           </div>
-          <div className="nex-co-price-row nex-co-price-row--muted">
-            <dt>{t("serviceFee")}</dt>
-            <dd dir="ltr">{formatPrice(serviceFee, locale)}</dd>
-          </div>
-          <div className="nex-co-price-row nex-co-price-row--muted">
-            <dt>{t("estimatedTax")}</dt>
-            <dd dir="ltr">{formatPrice(estimatedTax, locale)}</dd>
-          </div>
+          {serviceFee > 0 ? (
+            <div className="nex-co-price-row nex-co-price-row--muted">
+              <dt>{t("serviceFee")}</dt>
+              <dd dir="ltr">{formatPrice(serviceFee, locale)}</dd>
+            </div>
+          ) : null}
           {discountCents > 0 && (
             <div className="nex-co-price-row nex-co-price-row--savings">
               <dt>{t("coupon")}</dt>

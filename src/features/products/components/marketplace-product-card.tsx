@@ -22,6 +22,10 @@ import {
   homepageBadgeClass,
   homepageBadgeLabelKey,
 } from "@/features/products/lib/homepage-badges";
+import {
+  availabilityStatusLabelKey,
+  deliveryModeLabelKey,
+} from "@/features/products/lib/product-commerce-labels";
 
 const MotionArticle = motion.article;
 
@@ -42,6 +46,11 @@ export function MarketplaceProductCard({
   averageRating,
   reviewCount,
   inStock,
+  deliveryMode,
+  availabilityStatus,
+  trustBadges,
+  manualSlotsRemaining,
+  manualDailySlotLimit,
   className,
 }: MarketplaceProductCardProps) {
   const locale = useLocale();
@@ -76,6 +85,8 @@ export function MarketplaceProductCard({
     badge === "bestSeller" ||
     badge === "hot" ||
     badge === "trending";
+  const deliveryKey = deliveryModeLabelKey(deliveryMode);
+  const availabilityKey = availabilityStatusLabelKey(availabilityStatus);
 
   return (
     <MotionArticle
@@ -167,6 +178,33 @@ export function MarketplaceProductCard({
         <Link href={`/products/${slug}`} className="mp-card__info">
           <h3 className="mp-card__name">{name}</h3>
           <p className="mp-card__cat">{subtitle}</p>
+          {(deliveryKey ||
+            availabilityKey ||
+            (trustBadges?.length ?? 0) > 0 ||
+            (manualDailySlotLimit != null && manualSlotsRemaining != null)) && (
+            <div className="mp-card__meta-row">
+              {deliveryKey ? (
+                <span className="mp-card__chip">{tProduct(deliveryKey)}</span>
+              ) : null}
+              {availabilityKey ? (
+                <span className="mp-card__chip">{tProduct(availabilityKey)}</span>
+              ) : null}
+              {manualDailySlotLimit != null && manualSlotsRemaining != null ? (
+                <span className="mp-card__chip mp-card__chip--accent">
+                  {manualSlotsRemaining > 0
+                    ? tProduct("manualSlotsLeft", {
+                        count: manualSlotsRemaining,
+                      })
+                    : tProduct("limitedAvailabilityToday")}
+                </span>
+              ) : null}
+              {(trustBadges ?? []).map((tb) => (
+                <span key={tb} className="mp-card__chip">
+                  {tProduct(`trust_${tb}`)}
+                </span>
+              ))}
+            </div>
+          )}
           {rating != null ? (
             <div className="mp-card__rating-row">
               <Star className="mp-card__star" strokeWidth={1.5} />

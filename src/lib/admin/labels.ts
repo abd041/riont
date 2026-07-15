@@ -192,8 +192,9 @@ export const PRODUCT_STATUS_LABELS: Record<ProductStatusType, string> = {
 };
 
 export const DELIVERY_MODE_LABELS: Record<DeliveryModeType, string> = {
-  [DeliveryMode.AUTO]: "Automatic",
-  [DeliveryMode.MANUAL]: "Manual delivery",
+  [DeliveryMode.AUTO]: "Instant",
+  [DeliveryMode.MANUAL]: "Manual",
+  [DeliveryMode.HYBRID]: "Hybrid",
 };
 
 export function getProductStatusLabel(status: ProductStatusType | string): string {
@@ -209,6 +210,34 @@ export const DELIVERY_MODE_HINTS: Record<DeliveryModeType, string> = {
     "The site sends codes or keys automatically when you start processing an order. Upload stock on this product page (one code or key per line).",
   [DeliveryMode.MANUAL]:
     "You paste delivery details yourself on each order after payment is confirmed.",
+  [DeliveryMode.HYBRID]:
+    "Uses automatic stock first when available; otherwise falls back to manual delivery for that order.",
+};
+
+export const AVAILABILITY_STATUS_LABELS: Record<string, string> = {
+  available_now: "Available now",
+  out_of_stock: "Out of stock",
+  available_soon: "Available soon",
+  service_paused: "Service temporarily paused",
+  after_manual_review: "Available after manual review",
+  coming_soon: "Coming soon",
+  manual_busy: "Manual service busy",
+  limited_availability: "Limited availability",
+};
+
+export const PRODUCT_TRUST_BADGE_LABELS: Record<string, string> = {
+  instantDelivery: "Instant Delivery",
+  warranty: "Warranty",
+  verifiedService: "Verified Service",
+  manualSupport: "Manual Support",
+  securePayment: "Secure Payment",
+};
+
+export const PLAN_HIGHLIGHT_LABELS: Record<string, string> = {
+  none: "None",
+  bestValue: "Best Value",
+  recommended: "Recommended",
+  mostPopular: "Most Popular",
 };
 
 export const PRODUCT_BADGE_LABELS: Record<

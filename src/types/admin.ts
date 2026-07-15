@@ -24,9 +24,10 @@ export type AdminOrderItem = {
   id: string;
   productId: string;
   productName: string;
+  variantName: string | null;
   unitPriceCents: number;
   quantity: number;
-  deliveryMode: "auto" | "manual";
+  deliveryMode: "auto" | "manual" | "hybrid";
   fulfillmentStatus: string;
   deliveryContent: string | null;
 };
@@ -37,6 +38,7 @@ export type AdminOrderDetail = {
   status: OrderStatus;
   subtotalCents: number;
   discountCents: number;
+  feeCents: number;
   totalCents: number;
   currency: string;
   locale: string;

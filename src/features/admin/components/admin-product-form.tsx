@@ -7,9 +7,11 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
+  AVAILABILITY_STATUS_LABELS,
   DELIVERY_MODE_HINTS,
   PRODUCT_BADGE_LABELS,
   PRODUCT_STATUS_OPTIONS,
+  PRODUCT_TRUST_BADGE_LABELS,
 } from "@/lib/admin/labels";
 import { centsToDollars } from "@/lib/admin/money";
 import {
@@ -67,8 +69,35 @@ export function AdminProductForm({
   );
   const [badge, setBadge] = useState<string>(product?.badge ?? "none");
   const [status, setStatus] = useState(product?.status ?? "draft");
-  const [deliveryMode, setDeliveryMode] = useState<"auto" | "manual">(
+  const [deliveryMode, setDeliveryMode] = useState<"auto" | "manual" | "hybrid">(
     product?.deliveryMode ?? "manual",
+  );
+  const [availabilityStatus, setAvailabilityStatus] = useState(
+    product?.availabilityStatus ?? "available_now",
+  );
+  const [extraFeeType, setExtraFeeType] = useState(
+    product?.extraFeeType ?? "none",
+  );
+  const [extraFeePercent, setExtraFeePercent] = useState(
+    product?.extraFeeType === "percent" ? String(product.extraFeeValue ?? 0) : "0",
+  );
+  const [extraFeeDollars, setExtraFeeDollars] = useState(
+    product?.extraFeeType === "fixed"
+      ? centsToDollars(product.extraFeeValue ?? 0)
+      : "0.00",
+  );
+  const [trustBadges, setTrustBadges] = useState<string[]>(
+    product?.trustBadges ?? [],
+  );
+  const [manualDailySlotLimit, setManualDailySlotLimit] = useState(
+    product?.manualDailySlotLimit != null
+      ? String(product.manualDailySlotLimit)
+      : "",
+  );
+  const [manualSlotsRemaining, setManualSlotsRemaining] = useState(
+    product?.manualSlotsRemaining != null
+      ? String(product.manualSlotsRemaining)
+      : "",
   );
   const [imagePreviewUrl, setImagePreviewUrl] = useState<string | null>(null);
   const [showAdvanced, setShowAdvanced] = useState(false);
@@ -220,13 +249,14 @@ export function AdminProductForm({
               name="deliveryMode"
               value={deliveryMode}
               onChange={(e) =>
-                setDeliveryMode(e.target.value as "auto" | "manual")
+                setDeliveryMode(e.target.value as "auto" | "manual" | "hybrid")
               }
               className={adminSelectClassName}
             >
-              <option value="manual">Manual — you send details on each order</option>
-              <option value="auto">
-                Automatic — site sends codes/keys from your stock
+              <option value="auto">Instant — codes/keys from stock</option>
+              <option value="manual">Manual — you deliver on each order</option>
+              <option value="hybrid">
+                Hybrid — stock first, then light manual if needed
               </option>
             </select>
             <p className="admin-callout">{DELIVERY_MODE_HINTS[deliveryMode]}</p>
@@ -237,6 +267,152 @@ export function AdminProductForm({
               </p>
             )}
           </AdminFormField>
+
+          <AdminFormField
+            label="Availability status"
+            htmlFor="availabilityStatus"
+            className="sm:col-span-2"
+            hint="Shown on product cards and the product page."
+          >
+            <select
+              id="availabilityStatus"
+              name="availabilityStatus"
+              value={availabilityStatus}
+              onChange={(e) =>
+                setAvailabilityStatus(
+                  e.target.value as typeof availabilityStatus,
+                )
+              }
+              className={adminSelectClassName}
+            >
+              {Object.entries(AVAILABILITY_STATUS_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </AdminFormField>
+
+          <AdminFormField
+            label="Trust badges"
+            htmlFor="trustBadges"
+            className="sm:col-span-2"
+            hint="Shown on the product card and product page."
+          >
+            <div className="flex flex-wrap gap-3 pt-1">
+              {Object.entries(PRODUCT_TRUST_BADGE_LABELS).map(([value, label]) => (
+                <label key={value} className="flex items-center gap-2 text-sm">
+                  <input
+                    type="checkbox"
+                    name="trustBadges"
+                    value={value}
+                    checked={trustBadges.includes(value)}
+                    onChange={(e) => {
+                      setTrustBadges((prev) =>
+                        e.target.checked
+                          ? [...prev, value]
+                          : prev.filter((v) => v !== value),
+                      );
+                    }}
+                  />
+                  {label}
+                </label>
+              ))}
+            </div>
+          </AdminFormField>
+
+          <AdminFormField
+            label="Extra fee"
+            htmlFor="extraFeeType"
+            hint="Charged on checkout (real total). Not a decorative fee."
+          >
+            <select
+              id="extraFeeType"
+              name="extraFeeType"
+              value={extraFeeType}
+              onChange={(e) =>
+                setExtraFeeType(e.target.value as "none" | "percent" | "fixed")
+              }
+              className={adminSelectClassName}
+            >
+              <option value="none">None</option>
+              <option value="percent">Percentage of line subtotal</option>
+              <option value="fixed">Fixed amount per unit</option>
+            </select>
+          </AdminFormField>
+
+          {extraFeeType === "percent" ? (
+            <AdminFormField label="Fee percent" htmlFor="extraFeePercent">
+              <Input
+                id="extraFeePercent"
+                name="extraFeePercent"
+                type="number"
+                min={0}
+                step={1}
+                value={extraFeePercent}
+                onChange={(e) => setExtraFeePercent(e.target.value)}
+                dir="ltr"
+              />
+            </AdminFormField>
+          ) : null}
+
+          {extraFeeType === "fixed" ? (
+            <AdminFormField label="Fee amount (USD)" htmlFor="extraFeeDollars">
+              <div className="admin-input-prefix">
+                <span className="admin-input-prefix__symbol" aria-hidden>
+                  $
+                </span>
+                <Input
+                  id="extraFeeDollars"
+                  name="extraFeeDollars"
+                  type="number"
+                  min={0}
+                  step={0.01}
+                  value={extraFeeDollars}
+                  onChange={(e) => setExtraFeeDollars(e.target.value)}
+                  className="admin-input-prefix__input"
+                  dir="ltr"
+                />
+              </div>
+            </AdminFormField>
+          ) : null}
+
+          {(deliveryMode === "manual" || deliveryMode === "hybrid") && (
+            <>
+              <AdminFormField
+                label="Manual slots / day"
+                htmlFor="manualDailySlotLimit"
+                hint="Leave empty for unlimited. Real counter — decrements on each order."
+              >
+                <Input
+                  id="manualDailySlotLimit"
+                  name="manualDailySlotLimit"
+                  type="number"
+                  min={0}
+                  value={manualDailySlotLimit}
+                  onChange={(e) => setManualDailySlotLimit(e.target.value)}
+                  placeholder="Unlimited"
+                  dir="ltr"
+                />
+              </AdminFormField>
+              <AdminFormField
+                label="Slots remaining today"
+                htmlFor="manualSlotsRemaining"
+                hint="Editable. Resets to the daily limit at midnight UTC."
+              >
+                <Input
+                  id="manualSlotsRemaining"
+                  name="manualSlotsRemaining"
+                  type="number"
+                  min={0}
+                  value={manualSlotsRemaining}
+                  onChange={(e) => setManualSlotsRemaining(e.target.value)}
+                  placeholder="Same as daily limit"
+                  dir="ltr"
+                />
+              </AdminFormField>
+            </>
+          )}
         </div>
       </AdminFormSection>
 

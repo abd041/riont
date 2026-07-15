@@ -249,6 +249,7 @@ export async function getAdminOrderDetail(
       status,
       subtotal_cents,
       discount_cents,
+      fee_cents,
       total_cents,
       currency,
       locale,
@@ -263,6 +264,7 @@ export async function getAdminOrderDetail(
         id,
         product_id,
         product_name_snapshot,
+        variant_name_snapshot,
         unit_price_cents,
         quantity,
         delivery_mode,
@@ -293,6 +295,7 @@ export async function getAdminOrderDetail(
     status: OrderStatusType;
     subtotal_cents: number;
     discount_cents: number;
+    fee_cents?: number;
     total_cents: number;
     currency: string;
     locale: string;
@@ -307,9 +310,10 @@ export async function getAdminOrderDetail(
       id: string;
       product_id: string;
       product_name_snapshot: Record<string, string>;
+      variant_name_snapshot: Record<string, string> | null;
       unit_price_cents: number;
       quantity: number;
-      delivery_mode: "auto" | "manual";
+      delivery_mode: "auto" | "manual" | "hybrid";
       fulfillment_status: string;
     }>;
     order_field_values: Array<{
@@ -329,6 +333,7 @@ export async function getAdminOrderDetail(
   const items = await Promise.all(
     row.order_items.map(async (item) => {
       const names = item.product_name_snapshot;
+      const variantNames = item.variant_name_snapshot;
       let deliveryContent: string | null = null;
       if (item.fulfillment_status === "delivered") {
         deliveryContent = await getCustomerDeliveryForItem(item.id);
@@ -337,6 +342,9 @@ export async function getAdminOrderDetail(
         id: item.id,
         productId: item.product_id,
         productName: names.en ?? names.ar ?? "Product",
+        variantName: variantNames
+          ? (variantNames.en ?? variantNames.ar ?? null)
+          : null,
         unitPriceCents: item.unit_price_cents,
         quantity: item.quantity,
         deliveryMode: item.delivery_mode,
@@ -377,6 +385,7 @@ export async function getAdminOrderDetail(
     status: row.status,
     subtotalCents: row.subtotal_cents,
     discountCents: row.discount_cents,
+    feeCents: row.fee_cents ?? 0,
     totalCents: row.total_cents,
     currency: row.currency,
     locale: row.locale,

@@ -1,5 +1,13 @@
 /** Shared catalog domain types (used by server services and storefront features). */
 
+import type {
+  DeliveryModeValue,
+  ProductAvailabilityStatus,
+  ProductExtraFeeType,
+  ProductTrustBadgeKey,
+  VariantPlanHighlight,
+} from "@/lib/catalog/product-commerce";
+
 export type ProductBadge =
   | "bestSeller"
   | "instant"
@@ -24,6 +32,8 @@ export type ProductVariant = {
   compareAtCents?: number | null;
   offerLabel?: string | null;
   isDefault?: boolean;
+  benefits?: string[];
+  planHighlight?: VariantPlanHighlight;
 };
 
 export interface CatalogProduct {
@@ -37,7 +47,11 @@ export interface CatalogProduct {
   badge?: ProductBadge;
   shortDescription?: string | null;
   imageUrl?: string | null;
-  deliveryMode?: "auto" | "manual";
+  deliveryMode?: DeliveryModeValue;
+  availabilityStatus?: ProductAvailabilityStatus;
+  trustBadges?: ProductTrustBadgeKey[];
+  manualSlotsRemaining?: number | null;
+  manualDailySlotLimit?: number | null;
   inStock?: boolean;
   isFeatured?: boolean;
   salesCount?: number;
@@ -52,6 +66,8 @@ export interface CatalogProductDetail extends CatalogProduct {
   ogImageUrl?: string | null;
   media: ProductMediaItem[];
   variants: ProductVariant[];
+  extraFeeType?: ProductExtraFeeType;
+  extraFeeValue?: number;
 }
 
 export interface CatalogCategory {
@@ -86,6 +102,17 @@ export type AdminProductVariant = {
   compareAtCents?: number | null;
   offerLabelEn?: string;
   offerLabelAr?: string;
+  benefitsEn?: string;
+  benefitsAr?: string;
+  planHighlight?: VariantPlanHighlight;
   isDefault: boolean;
   sortOrder: number;
+};
+
+export type {
+  DeliveryModeValue,
+  ProductAvailabilityStatus,
+  ProductExtraFeeType,
+  ProductTrustBadgeKey,
+  VariantPlanHighlight,
 };

@@ -17,6 +17,7 @@ import { CheckoutPremiumCheckbox } from "@/features/checkout/components/checkout
 import { CheckoutDynamicField } from "@/features/checkout/components/checkout-details-card";
 import { CheckoutPaymentMethodField } from "@/features/checkout/components/checkout-payment-method-field";
 import { useCurrency } from "@/features/shared/currency/currency-provider";
+import { computeLineExtraFeeCents } from "@/lib/catalog/product-commerce";
 
 export function CartCheckoutForm({
   cartItems,
@@ -82,6 +83,23 @@ export function CartCheckoutForm({
         (sum, line) => sum + line.priceCents * line.quantity,
         0,
       ),
+    [lines],
+  );
+
+  const feeCents = useMemo(
+    () =>
+      (lines ?? []).reduce((sum, line) => {
+        const lineSub = line.priceCents * line.quantity;
+        return (
+          sum +
+          computeLineExtraFeeCents({
+            feeType: line.extraFeeType,
+            feeValue: line.extraFeeValue,
+            lineSubtotalCents: lineSub,
+            quantity: line.quantity,
+          })
+        );
+      }, 0),
     [lines],
   );
 
@@ -231,9 +249,15 @@ export function CartCheckoutForm({
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="nex-co-product-name text-sm">{line.name}</p>
-                      <p className="text-xs text-[var(--text-muted)]">
-                        ×{line.quantity}
-                      </p>
+                      {line.variantName ? (
+                        <p className="text-xs text-[var(--text-muted)]">
+                          {line.variantName} · ×{line.quantity}
+                        </p>
+                      ) : (
+                        <p className="text-xs text-[var(--text-muted)]">
+                          ×{line.quantity}
+                        </p>
+                      )}
                     </div>
                     <span dir="ltr" className="text-sm font-medium">
                       {formatPrice(line.priceCents * line.quantity, locale)}
@@ -247,6 +271,12 @@ export function CartCheckoutForm({
                   <dt>{t("subtotal")}</dt>
                   <dd dir="ltr">{formatPrice(subtotalCents, locale)}</dd>
                 </div>
+                {feeCents > 0 ? (
+                  <div className="nex-co-price-row nex-co-price-row--muted">
+                    <dt>{t("serviceFee")}</dt>
+                    <dd dir="ltr">{formatPrice(feeCents, locale)}</dd>
+                  </div>
+                ) : null}
               </dl>
 
               {couponDiscountCents > 0 && (
@@ -258,7 +288,10 @@ export function CartCheckoutForm({
               <div className="nex-co-total-block">
                 <span className="nex-co-total-label">{t("total")}</span>
                 <span className="nex-co-total-amount" dir="ltr">
-                  {formatPrice(Math.max(0, subtotalCents - couponDiscountCents), locale)}
+                  {formatPrice(
+                    Math.max(0, subtotalCents - couponDiscountCents + feeCents),
+                    locale,
+                  )}
                 </span>
               </div>
 

@@ -196,6 +196,12 @@ export default async function AdminOrderDetailPage({
                 </span>
               </div>
             )}
+            {order.feeCents > 0 && (
+              <div className="admin-summary-row">
+                <span className="admin-summary-row__label">Extra fee</span>
+                <span dir="ltr">${(order.feeCents / 100).toFixed(2)}</span>
+              </div>
+            )}
             <div className="admin-summary-row admin-summary-row--total">
               <span>Total</span>
               <span className="admin-summary-row__value" dir="ltr">

@@ -41,7 +41,7 @@ export default async function AdminEditProductPage({
   if (!product) notFound();
 
   const availableStock =
-    product.deliveryMode === "auto"
+    product.deliveryMode === "auto" || product.deliveryMode === "hybrid"
       ? await getAvailableStock(product.id)
       : 0;
 
@@ -70,13 +70,13 @@ export default async function AdminEditProductPage({
 
       <AdminProductForm product={product} categories={categories} />
 
-      {product.deliveryMode === "auto" && (
+      {product.deliveryMode === "auto" || product.deliveryMode === "hybrid" ? (
         <AdminInventoryPanel
           productId={product.id}
           productName={product.en.name}
           availableStock={availableStock}
         />
-      )}
+      ) : null}
 
       <AdminProductExtras
         productId={product.id}

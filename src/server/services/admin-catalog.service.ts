@@ -29,7 +29,21 @@ export type AdminProductEdit = {
   id: string;
   categoryId: string;
   status: "draft" | "active" | "archived";
-  deliveryMode: "auto" | "manual";
+  deliveryMode: "auto" | "manual" | "hybrid";
+  availabilityStatus:
+    | "available_now"
+    | "out_of_stock"
+    | "available_soon"
+    | "service_paused"
+    | "after_manual_review"
+    | "coming_soon"
+    | "manual_busy"
+    | "limited_availability";
+  extraFeeType: "none" | "percent" | "fixed";
+  extraFeeValue: number;
+  trustBadges: string[];
+  manualDailySlotLimit: number | null;
+  manualSlotsRemaining: number | null;
   priceCents: number;
   compareAtCents: number | null;
   isFeatured: boolean;
@@ -104,6 +118,12 @@ export async function getAdminProductEdit(
       category_id,
       status,
       delivery_mode,
+      availability_status,
+      extra_fee_type,
+      extra_fee_value,
+      trust_badges,
+      manual_daily_slot_limit,
+      manual_slots_remaining,
       price_cents,
       compare_at_cents,
       is_featured,
@@ -122,7 +142,13 @@ export async function getAdminProductEdit(
     id: string;
     category_id: string;
     status: "draft" | "active" | "archived";
-    delivery_mode: "auto" | "manual";
+    delivery_mode: "auto" | "manual" | "hybrid";
+    availability_status?: AdminProductEdit["availabilityStatus"] | null;
+    extra_fee_type?: AdminProductEdit["extraFeeType"] | null;
+    extra_fee_value?: number | null;
+    trust_badges?: unknown;
+    manual_daily_slot_limit?: number | null;
+    manual_slots_remaining?: number | null;
     price_cents: number;
     compare_at_cents: number | null;
     is_featured: boolean;
@@ -159,6 +185,14 @@ export async function getAdminProductEdit(
     categoryId: row.category_id,
     status: row.status,
     deliveryMode: row.delivery_mode,
+    availabilityStatus: row.availability_status ?? "available_now",
+    extraFeeType: row.extra_fee_type ?? "none",
+    extraFeeValue: row.extra_fee_value ?? 0,
+    trustBadges: Array.isArray(row.trust_badges)
+      ? (row.trust_badges as string[])
+      : [],
+    manualDailySlotLimit: row.manual_daily_slot_limit ?? null,
+    manualSlotsRemaining: row.manual_slots_remaining ?? null,
     priceCents: row.price_cents,
     compareAtCents: row.compare_at_cents,
     isFeatured: row.is_featured,
@@ -213,6 +247,12 @@ export async function saveProduct(
     category_id: input.categoryId,
     status: input.status,
     delivery_mode: input.deliveryMode,
+    availability_status: input.availabilityStatus ?? "available_now",
+    extra_fee_type: input.extraFeeType ?? "none",
+    extra_fee_value: input.extraFeeValue ?? 0,
+    trust_badges: input.trustBadges ?? [],
+    manual_daily_slot_limit: input.manualDailySlotLimit ?? null,
+    manual_slots_remaining: input.manualSlotsRemaining ?? null,
     price_cents: input.priceCents,
     compare_at_cents: compareAt,
     is_featured: Boolean(input.isFeatured),
@@ -701,7 +741,7 @@ export async function getAdminProductVariants(
   const { data, error } = await admin
     .from("product_variants")
     .select(
-      "id, name, price_cents, compare_at_cents, offer_label, sort_order, is_default",
+      "id, name, price_cents, compare_at_cents, offer_label, benefits, plan_highlight, sort_order, is_default",
     )
     .eq("product_id", productId)
     .order("sort_order");
@@ -715,9 +755,13 @@ export async function getAdminProductVariants(
       price_cents: number;
       compare_at_cents: number | null;
       offer_label: Record<string, string> | null;
+      benefits: { en?: string[]; ar?: string[] } | null;
+      plan_highlight: string | null;
       sort_order: number;
       is_default: boolean;
     };
+    const benefitsEn = (r.benefits?.en ?? []).join("\n");
+    const benefitsAr = (r.benefits?.ar ?? []).join("\n");
     return {
       id: r.id,
       nameEn: r.name.en ?? "Option",
@@ -726,6 +770,14 @@ export async function getAdminProductVariants(
       compareAtCents: r.compare_at_cents,
       offerLabelEn: r.offer_label?.en ?? "",
       offerLabelAr: r.offer_label?.ar ?? "",
+      benefitsEn,
+      benefitsAr,
+      planHighlight:
+        r.plan_highlight === "bestValue" ||
+        r.plan_highlight === "recommended" ||
+        r.plan_highlight === "mostPopular"
+          ? r.plan_highlight
+          : "none",
       isDefault: r.is_default,
       sortOrder: r.sort_order,
     };
@@ -754,6 +806,17 @@ export async function saveAdminProductVariants(
             ar: variant.offerLabelAr?.trim() || null,
           }
         : null,
+    benefits: {
+      en: (variant.benefitsEn ?? "")
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean),
+      ar: (variant.benefitsAr ?? "")
+        .split("\n")
+        .map((s) => s.trim())
+        .filter(Boolean),
+    },
+    plan_highlight: variant.planHighlight ?? "none",
     sort_order: variant.sortOrder ?? index,
     is_default: defaultIndex === -1 ? index === 0 : index === defaultIndex,
     is_active: true,

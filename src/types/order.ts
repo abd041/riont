@@ -1,4 +1,11 @@
 import type { OrderStatus } from "@/lib/domain/enums";
+import type {
+  DeliveryModeValue,
+  ProductAvailabilityStatus,
+  ProductExtraFeeType,
+  ProductTrustBadgeKey,
+  VariantPlanHighlight,
+} from "@/lib/catalog/product-commerce";
 
 export type CheckoutField = {
   id: string;
@@ -23,11 +30,17 @@ export type CheckoutProduct = {
   shortDescription: string | null;
   priceCents: number;
   compareAtCents: number | null;
-  deliveryMode: "auto" | "manual";
+  deliveryMode: DeliveryModeValue;
+  availabilityStatus?: ProductAvailabilityStatus;
+  trustBadges?: ProductTrustBadgeKey[];
+  extraFeeType?: ProductExtraFeeType;
+  extraFeeValue?: number;
   imageUrl: string | null;
   fields: CheckoutField[];
   variantId?: string | null;
   variantName?: string | null;
+  manualSlotsRemaining?: number | null;
+  manualDailySlotLimit?: number | null;
   variants: Array<{
     id: string;
     name: string;
@@ -35,6 +48,8 @@ export type CheckoutProduct = {
     compareAtCents?: number | null;
     offerLabel?: string | null;
     isDefault?: boolean;
+    benefits?: string[];
+    planHighlight?: VariantPlanHighlight;
   }>;
 };
 
@@ -47,9 +62,10 @@ export type OrderSubmitSuccess = {
 export type OrderLineItem = {
   id: string;
   productName: string;
+  variantName?: string | null;
   unitPriceCents: number;
   quantity: number;
-  deliveryMode: "auto" | "manual";
+  deliveryMode: DeliveryModeValue;
   fulfillmentStatus: string;
   deliveryContent: string | null;
 };
@@ -73,6 +89,7 @@ export type CustomerOrder = {
   status: OrderStatus;
   subtotalCents: number;
   discountCents: number;
+  feeCents: number;
   totalCents: number;
   currency: string;
   locale: string;

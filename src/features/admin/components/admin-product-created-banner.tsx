@@ -5,7 +5,7 @@ export function AdminProductCreatedBanner({
   deliveryMode,
 }: {
   productName: string;
-  deliveryMode: "auto" | "manual";
+  deliveryMode: "auto" | "manual" | "hybrid";
 }) {
   return (
     <div className="admin-banner admin-banner--success" role="status">
@@ -13,7 +13,9 @@ export function AdminProductCreatedBanner({
       <p className="admin-banner__text">
         {deliveryMode === "auto"
           ? "Next: scroll down and add stock (codes or keys) so automatic delivery can work."
-          : "Next: when orders arrive, open each order and paste delivery details for the customer."}
+          : deliveryMode === "hybrid"
+            ? "Next: add stock for instant fulfillment when possible; otherwise fulfill remaining orders manually."
+            : "Next: when orders arrive, open each order and paste delivery details for the customer."}
       </p>
       <p className="admin-banner__text">
         <Link href="/en/products" className="admin-banner__link">

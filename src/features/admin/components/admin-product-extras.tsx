@@ -10,6 +10,9 @@ import {
   saveProductVariantsAction,
   type CatalogActionResult,
 } from "@/server/actions/admin-catalog.actions";
+import {
+  PLAN_HIGHLIGHT_LABELS,
+} from "@/lib/admin/labels";
 import type { AdminProductField, AdminProductVariant } from "@/types/catalog";
 
 const emptyVariant = (): AdminProductVariant => ({
@@ -19,6 +22,9 @@ const emptyVariant = (): AdminProductVariant => ({
   compareAtCents: null,
   offerLabelEn: "",
   offerLabelAr: "",
+  benefitsEn: "",
+  benefitsAr: "",
+  planHighlight: "none",
   isDefault: false,
   sortOrder: 0,
 });
@@ -83,9 +89,11 @@ export function AdminProductExtras({
   return (
     <div className="space-y-6">
       <section className="admin-panel admin-panel--flat">
-        <h3 className="admin-panel__title">Duration / options</h3>
+        <h3 className="admin-panel__title">Plans / offer ladder</h3>
         <p className="mb-4 text-sm text-[var(--text-muted)]">
-          Add selectable plans such as 1 Month, 3 Months, etc. Each option can have its own price and offer label.
+          Add month options (1 Month, 2 Months…) and/or service levels (Basic,
+          Fast, VIP). Each option can have its own price, benefits, and a
+          highlight badge (Best Value / Recommended / Most Popular).
         </p>
 
         <div className="space-y-4">
@@ -158,6 +166,71 @@ export function AdminProductExtras({
                   )
                 }
               />
+              <Input
+                placeholder="Offer label (AR)"
+                value={variant.offerLabelAr ?? ""}
+                onChange={(e) =>
+                  setVariants((rows) =>
+                    rows.map((row, i) =>
+                      i === index ? { ...row, offerLabelAr: e.target.value } : row,
+                    ),
+                  )
+                }
+              />
+              <label className="text-sm text-[var(--text-muted)] md:col-span-2">
+                Benefits EN (one per line)
+                <textarea
+                  className="mt-1 flex min-h-[72px] w-full rounded-[var(--radius-md)] border border-[var(--border-default)] bg-surface px-3 py-2 text-sm"
+                  value={variant.benefitsEn ?? ""}
+                  onChange={(e) =>
+                    setVariants((rows) =>
+                      rows.map((row, i) =>
+                        i === index ? { ...row, benefitsEn: e.target.value } : row,
+                      ),
+                    )
+                  }
+                  placeholder={"Priority handling\nBetter support\nLonger warranty"}
+                />
+              </label>
+              <label className="text-sm text-[var(--text-muted)] md:col-span-2">
+                Benefits AR (one per line)
+                <textarea
+                  className="mt-1 flex min-h-[72px] w-full rounded-[var(--radius-md)] border border-[var(--border-default)] bg-surface px-3 py-2 text-sm"
+                  value={variant.benefitsAr ?? ""}
+                  onChange={(e) =>
+                    setVariants((rows) =>
+                      rows.map((row, i) =>
+                        i === index ? { ...row, benefitsAr: e.target.value } : row,
+                      ),
+                    )
+                  }
+                />
+              </label>
+              <label className="text-sm text-[var(--text-muted)]">
+                Plan badge
+                <select
+                  className="mt-1 flex h-10 w-full rounded-[var(--radius-md)] border border-[var(--border-default)] bg-surface px-3 text-sm"
+                  value={variant.planHighlight ?? "none"}
+                  onChange={(e) =>
+                    setVariants((rows) =>
+                      rows.map((row, i) =>
+                        i === index
+                          ? {
+                              ...row,
+                              planHighlight: e.target.value as AdminProductVariant["planHighlight"],
+                            }
+                          : row,
+                      ),
+                    )
+                  }
+                >
+                  {Object.entries(PLAN_HIGHLIGHT_LABELS).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
               <div className="flex items-center gap-3">
                 <label className="flex items-center gap-2 text-sm">
                   <input
@@ -201,7 +274,8 @@ export function AdminProductExtras({
       <section className="admin-panel admin-panel--flat">
         <h3 className="admin-panel__title">Customer fields</h3>
         <p className="mb-4 text-sm text-[var(--text-muted)]">
-          Required information for manual service products (username, email, etc.).
+          Only ask for what this product needs. Mark fields required or optional —
+          customers are not forced to fill optional fields at checkout.
         </p>
 
         <div className="space-y-4">

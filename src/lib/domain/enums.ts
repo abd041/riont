@@ -23,6 +23,7 @@ export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus];
 export const DeliveryMode = {
   AUTO: "auto",
   MANUAL: "manual",
+  HYBRID: "hybrid",
 } as const;
 
 export type DeliveryMode = (typeof DeliveryMode)[keyof typeof DeliveryMode];

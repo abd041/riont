@@ -52,12 +52,31 @@ function formatProductValidationError(
 function parseProductForm(formData: FormData) {
   const priceCents = parseDollarsInput(formData.get("priceDollars"));
   const compareAtCents = parseDollarsInput(formData.get("compareAtDollars"));
+  const trustBadges = formData
+    .getAll("trustBadges")
+    .filter((v): v is string => typeof v === "string");
+
+  const extraFeeDollars = parseDollarsInput(formData.get("extraFeeDollars"));
+  const extraFeeType = String(formData.get("extraFeeType") || "none");
+  const extraFeePercent = Number(formData.get("extraFeePercent") || 0);
+  const extraFeeValue =
+    extraFeeType === "fixed"
+      ? (extraFeeDollars ?? 0)
+      : extraFeeType === "percent"
+        ? Math.max(0, Math.floor(extraFeePercent))
+        : 0;
 
   return saveProductSchema.safeParse({
     productId: formData.get("productId") || undefined,
     categoryId: formData.get("categoryId"),
     status: formData.get("status"),
     deliveryMode: formData.get("deliveryMode"),
+    availabilityStatus: formData.get("availabilityStatus") || "available_now",
+    extraFeeType,
+    extraFeeValue,
+    trustBadges,
+    manualDailySlotLimit: formData.get("manualDailySlotLimit") || null,
+    manualSlotsRemaining: formData.get("manualSlotsRemaining") || null,
     priceCents: priceCents ?? formData.get("priceCents"),
     compareAtCents:
       compareAtCents !== undefined

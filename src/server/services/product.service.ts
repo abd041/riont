@@ -16,15 +16,30 @@ import { resolveMediaUrl } from "@/lib/storage/media-url";
 import { ServiceError } from "@/lib/domain/errors";
 import { getAvailableStockCounts } from "@/server/services/inventory.service";
 import { getReviewSummariesForProducts } from "@/server/services/review.service";
+import {
+  effectiveManualSlotsRemaining,
+  isPurchasableAvailability,
+  parseTrustBadges,
+  type ProductAvailabilityStatus,
+  type ProductExtraFeeType,
+  type VariantPlanHighlight,
+} from "@/lib/catalog/product-commerce";
 
 type ProductQueryRow = {
   id: string;
   price_cents: number;
   compare_at_cents: number | null;
   is_featured: boolean;
-  delivery_mode: "auto" | "manual";
+  delivery_mode: "auto" | "manual" | "hybrid";
   sales_count: number;
   badge?: string | null;
+  availability_status?: string | null;
+  trust_badges?: unknown;
+  extra_fee_type?: string | null;
+  extra_fee_value?: number | null;
+  manual_daily_slot_limit?: number | null;
+  manual_slots_remaining?: number | null;
+  manual_slots_date?: string | null;
   product_translations: Array<{
     name: string;
     slug: string;
@@ -63,6 +78,13 @@ const PRODUCT_SELECT = `
   delivery_mode,
   sales_count,
   badge,
+  availability_status,
+  trust_badges,
+  extra_fee_type,
+  extra_fee_value,
+  manual_daily_slot_limit,
+  manual_slots_remaining,
+  manual_slots_date,
   product_translations!inner (
     name,
     slug,
@@ -90,6 +112,13 @@ const PRODUCT_DETAIL_SELECT = `
   delivery_mode,
   sales_count,
   badge,
+  availability_status,
+  trust_badges,
+  extra_fee_type,
+  extra_fee_value,
+  manual_daily_slot_limit,
+  manual_slots_remaining,
+  manual_slots_date,
   product_translations!inner (
     name,
     slug,
@@ -143,12 +172,25 @@ type VariantRow = {
   price_cents: number;
   compare_at_cents: number | null;
   offer_label: LocalizedLabel | null;
+  benefits: { en?: string[]; ar?: string[] } | null;
+  plan_highlight: string | null;
   sort_order: number;
   is_active: boolean;
   is_default: boolean;
 };
 
 function mapVariant(row: VariantRow, locale: string): ProductVariant {
+  const benefitsList =
+    locale === "ar"
+      ? (row.benefits?.ar?.length ? row.benefits.ar : row.benefits?.en)
+      : (row.benefits?.en?.length ? row.benefits.en : row.benefits?.ar);
+  const planHighlight =
+    row.plan_highlight === "bestValue" ||
+    row.plan_highlight === "recommended" ||
+    row.plan_highlight === "mostPopular"
+      ? (row.plan_highlight as VariantPlanHighlight)
+      : "none";
+
   return {
     id: row.id,
     name: resolveLocalizedLabel(row.name, locale, resolveFallbackLabel(locale, "defaultOption")),
@@ -158,6 +200,8 @@ function mapVariant(row: VariantRow, locale: string): ProductVariant {
       ? resolveLocalizedLabel(row.offer_label, locale)
       : null,
     isDefault: row.is_default,
+    benefits: benefitsList ?? [],
+    planHighlight,
   };
 }
 
@@ -171,7 +215,7 @@ async function fetchProductVariants(
   const { data, error } = await supabase
     .from("product_variants")
     .select(
-      "id, name, price_cents, compare_at_cents, offer_label, sort_order, is_active, is_default",
+      "id, name, price_cents, compare_at_cents, offer_label, benefits, plan_highlight, sort_order, is_active, is_default",
     )
     .eq("product_id", productId)
     .eq("is_active", true)
@@ -225,6 +269,12 @@ function mapRow(row: ProductQueryRow): CatalogProduct | null {
   if (!translation) return null;
 
   const categoryTranslation = getCategoryTranslations(row)?.[0];
+  const slots = effectiveManualSlotsRemaining({
+    dailyLimit: row.manual_daily_slot_limit,
+    remaining: row.manual_slots_remaining,
+    slotsDate: row.manual_slots_date,
+  });
+
   return {
     id: row.id,
     slug: translation.slug,
@@ -239,6 +289,11 @@ function mapRow(row: ProductQueryRow): CatalogProduct | null {
       primaryImageUrl(row, translation) ??
       productThumbnailUrl(translation.slug, categoryTranslation?.slug),
     deliveryMode: row.delivery_mode,
+    availabilityStatus: (row.availability_status ??
+      "available_now") as ProductAvailabilityStatus,
+    trustBadges: parseTrustBadges(row.trust_badges),
+    manualDailySlotLimit: row.manual_daily_slot_limit ?? null,
+    manualSlotsRemaining: slots,
     isFeatured: row.is_featured,
     salesCount: row.sales_count,
   };
@@ -259,10 +314,22 @@ async function enrichCatalogProducts(
   return products.map((product) => {
     if (!product.id) return product;
 
-    const inStock =
-      product.deliveryMode === "manual"
-        ? true
-        : (stockMap.get(product.id) ?? 0) > 0;
+    const stockCount = stockMap.get(product.id) ?? 0;
+    let inStock = true;
+    if (product.deliveryMode === "auto") {
+      inStock = stockCount > 0;
+    } else if (product.deliveryMode === "hybrid") {
+      inStock =
+        stockCount > 0 ||
+        product.manualDailySlotLimit == null ||
+        (product.manualSlotsRemaining ?? 0) > 0;
+    } else if (product.manualDailySlotLimit != null) {
+      inStock = (product.manualSlotsRemaining ?? 0) > 0;
+    }
+
+    if (!isPurchasableAvailability(product.availabilityStatus)) {
+      inStock = false;
+    }
 
     const review = reviewMap.get(product.id);
 
@@ -292,6 +359,8 @@ function mapDetailRow(row: ProductQueryRow): CatalogProductDetail | null {
     ogImageUrl: resolveOgImage(translation.og_image_url) ?? base.imageUrl,
     media: mapMedia(row),
     variants: [],
+    extraFeeType: (row.extra_fee_type ?? "none") as ProductExtraFeeType,
+    extraFeeValue: row.extra_fee_value ?? 0,
   };
 }
 
@@ -771,7 +840,13 @@ export async function getProductForCheckout(
       )
       .eq("product_id", detail.id)
       .order("sort_order", { ascending: true }),
-    supabase.from("products").select("delivery_mode").eq("id", detail.id).single(),
+    supabase
+      .from("products")
+      .select(
+        "delivery_mode, availability_status, trust_badges, extra_fee_type, extra_fee_value, manual_daily_slot_limit, manual_slots_remaining, manual_slots_date",
+      )
+      .eq("id", detail.id)
+      .single(),
   ]);
 
   if (fieldsResult.error) throw fieldsResult.error;
@@ -783,9 +858,30 @@ export async function getProductForCheckout(
     throw new ServiceError("VALIDATION", "Invalid product option selected");
   }
 
+  const productRow = productResult.data as {
+    delivery_mode: "auto" | "manual" | "hybrid";
+    availability_status?: ProductAvailabilityStatus | null;
+    trust_badges?: unknown;
+    extra_fee_type?: ProductExtraFeeType | null;
+    extra_fee_value?: number | null;
+    manual_daily_slot_limit?: number | null;
+    manual_slots_remaining?: number | null;
+    manual_slots_date?: string | null;
+  };
+
   return mapDetailToCheckoutProduct(detail, {
     fields: mapProductFields((fieldsResult.data ?? []) as ProductFieldRow[], locale),
-    deliveryMode: productResult.data.delivery_mode as "auto" | "manual",
+    deliveryMode: productRow.delivery_mode,
+    availabilityStatus: productRow.availability_status ?? "available_now",
+    trustBadges: parseTrustBadges(productRow.trust_badges),
+    extraFeeType: productRow.extra_fee_type ?? "none",
+    extraFeeValue: productRow.extra_fee_value ?? 0,
+    manualSlotsRemaining: effectiveManualSlotsRemaining({
+      dailyLimit: productRow.manual_daily_slot_limit,
+      remaining: productRow.manual_slots_remaining,
+      slotsDate: productRow.manual_slots_date,
+    }),
+    manualDailySlotLimit: productRow.manual_daily_slot_limit ?? null,
     selected,
   });
 }
@@ -794,7 +890,13 @@ function mapDetailToCheckoutProduct(
   detail: NonNullable<Awaited<ReturnType<typeof getProductBySlug>>>,
   opts: {
     fields: CheckoutField[];
-    deliveryMode: "auto" | "manual";
+    deliveryMode: "auto" | "manual" | "hybrid";
+    availabilityStatus: ProductAvailabilityStatus;
+    trustBadges: ReturnType<typeof parseTrustBadges>;
+    extraFeeType: ProductExtraFeeType;
+    extraFeeValue: number;
+    manualSlotsRemaining: number | null;
+    manualDailySlotLimit: number | null;
     selected: ReturnType<typeof pickVariant>;
   },
 ): CheckoutProduct {
@@ -807,16 +909,22 @@ function mapDetailToCheckoutProduct(
   return {
     id: detail.id!,
     slug: detail.slug,
-    name: variantName ? `${detail.name} — ${variantName}` : detail.name,
+    name: detail.name,
     categoryName: detail.category ?? null,
     shortDescription: detail.shortDescription ?? null,
     priceCents,
     compareAtCents,
     deliveryMode,
+    availabilityStatus: opts.availabilityStatus,
+    trustBadges: opts.trustBadges,
+    extraFeeType: opts.extraFeeType,
+    extraFeeValue: opts.extraFeeValue,
     imageUrl: detail.imageUrl ?? null,
     fields,
     variantId: selected?.id ?? null,
     variantName,
+    manualSlotsRemaining: opts.manualSlotsRemaining,
+    manualDailySlotLimit: opts.manualDailySlotLimit,
     variants,
   };
 }

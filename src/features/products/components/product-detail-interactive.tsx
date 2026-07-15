@@ -1,8 +1,10 @@
 "use client";
 
 import { useMemo, useState, type ReactNode } from "react";
+import { useTranslations } from "next-intl";
 import type { ProductVariant } from "@/types/catalog";
 import { cn } from "@/utils/cn";
+import { planHighlightLabelKey } from "@/features/products/lib/product-commerce-labels";
 import {
   ProductDetailPricing,
   ProductDetailPurchaseActions,
@@ -30,6 +32,7 @@ export function ProductDetailInteractive({
   variants: ProductVariant[];
   betweenPricingAndActions?: ReactNode;
 }) {
+  const t = useTranslations("product");
   const defaultVariant = useMemo(
     () => variants.find((v) => v.isDefault) ?? variants[0] ?? null,
     [variants],
@@ -58,26 +61,54 @@ export function ProductDetailInteractive({
     variantLabel: selected?.name ?? null,
   };
 
+  const showLadder = variants.some(
+    (v) => (v.benefits?.length ?? 0) > 0 || (v.planHighlight && v.planHighlight !== "none"),
+  );
+
   return (
     <div className="nex-pdp-purchase-block">
       {variants.length > 0 && (
-        <div className="nex-pdp-variants">
-          {variants.map((variant) => (
-            <button
-              key={variant.id}
-              type="button"
-              className={cn(
-                "nex-pdp-variant",
-                selectedId === variant.id && "nex-pdp-variant--active",
-              )}
-              onClick={() => setSelectedId(variant.id)}
-            >
-              <span className="nex-pdp-variant__name">{variant.name}</span>
-              {variant.offerLabel ? (
-                <span className="nex-pdp-variant__offer">{variant.offerLabel}</span>
-              ) : null}
-            </button>
-          ))}
+        <div
+          className={cn(
+            "nex-pdp-variants",
+            showLadder && "nex-pdp-variants--ladder",
+          )}
+        >
+          {variants.map((variant) => {
+            const highlightKey = planHighlightLabelKey(variant.planHighlight);
+            return (
+              <button
+                key={variant.id}
+                type="button"
+                className={cn(
+                  "nex-pdp-variant",
+                  showLadder && "nex-pdp-variant--ladder",
+                  selectedId === variant.id && "nex-pdp-variant--active",
+                )}
+                onClick={() => setSelectedId(variant.id)}
+              >
+                <span className="nex-pdp-variant__top">
+                  <span className="nex-pdp-variant__name">{variant.name}</span>
+                  {highlightKey ? (
+                    <span className="nex-pdp-variant__plan-badge">
+                      {t(highlightKey)}
+                    </span>
+                  ) : variant.offerLabel ? (
+                    <span className="nex-pdp-variant__offer">
+                      {variant.offerLabel}
+                    </span>
+                  ) : null}
+                </span>
+                {variant.benefits && variant.benefits.length > 0 ? (
+                  <ul className="nex-pdp-variant__benefits">
+                    {variant.benefits.slice(0, 4).map((b) => (
+                      <li key={b}>{b}</li>
+                    ))}
+                  </ul>
+                ) : null}
+              </button>
+            );
+          })}
         </div>
       )}
 

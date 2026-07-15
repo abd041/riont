@@ -8,12 +8,17 @@ import {
   hashGuestToken,
 } from "@/lib/crypto/tokens";
 import { resolveLocalizedLabel, type LocalizedLabel } from "@/lib/i18n/json-label";
+import {
+  computeLineExtraFeeCents,
+  isPurchasableAvailability,
+  type DeliveryModeValue,
+} from "@/lib/catalog/product-commerce";
 import { getSession } from "@/server/services/auth.service";
 import { quoteCoupon } from "@/server/services/coupon.service";
 import { getCustomerDeliveryForItem } from "@/server/services/delivery-content.service";
 import { getPaymentInstructions } from "@/server/services/site-settings.service";
 import { getProductForCheckout } from "@/server/services/product.service";
-import type { CheckoutField } from "@/types/order";
+import type { CheckoutField, CheckoutProduct } from "@/types/order";
 import type { SubmitCartOrderInput, SubmitOrderInput } from "@/validations/order.schema";
 import type {
   CustomerOrder,
@@ -124,6 +129,79 @@ async function assertAutoStock(
   }
 }
 
+async function hasAutoStock(
+  admin: ReturnType<typeof createAdminClient>,
+  productId: string,
+  quantity: number,
+): Promise<boolean> {
+  const { count, error } = await admin
+    .from("delivery_inventory")
+    .select("id", { count: "exact", head: true })
+    .eq("product_id", productId)
+    .eq("status", "available");
+
+  if (error) throw error;
+  return (count ?? 0) >= quantity;
+}
+
+/** Resolve product delivery mode to an order-item mode (hybrid → auto or manual). */
+async function resolveFulfillmentMode(
+  admin: ReturnType<typeof createAdminClient>,
+  product: CheckoutProduct,
+  quantity: number,
+): Promise<"auto" | "manual"> {
+  if (product.deliveryMode === "auto") {
+    await assertAutoStock(admin, product.id, quantity);
+    return "auto";
+  }
+
+  if (product.deliveryMode === "hybrid") {
+    if (await hasAutoStock(admin, product.id, quantity)) {
+      return "auto";
+    }
+    return "manual";
+  }
+
+  return "manual";
+}
+
+async function assertAndConsumeManualSlots(
+  admin: ReturnType<typeof createAdminClient>,
+  productId: string,
+  quantity: number,
+  fulfillmentMode: "auto" | "manual",
+): Promise<void> {
+  if (fulfillmentMode !== "manual") return;
+
+  const { data, error } = await admin.rpc("consume_manual_slot", {
+    p_product_id: productId,
+    p_quantity: quantity,
+  });
+
+  if (error) {
+    throw new ServiceError(
+      "INTERNAL",
+      "Could not reserve a manual delivery slot. Please try again or contact support.",
+    );
+  }
+
+  if (data === false) {
+    throw new ServiceError(
+      "CONFLICT",
+      "No manual delivery slots left for today. Try again tomorrow or contact support.",
+    );
+  }
+}
+
+function assertProductAvailable(product: CheckoutProduct): void {
+  if (!isPurchasableAvailability(product.availabilityStatus)) {
+    throw new ServiceError(
+      "CONFLICT",
+      "This product is not available for purchase right now.",
+    );
+  }
+}
+
 /** Creates an order request (unpaid). See docs/PAYMENT_MODEL.md — payment confirmed by admin later. */
 export async function submitOrder(
   input: SubmitOrderInput,
@@ -151,8 +229,16 @@ export async function submitOrder(
     }
   }
 
+  assertProductAvailable(product);
+
   const admin = createAdminClient();
   const subtotalCents = product.priceCents * input.quantity;
+  const feeCents = computeLineExtraFeeCents({
+    feeType: product.extraFeeType,
+    feeValue: product.extraFeeValue,
+    lineSubtotalCents: subtotalCents,
+    quantity: input.quantity,
+  });
 
   let discountCents = 0;
   let couponId: string | null = null;
@@ -168,11 +254,19 @@ export async function submitOrder(
     couponCodeSnapshot = couponResult.quote.code;
   }
 
-  const totalCents = subtotalCents - discountCents;
+  const totalCents = Math.max(0, subtotalCents - discountCents + feeCents);
 
-  if (product.deliveryMode === "auto") {
-    await assertAutoStock(admin, product.id, input.quantity);
-  }
+  const fulfillmentMode = await resolveFulfillmentMode(
+    admin,
+    product,
+    input.quantity,
+  );
+  await assertAndConsumeManualSlots(
+    admin,
+    product.id,
+    input.quantity,
+    fulfillmentMode,
+  );
 
   const orderNumber = generateOrderNumber();
   const nameSnapshot = await fetchProductNameSnapshot(admin, product.id);
@@ -186,6 +280,7 @@ export async function submitOrder(
       status: OrderStatus.PENDING_REVIEW,
       subtotal_cents: subtotalCents,
       discount_cents: discountCents,
+      fee_cents: feeCents,
       total_cents: totalCents,
       currency: "USD",
       coupon_id: couponId,
@@ -210,7 +305,8 @@ export async function submitOrder(
       product_name_snapshot: nameSnapshot,
       unit_price_cents: product.priceCents,
       quantity: input.quantity,
-      delivery_mode: product.deliveryMode,
+      delivery_mode: fulfillmentMode,
+      fee_cents: feeCents,
       variant_id: product.variantId ?? null,
       variant_name_snapshot: product.variantName
         ? { [input.locale]: product.variantName }
@@ -318,12 +414,31 @@ export async function submitCartOrder(
 
   const admin = createAdminClient();
   let subtotalCents = 0;
+  let feeCents = 0;
+  const resolvedModes: Array<"auto" | "manual"> = [];
 
   for (const line of resolved) {
-    subtotalCents += line.product.priceCents * line.quantity;
-    if (line.product.deliveryMode === "auto") {
-      await assertAutoStock(admin, line.product.id, line.quantity);
-    }
+    assertProductAvailable(line.product);
+    const lineSub = line.product.priceCents * line.quantity;
+    subtotalCents += lineSub;
+    feeCents += computeLineExtraFeeCents({
+      feeType: line.product.extraFeeType,
+      feeValue: line.product.extraFeeValue,
+      lineSubtotalCents: lineSub,
+      quantity: line.quantity,
+    });
+    const mode = await resolveFulfillmentMode(
+      admin,
+      line.product,
+      line.quantity,
+    );
+    await assertAndConsumeManualSlots(
+      admin,
+      line.product.id,
+      line.quantity,
+      mode,
+    );
+    resolvedModes.push(mode);
   }
 
   let discountCents = 0;
@@ -340,7 +455,7 @@ export async function submitCartOrder(
     couponCodeSnapshot = couponResult.quote.code;
   }
 
-  const totalCents = subtotalCents - discountCents;
+  const totalCents = Math.max(0, subtotalCents - discountCents + feeCents);
   const orderNumber = generateOrderNumber();
 
   const { data: order, error: orderError } = await admin
@@ -352,6 +467,7 @@ export async function submitCartOrder(
       status: OrderStatus.PENDING_REVIEW,
       subtotal_cents: subtotalCents,
       discount_cents: discountCents,
+      fee_cents: feeCents,
       total_cents: totalCents,
       currency: "USD",
       coupon_id: couponId,
@@ -370,8 +486,16 @@ export async function submitCartOrder(
 
   const allFieldInserts: ReturnType<typeof buildFieldInserts> = [];
 
-  for (const line of resolved) {
+  for (let i = 0; i < resolved.length; i++) {
+    const line = resolved[i]!;
+    const fulfillmentMode = resolvedModes[i]!;
     const nameSnapshot = await fetchProductNameSnapshot(admin, line.product.id);
+    const lineFee = computeLineExtraFeeCents({
+      feeType: line.product.extraFeeType,
+      feeValue: line.product.extraFeeValue,
+      lineSubtotalCents: line.product.priceCents * line.quantity,
+      quantity: line.quantity,
+    });
 
     const { data: orderItem, error: itemError } = await admin
       .from("order_items")
@@ -381,7 +505,8 @@ export async function submitCartOrder(
         product_name_snapshot: nameSnapshot,
         unit_price_cents: line.product.priceCents,
         quantity: line.quantity,
-        delivery_mode: line.product.deliveryMode,
+        delivery_mode: fulfillmentMode,
+        fee_cents: lineFee,
         variant_id: line.product.variantId ?? null,
         variant_name_snapshot: line.product.variantName
           ? { [input.locale]: line.product.variantName }
@@ -486,6 +611,7 @@ export async function getOrderForCustomer(params: {
       status,
       subtotal_cents,
       discount_cents,
+      fee_cents,
       total_cents,
       currency,
       locale,
@@ -493,6 +619,7 @@ export async function getOrderForCustomer(params: {
       order_items (
         id,
         product_name_snapshot,
+        variant_name_snapshot,
         unit_price_cents,
         quantity,
         delivery_mode,
@@ -523,6 +650,7 @@ export async function getOrderForCustomer(params: {
     status: string;
     subtotal_cents: number;
     discount_cents: number;
+    fee_cents?: number;
     total_cents: number;
     currency: string;
     locale: string;
@@ -530,9 +658,10 @@ export async function getOrderForCustomer(params: {
     order_items: Array<{
       id: string;
       product_name_snapshot: Record<string, string>;
+      variant_name_snapshot: Record<string, string> | null;
       unit_price_cents: number;
       quantity: number;
-      delivery_mode: "auto" | "manual";
+      delivery_mode: DeliveryModeValue;
       fulfillment_status: string;
     }>;
     order_field_values: Array<{
@@ -570,6 +699,10 @@ export async function getOrderForCustomer(params: {
   const items = await Promise.all(
     (row.order_items ?? []).map(async (item) => {
       const names = item.product_name_snapshot as Record<string, string>;
+      const variantNames = item.variant_name_snapshot as Record<
+        string,
+        string
+      > | null;
       let deliveryContent: string | null = null;
       if (item.fulfillment_status === "delivered") {
         deliveryContent = await getCustomerDeliveryForItem(item.id);
@@ -578,6 +711,12 @@ export async function getOrderForCustomer(params: {
         id: item.id,
         productName:
           names[params.locale] ?? names.en ?? names.ar ?? "Product",
+        variantName: variantNames
+          ? (variantNames[params.locale] ??
+            variantNames.en ??
+            variantNames.ar ??
+            null)
+          : null,
         unitPriceCents: item.unit_price_cents,
         quantity: item.quantity,
         deliveryMode: item.delivery_mode,
@@ -606,6 +745,7 @@ export async function getOrderForCustomer(params: {
     status: row.status as CustomerOrder["status"],
     subtotalCents: row.subtotal_cents,
     discountCents: row.discount_cents,
+    feeCents: row.fee_cents ?? 0,
     totalCents: row.total_cents,
     currency: row.currency,
     locale: row.locale,

@@ -270,10 +270,84 @@ ON CONFLICT (product_id, field_key) DO NOTHING;
 
 DELETE FROM product_variants WHERE product_id = 'b0000000-0000-4000-8000-000000000001';
 
-INSERT INTO product_variants (product_id, name, price_cents, compare_at_cents, offer_label, sort_order, is_default, is_active) VALUES
-  ('b0000000-0000-4000-8000-000000000001', '{"en":"1 Month","ar":"شهر واحد"}', 1499, 1999, '{"en":"20% OFF","ar":"خصم 20%"}', 0, true, true),
-  ('b0000000-0000-4000-8000-000000000001', '{"en":"3 Months","ar":"3 أشهر"}', 3999, 4999, '{"en":"Best Value","ar":"أفضل قيمة"}', 1, false, true),
-  ('b0000000-0000-4000-8000-000000000001', '{"en":"6 Months","ar":"6 أشهر"}', 6999, 8999, null, 2, false, true);
+INSERT INTO product_variants (
+  product_id, name, price_cents, compare_at_cents, offer_label,
+  benefits, plan_highlight, sort_order, is_default, is_active
+) VALUES
+  (
+    'b0000000-0000-4000-8000-000000000001',
+    '{"en":"1 Month","ar":"شهر واحد"}',
+    1499, 1999, '{"en":"20% OFF","ar":"خصم 20%"}',
+    '{"en":["Standard processing","Email support"],"ar":["معالجة قياسية","دعم بالبريد"]}',
+    'none', 0, true, true
+  ),
+  (
+    'b0000000-0000-4000-8000-000000000001',
+    '{"en":"2 Months","ar":"شهران"}',
+    2799, 3499, null,
+    '{"en":["Faster handling"],"ar":["معالجة أسرع"]}',
+    'none', 1, false, true
+  ),
+  (
+    'b0000000-0000-4000-8000-000000000001',
+    '{"en":"3 Months","ar":"3 أشهر"}',
+    3999, 4999, null,
+    '{"en":["Best value for longer use","Priority support"],"ar":["أفضل قيمة للاستخدام الأطول","دعم ذو أولوية"]}',
+    'bestValue', 2, false, true
+  ),
+  (
+    'b0000000-0000-4000-8000-000000000001',
+    '{"en":"4 Months","ar":"4 أشهر"}',
+    5199, 6499, null,
+    '{"en":["Priority handling","Longer warranty window"],"ar":["معالجة ذات أولوية","نافذة ضمان أطول"]}',
+    'recommended', 3, false, true
+  );
+
+-- Sample service ladder (Basic / Fast / VIP) on Steam Shared
+DELETE FROM product_variants WHERE product_id = 'b0000000-0000-4000-8000-000000000002';
+
+INSERT INTO product_variants (
+  product_id, name, price_cents, compare_at_cents, offer_label,
+  benefits, plan_highlight, sort_order, is_default, is_active
+) VALUES
+  (
+    'b0000000-0000-4000-8000-000000000002',
+    '{"en":"Basic","ar":"أساسي"}',
+    999, null, null,
+    '{"en":["Standard queue","Email support"],"ar":["طابور قياسي","دعم بالبريد"]}',
+    'none', 0, true, true
+  ),
+  (
+    'b0000000-0000-4000-8000-000000000002',
+    '{"en":"Fast","ar":"سريع"}',
+    1499, 1999, null,
+    '{"en":["Priority handling","Faster delivery window"],"ar":["معالجة ذات أولوية","نافذة تسليم أسرع"]}',
+    'mostPopular', 1, false, true
+  ),
+  (
+    'b0000000-0000-4000-8000-000000000002',
+    '{"en":"VIP","ar":"VIP"}',
+    2499, 2999, null,
+    '{"en":["Top priority","Dedicated support","Longer warranty"],"ar":["أولوية قصوى","دعم مخصص","ضمان أطول"]}',
+    'recommended', 2, false, true
+  );
+
+-- Demo commerce fields on seed products (after columns exist)
+UPDATE products SET
+  availability_status = 'available_now',
+  trust_badges = '["instantDelivery","warranty","securePayment"]'::jsonb,
+  extra_fee_type = 'none',
+  extra_fee_value = 0
+WHERE id = 'b0000000-0000-4000-8000-000000000001';
+
+UPDATE products SET
+  delivery_mode = 'manual',
+  availability_status = 'limited_availability',
+  trust_badges = '["manualSupport","verifiedService","warranty"]'::jsonb,
+  manual_daily_slot_limit = 8,
+  manual_slots_remaining = 8,
+  manual_slots_date = (timezone('utc', now()))::date
+WHERE id = 'b0000000-0000-4000-8000-000000000002';
 
 INSERT INTO product_related (product_id, related_product_id, sort_order) VALUES
   ('b0000000-0000-4000-8000-000000000001', 'b0000000-0000-4000-8000-000000000002', 0),

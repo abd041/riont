@@ -33,7 +33,22 @@ export interface Database {
           id: string;
           category_id: string;
           status: "draft" | "active" | "archived";
-          delivery_mode: "auto" | "manual";
+          delivery_mode: "auto" | "manual" | "hybrid";
+          availability_status:
+            | "available_now"
+            | "out_of_stock"
+            | "available_soon"
+            | "service_paused"
+            | "after_manual_review"
+            | "coming_soon"
+            | "manual_busy"
+            | "limited_availability";
+          extra_fee_type: "none" | "percent" | "fixed";
+          extra_fee_value: number;
+          trust_badges: Json;
+          manual_daily_slot_limit: number | null;
+          manual_slots_remaining: number | null;
+          manual_slots_date: string | null;
           price_cents: number;
           compare_at_cents: number | null;
           sort_order: number;
@@ -127,6 +142,7 @@ export interface Database {
           status: string;
           subtotal_cents: number;
           discount_cents: number;
+          fee_cents: number;
           total_cents: number;
           currency: string;
           locale: string;
@@ -139,6 +155,7 @@ export interface Database {
           status: string;
           subtotal_cents: number;
           discount_cents?: number;
+          fee_cents?: number;
           total_cents: number;
           currency?: string;
           coupon_id?: string | null;
@@ -193,7 +210,12 @@ export interface Database {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      consume_manual_slot: {
+        Args: { p_product_id: string; p_quantity?: number };
+        Returns: boolean;
+      };
+    };
     Enums: Record<string, never>;
   };
 }

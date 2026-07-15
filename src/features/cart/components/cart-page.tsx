@@ -86,6 +86,11 @@ export function CartPage() {
                   <Link href={`/products/${item.slug}`} className="sf-cart-item__name">
                     {item.name}
                   </Link>
+                  {item.variantLabel ? (
+                    <p className="text-xs text-[var(--text-muted)]">
+                      {item.variantLabel}
+                    </p>
+                  ) : null}
                   <p className="sf-cart-item__price" dir="ltr">
                     {formatPrice(item.priceCents, locale)}
                   </p>

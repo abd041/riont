@@ -18,6 +18,10 @@ import {
   homepageBadgeClass,
   homepageBadgeLabelKey,
 } from "@/features/products/lib/homepage-badges";
+import {
+  availabilityStatusLabelKey,
+  deliveryModeLabelKey,
+} from "@/features/products/lib/product-commerce-labels";
 import type { CatalogProduct } from "@/types/catalog";
 import { cn } from "@/utils/cn";
 import { mpCardHoverMini } from "@/features/homepage/motion/marketplace-motion";
@@ -45,13 +49,28 @@ export function MarketplaceMiniCard({
   const { addItem } = useCart();
   const { toggleItem, hasItem } = useWishlist();
 
-  const { id, slug, name, priceCents, compareAtCents, imageUrl, badge } = product;
+  const {
+    id,
+    slug,
+    name,
+    priceCents,
+    compareAtCents,
+    imageUrl,
+    badge,
+    deliveryMode,
+    availabilityStatus,
+    trustBadges,
+    manualSlotsRemaining,
+    manualDailySlotLimit,
+  } = product;
   const discount = discountPercent(priceCents, compareAtCents);
   const rating = productRating(product);
   const category = productCategoryLabel(product, t("lifetimeLicense"));
   const wished = hasItem(id ?? slug);
   const reduceMotion = useReducedMotion();
   const CardRoot = showcase || reduceMotion ? "article" : MotionArticle;
+  const deliveryKey = deliveryModeLabelKey(deliveryMode);
+  const availabilityKey = availabilityStatusLabelKey(availabilityStatus);
 
   return (
     <CardRoot
@@ -117,6 +136,40 @@ export function MarketplaceMiniCard({
           ) : (
             <>
               <p className="mp-card__cat">{category}</p>
+              {(deliveryKey ||
+                availabilityKey ||
+                (manualDailySlotLimit != null &&
+                  manualSlotsRemaining != null)) && (
+                <div className="mp-card__meta-row">
+                  {deliveryKey ? (
+                    <span className="mp-card__chip">{tProduct(deliveryKey)}</span>
+                  ) : null}
+                  {availabilityKey ? (
+                    <span className="mp-card__chip">
+                      {tProduct(availabilityKey)}
+                    </span>
+                  ) : null}
+                  {manualDailySlotLimit != null &&
+                  manualSlotsRemaining != null ? (
+                    <span className="mp-card__chip mp-card__chip--accent">
+                      {manualSlotsRemaining > 0
+                        ? tProduct("manualSlotsLeft", {
+                            count: manualSlotsRemaining,
+                          })
+                        : tProduct("limitedAvailabilityToday")}
+                    </span>
+                  ) : null}
+                </div>
+              )}
+              {(trustBadges?.length ?? 0) > 0 ? (
+                <div className="mp-card__meta-row">
+                  {trustBadges!.map((tb) => (
+                    <span key={tb} className="mp-card__chip">
+                      {tProduct(`trust_${tb}`)}
+                    </span>
+                  ))}
+                </div>
+              ) : null}
               {rating != null ? (
                 <p className="mp-card__rating">
                   <Star className="mp-card__star" strokeWidth={1.5} />

@@ -164,7 +164,7 @@ export function HomeMarketplace({
       <ProductRowSection
         products={rows.mostRequested}
         titleKey="mostRequested"
-        variant="featured"
+        variant="default"
         delay={0}
       />
 

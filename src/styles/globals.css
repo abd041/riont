@@ -43,6 +43,7 @@
 @import "./nexora-theme-bronze.css";
 @import "./nexora-geist-dark.css";
 @import "./nexora-homepage-extras.css";
+@import "./nexora-product-commerce.css";
 @import "./nexora-theme-bindings.css";
 
 @tailwind base;
